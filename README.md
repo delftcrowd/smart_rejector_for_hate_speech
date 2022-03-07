@@ -1,29 +1,16 @@
-# Student Project Template [UNDER DEVELOPMENT]
+### Smart rejector for Hate Speech
 
-Please name your repository as follows:
-- use lower case
-- use underscores to separate tokens
-- if related to a larger project, start with the name of this project, followed by the name of your project (e.g. 'seco_image_classification')
-- in case of doubt ask your supervisors
-
-Please structure your repository as follows:
-
-- a folder **code** where you put... your code and your resources
-- a folder **report** where you put... your report and presentations
-- a **README**, with the following information:
-
-### Basic information
-
-- name of student
-- names of supervisors
-- academic year
+- name of student: Philippe Lammerts
+- names of supervisors: Dr. J. Yang, Prof.dr.ir. G.J.P.M. Houben
+- academic year: 2021/2022
 
 ### Introduction
-_brief introduction of the project_
+The amount of hateful content that is spread online on social media platforms remains a serious problem. Manual moderation is still the most reliable solution but is simply infeasible due to the large amount of data generated every second on social media platforms. There exist automated solutions for detecting hate speech, and most of these use Machine Learning models. However, these models tend to be unreliable as they often perform poor on deployment data.
+
+Therefore, in this project, we focus on Machine Learning models with a reject option. The goal of the reject option is to reject a prediction when the model is not confident enough. This Thesis project is about building the first smart rejector for detecting hate speech where the machine assists the human in detecting hate speech automatically and where the human makes the decisions when the machine is not confident enough.  
+
 
 ### Research summary
-_brief summary of your approaches/implementations_
-_illustration of results_
 
 ### Installation and Usage
 - _dependencies: platform, libraries_
