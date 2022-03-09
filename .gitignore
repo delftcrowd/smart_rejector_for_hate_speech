@@ -6,6 +6,29 @@ __pycache__/
 # C extensions
 *.so
 
+# VS Code
+.vscode/
+
+# Conda
+env/
+venv/
+
+# Python
+*.pyc
+*.pyo
+
+# Word embeddings
+word_vectors/
+
+# Results
+results/
+
+# Pickle files
+*.p
+
+# Data
+data/
+
 # Distribution / packaging
 .Python
 build/
