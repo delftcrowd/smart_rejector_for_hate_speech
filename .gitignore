@@ -154,3 +154,5 @@ dmypy.json
 # Report
 report/*
 !report/*.pdf
+!report/*.tex
+!report/*.bib
