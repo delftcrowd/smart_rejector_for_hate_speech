@@ -23,6 +23,7 @@ To setup all the required packages and the correct Python version, run the follo
 To run the notebooks, you first need to run the following commands so that Jupyter notebook can recognize the Conda kernel:
 
 `conda activate smart-rejector`
+
 `python -m ipykernel install --user`
 
 You can now open a notebook, go to Kernel>change kernel and select smart-rejector there.
