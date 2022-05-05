@@ -156,3 +156,6 @@ report/*
 !report/*.pdf
 !report/*.tex
 !report/*.bib
+
+# Data
+.pkl
