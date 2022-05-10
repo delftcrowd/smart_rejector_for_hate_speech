@@ -1,5 +1,5 @@
 \documentclass[a4paper]{article}
-
+% !TEX root = main.tex
 %%%%%%%% CREATE DOCUMENT STRUCTURE %%%%%%%%
 %% Language and font encodings
 \usepackage[english]{babel}
@@ -152,6 +152,7 @@ We will list all independent, dependent, confounding, and control variables anal
 \begin{itemize}
     \item \textbf{Scales} Because of our confounding variable ‘learning effect of the scales’, we need to cancel the learning effect out. We do this by splitting the group into two and assigning a different order of scales to each group. For example, the first group needs to answer the questions using the ME scale first and then 100-level scale. The second group needs to answer the questions using the 100-level scale first and then the ME scale.
     \item \textbf{Presentation of scenarios} In both experiments, we will present the individual or pairs of scenarios in a random order to reduce bias.
+    \item \textbf{Content of the posts} All social media posts are sampled from existing datasets containing both hateful and non-hateful tweets.
 \end{itemize}
 
 \subsubsection{Dependent variables}
@@ -197,6 +198,8 @@ During experiment Type 2, we need to cover all 10 different pairs of scenarios w
 This section will explain all steps of the survey. \autoref{sec:appendix} contains the presentation texts. All subjects have 10 seconds before they can continue to the next question. There is no limit to the amount of time they spend on each question.
 
 \subsection{Survey}
+\textbf{WARNING: the examples used in this section contain content that may make some people feel uncomfortable.}
+
 \begin{itemize}[leftmargin=*, label={}]
     \item \textbf{Step 1: provide informed consent}
           \begin{itemize}
@@ -290,6 +293,24 @@ Please indicate whether you agree, disagree, or are neutral about SocialNet’s 
 
 **Show a numerical slider with values between 1 and 100.**\\
 
+\subsection{Example rejection scenario with 100-level scale}
+
+Suppose we have the following post:
+
+\textit{“I hate how much I love everybody in the world!!!”}\\
+
+\underline{Question 1:} Please indicate \textbf{how hateful} you feel this post is using any number between 0 and 100 where 0 means not hateful and 100 means extremely hateful.
+
+**Show a numerical slider with values between 0 and 100.**\\
+
+\underline{Question 2:} The detection system of SocialNet \textbf{was uncertain} about whether the post was hateful or not. An internal moderator needs to look at it. It will remain publicly visible for 24 hours until the moderator decides to remove it when necessary.
+
+Please indicate whether you agree, disagree, or are neutral about SocialNet’s decision.\\
+
+\underline{Question 3}: Please indicate how much you agree or disagree with SocialNet’s decision using any positive number from 1 to 100. If you feel neutral about SocialNet’s decision, select neutral in the field above.
+
+**Show a numerical slider with values between 1 and 100.**\\
+
 \subsection{Example FP-FN pair scenario with 100-level scale}
 
 Suppose we have the following post:
@@ -332,7 +353,7 @@ Suppose we have a second scenario:
 First, we calculate the cost values for the TP, TN, FP, FN, and rejection scenarios in hate speech detection using the survey's results. Second, we analyze whether we can use the results to draw any conclusions by looking at two aspects: reliability and validity.
 
 \subsection{Costs}
-The goal of the complete experiment is to come up with the relative cost values for TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection. The metric from the first part of our research takes these numerical values as its input to calculate the optimal rejection threshold. We do not need to know the absolute cost values but only the relative cost values. For example, if we set all cost values to 1, we retrieve the same optimal rejection threshold as setting all cost values to 1000. The ME technique provides us with the ratio data we need. We conducted two types of experiments: one using individual scenarios and one using pairs. We use the same scenarios in both experiments. So all subjects will see the same 40 scenarios. For each experiment type, we split the group up into two subgroups. The first subgroup uses the ME scale first, and the second group uses the 100-level scale first. We calculate the mean scores of the questions in all scenarios for both scales. The first question asks how hateful the subjects feel about a specific post. We use an unipolar scale here. So we can calculate the mean value of all given scores. The second and third questions ask if the subject agrees/disagrees/is neutral with the decision from SocialNet. We use a bipolar scale here. Therefore, we will interpret disagreement values as negative, neutral values as 0, and agreement values as positive. This allows us to calculate the mean value of how much all subjects agree/disagree with the decisions from SocialNet. We define the cost values that we need by directly taking the mean scores of the TP, TN, FP, and rejection scenarios rated with the ME scale.
+The goal of the complete experiment is to come up with the relative cost values for TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection. The metric from the first part of our research takes these numerical values as its input to calculate the optimal rejection threshold. We do not need to know the absolute cost values but only the relative cost values. For example, if we set all cost values to 1, we retrieve the same optimal rejection threshold as setting all cost values to 1000. The ME technique provides us with the ratio data we need. We conducted two types of experiments: one using individual scenarios and one using pairs. We use the same scenarios in both experiments. So all subjects will see the same 40 scenarios. For each experiment type, we split the group up into two subgroups. The first subgroup uses the ME scale first, and the second group uses the 100-level scale first. We calculate the mean scores of the questions in all scenarios for both scales. The first question asks how hateful the subjects feel about a specific post. We use an unipolar scale here. So we can calculate the mean value of all given scores. The second and third questions ask if the subject agrees/disagrees/is neutral with the decision from SocialNet. We use a bipolar scale here. Therefore, we will interpret disagreement values as negative, neutral values as 0, and agreement values as positive. This allows us to calculate the mean value of how much all subjects agree/disagree with the decisions from SocialNet. We define the cost values that we need by directly taking the mean scores of the TP, TN, FP, FN, and rejection scenarios rated with the ME scale.
 
 \subsection{Reliability}
 Reliability is about whether we can trust our results and if we get consistent results \cite{fitzner2007reliability}. We do this by mainly looking at the inter-rater reliability. This means that different subjects should give approximately the same judgements to the same scenarios. We measure the inter-rater reliability using Krippendorff's alpha \cite{maddalena2017crowdsourcing, krippendorff2004reliability}. We calculate this value using the mean scores of both the first question about the hatefulness of the post and the third question about the (dis)agreement with SocialNet’s decision. We will only use the results from the first question to understand the results of the third question. For example, if we notice that the inter-rater reliability value is low for the first question, this might result in a low value for the third question. We will use the inter-rater reliability scores of the third question to compare the ME scale with the 100-level scale and compare experiment Type 1 with experiment Type 2. We also study the inter-rater reliability values for the different types of scenarios: TP, TN, FN, FP, and rejections. We can compare experiments Type 1 and Type 2 since they both use the same scenarios, but only the presentation is different. Also, we will compare the two types of experiments using the Mann–Whitney U test to test if there is a significant difference between the two. We abstain from using the Two-Sample T-Test since we do not assume that the distribution of the scores is normal. Other types of reliability, such as test-retest reliability, are not considered in this experiment. Guaranteeing test-retest reliability would require us to redo the complete experiment at a different time for the same subjects. This is infeasible for our Thesis project, given the limited time and budget.
