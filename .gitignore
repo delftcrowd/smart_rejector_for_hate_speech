@@ -152,10 +152,18 @@ dmypy.json
 .pyre/
 
 # Report
-report/*
-!report/**/*.pdf
-!report/**/*.tex
-!report/**/*.bib
-
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.xdv
+report/thesis report/cover/
+report/thesis report/fonts/
+*.eps
 # Data
 *.pkl
