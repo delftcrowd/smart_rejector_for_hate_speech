@@ -81,7 +81,7 @@ The second step of this project is to find out how we can retrieve the relative 
     \item \underline{We hypothesize that the cost of an FN is greater than the cost of an FP}. We believe that allowing hateful content to be publicly visible has a more negative impact on social media users than filtering out neutral content. Therefore, we think that the cost of an FN is greater than the cost of an FP.
     \item \underline{We hypothesize that the gain of an TP is greater than the gain of an TN.} We believe that correctly predicting hateful content is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think that the gain of an TP is greater than the gain of an TN.
     \item \underline{We hypothesize that the cost of a rejection is lower than the average cost of an FP and an FN prediction.} The key assumption of using ML models with a reject option is that the cost of a rejection should always be lower than the cost of an incorrect decision.
-    \item \underline{We hypothesize that Magnitude Estimation (ME) is a suitable technique for retrieving the relative costs.} For details on ME refer to Section \autoref{sec:method}. ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \cite{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale.
+    \item \underline{We hypothesize that Magnitude Estimation (ME) is a suitable technique for retrieving the relative costs.} For details on ME refer to \autoref{sec:method}. ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \cite{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale.
 \end{itemize}
 
 \section{Method}
@@ -108,7 +108,7 @@ Most papers that use the ME method apply some form of validation. Cross-modality
 We will explain in this chapter the experiment idea and the experimental setup (variables considered and materials used). All the collected data is completely anonymous. We will inform the participants not to put personal identifiers in their answers.
 
 \subsubsection{Idea}
-In this experiment, we will shuffle and present the TP, TN, FP, FN, and rejection settings to the subjects. We will use two scales in our experiments: the ME scale and the 100-level scale. The 100-level scale is a bounded scale that consists of 100 numerical levels. We will use the 100-level scale to validate whether we can use the ME scale to measure the subjects' opinions about the different types of scenarios. This validation is a form of convergent validation where we try two types of measures to see if they measure the same thing \cite{fitzner2007reliability}. The 100-level scale is easier to understand than ME, does not require normalization, and provides more flexibility than Likert scales \cite{maddalena2017crowdsourcing}.
+In this experiment, we will shuffle and present the TP, TN, FP, FN, and rejection settings to the subjects. We will use two scales in our experiments: the ME scale and the 100-level scale. The 100-level scale is a bounded scale that consists of 100 numerical levels. We will use the 100-level scale to validate whether we can use the ME scale to measure the subjects' opinions about the different types of scenarios. This validation is a form of convergent validation where we try two types of measures to see if they measure the same thing \cite{fitzner2007reliability}. Refer to \autoref{sec:analysis-validity} for more details about validity analysis. The 100-level scale is easier to understand than ME, does not require normalization, and provides more flexibility than Likert scales \cite{maddalena2017crowdsourcing}.
 
 \subsection{Variables}
 We will list all independent, dependent, confounding, and control variables analyzed in our experiment in this section. Important to note is that we do not intend to study the confounding variables ‘demographic’ and ‘age’. The main reason for this is that we do not focus on the effects of subject characteristics on the outcomes but only want to study whether the ME technique is suitable for retrieving opinions about hate speech detection predictions. We left the investigation of the effects of subject characteristics on the outcomes to future research. According to \cite{gold2018women}, there is no significant difference in how men and women perceive hate. Therefore, we do not consider gender as a confounding variable.
@@ -145,7 +145,6 @@ We will list all independent, dependent, confounding, and control variables anal
 \subsubsection{Control variables}
 \begin{itemize}
     \item \textbf{Scales} Because of our confounding variable ‘learning effect of the scales’, we need to cancel the learning effect out. We do this by splitting the group into two and assigning a different order of scales to each group. For example, the first group needs to answer the questions using the ME scale first and then 100-level scale. The second group needs to answer the questions using the 100-level scale first and then the ME scale.
-    \item \textbf{Presentation of scenarios} In both experiments, we will present the individual or pairs of scenarios in a random order to reduce bias.
     \item \textbf{Content of the posts} All social media posts are sampled from existing datasets containing both hateful and non-hateful tweets.
 \end{itemize}
 
@@ -186,7 +185,8 @@ There are 4.55 billion active social media users\footnote{\url{https://datarepor
 We use \href{https://www.limesurvey.org}{LimeSurvey} as our survey tool since it supports all the features we need, and its (discounted) subscription price is 17 euros per month.
 
 \subsubsection{Data}
-During experiment Type 2, we need to cover all 10 different pairs of scenarios which require 20 social media posts. Furthermore, we need each subject to rate all 10 pairs with each scale. Therefore, we need 40 different social media posts where 20 are hateful and 20 non-hateful. For experiment Type 1, we will use the same posts to create 40 individual scenarios. We used the datasets from \cite{waseem2016hateful} and \cite{basile2019semeval} and randomly sampled both neutral and hateful samples. Both datasets contain tweet messages from Twitter that are neutral, racist or sexist. We filtered out the Twitter replies and mentions since the context is not always clear in these messages.
+% TODO: explain content analysis
+We will use 40 different social media posts where 20 are hateful and 20 non-hateful to create 40 different scenarios. This implies that each subject will need to judge four scenarios for each type (TP, TN, FP, FN, and rejection) for each scale type (ME and 100-level) since we let each subject use both scales. We used the datasets from \cite{waseem2016hateful} and \cite{basile2019semeval} and randomly sampled both neutral and hateful samples. Both datasets contain tweet messages from Twitter that are neutral, racist or sexist. We filtered out the Twitter replies and mentions since the context is not always clear in these messages.
 
 \section{Procedure}
 This section will explain all steps of the survey. \autoref{sec:appendix} contains the presentation texts. All subjects have 10 seconds before they can continue to the next question. There is no limit to the amount of time they spend on each question.
@@ -208,7 +208,7 @@ This section will explain all steps of the survey. \autoref{sec:appendix} contai
               \item The second group first uses the 100-level scale to rate the first half of all scenarios and then uses the ME scale for the second half.
               \item Provide an explanation in the introduction about the first scale.
           \end{itemize}
-    \item \textbf{Step 3: Attention check}
+    \item \textbf{Step 3: attention check}
           \begin{itemize}
               \item Simple attention check where we ask the subject to select one option.
           \end{itemize}
@@ -219,8 +219,7 @@ This section will explain all steps of the survey. \autoref{sec:appendix} contai
           \end{itemize}
     \item \textbf{Step 4b: first half of all scenarios using the first scale (ME or 100-level)}
           \begin{itemize}
-              \item Type 1: show 20 different scenarios in random order: 4 TP, 4 TN, 4 FP, 4 FN, and 4 rejection.
-              \item Type 2: show 10 different pairs of scenarios in random order: TP-TN, FP-FN, TN-FN, TP-FP, TP-FN, TN-FP, FP-rejection, FN-rejection, TP-rejection, and TN-rejection.
+              \item Show 20 different scenarios in random order: 4 TP, 4 TN, 4 FP, 4 FN, and 4 rejection.
           \end{itemize}
     \item \textbf{Step 4c: ME calibration phase (when ME is used first)}
           \begin{itemize}
@@ -236,12 +235,11 @@ This section will explain all steps of the survey. \autoref{sec:appendix} contai
     \item \textbf{Step 5b: second half of all scenarios using the second scale (ME or 100-level)}
           \begin{itemize}
               \item In case we now use the 100-level scale, explain that we now switch to the 100-level scale and how this scale works.
-              \item Type 1: show 20 different scenarios in random order: 4 TP, 4 TN, 4 FP, 4 FN, and 4 rejection
-              \item Type 2: show 10 different pairs of scenarios in random order: TP-TN, FP-FN, TN-FN, TP-FP, TP-FN, TN-FP, FP-rejection, FN-rejection, TP-rejection, and TN-rejection
+              \item Show 20 different scenarios in random order: 4 TP, 4 TN, 4 FP, 4 FN, and 4 rejection.
           \end{itemize}
     \item \textbf{Step 5c: ME calibration phase (when ME is used second)}
           \begin{itemize}
-              \item Ask subjects what numbers correspond with the following verbal labels: Strongly disagree, disagree, somewhat disagree, somewhat agree, agree, strongly agree.
+              \item Ask subjects what numbers correspond with the following verbal labels: strongly disagree, disagree, somewhat disagree, somewhat agree, agree, strongly agree.
               \item We will use this to normalize the magnitude estimates as explained in the external calibration method from \cite{moskowitz1977magnitude}.
           \end{itemize}
 
@@ -324,6 +322,7 @@ We apply the same calculations for the remaining scenario types. We define the c
 Reliability is about whether we can trust our results and if we get consistent results \cite{fitzner2007reliability}. We do this by mainly looking at the inter-rater reliability. This means that different subjects should give approximately the same judgements to the same scenarios. We measure the inter-rater reliability using Krippendorff's alpha \cite{maddalena2017crowdsourcing, krippendorff2004reliability}. We calculate the inter-rater reliability value using the mean response values as calculated in \autoref{sec:analysis-costs}. We will use the inter-rater reliability scores to compare the ME scale with the 100-level scale. We also study the inter-rater reliability values for the different types of scenarios: TP, TN, FN, FP, and rejection. Other types of reliability, such as test-retest reliability, are not considered in this experiment. Guaranteeing test-retest reliability would require us to redo the complete experiment at a different time for the same subjects. This is infeasible for our Thesis project, given the limited time and budget.
 
 \subsection{Validity}
+\label{sec:analysis-validity}
 Validity is about whether we are measuring the things we want to measure \cite{fitzner2007reliability}. The main goal of this aspect is to validate if we can use the ME technique to measure subjects’ opinions about hate speech detection scenarios. There are multiple types of validity, but we focus mainly on convergent validity (part of construct validity), content validity, and face validity \cite{fitzner2007reliability}. Construct validity checks whether there is an agreement between a theory and a measurement device or procedure \cite{fitzner2007reliability}. Convergent validity is about the correlation between different types of measures to see if they measure the same phenomenon \cite{fitzner2007reliability}. Content validity is about letting external experts review the proposed research questions and procedure \cite{fitzner2007reliability}. Face validity is the most intuitive and subjective type of validity and is about if and why we think the questions and proposed procedures are valid \cite{fitzner2007reliability}.
 
 We analyze convergent validity by comparing the mean scores from \autoref{sec:analysis-costs} between the two scales. We can verify that they measure the same phenomenon by analyzing the correlation between the scales. However, we can expect a low correlation since the ME scale is a (normalized) unbounded scale and the 100-level scale is bounded. Nevertheless, we think that both scales will give similar results, meaning that high ME responses should correspond to high 100-level scale responses and low ME responses to low 100-level scale responses. To guarantee content validity, we let external experts (the supervisors of this Thesis project) check this pre-registration report. We guarantee face validity by discussing whether the ME technique gives us the expected results. We exclude other forms of validity from this experiment because they either are irrelevant or infeasible. For example, external validity is about the degree to which the findings can be generalized to other settings or groups. We would have to experiment with multiple groups with different demographic and age characteristics to guarantee external validity. We left this for future work to investigate since this is out of scope for our Thesis project. Despite that, we think that people of different ages and demographic characteristics perceive hate differently since people have other norms and values in various parts of the world. We believe that if we conduct this experiment using different groups of subjects, then we might retrieve different cost values. Therefore, we decided not to create too many participant inclusion criteria but take a random sample of global social media users.
