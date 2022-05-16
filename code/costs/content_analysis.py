@@ -1,18 +1,31 @@
-from sklearn.datasets import fetch_20newsgroups
 from sklearn.cluster import KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.preprocessing import Normalizer
 from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
+import csv
+import preprocessor as p
+import html
+
+# Implementation is based on:
+# https://scikit-learn.org/stable/auto_examples/text/plot_document_clustering.html#clustering
 
 K = 10
 N_COMPONENTS = 100
+FILE_PATH = "F:\Thesis\data\SemEval\hateval2019_en_train.csv"
 
-dataset = fetch_20newsgroups(subset="all", shuffle=True, random_state=42)
+with open(FILE_PATH, newline='', encoding='utf-8') as f:
+    reader = csv.reader(f)
+    data = list(reader)
 
+filtered_data = list(filter(lambda x: x[2] == '0', data))
+print("size: ", len(filtered_data))
+
+data = list(map(lambda x: p.clean(html.unescape(x[1])), filtered_data[1:]))
+print(data[:10])
 vectorizer = TfidfVectorizer(max_df=0.5, min_df=2, stop_words="english")
 
-X = vectorizer.fit_transform(dataset.data[:1000])
+X = vectorizer.fit_transform(data)
 
 svd = TruncatedSVD(n_components=N_COMPONENTS)
 normalizer = Normalizer(copy=False)
