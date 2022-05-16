@@ -1,0 +1,461 @@
+\documentclass[a4paper]{article}
+% !TEX root = main.tex
+%%%%%%%% CREATE DOCUMENT STRUCTURE %%%%%%%%
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+%\usepackage{subfig}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{sectsty}
+\usepackage{float}
+\usepackage{titling} 
+\usepackage{blindtext}
+\usepackage[square,numbers]{natbib}
+\usepackage{amsmath}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{xcolor}
+\usepackage{parskip}
+\definecolor{darkgreen}{rgb}{0.0, 0.4, 0.0}
+
+%%%%%%%% DOCUMENT %%%%%%%%
+\begin{document}
+
+%%%% Title Page
+\begin{titlepage}
+
+    \newcommand{\HRule}{\rule{\linewidth}{0.5mm}} 							% horizontal line and its thickness
+    \center
+
+    % University
+    \textsc{\LARGE Delft University of Technology}\\[1cm]
+
+    % Document info
+    \textsc{\Large Pre-registration report}\\[0.2cm]
+    \HRule \\[0.8cm]
+    { \huge \bfseries Costs of predictions in hate speech detection}\\[0.7cm]								% Assignment
+    \HRule \\[2cm]
+    \large
+    \emph{Authors:}\\
+    Philippe Lammerts\\
+    Prof.\ dr.\ ir.\ G.J.P.M. Houben, thesis advisor \\
+    Dr.\ J. Yang, TU Delft, daily supervisor \\
+    Dr.\ Y-C. Hsu, TU Delft, co-daily supervisor\\
+    P. Lippmann, TU Delft, co-daily supervisor\\
+
+    {\large \today}\\[5cm]
+    \includegraphics[width=0.6\textwidth]{images/TU_delft_logo.jpg}\\[1cm] 	% University logo
+    \vfill
+\end{titlepage}
+
+\begin{abstract}
+    This document is prepared for the Human Research Ethics Committee review at TU Delft. It describes the plan for an experiment for the thesis project called "Building a smart rejector for detecting hate speech". This document follows the pre-registration plan suggested by \cite{van2016pre} and elaborates on the goal, the exact procedure, and the analysis of the experiment.
+
+    In this experiment, we will conduct an anonymous survey where we ask human subjects to judge different scenarios of hate speech detection on social media. The goal of this experiment is to find out the relative cost values between these scenarios. We will use the results in the thesis project to build a smart rejector for hate speech detection.
+\end{abstract}
+
+\tableofcontents
+
+\section{Research Question and Hypotheses}
+The amount of hateful content that is spread online on social media platforms remains a serious problem. Manual moderation is still the most reliable solution but is simply infeasible due to the large amount of data generated every second on social media platforms \cite{balayn2021automatic}. There exist automated solutions for detecting hate speech, and most of these use Machine Learning models. However, these models tend to be unreliable as they often perform poor on deployment data \cite{balayn2021automatic, grondahl2018all}. One study found that the F1 scores reduce significantly (69\% F1 score drop in the worst case) when training a hate speech detection model on one dataset and evaluating it using another dataset \cite{grondahl2018all}.
+
+Therefore in this project, we focus on Machine Learning (ML) models with a reject option. The goal of the reject option is to reject a prediction when the model is not confident enough \cite{hendrickx2021machine}. This thesis project is about building a smart rejector for detecting hate speech. A system in which the machine assists the human in detecting hate speech automatically and in which the human makes the decisions when the machine is not confident enough.
+
+The first goal of the project was to find a confidence metric that calculates the optimal rejection threshold. This threshold is calculated based on the confidence values of the ML predictions, the ground-truth labels of the underlying data samples, and a set of cost values. These cost values represent the impact of the True Positive (TP: correctly predicting content as hateful), True Negative (TN: correctly predicting content as non-hateful), False Positive (FP: predicting content as hateful while it is non-hateful), False Negative (FN: predicting content as non-hateful while it is hateful) and rejected predictions. Rejecting a prediction means that the ML predictor was not confident enough and, therefore, a human moderator needs to make the final judgment. We understand that there are different ways of handling rejected predictions. In this project, we treat rejected predictions as content that remains publicly visible online for, at most, 24 hours until a human moderator decides to remove/tolerate it. We based the timespan of 24 hours on a news article that stated that Germany fines social media platforms if they do not remove hate speech within 24 hours\footnote{\url{https://www.nytimes.com/2017/06/30/business/germany-facebook-google-twitter.html}}.
+
+The second step of this project is to find out how we can retrieve the relative cost values of TP, TN, FP, FN, and rejected predictions in hate speech detection. By relative costs, we mean to figure out, for example, the cost ratio between an FP and an FN prediction. Expressing these cost values in money spent/saved is infeasible in hate speech detection due to many uncertainties \cite{sunstein2018does}. So in this experiment, we aim to define the cost values in a subjective manner by analyzing the subjects' opinions about different hate speech detection scenarios. The main research question and our hypotheses of this experiment are as follows:
+
+\paragraph{[RQ]: How can we determine the relative costs of rejections and True Positive (TP), True Negative (TN), False Positive (FP), and False Negative (FN) predictions in hate speech detection?}
+\begin{itemize}
+    \item \underline{We hypothesize that the cost of an FN is greater than the cost of an FP}. We believe that allowing hateful content to be publicly visible has a more negative impact on social media users than filtering out neutral content. Therefore, we think that the cost of an FN is greater than the cost of an FP.
+    \item \underline{We hypothesize that the gain of an TP is greater than the gain of an TN.} We believe that correctly predicting hateful content is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think that the gain of an TP is greater than the gain of an TN.
+    \item \underline{We hypothesize that the cost of a rejection is lower than the average cost of an FP and an FN prediction.} The key assumption of using ML models with a reject option is that the cost of a rejection should always be lower than the cost of an incorrect decision.
+    \item \underline{We hypothesize that Magnitude Estimation (ME) is a suitable technique for retrieving the relative costs.} For details on ME refer to \ref{sec:me}. ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \cite{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale when rating the relevance of documents.
+\end{itemize}
+
+\section{Method}
+\label{sec:method}
+In this experiment, we show different scenarios to the human subjects using a survey and ask them whether they agree, disagree or are neutral about the decisions of a fictional social media platform we call SocialNet. These scenarios represent TP, TN, FP, FN, and rejected predictions. For example, we simulate an FN by showing a hateful post to the subject and explain that SocialNet did not detect any hate speech. The subject then indicates whether they agree, disagree, or are neutral with this decision. By analyzing the results of a group of subjects, we aim to conclude that an FN scenario is considered, for example, three times as worse as an FP scenario. This section first gives some background information and then elaborates on the exact procedure of the experiment.
+
+\subsection{Background}
+Initially, we considered using Likert scales as the response scales of our survey. However, as we will explain in the following subsection, Likert scales are not suitable for retrieving ratio values between the different scenarios of TP, TN, FP, FN, and rejections. Therefore, we will use a technique called Magnitude Estimation in our survey.
+
+\subsubsection{Likert}
+\label{sec:likert}
+Likert scales are widely used in academic research for retrieving the opinions of a group of subjects. Likert scales are a series of multiple Likert-type questions where subjects can answer questions with several response alternatives \cite{boone2012analyzing}. So in our case, we could use a bipolar scale with seven response alternatives ranging from 'strongly disagree' to 'strongly agree', including a 'neutral' midpoint. However, there is a lot of discussion in the literature about how we should analyze these Likert scales \cite{boone2012analyzing, allen2007likert, norman2010likert, murray2013likert}. The scale of the questions is ordinal, which means that we do know the ranking of the responses, but we do not have an exact measurement of the distances between the response items \cite{allen2007likert}. For example, we know that 'strongly agree' is higher in rank than 'agree', but not the exact distance between the two responses and whether it is greater than the distance between the 'neutral' and the 'somewhat agree' responses. Therefore, we technically cannot use parametric statistics, such as calculating the mean, when analyzing the data \cite{allen2007likert}. Other papers argue that we can treat a Likert scale that consists of multiple Likert items as interval data and, therefore, applying parametric statistics will not affect the conclusions \cite{boone2012analyzing, norman2010likert, murray2013likert}. So, we can calculate mean scores for TP, TN, FP, FN, and rejection scenarios and compare these with each other. For example, we can then verify that the mean value of FN cases is greater than the mean value of FP cases and conclude that the cost of an FN is greater than the cost of an FP. Analyzing Likert scales from our surveys would at most provide us with interval data (data for which we know the order, and we can measure the distances, but there is no true zero point \cite{allen2007likert}). However, we need to have ratio data in this project since we want to know the exact ratios between the cost values of the TP, TN, FP, FN, and rejection scenarios.
+
+\subsubsection{Magnitude Estimation}
+\label{sec:me}
+In \ref{sec:likert}, we concluded that Likert scales are not suitable since they do not provide ratio data. In this research, we want to experiment with a technique called Magnitude Estimation (ME). The ME technique originates from psychophysicists where human subjects need to give a quantitative estimation of sensory magnitudes \cite{stevens1956direct}. For example, in one experiment, human subjects are asked to assign any number that reflects their perception of the loudness of a range of sounds \cite{stevens1956direct}. If the human subjects perceive the succeeding sound as twice as loud, they should assign a number to it that is twice as large. Researchers applied the ME technique to different types of physical stimuli (line length, brightness, duration, etc.) and proved that the results are reproducible and that the data has ratio properties \cite{moskowitz1977magnitude}. Other works have shown that the ME technique is also useful for rating more abstract types of stimuli, such as judging the relevance of documents \cite{maddalena2017crowdsourcing}, the linguistic acceptability of sentences \cite{bard1996magnitude}, the strength of political opinions \cite{lodge1979comparisons, lodge1976calibration}, and the usability of system interfaces \cite{mcgee2004master}. Therefore, we think that ME is a promising method for judging the relative costs of scenarios in hate speech detection.
+
+The main advantage of ME is that it provides the ratio scale properties we need. Another advantage is that the scale is unbounded compared to other commonly used response scales, such as Likert scales. For example, suppose we first show a scenario and the subject provides a 'strongly disagree' judgment. Suppose we now present an even worse scenario. The subject is now limited to the response items in the Likert scale and can only give the same 'strongly disagree' judgement. We do not have this problem when using ME because the subject always has the freedom to assign a value of disagreement that is even larger. However, there are two main drawbacks of using ME. First, we need to normalize the results. Second, it can be hard to validate if we can use ME to measure the subjects' judgements for different scenarios of hate speech detection.
+
+The resulting data needs to be normalized since each subject can use any value they like. For example, one may judge the scenarios using values of 1, 2, and 10, while another may use 100, 200, and 1000. Luckily, there are different solutions for normalizing ME data, such as modulus normalization or external calibration \cite{moskowitz1977magnitude}. The most commonly used method for modulus normalization is geometric averaging since this preserves the ratio information \cite{moskowitz1977magnitude, mcgee2004master}. However, as opposed to the unipolar scales used in \cite{bard1996magnitude, mcgee2004master}, we are using bipolar scales (disagree-agree). By including 0 (neutral) and negative values (disagree), we cannot use geometric averaging anymore because it uses log calculations \cite{moskowitz1977magnitude}. Using the algorithmic mean is also not an option since it would destroy the ratio scale properties \cite{moskowitz1977magnitude}. Therefore \cite{moskowitz1977magnitude} proposed an external calibration method that keeps the ratio scale properties. This method instructs the subjects at the end of the survey to indicate which verbal label (such as 'strongly agree') corresponds with which numerical value they used before \cite{moskowitz1977magnitude}. Then we calculate the average value, called the pivot value, and divide each ME value by the pivot value \cite{moskowitz1977magnitude}. This allows normalization of the ME values among all subjects while the ratios are maintained.
+
+Most papers that use the ME method apply some form of validation. Cross-modality validation is a technique that is often applied to validate the ME results \cite{bard1996magnitude}. Psychophysicists compare the magnitude estimates to the physical stimuli \cite{bard1996magnitude}. They analyze the correlation between the magnitude estimates and the physical stimuli by taking the log of each value and plotting them against each other \cite{bard1996magnitude}. In the case of estimating line lengths, we can easily vary the line length, for example, by showing a line that is twice as long as the previous line. Subjects can then estimate the line length using a number twice as large. However, this becomes more difficult in the social science and psychology domains. In hate speech detection and other applications in social science and psychology, we do not have an exact measure of the stimulus \cite{bard1996magnitude}. Luckily, related work has shown that ME is still a suitable technique for eliciting opinions about different types of non-physical stimuli \cite{bard1996magnitude, mcgee2004master, maddalena2017crowdsourcing, lodge1979comparisons}. We can validate the magnitude estimates by adopting the cross-modality technique but instead compare judgements against judgements \cite{bard1996magnitude, lodge1979comparisons}. Some papers analyze the correlation between different ME scales for validation, such as handgrip measurements or drawing lines \cite{bard1996magnitude, lodge1976calibration}. Others compare ME with another validated scale that can be of any type. For example, in \cite{maddalena2017crowdsourcing} about judging the relevance of documents, the authors compared the ME scale with two validated ordinal scales for the same dataset \cite{maddalena2017crowdsourcing}. So, we also need to validate our findings by checking the correlation between the ME scale and another scale. Validating two different measures is a form of convergent validation \cite{fitzner2007reliability}. Refer to \ref{sec:analysis-validity} for more details about validation.
+
+\subsubsection{100-level scale}
+In \ref{sec:me}, we concluded that we need to validate the ME scale by comparing it against another. We will use a bounded scale that consists of 100 numerical levels to validate the ME scale for four reasons. First, it is impractical in this project, given the limited budget, to use other ME scales, such as measuring the intensity of the subjects' handgrips to express their judgements. Second, there does not exist any suitable dataset that we can use for validation that contains human ratings of different scenarios in hate speech detection. Third, we concluded in \ref{sec:likert} that Likert scales have limited response freedom. Finally, in \cite{roitero2018fine}, the authors concluded that the 100-level scale provides more response freedom than course-grained Likert scales and has several advantages over ME in terms of usability and reliability. The 100-level scale is easier to understand than ME, does not require normalization, and provides more flexibility than Likert scales \cite{roitero2018fine}. Therefore, we will let each subject rate half of all scenarios with the ME scale and the other half with the 100-level scale.
+
+\subsection{Design}
+We will list all independent, dependent, confounding, and control variables analyzed in our experiment in this section. Important to note is that we do not intend to study the confounding variables ‘demographic’ and ‘age’. The main reason for this is that we do not focus on the effects of subject characteristics on the outcomes but only want to study whether the ME technique is suitable for retrieving opinions about hate speech detection predictions. We left the investigation of the effects of subject characteristics on the outcomes to future research. According to \cite{gold2018women}, there is no significant difference in how men and women perceive hate. Therefore, we do not consider gender as a confounding variable.
+
+\subsubsection{Independent variables}
+\begin{itemize}
+    \item \textbf{Scenarios}
+          \begin{itemize}
+              \item \textbf{True Positive} Show a hateful post to the user and explain that SocialNet detected hate and removed the post.
+              \item \textbf{True Negative} Show a non-hateful post to the user and explain that SocialNet did not detect hate and tolerated the post.
+              \item \textbf{False Positive} Show a non-hateful post to the user and explain that SocialNet detected hate and removed the post.
+              \item \textbf{False Negative} Show a hateful post to the users and explain that SocialNet did not detect hate and tolerated the post.
+              \item \textbf{Rejection}
+                    \begin{itemize}
+                        \item Show a hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
+                        \item Or, show a non-hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
+                    \end{itemize}
+          \end{itemize}
+
+    \item \textbf{Social media posts}
+          \begin{itemize}
+              \item Neutral content.
+              \item Hateful content that is either sexist or racist.
+          \end{itemize}
+\end{itemize}
+
+\subsubsection{Confounding variables}
+\begin{itemize}
+    \item \textbf{Demographic} People from different countries might have different perceptions and definitions of hate speech and how we should deal with it (tolerating hateful content or removing it).
+    \item \textbf{Age} People of different ages might have different perceptions and definitions of hate speech and how we should deal with it (tolerating hateful content or removing it).
+    \item \textbf{Learning effect of the scales} Since each subject needs to use both scales, we might introduce a learning effect problem. Once the subject learns how to rate with one scale and then uses another, then the results of the second scale might be affected.
+\end{itemize}
+
+\subsubsection{Control variables}
+\begin{itemize}
+    \item \textbf{Scales} Because of our confounding variable ‘learning effect of the scales', we need to cancel the learning effect out. We do this by splitting the group into two and assigning a different order of scales to each group. For example, the first group needs to answer the questions using the ME scale first and then 100-level scale. The second group needs to answer the questions using the 100-level scale first and then the ME scale.
+    \item \textbf{Content of the posts} All social media posts are sampled from existing datasets containing both hateful and non-hateful tweets.
+\end{itemize}
+
+\subsubsection{Dependent variables}
+\begin{itemize}
+    \item \textbf{Reliability} Measured using the Krippendorff's alpha where values larger than 0.8 indicate reliable conclusions and values larger than 0.6 indicate tentative conclusions \cite{krippendorff2004reliability}.
+    \item \textbf{Validity} Convergent validity (if two different measures measure the same thing) \cite{fitzner2007reliability}. Measured by calculating the correlation between the magnitude estimates and the response values from the 100 level scale.
+    \item \textbf{Costs of TP, TN, FP, FN, and rejection scenarios} Measured by calculating the mean of the normalized magnitude estimates of each scenario.
+\end{itemize}
+
+\subsection{Planned sample}
+We will explain in this section how we will recruit the participants, give our sample size, and set our stopping and exclusion rules.
+
+\subsubsection{Participant Inclusion and Exclusion Criteria}
+We will use the \href{https://prolific.co}{Prolific} platform for recruiting online participants. We will use the following inclusion criteria for our participants:
+\begin{itemize}
+    \item 18 years of age and older since we are showing offensive language in the experiment.
+    \item Fluent in English.
+    \item Approval rating over 90\% on the Prolific platform.
+    \item Use one of the following social media platforms regularly (at least once a month): Facebook, Twitter, YouTube, LinkedIn, Pinterest, Google Plus, Tumblr, Instagram, Reddit, VK, Flickr, Vine.co, Meetup, ask.fm, Snapchat, TikTok, Medium.
+\end{itemize}
+
+We use the following exclusion/rejection criteria:
+\begin{itemize}
+    \item Participants who fail the attention check. Around the start of the survey, we will include an Instructional Manipulation Check to check if the user pays attention to the survey\footnote{\url{https://researcher-help.prolific.co/hc/en-gb/articles/360009223553}}.
+    \item Participants who do not complete all questions.
+    \item Participants who do not agree with the informed consent before the start of the survey. We are not allowed to collect and process their data if they do not consent.
+\end{itemize}
+
+\subsubsection{Participant Compensation}
+Every participant will be paid based on the hourly wage of 9.0 GBP (about 10,67 Euro), indicated as good pay by the platform\footnote{\url{https://prolific.co/pricing}}.
+
+\subsubsection{Sample size}
+There are 4.55 billion active social media users\footnote{\url{https://datareportal.com/reports/digital-2021-october-global-statshot}}. We choose a 95\% Confidence Interval (CI) and 10\% Margin of Error (MoE) for this study. So for 95\% of the time, our observations will fall within a 10\% interval \cite{olson2014ways}. According to \cite{olson2014ways}, we need a sample size of 96 participants to reach the desired CI and MoE values. We chose 10\% MoE since we have a limiting budget. We will first conduct a pilot survey for 5 participants to gather feedback and check if we need to improve things before the actual experiment. We want to determine the average workload using the pilot survey and decide whether it’s possible to reduce the MoE by increasing the number of participants. For the pilot survey, we will use 5 participants. Therefore, in total we will need $5+96 = 101$ participants.
+
+\subsection{Materials}
+\subsubsection{Survey tool}
+We use \href{https://www.limesurvey.org}{LimeSurvey} as our survey tool since it supports all the features we need, and its (discounted) subscription price is 17 euros per month.
+
+\subsubsection{Data}
+% TODO: explain content analysis
+We will use 40 different social media posts where 20 are hateful and 20 are not hateful to create 40 different scenarios. So, each subject will need to judge four scenarios for each type (TP, TN, FP, FN, and rejection) for each scale type (ME and 100-level) since we let each subject use both scales. We used the datasets from \cite{waseem2016hateful} and \cite{basile2019semeval} and randomly sampled both neutral and hateful samples. Both datasets contain tweet messages from Twitter that are neutral, racist or sexist. We filtered out the Twitter replies and mentions since the context is not always clear in these messages.
+
+\section{Procedure}
+This section will explain all steps of the survey. \autoref{sec:appendix} contains all presentation texts, the informed consent, and some scenario examples. In this experiment, we will shuffle and present the TP, TN, FP, FN, and rejection settings to the subjects. We include one additional question in each scenario after showing the social media post in which we ask the subjects whether they think the post is hateful or not. This question is binary and can be answered with yes or no. The results of these questions are purely informative and used to understand the results of the final question about the agreement with SocialNet's decision. All subjects have 10 seconds before they can continue to the next scenario. There is no limit to the amount of time they spend on each question. All the collected data is completely anonymous. Finally, we will inform the participants not to put personal identifiers in their answers.
+
+\begin{itemize}[leftmargin=*, label={}]
+    \item \textbf{Step 1: provide informed consent}
+          \begin{itemize}
+              \item Show the informed consent (with checkboxes for giving consent).
+              \item Proceed to the next step only for the participants who give consent.
+          \end{itemize}
+    \item \textbf{Step 2: introduction}
+          \begin{itemize}
+              \item Show introductory text about what is expected from the subject.
+              \item We split all participants up into two groups.
+              \item The first group first uses the ME scale to rate the first half of all scenarios and then uses the 100-level scale for the second half.
+              \item The second group first uses the 100-level scale to rate the first half of all scenarios and then uses the ME scale for the second half.
+              \item Provide an explanation in the introduction about the first scale.
+          \end{itemize}
+    \item \textbf{Step 3: attention check}
+          \begin{itemize}
+              \item Simple attention check where we ask the subject to select one option.
+          \end{itemize}
+    \item \textbf{Step 4a: ME practice phase (when ME is used first)}
+          \begin{itemize}
+              \item To let subjects learn how to use ME, we first run a practice phase where we shuffle and present 5 different line lengths.
+              \item Each subject needs to estimate the line length using any positive value.
+          \end{itemize}
+    \item \textbf{Step 4b: first half of all scenarios using the first scale (ME or 100-level)}
+          \begin{itemize}
+              \item Show 20 different scenarios in random order: 4 TP, 4 TN, 4 FP, 4 FN, and 4 rejection.
+          \end{itemize}
+    \item \textbf{Step 4c: ME calibration phase (when ME is used first)}
+          \begin{itemize}
+              \item Ask subjects what numbers correspond with the following verbal labels: Strongly disagree, disagree, somewhat disagree, somewhat agree, agree, strongly agree.
+              \item We will use this to normalize the magnitude estimates as explained in the external calibration method from \cite{moskowitz1977magnitude}.
+          \end{itemize}
+    \item \textbf{Step 5a: ME practice phase (when ME is used second)}
+          \begin{itemize}
+              \item Explain that we are going to use the ME scale in the second part.
+              \item To let subjects learn how to use ME, we first run a practice phase where we shuffle and present 5 different line lengths.
+              \item Each subject needs to estimate the line length using any positive value.
+          \end{itemize}
+    \item \textbf{Step 5b: second half of all scenarios using the second scale (ME or 100-level)}
+          \begin{itemize}
+              \item In case we now use the 100-level scale, explain that we now switch to the 100-level scale and how this scale works.
+              \item Show 20 different scenarios in random order: 4 TP, 4 TN, 4 FP, 4 FN, and 4 rejection.
+          \end{itemize}
+    \item \textbf{Step 5c: ME calibration phase (when ME is used second)}
+          \begin{itemize}
+              \item Ask subjects what numbers correspond with the following verbal labels: strongly disagree, disagree, somewhat disagree, somewhat agree, agree, strongly agree.
+              \item We will use this to normalize the magnitude estimates as explained in the external calibration method from \cite{moskowitz1977magnitude}.
+          \end{itemize}
+
+    \item \textbf{Step 6: finish}
+          \begin{itemize}
+              \item Show a thank you message and redirect the users to Prolific to complete the task.
+          \end{itemize}
+\end{itemize}
+
+\section{Analysis}
+First, we calculate the cost values for the TP, TN, FP, FN, and rejection scenarios in hate speech detection using the survey's results. Second, we analyze whether we can use the results to draw any conclusions by looking at two aspects: reliability and validity.
+
+\subsection{Costs}
+\label{sec:analysis-costs}
+The goal of the complete experiment is to come up with the relative cost values for TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection. The metric from the first part of our research takes these numerical values as its input to calculate the optimal rejection threshold. We do not need to know the absolute cost values but only the relative cost values. For example, if we set all cost values to 1, we retrieve the same optimal rejection threshold as setting all cost values to 1000. Therefore, we need to know the cost ratios between all scenario types. The ME technique provides us with ratio data. We use a bipolar scale for question 3 in the survey since we ask the subjects whether they agree, disagree, or are neutral with the decision of SocialNet (tolerating, removing, or rejecting posts). For both scales, we will convert disagreement values to negative values, neutral values to 0, and agreement values to positive values. This allows us to calculate the mean value of how much all subjects agree or disagree with the decisions from SocialNet. The results should give us an understanding of how the subjects feel towards the different scenarios: TP, TN, FP, FP, and rejection.
+
+For example, to calculate the mean value of all responses to question 3 of the TP scenarios for both scales, we use:
+\begin{align*}
+    \bar{r}_{TP}^{ME} = \frac{1}{n} \sum_{i=1}^{n} r_i^{ME}   & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of ME responses to TP scenarios       \\and $r_i^{ME}$ is the $i$th ME response value.}\\
+    \bar{r}_{TP}^{100} = \frac{1}{n} \sum_{i=1}^{n} r_i^{100} & \quad \parbox{35em}{\footnotesize where $n$ is the total number of 100-level responses to TP scenarios \\and $r_i^{100}$ is $i$th 100-level response value.}
+\end{align*}
+
+We apply the same calculations for the remaining scenario types. We define the cost values we need for the metric using the mean scores of the TP, TN, FP, FN, and rejection scenarios rated with the ME scale. We will interpret disagreement values as costs and agreement values as gains. We will not use the mean scores of the 100-level scale in our metric since the 100-level scale does not have ratio properties.
+
+\subsection{Reliability}
+Reliability is about whether we can trust our results and if we get consistent results \cite{fitzner2007reliability}. We do this by mainly looking at the inter-rater reliability. This means that different subjects should give approximately the same judgements to the same scenarios. We measure the inter-rater reliability using Krippendorff's alpha \cite{maddalena2017crowdsourcing, krippendorff2004reliability}. We calculate the inter-rater reliability value using the mean response values as calculated in \ref{sec:analysis-costs}. We will use the inter-rater reliability scores to compare the ME scale with the 100-level scale. We also study the inter-rater reliability values for the different types of scenarios: TP, TN, FN, FP, and rejection. Other types of reliability, such as test-retest reliability, are not considered in this experiment. Guaranteeing test-retest reliability would require us to redo the complete experiment at a different time for the same subjects. This is infeasible for our thesis project, given the limited time and budget.
+
+\subsection{Validity}
+\label{sec:analysis-validity}
+Validity is about whether we are measuring the things we want to measure \cite{fitzner2007reliability}. The main goal of this aspect is to validate if we can use the ME technique to measure subjects' opinions about hate speech detection scenarios. There are multiple types of validity, but we focus mainly on convergent validity (part of construct validity), content validity, and face validity \cite{fitzner2007reliability}. Construct validity checks whether there is an agreement between a theory and a measurement device or procedure \cite{fitzner2007reliability}. Convergent validity is about the correlation between different types of measures to see if they measure the same phenomenon \cite{fitzner2007reliability}. Content validity is about letting external experts review the proposed research questions and procedure \cite{fitzner2007reliability}. Face validity is the subjective type of validity, and it is about why we think the questions and proposed procedures are valid \cite{fitzner2007reliability}.
+
+We analyze convergent validity by comparing the mean scores from \ref{sec:analysis-costs} between the two scales. We can verify that they measure the same phenomenon by analyzing the correlation between the scales. However, we can expect a low correlation since the ME scale is a (normalized) unbounded scale and the 100-level scale is bounded. Nevertheless, we think that both scales will give similar results, meaning that high ME responses should correspond to high 100-level scale responses and low ME responses to low 100-level scale responses. To guarantee content validity, we let external experts (the supervisors of this thesis project) check this pre-registration report. We guarantee face validity by discussing whether the ME technique gives us the expected results. We exclude other forms of validity from this experiment because they either are irrelevant or infeasible. For example, external validity is about the degree to which the findings can be generalized to other settings or groups. We would have to experiment with multiple groups with different demographic and age characteristics to guarantee external validity. We left this for future work to investigate since this is out of scope for our thesis project. Despite that, we think that people of different ages and demographic characteristics perceive hate differently since people have other norms and values in various parts of the world. We believe that if we conduct this experiment using different groups of subjects, then we might retrieve different cost values. Therefore, we decided not to create too many participant inclusion criteria but take a random sample of global social media users.
+
+\appendix
+\section{Presentation texts}
+\label{sec:appendix}
+
+\subsection{Consent}
+You are being invited to participate in a research study titled "Costs of predictions in hate speech detection". This study is being done by Philippe Lammerts from the TU Delft.
+
+The purpose of this research study is to find out what social media users think of different scenarios of hate speech detection on social media. It will take you approximately 25 minutes to complete. These scenarios consist of two things. First, we show a specific social media post that can be either hateful or not hateful. You need to indicate if you feel that this post is hateful or not hateful. Second, we explain how the social media platform dealt with this post. You need to indicate whether you agree/disagree/are neutral about the platform's decision. We will use the results of the survey in the thesis project.
+
+Warning: some of the scenarios used in this experiment contain harmful and offensive content that may make some people feel uncomfortable.
+
+As with any online activity, the risk of a breach is always possible. To the best of our ability, your answers in this study will remain confidential. We will minimize any risks by making this survey completely anonymous. Therefore, please do not provide any personal information anywhere. The anonymous results might be shared publicly in the future.
+
+Your participation in this study is entirely voluntary, and you can withdraw at any time.
+
+Feel free to contact me with any questions or feedback you might have:
+p.m.lammerts@student.tudelft.nl
+
+If you understand and agree with the above information and consent to take part in this study, you can check the checkbox and click on the 'Next' button to start the survey.
+
+
+\subsection{Short introduction ME-100}
+\begin{itemize}
+    \item This survey consists of two parts.
+    \item In each part, you will be presented with a series of different scenarios.
+    \item For each scenario, you need to answer two questions using a specific scale.
+    \item Warning: some of the scenarios used in this experiment contain harmful and offensive content that may make some people feel uncomfortable.
+    \item We will explain the exact instructions later.
+    \item But first, we will let you familiarize yourself with a scale called Magnitude Estimation.
+\end{itemize}
+
+\subsection{Short introduction 100-ME}
+\begin{itemize}
+    \item This survey consists of two parts.
+    \item In each part, you will be presented with a series of different scenarios.
+    \item For each scenario, you need to answer two questions using a specific scale.
+    \item Warning: some of the scenarios used in this experiment contain harmful and offensive content that may
+          make some people feel uncomfortable.
+    \item We will explain the exact instructions in the next page.
+\end{itemize}
+
+\subsection{Introduction}
+You will be presented with a series of different scenarios.
+\begin{itemize}
+    \item Each scenario describes a situation of a social media user who wants to post a specific message on a fictional social media platform we now call SocialNet.
+    \item These posts can be neutral or contain hateful content (sexist or racist posts).
+    \item SocialNet uses automated detection systems for detecting hate speech.
+    \item Each scenario describes one of the following situations for a specific social media post:
+          \begin{enumerate}
+              \item You are a user of the SocialNet platform and have not seen this post online because SocialNet \textbf{removed} the post since they considered it to be hateful.
+              \item You are a user of the SocialNet platform and just saw this post online because SocialNet \textbf{tolerated} the post since they considered it to be not hateful.
+              \item You are a user of the SocialNet platform and just saw this post online because SocialNet \textbf{was uncertain} about whether the post was hateful or not. An internal content moderator at SocialNet needs to look at it. It will remain publicly visible for at most 24 hours until the moderator decides to remove it when necessary.
+          \end{enumerate}
+\end{itemize}
+
+For each scenario, you need to answer two questions:
+
+\subsection{100-level scale explanation}
+\begin{itemize}
+    \item First, you need to indicate whether you feel that this post is hateful or not hateful.
+    \item Second, your task is to tell how you feel about SocialNet's decision.
+          \begin{itemize}
+              \item If you feel neutral about SocialNet’s decision, place the slider in the middle (value of 0).
+              \item If you (dis)agree with the decision, you need to indicate how much you (dis)agree by assigning any number between 1 and 100.
+              \item A large number means you (dis)agree with it a lot, while a small number means you (dis)agree with it a little.
+              \item Try to make each number match the intensity as you perceive it.
+              \item Please try to not only use appropriate numbers but also avoid restricting your choice of numbers from 1 to 10. (\cite{bard1996magnitude} recommended to include this instruction)
+          \end{itemize}
+\end{itemize}
+
+\subsection{ME scale explanation (inspired by \cite{moskowitz1977magnitude})}
+\begin{itemize}
+    \item First, you need to indicate whether you feel that this post is hateful or not hateful.
+    \item Second, your task is to tell how you feel about SocialNet's decision.
+          \begin{itemize}
+              \item If you feel neutral about SocialNet's decision, this value will be equal to 0.
+              \item If you (dis)agree with the decision from SocialNet, you need to assign any number that is greater than 0 that reflects how much you (dis)agree with the decision.
+              \item Assign any number that seems appropriate to you.
+              \item If you (dis)agree twice as much with the current decision as with the previous one, you need to assign a number that is twice as large as the previous number.
+              \item Or, if you (dis)agree half as much with the current decision as with the previous one, you need to assign a number that is half as large as the previous number.
+              \item You can use any number or decimal you want, but make each assignment proportional to your subjective impression.
+          \end{itemize}
+\end{itemize}
+
+\subsection{Attention check}
+This question is an attention check. You must select 'Blue' here.\footnote{Based on \url{https://researcher-help.prolific.co/hc/en-gb/articles/360009223553}}
+
+\subsection{Training phase ME}
+"As a warm-up task, to familiarize you with magnitude estimation, you will be shown a sequence of five lines, one at a time.
+\begin{itemize}
+    \item For each line, enter a number into the text box below the displayed line. This number should reflect your perception of the length of the line. You may use any numbers that seem appropriate to you—whole numbers or decimals. However, you may not use negative numbers or zero.
+    \item For each subsequent line, enter a number that reflects your perception of its length, relative to the previous line. For example, if you feel that the current line is twice as long as the previous, then you should assign a number that is twice as large as the number you used previously.
+\end{itemize}
+
+Don’t worry about running out of numbers—there will always be a larger number than the largest you use, and a smaller number than the smallest you use. Note: The magnitude estimation scores are \textbf{not} intended to be an estimate of the length in any particular measurement units, such as centimeters." \cite{maddalena2017crowdsourcing}
+
+\subsection{Example FN scenario with ME scale}
+\textbf{WARNING: the example used in this section contain content that may make some people feel uncomfortable.}
+
+Suppose somebody wants to post the following social media post on SocialNet:
+
+\textit{“I really hate all immigrants, they steal our homes!!!”}\\
+
+\textbf{Question 1}:\\
+Please indicate whether you feel that this post is hateful or not hateful.\\
+
+**Select input with options: 'hateful' or 'not hateful'**\\
+
+\textbf{Question 2}:\\
+You are a user of the SocialNet platform and just saw this post online because SocialNet \textbf{tolerated} the post since they considered it to be not hateful.
+
+Please indicate how you feel about SocialNet's decision.\\
+
+**Select input with options: 'agree', 'neutral', or 'disagree'.**\\
+
+\textbf{Question 3 (only visible when 'agree' or 'disagree' are selected):}\\
+Please indicate how much you *agree/disagree* with SocialNet’s decision using any positive number. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet’s decision, select neutral in the question above.\\
+
+**Show ME input field that allows all positive values greater than 0.**
+
+
+
+\subsection{Example FP scenario with 100-level scale}
+
+Suppose somebody wants to post the following social media post on SocialNet:
+
+\textit{“I hate how much I love everybody in the world!!!”}\\
+
+\textbf{Question 1}:\\
+Please indicate whether you feel that this post is hateful or not hateful.\\
+
+**Select input with options: 'hateful' or 'not hateful'**\\
+
+\textbf{Question 2}:\\
+You are a user of the SocialNet platform and have not seen this post online because SocialNet \textbf{removed} the post since they considered it to be hateful.
+
+Please indicate how you feel about SocialNet's decision.\\
+
+**Select input with options: 'agree', 'neutral', or 'disagree'.**\\
+
+\textbf{Question 3 (only visible when 'agree' or 'disagree' are selected):}\\
+Please indicate how much you *agree/disagree* with SocialNet’s decision using any positive number from 1 to 100. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet’s decision, select neutral in the question above.\\
+
+**Show a numerical slider with values between 1 and 100.**\\
+
+
+\subsection{Example rejection scenario with 100-level scale}
+
+Suppose somebody wants to post the following social media post on SocialNet:
+
+\textit{“I hate how much I love everybody in the world!!!”}\\
+
+\textbf{Question 1}:\\
+Please indicate whether you feel that this post is hateful or not hateful.\\
+
+**Select input with options: 'hateful' or 'not hateful'**\\
+
+\textbf{Question 2}:\\
+You are a user of the SocialNet platform and just saw this post online because SocialNet \textbf{was uncertain} about whether the post was hateful or not. An internal content moderator at SocialNet needs to look at it. It will remain publicly visible for at most 24 hours until the moderator decides to remove it when necessary.
+
+Please indicate how you feel about SocialNet's decision.\\
+
+**Select input with options: 'agree', 'neutral', or 'disagree'.**\\
+
+\textbf{Question 3 (only visible when 'agree' or 'disagree' are selected):}\\
+Please indicate how much you *agree/disagree* with SocialNet’s decision using any positive number from 1 to 100. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet’s decision, select neutral in the question above.\\
+
+**Show a numerical slider with values between 1 and 100.**\\
+
+
+\subsection{ME calibration}
+You are now finished with the scenarios using the magnitude estimation scale.
+
+In each scenario, you had to indicate how much you agreed or disagreed with how SocialNet dealt with a social media post.
+
+We now ask you to estimate \textbf{what numbers correspond to what labels}.
+
+\begin{itemize}
+    \item Try to recall which numbers you used before when answering the questions and assign each label a number that reflected your subjective feeling.
+    \item Use negative values for the 'strongly disagree', 'disagree', and 'somewhat disagree' fields.
+    \item Use positive values for the 'strongly agree', 'agree', and 'somewhat agree' fields.
+    \item For example, if you strongly agreed with a decision during the scenarios and rated it using the number 300, then assign 300 to the label 'strongly agree'.
+    \item For example, if you somewhat disagreed with a decision during the scenarios and rated it using the number 8, then assign -8 to the label 'somewhat disagree'.
+\end{itemize}
+
+**Show 'Strongly disagree', 'Disagree', 'Somewhat disagree', 'Neutral (equals 0)', 'Somewhat agree', 'Agree', and 'Strongly agree' labels with ME inputs**
+
+\bibliographystyle{abbrvnat}
+\bibliography{ref}
+
+\end{document}
