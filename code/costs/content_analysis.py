@@ -1,5 +1,4 @@
-from dataclasses import field
-from pydoc import doc
+from typing import List
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 import csv
@@ -24,16 +23,36 @@ FILE_PATH = "F:\Thesis\data\SemEval\hateval2019_en_train.csv"
 NUM_SAMPLES = 5
 
 
-def most_representative_sample_indices(distances, cluster_index, num_samples):
+def most_representative_sample_indices(distances: List[List[float]], cluster_index: int, num_samples: int) -> List[int]:
+    """Returns the indices of the most representative samples.
+
+    Args:
+        distances (List[List[float]]): list of distances between samples and all clusters.
+        cluster_index (int): cluster index for which the most representative samples need to be returned.
+        num_samples (int): number of most representative samples to return.
+
+    Returns:
+        List[int]: list of indices of the most representative samples for cluster.
+    """
     distances = list(map(lambda s: s[cluster_index], distances))
     sorted_distances_ind = np.argsort(np.array(distances))
     return sorted_distances_ind[0:num_samples]
 
 
-def contains_mention_or_url(text):
+def valid_text(text: str) -> bool:
+    """Checks if the text is valid.
+    Valid texts do not contains mentions and urls since the context is often unclear for these tweets,
+    and should be empty after cleaning the text up (removing hashtags, urls, mentions and html attributes)
+
+    Args:
+        text (str): the string that needs to be checked.
+
+    Returns:
+        bool: whether the text is valid or not.
+    """
     tokenized_text = p.tokenize(text)
     cleaned_text = p.clean(html.unescape(text))
-    return "$MENTION$" in tokenized_text or "$URL$" in tokenized_text or cleaned_text == ''
+    return "$MENTION$" not in tokenized_text and "$URL$" not in tokenized_text and cleaned_text != ''
 
 
 with open(FILE_PATH, newline='', encoding='utf-8') as f:
@@ -43,10 +62,12 @@ with open(FILE_PATH, newline='', encoding='utf-8') as f:
 # Filter out
 filtered_data = list(
     filter(lambda x: x[2] == HS and x[3] == TR and x[4] == AG, data))
+
+# Remove first row since these contains headers
 filtered_data = filtered_data[1:]
 
 filtered_data = [
-    x for x in filtered_data if contains_mention_or_url(x[1]) == False]
+    x for x in filtered_data if valid_text(x[1])]
 
 # Remove html attributes and clean tweets by removing hashtags, mentions, and urls
 data = list(map(lambda x: p.clean(html.unescape(x[1])), filtered_data))
@@ -56,10 +77,7 @@ vectorizer = TfidfVectorizer(max_df=0.5, min_df=2, stop_words="english")
 X = vectorizer.fit_transform(data)
 
 # Apply k-means clustering
-km = KMeans(
-    n_clusters=K,
-    init="k-means++",
-)
+km = KMeans(n_clusters=K, init="k-means++")
 
 # Calculate distances between samples and all clusters
 distances = km.fit_transform(X)
