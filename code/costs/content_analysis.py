@@ -44,19 +44,11 @@ with open(FILE_PATH, newline='', encoding='utf-8') as f:
 filtered_data = list(
     filter(lambda x: x[2] == HS and x[3] == TR and x[4] == AG, data))
 filtered_data = filtered_data[1:]
-# print("size: ", len(filtered_data))
 
-# data = data[:10]
-# print("data: ", data)
-# tokenized_tweets = list(map(lambda x: p.tokenize(x[1]), data))
-# tokenized_tweets_with_index = [{'tweet': x, 'index': i}
-#                                for i, x in enumerate(tokenized_tweets)]
 filtered_data = [
     x for x in filtered_data if contains_mention_or_url(x[1]) == False]
 
 # Remove html attributes and clean tweets by removing hashtags, mentions, and urls
-# data_with_index = list(map(lambda x: {'tweet': p.clean(html.unescape(
-#     x['tweet'])), 'index': x['index']}, filtered_tokenized_tweets))
 data = list(map(lambda x: p.clean(html.unescape(x[1])), filtered_data))
 
 # Fit and transform the data using TF-IDF
@@ -68,25 +60,24 @@ km = KMeans(
     n_clusters=K,
     init="k-means++",
 )
-pred = km.fit_predict(X)
-dist = km.transform(X)
-# print("predictions: ", pred)
-# print("distances: ", dist)
 
-# Print top 10 terms per cluster
-print("Top terms per cluster:")
+# Calculate distances between samples and all clusters
+distances = km.fit_transform(X)
 ordered_centroids = km.cluster_centers_.argsort()[:, ::-1]
 terms = vectorizer.get_feature_names_out()
-for i in range(K):
-    print("Cluster %d:" % i, end="")
-    for ind in ordered_centroids[i, :10]:
-        print(" %s" % terms[ind], end="")
-    print()
 
 for k in range(K):
-    ind = most_representative_sample_indices(dist, k, NUM_SAMPLES)
     print("=======================================")
     print("Cluster ", k)
+    # Print top 10 terms per cluster
+    print("Top terms:")
+    for i in ordered_centroids[k, :10]:
+        print(" %s" % terms[i], end="")
+    print()
+    print()
+
+    ind = most_representative_sample_indices(distances, k, NUM_SAMPLES)
+
     print("Most representative sample indices:", ind)
     for i in ind:
         print(data[i])
