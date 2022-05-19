@@ -1,6 +1,9 @@
 from typing import List
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import TruncatedSVD
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import Normalizer
 import csv
 import preprocessor as p
 import html
@@ -10,11 +13,11 @@ import numpy as np
 # https://scikit-learn.org/stable/auto_examples/text/plot_document_clustering.html#clustering
 
 # Number of clusters
-K = 2
+K = 4
 # Filter on tweets that are hateful ('1') or not hateful ('0')
 HS = '1'
 # If HS is set to hateful, then we can filter on targeted to a specific individual ('1') or a generic group ('0')
-TR = '1'
+TR = '0'
 # If HS is set to hateful, then we can filter on aggressive tweets ('1') or non-aggressive tweets ('0')
 AG = '1'
 # Path of CSV file
@@ -59,6 +62,8 @@ with open(FILE_PATH, newline='', encoding='utf-8') as f:
     reader = csv.reader(f)
     data = list(reader)
 
+print("Original data length: ", len(data) - 1)
+
 # Filter out
 filtered_data = list(
     filter(lambda x: x[2] == HS and x[3] == TR and x[4] == AG, data))
@@ -66,22 +71,43 @@ filtered_data = list(
 # Remove first row since these contains headers
 filtered_data = filtered_data[1:]
 
+print("After applying filters: ", len(filtered_data))
+
+# Remove all tweets that are invalid (contain urls, mentions, or not enough text after cleaning)
 filtered_data = [
     x for x in filtered_data if valid_text(x[1])]
 
 # Remove html attributes and clean tweets by removing hashtags, mentions, and urls
 data = list(map(lambda x: p.clean(html.unescape(x[1])), filtered_data))
 
+print("Data length after removing invalid tweets: ", len(data))
+
 # Fit and transform the data using TF-IDF
-vectorizer = TfidfVectorizer(max_df=0.5, min_df=2, stop_words="english")
+vectorizer = TfidfVectorizer(stop_words="english")
 X = vectorizer.fit_transform(data)
+
+# Perform Latent Semantic Analysis (LSA) to reduce dimensions
+# This helps to remove noise
+# We use Singular Value Decomposition (SVD) on the TF-IDF data,
+# which is then known as LSA.
+# For LSA, a dimensionality of 100 is recommended.
+svd = TruncatedSVD(n_components=100)
+normalizer = Normalizer(copy=False)
+lsa = make_pipeline(svd, normalizer)
+
+X = lsa.fit_transform(X)
+
+explained_variance = svd.explained_variance_ratio_.sum()
+print("Explained variance of the SVD step: {}%".format(
+    int(explained_variance * 100)))
 
 # Apply k-means clustering
 km = KMeans(n_clusters=K, init="k-means++")
 
 # Calculate distances between samples and all clusters
 distances = km.fit_transform(X)
-ordered_centroids = km.cluster_centers_.argsort()[:, ::-1]
+original_space_centroids = svd.inverse_transform(km.cluster_centers_)
+ordered_centroids = original_space_centroids.argsort()[:, ::-1]
 terms = vectorizer.get_feature_names_out()
 
 for k in range(K):
