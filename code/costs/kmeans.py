@@ -1,5 +1,5 @@
 from langcodes import Any
-from sklearn.metrics import silhouette_score
+from sklearn import metrics
 from sklearn.cluster import KMeans
 from sklearn.decomposition import TruncatedSVD
 from sklearn.decomposition import PCA
@@ -259,7 +259,7 @@ class KMeansClustering:
 
     @staticmethod
     def plot_silhouette_analysis(max_k: int, X: list) -> None:
-        """Plots the results of a silhouette analysis.
+        """Plots the results of the silhouette analysis.
 
         Args:
             max_k (int): the maximum cluster size to test.
@@ -269,7 +269,7 @@ class KMeansClustering:
         for k in range(2, max_k):
             km = KMeans(n_clusters=k, init="k-means++")
             km.fit(X)
-            sil_score = silhouette_score(X, km.labels_)
+            sil_score = metrics.silhouette_score(X, km.labels_)
             sil_scores.append(sil_score)
 
         plt.plot(range(2, max_k), sil_scores)
@@ -277,4 +277,48 @@ class KMeansClustering:
         plt.title('Silhouette analysis')
         plt.xlabel('K (cluster size)')
         plt.ylabel('Silhouette coefficient')
+        plt.show()
+
+    @staticmethod
+    def plot_calinski_harabasz_analysis(max_k: int, X: list) -> None:
+        """Plots the results of the Calinski-Harabasz analysis.
+
+        Args:
+            max_k (int): the maximum cluster size to test.
+            X (list): input data list.
+        """
+        sil_scores = []
+        for k in range(2, max_k):
+            km = KMeans(n_clusters=k, init="k-means++")
+            km.fit(X)
+            sil_score = metrics.calinski_harabasz_score(X, km.labels_)
+            sil_scores.append(sil_score)
+
+        plt.plot(range(2, max_k), sil_scores)
+        plt.grid(True)
+        plt.title('Calinski-Harabasz analysis')
+        plt.xlabel('K (cluster size)')
+        plt.ylabel('Calinski-Harabasz score')
+        plt.show()
+
+    @staticmethod
+    def plot_davies_bouldin_score_analysis(max_k: int, X: list) -> None:
+        """Plots the results of the Davies-Bouldin analysis.
+
+        Args:
+            max_k (int): the maximum cluster size to test.
+            X (list): input data list.
+        """
+        sil_scores = []
+        for k in range(2, max_k):
+            km = KMeans(n_clusters=k, init="k-means++")
+            km.fit(X)
+            sil_score = metrics.calinski_harabasz_score(X, km.labels_)
+            sil_scores.append(sil_score)
+
+        plt.plot(range(2, max_k), sil_scores)
+        plt.grid(True)
+        plt.title('Davies-Bouldin analysis')
+        plt.xlabel('K (cluster size)')
+        plt.ylabel('Davies-Bouldin score')
         plt.show()
