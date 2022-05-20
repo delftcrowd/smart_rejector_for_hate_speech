@@ -1,17 +1,19 @@
-from typing import List
 from langcodes import Any
+from sklearn.metrics import silhouette_score
 from sklearn.cluster import KMeans
-from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
+from sklearn.decomposition import PCA
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
+from typing import List
 import csv
-import preprocessor as p
 import html
-import numpy as np
-import matplotlib.pyplot as plt
-import sys
 import logging
+import matplotlib.pyplot as plt
+import numpy as np
+import preprocessor as p
+import sys
 
 
 class KMeansClustering:
@@ -29,8 +31,172 @@ class KMeansClustering:
         self.vectorizer = None
         self.svd = None
         self.km = None
-        self.predictions = []
-        self.distances = []
+
+    def open(self, file_path: str) -> list:
+        """Opens the file and returns list of rows read.
+
+        Args:
+            file_path (str): the file path.
+
+        Returns:
+            list: list of rows read.
+        """
+        with open(file_path, newline='', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            data = list(reader)
+        self.data = data
+
+    def filter(self, HS: str, TR: str, AG: str) -> list:
+        """Filters the data of the SemEval 2019 dataset based on the column values.
+
+        Args:
+            HS (str): filter on hateful '1' or non-hateful '0' tweets.
+            TR (str): filter on individually targeted '1' or generic group '0' targeted tweets.
+            AG (str): filter on aggressive '1' or non-aggressive '0' tweets
+        """
+        logging.info("Original data length: %s", len(self.data) - 1)
+
+        # Filter out
+        filtered_data = list(
+            filter(lambda x: x[2] == HS and x[3] == TR and x[4] == AG, self.data))
+
+        logging.info("After applying filters: %s", len(filtered_data))
+
+        # Remove first row since these contains headers
+        filtered_data = filtered_data[1:]
+        self.filtered_data = [
+            x for x in filtered_data if self.valid_text(x[1])]
+
+        logging.info("Data length after removing invalid tweets: %s",
+                     len(self.filtered_data))
+
+        # Remove all tweets that are invalid (contain urls, mentions, or not enough text after cleaning)
+        return self.filtered_data
+
+    def clean(self) -> list:
+        """Remove html attributes and clean tweets by removing hashtags, mentions, and urls.
+
+        Returns:
+            list: list of filtered data.
+        """
+        X = list(map(lambda x: p.clean(
+            html.unescape(x[1])), self.filtered_data))
+
+        return X
+
+    def fit_tfidf(self, X: list) -> list:
+        """Fit and transform the data using TF-IDF.
+
+        Returns:
+            list: fitted and transformed data with TF-IDF.
+        """
+        vectorizer = TfidfVectorizer(stop_words="english")
+        X = vectorizer.fit_transform(X)
+        self.vectorizer = vectorizer
+        return X
+
+    def fit_pca(self, X: list, n_components: int = 2) -> list:
+        """Perform Principal component analysis (PCA) to reduce dimensions.
+
+        Useful for visualization.
+
+        Args:
+            X (list): input data list.
+            n_components (int, optional): the dimensionality of the output. Defaults to 2.
+
+        Returns:
+            list: fitted and transformed data with LSA.
+        """
+        pca = PCA(n_components=n_components)
+
+        X = pca.fit_transform(X.toarray())
+
+        self.pca = pca
+        return X
+
+    def fit_lsa(self, X: list, n_components: int = 100) -> list:
+        """Perform Latent Semantic Analysis (LSA) to reduce dimensions.
+
+        This helps to remove noise. We use Singular Value Decomposition (SVD) on the TF-IDF data,
+        which is then known as LSA. For LSA, a dimensionality of 100 is recommended.
+
+        Args:
+            X (list): input data list.
+            n_components (int, optional): the dimensionality of the output. Defaults to 100.
+
+        Returns:
+            list: fitted and transformed data with LSA.
+        """
+        svd = TruncatedSVD(n_components=n_components)
+        normalizer = Normalizer(copy=False)
+        lsa = make_pipeline(svd, normalizer)
+
+        X = lsa.fit_transform(X)
+
+        explained_variance = svd.explained_variance_ratio_.sum()
+        logging.info("Explained variance of the SVD step: {}%".format(
+            int(explained_variance * 100)))
+
+        self.svd = svd
+        return X
+
+    def cluster(self, X: list, K: int) -> Any:
+        """Fits and predicts for each sample the nearest cluster.
+
+        Args:
+            X (list): input data list.
+            K (int): number of clusters.
+
+        Returns:
+            Any: the KMeans clustering object.
+        """
+        km = KMeans(n_clusters=K, init="k-means++")
+        km.fit(X)
+
+        # Calculate distances between samples and all clusters
+        self.km = km
+        self.K = K
+
+        return km
+
+    def print_top_terms(self) -> None:
+        """Prints the 10 top terms per cluster.
+        """
+        if self.svd:
+            original_space_centroids = self.svd.inverse_transform(
+                self.km.cluster_centers_)
+            ordered_centroids = original_space_centroids.argsort()[:, ::-1]
+        else:
+            ordered_centroids = self.km.cluster_centers_.argsort()[:, ::-1]
+
+        terms = self.vectorizer.get_feature_names_out()
+
+        for k in range(self.K):
+            print(f"Cluster {k}:")
+            for i in ordered_centroids[k, :10]:
+                print(" %s" % terms[i], end="")
+            print()
+            print()
+
+    def print_most_representative_samples(self, X: list, num_samples: int) -> None:
+        """Prints the most representative samples per cluster.
+
+        Args:
+            X (list): input data list.
+            num_samples (int): the number of most representative samples to return.
+        """
+        predictions = self.km.predict(X)
+        distances = self.km.transform(X)
+
+        for k in range(self.K):
+            ind = self.most_representative_sample_indices(
+                distances, predictions, k, num_samples)
+
+            print(f"Cluster {k}: most representative sample indices: {ind}")
+            for i in ind:
+                print(self.filtered_data[i])
+                print()
+            print()
 
     @staticmethod
     def most_representative_sample_indices(distances: List[List[float]], predictions: List[int], cluster_index: int, num_samples: int) -> List[int]:
@@ -70,159 +236,45 @@ class KMeansClustering:
         cleaned_text = p.clean(html.unescape(text))
         return "$MENTION$" not in tokenized_text and "$URL$" not in tokenized_text and cleaned_text != ''
 
-    def open(self, file_path: str) -> list:
-        """Opens the file and returns list of rows read.
-
-        Args:
-            file_path (str): the file path.
-
-        Returns:
-            list: list of rows read.
-        """
-        with open(file_path, newline='', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            data = list(reader)
-        self.data = data
-
-    def filter(self, HS: str, TR: str, AG: str) -> list:
-        """Filters the data of the SemEval 2019 dataset based on the column values.
-
-        Args:
-            lines (_type_): _description_
-            HS (_type_): _description_
-            TR (_type_): _description_
-            AG (_type_): _description_
-        """
-        logging.info("Original data length: ", len(self.data) - 1)
-
-        # Filter out
-        filtered_data = list(
-            filter(lambda x: x[2] == HS and x[3] == TR and x[4] == AG, self.data))
-
-        logging.info("After applying filters: ", len(filtered_data))
-
-        # Remove first row since these contains headers
-        filtered_data = filtered_data[1:]
-        self.filtered_data = [
-            x for x in filtered_data if self.valid_text(x[1])]
-
-        logging.info("Data length after removing invalid tweets: ",
-                     len(self.filtered_data))
-
-        # Remove all tweets that are invalid (contain urls, mentions, or not enough text after cleaning)
-        return self.filtered_data
-
-    def clean(self) -> list:
-        """Remove html attributes and clean tweets by removing hashtags, mentions, and urls.
-
-        Returns:
-            list: list of filtered data.
-        """
-        X = list(map(lambda x: p.clean(
-            html.unescape(x[1])), self.filtered_data))
-
-        return X
-
-    def fit_tfidf(self, X: list) -> list:
-        """Fit and transform the data using TF-IDF.
-
-        Returns:
-            list: fitted and transformed data with TF-IDF.
-        """
-        vectorizer = TfidfVectorizer(stop_words="english")
-        X = vectorizer.fit_transform(X)
-        self.vectorizer = vectorizer
-        return X
-
-    def fit_lsa(self, X: list) -> list:
-        """Perform Latent Semantic Analysis (LSA) to reduce dimensions.
-
-        This helps to remove noise. We use Singular Value Decomposition (SVD) on the TF-IDF data,
-        which is then known as LSA. For LSA, a dimensionality of 100 is recommended.
-
-        Args:
-            X (list): list of tf-idf vectors.
-
-        Returns:
-            list: fitted and transformed data with LSA.
-        """
-        svd = TruncatedSVD(n_components=100)
-        normalizer = Normalizer(copy=False)
-        lsa = make_pipeline(svd, normalizer)
-
-        X = lsa.fit_transform(X)
-
-        explained_variance = svd.explained_variance_ratio_.sum()
-        logging.info("Explained variance of the SVD step: {}%".format(
-            int(explained_variance * 100)))
-
-        self.svd = svd
-        return X
-
-    def plot_elbow_curve(self, max_k: int, X: list) -> None:
+    @staticmethod
+    def plot_elbow_curve(max_k: int, X: list) -> None:
         """Plots elbow curve for all clusters until max_k.
 
         Args:
             max_k (int): the maximum cluster size to test.
-            X (list): list of fitted and transformed LSA .
+            X (list): input data list.
         """
         plot_x = []
         for k in range(2, max_k):
             km = KMeans(n_clusters=k, init="k-means++")
+            km.fit(X)
             plot_x.append(km.inertia_)
 
         plt.plot(range(2, max_k), plot_x)
         plt.grid(True)
         plt.title('Elbow curve')
+        plt.xlabel('K (cluster size)')
+        plt.ylabel('Sum of squared distances to closest center')
         plt.show()
 
-    def cluster(self, X, K) -> Any:
-        """Fits and predicts for each sample the nearest cluster.
+    @staticmethod
+    def plot_silhouette_analysis(max_k: int, X: list) -> None:
+        """Plots the results of a silhouette analysis.
 
-        Returns:
-            Any: the KMeans clustering object.
-            X (list): list of fitted and transformed LSA .
+        Args:
+            max_k (int): the maximum cluster size to test.
+            X (list): input data list.
         """
-        km = KMeans(n_clusters=K, init="k-means++")
-        km.fit_predict(X)
+        sil_scores = []
+        for k in range(2, max_k):
+            km = KMeans(n_clusters=k, init="k-means++")
+            km.fit(X)
+            sil_score = silhouette_score(X, km.labels_)
+            sil_scores.append(sil_score)
 
-        # Calculate distances between samples and all clusters
-        self.predictions = km.fit_predict(X)
-        self.distances = km.transform(X)
-        self.km = km
-        self.K = K
-
-        return km
-
-    def print_top_terms(self) -> None:
-        """Prints the 10 top terms per cluster.
-        """
-        original_space_centroids = self.svd.inverse_transform(
-            self.km.cluster_centers_)
-        ordered_centroids = original_space_centroids.argsort()[:, ::-1]
-        terms = self.vectorizer.get_feature_names_out()
-
-        for k in range(self.K):
-            print("=======================================")
-            print("Cluster ", k)
-            print("Top terms:")
-            for i in ordered_centroids[k, :10]:
-                print(" %s" % terms[i], end="")
-            print()
-            print()
-
-    def print_most_representative_samples(self, X, num_samples) -> None:
-        """Prints the most representative samples per cluster.
-        """
-        for k in range(self.K):
-            ind = self.most_representative_sample_indices(
-                self.distances, self.predictions, k, num_samples)
-
-            print("=======================================")
-            print("Cluster ", k)
-            print("Most representative sample indices:", ind)
-            for i in ind:
-                print(X[i])
-                print(self.filtered_data[i])
-                print()
-            print()
+        plt.plot(range(2, max_k), sil_scores)
+        plt.grid(True)
+        plt.title('Silhouette analysis')
+        plt.xlabel('K (cluster size)')
+        plt.ylabel('Silhouette coefficient')
+        plt.show()
