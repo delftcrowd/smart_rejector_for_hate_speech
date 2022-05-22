@@ -26,63 +26,9 @@ class KMeansClustering:
         https://scikit-learn.org/stable/auto_examples/text/plot_document_clustering.html#clustering
         """
         self.K = None
-        self.data = []
-        self.filtered_data = []
         self.vectorizer = None
         self.svd = None
         self.km = None
-
-    def open(self, file_path: str) -> list:
-        """Opens the file and returns list of rows read.
-
-        Args:
-            file_path (str): the file path.
-
-        Returns:
-            list: list of rows read.
-        """
-        with open(file_path, newline='', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            data = list(reader)
-        self.data = data
-
-    def filter(self, HS: str, TR: str, AG: str) -> list:
-        """Filters the data of the SemEval 2019 dataset based on the column values.
-
-        Args:
-            HS (str): filter on hateful '1' or non-hateful '0' tweets.
-            TR (str): filter on individually targeted '1' or generic group '0' targeted tweets.
-            AG (str): filter on aggressive '1' or non-aggressive '0' tweets
-        """
-        logging.info("Original data length: %s", len(self.data) - 1)
-
-        # Filter out
-        filtered_data = list(
-            filter(lambda x: x[2] == HS and x[3] == TR and x[4] == AG, self.data))
-
-        logging.info("After applying filters: %s", len(filtered_data))
-
-        # Remove first row since these contains headers
-        filtered_data = filtered_data[1:]
-        self.filtered_data = [
-            x for x in filtered_data if self.valid_text(x[1])]
-
-        logging.info("Data length after removing invalid tweets: %s",
-                     len(self.filtered_data))
-
-        # Remove all tweets that are invalid (contain urls, mentions, or not enough text after cleaning)
-        return self.filtered_data
-
-    def clean(self) -> list:
-        """Remove html attributes and clean tweets by removing hashtags, mentions, and urls.
-
-        Returns:
-            list: list of filtered data.
-        """
-        X = list(map(lambda x: p.clean(
-            html.unescape(x[1])), self.filtered_data))
-
-        return X
 
     def fit_tfidf(self, X: list) -> list:
         """Fit and transform the data using TF-IDF.
@@ -178,11 +124,12 @@ class KMeansClustering:
             print()
             print()
 
-    def print_most_representative_samples(self, X: list, num_samples: int) -> None:
+    def print_most_representative_samples(self, original_data: list, X: List[str], num_samples: int) -> None:
         """Prints the most representative samples per cluster.
 
         Args:
-            X (list): input data list.
+            original_data (list): original input data list.
+            X (list): input data list that contains all filtered and cleaned tweets.
             num_samples (int): the number of most representative samples to return.
         """
         predictions = self.km.predict(X)
@@ -194,7 +141,7 @@ class KMeansClustering:
 
             print(f"Cluster {k}: most representative sample indices: {ind}")
             for i in ind:
-                print(self.filtered_data[i])
+                print(original_data[i])
                 print()
             print()
 
@@ -219,22 +166,6 @@ class KMeansClustering:
         sorted_distances_ind = np.argsort(np.array(cluster_distances))
 
         return sorted_distances_ind[0:num_samples]
-
-    @staticmethod
-    def valid_text(text: str) -> bool:
-        """Checks if the text is valid.
-        Valid texts do not contains mentions and urls since the context is often unclear for these tweets,
-        and should be empty after cleaning the text up (removing hashtags, urls, mentions and html attributes)
-
-        Args:
-            text (str): the string that needs to be checked.
-
-        Returns:
-            bool: whether the text is valid or not.
-        """
-        tokenized_text = p.tokenize(text)
-        cleaned_text = p.clean(html.unescape(text))
-        return "$MENTION$" not in tokenized_text and "$URL$" not in tokenized_text and cleaned_text != ''
 
     @staticmethod
     def plot_elbow_curve(max_k: int, X: list) -> None:
