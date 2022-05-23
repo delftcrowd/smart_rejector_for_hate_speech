@@ -29,7 +29,10 @@ dependencies:
       - scipy==1.7.1
       - statsmodels==0.13.2
 
-      #The packages below are required for both
+      # The packages below are required for both
       - tqdm==4.62.3
       - numpy==1.19.2
       - ipykernel==6.9.1
+
+      # The packages below are required for content-analysis
+      - gensim==4.2.0
