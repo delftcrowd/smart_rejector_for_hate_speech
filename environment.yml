@@ -35,4 +35,4 @@ dependencies:
       - ipykernel==6.9.1
 
       # The packages below are required for content-analysis
-      - zeugma==0.49
+      - gensim==4.2.0
