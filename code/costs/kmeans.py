@@ -6,12 +6,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
 from typing import List, Any
-import csv
-import html
 import logging
 import matplotlib.pyplot as plt
 import numpy as np
-import preprocessor as p
 import sys
 
 
