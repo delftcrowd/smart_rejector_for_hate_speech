@@ -172,12 +172,12 @@ class KMeansClustering:
             X (list): input data list.
         """
         plot_x = []
-        for k in range(2, max_k):
+        for k in range(2, max_k + 1):
             km = KMeans(n_clusters=k, init="k-means++")
             km.fit(X)
             plot_x.append(km.inertia_)
 
-        plt.plot(range(2, max_k), plot_x)
+        plt.plot(range(2, max_k + 1), plot_x)
         plt.grid(True)
         plt.title('Elbow curve')
         plt.xlabel('K (cluster size)')
@@ -193,13 +193,13 @@ class KMeansClustering:
             X (list): input data list.
         """
         sil_scores = []
-        for k in range(2, max_k):
+        for k in range(2, max_k + 1):
             km = KMeans(n_clusters=k, init="k-means++")
             km.fit(X)
             sil_score = metrics.silhouette_score(X, km.labels_)
             sil_scores.append(sil_score)
 
-        plt.plot(range(2, max_k), sil_scores)
+        plt.plot(range(2, max_k + 1), sil_scores)
         plt.grid(True)
         plt.title('Silhouette analysis')
         plt.xlabel('K (cluster size)')
@@ -215,13 +215,13 @@ class KMeansClustering:
             X (list): input data list.
         """
         sil_scores = []
-        for k in range(2, max_k):
+        for k in range(2, max_k + 1):
             km = KMeans(n_clusters=k, init="k-means++")
             km.fit(X)
             sil_score = metrics.calinski_harabasz_score(X, km.labels_)
             sil_scores.append(sil_score)
 
-        plt.plot(range(2, max_k), sil_scores)
+        plt.plot(range(2, max_k + 1), sil_scores)
         plt.grid(True)
         plt.title('Calinski-Harabasz analysis')
         plt.xlabel('K (cluster size)')
@@ -237,13 +237,13 @@ class KMeansClustering:
             X (list): input data list.
         """
         sil_scores = []
-        for k in range(2, max_k):
+        for k in range(2, max_k + 1):
             km = KMeans(n_clusters=k, init="k-means++")
             km.fit(X)
             sil_score = metrics.calinski_harabasz_score(X, km.labels_)
             sil_scores.append(sil_score)
 
-        plt.plot(range(2, max_k), sil_scores)
+        plt.plot(range(2, max_k + 1), sil_scores)
         plt.grid(True)
         plt.title('Davies-Bouldin analysis')
         plt.xlabel('K (cluster size)')
