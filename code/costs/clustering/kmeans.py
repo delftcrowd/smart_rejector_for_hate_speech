@@ -24,6 +24,7 @@ class KMeansClustering:
         self.K = None
         self.vectorizer = None
         self.svd = None
+        self.lsa = None
         self.km = None
 
     def fit_tfidf(self, X: list) -> list:
@@ -80,6 +81,7 @@ class KMeansClustering:
             int(explained_variance * 100)))
 
         self.svd = svd
+        self.lsa = lsa
         return X
 
     def cluster(self, X: list, K: int) -> Any:
