@@ -1,7 +1,7 @@
 ### Smart rejector for Hate Speech
 
 - name of student: Philippe Lammerts
-- names of supervisors: Dr. J. Yang, Dr. Y-C. Hsu, Prof.dr.ir. G.J.P.M. Houben
+- names of supervisors: Dr. J. Yang, Dr. Y-C. Hsu, Prof.dr.ir. G.J.P.M. Houben, P. Lippmann
 - academic year: 2021/2022
 
 ### Introduction
