@@ -6,12 +6,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
 from typing import List, Any
-import csv
-import html
 import logging
 import matplotlib.pyplot as plt
 import numpy as np
-import preprocessor as p
 import sys
 
 
@@ -27,6 +24,7 @@ class KMeansClustering:
         self.K = None
         self.vectorizer = None
         self.svd = None
+        self.lsa = None
         self.km = None
 
     def fit_tfidf(self, X: list) -> list:
@@ -83,6 +81,7 @@ class KMeansClustering:
             int(explained_variance * 100)))
 
         self.svd = svd
+        self.lsa = lsa
         return X
 
     def cluster(self, X: list, K: int) -> Any:
@@ -175,12 +174,12 @@ class KMeansClustering:
             X (list): input data list.
         """
         plot_x = []
-        for k in range(2, max_k):
+        for k in range(2, max_k + 1):
             km = KMeans(n_clusters=k, init="k-means++")
             km.fit(X)
             plot_x.append(km.inertia_)
 
-        plt.plot(range(2, max_k), plot_x)
+        plt.plot(range(2, max_k + 1), plot_x)
         plt.grid(True)
         plt.title('Elbow curve')
         plt.xlabel('K (cluster size)')
@@ -196,13 +195,13 @@ class KMeansClustering:
             X (list): input data list.
         """
         sil_scores = []
-        for k in range(2, max_k):
+        for k in range(2, max_k + 1):
             km = KMeans(n_clusters=k, init="k-means++")
             km.fit(X)
             sil_score = metrics.silhouette_score(X, km.labels_)
             sil_scores.append(sil_score)
 
-        plt.plot(range(2, max_k), sil_scores)
+        plt.plot(range(2, max_k + 1), sil_scores)
         plt.grid(True)
         plt.title('Silhouette analysis')
         plt.xlabel('K (cluster size)')
@@ -218,13 +217,13 @@ class KMeansClustering:
             X (list): input data list.
         """
         sil_scores = []
-        for k in range(2, max_k):
+        for k in range(2, max_k + 1):
             km = KMeans(n_clusters=k, init="k-means++")
             km.fit(X)
             sil_score = metrics.calinski_harabasz_score(X, km.labels_)
             sil_scores.append(sil_score)
 
-        plt.plot(range(2, max_k), sil_scores)
+        plt.plot(range(2, max_k + 1), sil_scores)
         plt.grid(True)
         plt.title('Calinski-Harabasz analysis')
         plt.xlabel('K (cluster size)')
@@ -240,13 +239,13 @@ class KMeansClustering:
             X (list): input data list.
         """
         sil_scores = []
-        for k in range(2, max_k):
+        for k in range(2, max_k + 1):
             km = KMeans(n_clusters=k, init="k-means++")
             km.fit(X)
             sil_score = metrics.calinski_harabasz_score(X, km.labels_)
             sil_scores.append(sil_score)
 
-        plt.plot(range(2, max_k), sil_scores)
+        plt.plot(range(2, max_k + 1), sil_scores)
         plt.grid(True)
         plt.title('Davies-Bouldin analysis')
         plt.xlabel('K (cluster size)')
