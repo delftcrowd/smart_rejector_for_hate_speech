@@ -109,7 +109,7 @@ Most papers that use the ME method apply some form of validation. Cross-modality
 In \ref{sec:me}, we concluded that we need to validate the ME scale by comparing it against another. We will use a bounded scale that consists of 100 numerical levels to validate the ME scale for four reasons. First, it is impractical in this project, given the limited budget, to use other ME scales, such as measuring the intensity of the subjects' handgrips to express their judgements. Second, there does not exist any suitable dataset that we can use for validation that contains human ratings of different scenarios in hate speech detection. Third, we concluded in \ref{sec:likert} that Likert scales have limited response freedom. Finally, in \cite{roitero2018fine}, the authors concluded that the 100-level scale provides more response freedom than course-grained Likert scales and has several advantages over ME in terms of usability and reliability. The 100-level scale is easier to understand than ME, does not require normalization, and provides more flexibility than Likert scales \cite{roitero2018fine}. Therefore, we will let each subject rate half of all scenarios with the ME scale and the other half with the 100-level scale.
 
 \subsection{Design}
-We will list all independent, dependent, confounding, and control variables analyzed in our experiment in this section. Important to note is that we do not intend to study the confounding variables ‘demographic’ and ‘age’. The main reason for this is that we do not focus on the effects of subject characteristics on the outcomes but only want to study whether the ME technique is suitable for retrieving opinions about hate speech detection predictions. We left the investigation of the effects of subject characteristics on the outcomes to future research. According to \cite{gold2018women}, there is no significant difference in how men and women perceive hate. Therefore, we do not consider gender as a confounding variable.
+We will list all independent, dependent, confounding, and control variables analyzed in our experiment in this section. Important to note is that we do not intend to study the confounding variables 'demographic' and 'age'. The main reason for this is that we do not focus on the effects of subject characteristics on the outcomes but only want to study whether the ME technique is suitable for retrieving opinions about hate speech detection predictions. We left the investigation of the effects of subject characteristics on the outcomes to future research. According to \cite{gold2018women}, there is no significant difference in how men and women perceive hate. Therefore, we do not consider gender as a confounding variable.
 
 \subsubsection{Independent variables}
 \begin{itemize}
@@ -129,7 +129,12 @@ We will list all independent, dependent, confounding, and control variables anal
     \item \textbf{Social media posts}
           \begin{itemize}
               \item Neutral content.
-              \item Hateful content that is either sexist or racist.
+              \item Hateful content.\begin{itemize}
+                        \item Generic group target + aggressive
+                        \item Generic group target + non-aggressive
+                        \item Individual target + aggressive
+                        \item Individual target + non-aggressive
+                    \end{itemize}
           \end{itemize}
 \end{itemize}
 
@@ -176,15 +181,14 @@ We use the following exclusion/rejection criteria:
 Every participant will be paid based on the hourly wage of 9.0 GBP (about 10,67 Euro), indicated as good pay by the platform\footnote{\url{https://prolific.co/pricing}}.
 
 \subsubsection{Sample size}
-There are 4.55 billion active social media users\footnote{\url{https://datareportal.com/reports/digital-2021-october-global-statshot}}. We choose a 95\% Confidence Interval (CI) and 10\% Margin of Error (MoE) for this study. So for 95\% of the time, our observations will fall within a 10\% interval \cite{olson2014ways}. According to \cite{olson2014ways}, we need a sample size of 96 participants to reach the desired CI and MoE values. We chose 10\% MoE since we have a limiting budget. We will first conduct a pilot survey for 5 participants to gather feedback and check if we need to improve things before the actual experiment. We want to determine the average workload using the pilot survey and decide whether it’s possible to reduce the MoE by increasing the number of participants. For the pilot survey, we will use 5 participants. Therefore, in total we will need $5+96 = 101$ participants.
+There are 4.55 billion active social media users\footnote{\url{https://datareportal.com/reports/digital-2021-october-global-statshot}}. We choose a 95\% Confidence Interval (CI) and 10\% Margin of Error (MoE) for this study. So for 95\% of the time, our observations will fall within a 10\% interval \cite{olson2014ways}. According to \cite{olson2014ways}, we need a sample size of 96 participants to reach the desired CI and MoE values. We chose 10\% MoE since we have a limiting budget. We will first conduct a pilot survey for 5 participants to gather feedback and check if we need to improve things before the actual experiment. We want to determine the average workload using the pilot survey and decide whether it's possible to reduce the MoE by increasing the number of participants. For the pilot survey, we will use 5 participants. Therefore, in total we will need $5+96 = 101$ participants.
 
 \subsection{Materials}
 \subsubsection{Survey tool}
 We use \href{https://www.limesurvey.org}{LimeSurvey} as our survey tool since it supports all the features we need, and its (discounted) subscription price is 17 euros per month.
 
 \subsubsection{Data}
-% TODO: explain content analysis
-We will use 40 different social media posts where 20 are hateful and 20 are not hateful to create 40 different scenarios. So, each subject will need to judge four scenarios for each type (TP, TN, FP, FN, and rejection) for each scale type (ME and 100-level) since we let each subject use both scales. We used the datasets from \cite{waseem2016hateful} and \cite{basile2019semeval} and randomly sampled both neutral and hateful samples. Both datasets contain tweet messages from Twitter that are neutral, racist or sexist. We filtered out the Twitter replies and mentions since the context is not always clear in these messages.
+We will use 40 different social media posts where 20 are hateful and 20 are not hateful to create 40 different scenarios. So, each subject will need to judge four scenarios for each type (TP, TN, FP, FN, and rejection) for each scale type (ME and 100-level) since we let each subject use both scales. We used the dataset from \cite{basile2019semeval} that contains 13,000 English tweets. Each tweet is annotated in three categories: hate speech (yes/no), target (generic group or an individual), and aggressiveness (yes/no). Therefore, we have four different groups of hateful tweets: generic target + aggressive, individual target + aggressive, generic target + non-aggressive, and individual target + aggressive. We filtered out all tweets that contain replies and mentions since the context is not always clear in these messages. Then we preprocessed all tweets by removing the URLs and hashtags. We performed term frequency-inverse document frequency (TF-IDF), latent semantic analysis (LSA), and k-means clustering on each group of tweets. We calculated the silhouette coefficient to determine the optimal cluster size (k value) for the neutral tweets and the four groups of hateful tweets. The silhouette analysis indicated to set k as large as possible. We selected the tweets by taking the nearest data sample to each cluster centroid. We used a cluster size of 20 for the neutral tweets and sampled one tweet per cluster to collect 20 neutral tweets. And we used a cluster size of 5 for each group of hateful tweets to collect 20 hateful tweets.
 
 \section{Procedure}
 This section will explain all steps of the survey. \autoref{sec:appendix} contains all presentation texts, the informed consent, and some scenario examples. In this experiment, we will shuffle and present the TP, TN, FP, FN, and rejection settings to the subjects. We include one additional question in each scenario after showing the social media post in which we ask the subjects whether they think the post is hateful or not. This question is binary and can be answered with yes or no. The results of these questions are purely informative and used to understand the results of the final question about the agreement with SocialNet's decision. All subjects have 10 seconds before they can continue to the next scenario. There is no limit to the amount of time they spend on each question. All the collected data is completely anonymous. Finally, we will inform the participants not to put personal identifiers in their answers.
@@ -313,7 +317,7 @@ If you understand and agree with the above information and consent to take part 
 You will be presented with a series of different scenarios.
 \begin{itemize}
     \item Each scenario describes a situation of a social media user who wants to post a specific message on a fictional social media platform we now call SocialNet.
-    \item These posts can be neutral or contain hateful content (sexist or racist posts).
+    \item These posts can be neutral or contain hateful content.
     \item SocialNet uses automated detection systems for detecting hate speech.
     \item Each scenario describes one of the following situations for a specific social media post:
           \begin{enumerate}
@@ -330,7 +334,7 @@ For each scenario, you need to answer two questions:
     \item First, you need to indicate whether you feel that this post is hateful or not hateful.
     \item Second, your task is to tell how you feel about SocialNet's decision.
           \begin{itemize}
-              \item If you feel neutral about SocialNet’s decision, place the slider in the middle (value of 0).
+              \item If you feel neutral about SocialNet's decision, place the slider in the middle (value of 0).
               \item If you (dis)agree with the decision, you need to indicate how much you (dis)agree by assigning any number between 1 and 100.
               \item A large number means you (dis)agree with it a lot, while a small number means you (dis)agree with it a little.
               \item Try to make each number match the intensity as you perceive it.
@@ -362,14 +366,14 @@ This question is an attention check. You must select 'Blue' here.\footnote{Based
     \item For each subsequent line, enter a number that reflects your perception of its length, relative to the previous line. For example, if you feel that the current line is twice as long as the previous, then you should assign a number that is twice as large as the number you used previously.
 \end{itemize}
 
-Don’t worry about running out of numbers—there will always be a larger number than the largest you use, and a smaller number than the smallest you use. Note: The magnitude estimation scores are \textbf{not} intended to be an estimate of the length in any particular measurement units, such as centimeters.'' \cite{maddalena2017crowdsourcing}
+Don't worry about running out of numbers—there will always be a larger number than the largest you use, and a smaller number than the smallest you use. Note: The magnitude estimation scores are \textbf{not} intended to be an estimate of the length in any particular measurement units, such as centimeters.'' \cite{maddalena2017crowdsourcing}
 
 \subsection{Example FN scenario with ME scale}
 \textbf{WARNING: the example used in this section contain content that may make some people feel uncomfortable.}
 
 Suppose somebody wants to post the following social media post on SocialNet:
 
-\textit{“I really hate all immigrants, they steal our homes!!!”}\\
+\textit{``Literally just got hit by a car bc this dumb blonde bitch was on her phone and she didn't even stop after HAHAHAHA what a cunt''\cite{basile2019semeval}}\\
 
 \textbf{Question 1}:\\
 Please indicate whether you feel that this post is hateful or not hateful.\\
@@ -384,7 +388,7 @@ Please indicate how you feel about SocialNet's decision.\\
 **Select input with options: 'agree', 'neutral', or 'disagree'.**\\
 
 \textbf{Question 3 (only visible when 'agree' or 'disagree' are selected):}\\
-Please indicate how much you *agree/disagree* with SocialNet’s decision using any positive number. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet’s decision, select neutral in the question above.\\
+Please indicate how much you *agree/disagree* with SocialNet's decision using any positive number. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet's decision, select neutral in the question above.\\
 
 **Show ME input field that allows all positive values greater than 0.**
 
@@ -394,7 +398,7 @@ Please indicate how much you *agree/disagree* with SocialNet’s decision using 
 
 Suppose somebody wants to post the following social media post on SocialNet:
 
-\textit{“I hate how much I love everybody in the world!!!”}\\
+\textit{``Democrats claim I need more diversity and hate immigrants. My immigrant friends from Ukraine, Belarus and Cuba all say Democrats promote the socialism that they immigrated to escape. Hmmm. Who knows best?  Survivors of socialism or the people who openly hate me and my country?''\cite{basile2019semeval}}\\
 
 \textbf{Question 1}:\\
 Please indicate whether you feel that this post is hateful or not hateful.\\
@@ -409,7 +413,7 @@ Please indicate how you feel about SocialNet's decision.\\
 **Select input with options: 'agree', 'neutral', or 'disagree'.**\\
 
 \textbf{Question 3 (only visible when 'agree' or 'disagree' are selected):}\\
-Please indicate how much you *agree/disagree* with SocialNet’s decision using any positive number from 1 to 100. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet’s decision, select neutral in the question above.\\
+Please indicate how much you *agree/disagree* with SocialNet's decision using any positive number from 1 to 100. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet's decision, select neutral in the question above.\\
 
 **Show a numerical slider with values between 1 and 100.**\\
 
@@ -418,7 +422,7 @@ Please indicate how much you *agree/disagree* with SocialNet’s decision using 
 
 Suppose somebody wants to post the following social media post on SocialNet:
 
-\textit{“I hate how much I love everybody in the world!!!”}\\
+\textit{``Democrats claim I need more diversity and hate immigrants. My immigrant friends from Ukraine, Belarus and Cuba all say Democrats promote the socialism that they immigrated to escape. Hmmm. Who knows best? Survivors of socialism or the people who openly hate me and my country?''\cite{basile2019semeval}}\\
 
 \textbf{Question 1}:\\
 Please indicate whether you feel that this post is hateful or not hateful.\\
@@ -433,7 +437,7 @@ Please indicate how you feel about SocialNet's decision.\\
 **Select input with options: 'agree', 'neutral', or 'disagree'.**\\
 
 \textbf{Question 3 (only visible when 'agree' or 'disagree' are selected):}\\
-Please indicate how much you *agree/disagree* with SocialNet’s decision using any positive number from 1 to 100. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet’s decision, select neutral in the question above.\\
+Please indicate how much you *agree/disagree* with SocialNet's decision using any positive number from 1 to 100. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet's decision, select neutral in the question above.\\
 
 **Show a numerical slider with values between 1 and 100.**\\
 
