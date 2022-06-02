@@ -109,7 +109,7 @@ Most papers that use the ME method apply some form of validation. Cross-modality
 In \ref{sec:me}, we concluded that we need to validate the ME scale by comparing it against another. We will use a bounded scale that consists of 100 numerical levels to validate the ME scale for four reasons. First, it is impractical in this project, given the limited budget, to use other ME scales, such as measuring the intensity of the subjects' handgrips to express their judgements. Second, there does not exist any suitable dataset that we can use for validation that contains human ratings of different scenarios in hate speech detection. Third, we concluded in \ref{sec:likert} that Likert scales have limited response freedom. Finally, in \cite{roitero2018fine}, the authors concluded that the 100-level scale provides more response freedom than course-grained Likert scales and has several advantages over ME in terms of usability and reliability. The 100-level scale is easier to understand than ME, does not require normalization, and provides more flexibility than Likert scales \cite{roitero2018fine}. Therefore, we will let each subject rate half of all scenarios with the ME scale and the other half with the 100-level scale.
 
 \subsection{Design}
-We will list all independent, dependent, confounding, and control variables analyzed in our experiment in this section. Important to note is that we do not intend to study the confounding variables ‘demographic’ and ‘age’. The main reason for this is that we do not focus on the effects of subject characteristics on the outcomes but only want to study whether the ME technique is suitable for retrieving opinions about hate speech detection predictions. We left the investigation of the effects of subject characteristics on the outcomes to future research. According to \cite{gold2018women}, there is no significant difference in how men and women perceive hate. Therefore, we do not consider gender as a confounding variable.
+We will list all independent, dependent, confounding, and control variables analyzed in our experiment in this section. Important to note is that we do not intend to study the confounding variables 'demographic' and 'age'. The main reason for this is that we do not focus on the effects of subject characteristics on the outcomes but only want to study whether the ME technique is suitable for retrieving opinions about hate speech detection predictions. We left the investigation of the effects of subject characteristics on the outcomes to future research. According to \cite{gold2018women}, there is no significant difference in how men and women perceive hate. Therefore, we do not consider gender as a confounding variable.
 
 \subsubsection{Independent variables}
 \begin{itemize}
@@ -181,7 +181,7 @@ We use the following exclusion/rejection criteria:
 Every participant will be paid based on the hourly wage of 9.0 GBP (about 10,67 Euro), indicated as good pay by the platform\footnote{\url{https://prolific.co/pricing}}.
 
 \subsubsection{Sample size}
-There are 4.55 billion active social media users\footnote{\url{https://datareportal.com/reports/digital-2021-october-global-statshot}}. We choose a 95\% Confidence Interval (CI) and 10\% Margin of Error (MoE) for this study. So for 95\% of the time, our observations will fall within a 10\% interval \cite{olson2014ways}. According to \cite{olson2014ways}, we need a sample size of 96 participants to reach the desired CI and MoE values. We chose 10\% MoE since we have a limiting budget. We will first conduct a pilot survey for 5 participants to gather feedback and check if we need to improve things before the actual experiment. We want to determine the average workload using the pilot survey and decide whether it’s possible to reduce the MoE by increasing the number of participants. For the pilot survey, we will use 5 participants. Therefore, in total we will need $5+96 = 101$ participants.
+There are 4.55 billion active social media users\footnote{\url{https://datareportal.com/reports/digital-2021-october-global-statshot}}. We choose a 95\% Confidence Interval (CI) and 10\% Margin of Error (MoE) for this study. So for 95\% of the time, our observations will fall within a 10\% interval \cite{olson2014ways}. According to \cite{olson2014ways}, we need a sample size of 96 participants to reach the desired CI and MoE values. We chose 10\% MoE since we have a limiting budget. We will first conduct a pilot survey for 5 participants to gather feedback and check if we need to improve things before the actual experiment. We want to determine the average workload using the pilot survey and decide whether it's possible to reduce the MoE by increasing the number of participants. For the pilot survey, we will use 5 participants. Therefore, in total we will need $5+96 = 101$ participants.
 
 \subsection{Materials}
 \subsubsection{Survey tool}
@@ -334,7 +334,7 @@ For each scenario, you need to answer two questions:
     \item First, you need to indicate whether you feel that this post is hateful or not hateful.
     \item Second, your task is to tell how you feel about SocialNet's decision.
           \begin{itemize}
-              \item If you feel neutral about SocialNet’s decision, place the slider in the middle (value of 0).
+              \item If you feel neutral about SocialNet's decision, place the slider in the middle (value of 0).
               \item If you (dis)agree with the decision, you need to indicate how much you (dis)agree by assigning any number between 1 and 100.
               \item A large number means you (dis)agree with it a lot, while a small number means you (dis)agree with it a little.
               \item Try to make each number match the intensity as you perceive it.
@@ -360,13 +360,13 @@ For each scenario, you need to answer two questions:
 This question is an attention check. You must select 'Blue' here.\footnote{Based on \url{https://researcher-help.prolific.co/hc/en-gb/articles/360009223553}}
 
 \subsection{Training phase ME}
-"As a warm-up task, to familiarize you with magnitude estimation, you will be shown a sequence of five lines, one at a time.
+``As a warm-up task, to familiarize you with magnitude estimation, you will be shown a sequence of five lines, one at a time.
 \begin{itemize}
     \item For each line, enter a number into the text box below the displayed line. This number should reflect your perception of the length of the line. You may use any numbers that seem appropriate to you—whole numbers or decimals. However, you may not use negative numbers or zero.
     \item For each subsequent line, enter a number that reflects your perception of its length, relative to the previous line. For example, if you feel that the current line is twice as long as the previous, then you should assign a number that is twice as large as the number you used previously.
 \end{itemize}
 
-Don’t worry about running out of numbers—there will always be a larger number than the largest you use, and a smaller number than the smallest you use. Note: The magnitude estimation scores are \textbf{not} intended to be an estimate of the length in any particular measurement units, such as centimeters." \cite{maddalena2017crowdsourcing}
+Don't worry about running out of numbers—there will always be a larger number than the largest you use, and a smaller number than the smallest you use. Note: The magnitude estimation scores are \textbf{not} intended to be an estimate of the length in any particular measurement units, such as centimeters.'' \cite{maddalena2017crowdsourcing}
 
 \subsection{Example FN scenario with ME scale}
 \textbf{WARNING: the example used in this section contain content that may make some people feel uncomfortable.}
@@ -388,7 +388,7 @@ Please indicate how you feel about SocialNet's decision.\\
 **Select input with options: 'agree', 'neutral', or 'disagree'.**\\
 
 \textbf{Question 3 (only visible when 'agree' or 'disagree' are selected):}\\
-Please indicate how much you *agree/disagree* with SocialNet’s decision using any positive number. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet’s decision, select neutral in the question above.\\
+Please indicate how much you *agree/disagree* with SocialNet's decision using any positive number. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet's decision, select neutral in the question above.\\
 
 **Show ME input field that allows all positive values greater than 0.**
 
@@ -413,7 +413,7 @@ Please indicate how you feel about SocialNet's decision.\\
 **Select input with options: 'agree', 'neutral', or 'disagree'.**\\
 
 \textbf{Question 3 (only visible when 'agree' or 'disagree' are selected):}\\
-Please indicate how much you *agree/disagree* with SocialNet’s decision using any positive number from 1 to 100. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet’s decision, select neutral in the question above.\\
+Please indicate how much you *agree/disagree* with SocialNet's decision using any positive number from 1 to 100. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet's decision, select neutral in the question above.\\
 
 **Show a numerical slider with values between 1 and 100.**\\
 
@@ -437,7 +437,7 @@ Please indicate how you feel about SocialNet's decision.\\
 **Select input with options: 'agree', 'neutral', or 'disagree'.**\\
 
 \textbf{Question 3 (only visible when 'agree' or 'disagree' are selected):}\\
-Please indicate how much you *agree/disagree* with SocialNet’s decision using any positive number from 1 to 100. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet’s decision, select neutral in the question above.\\
+Please indicate how much you *agree/disagree* with SocialNet's decision using any positive number from 1 to 100. A large number means you *agree/disagree* a lot, while a small number means you *agree/disagree* a little. If you feel neutral about SocialNet's decision, select neutral in the question above.\\
 
 **Show a numerical slider with values between 1 and 100.**\\
 
