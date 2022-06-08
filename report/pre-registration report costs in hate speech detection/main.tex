@@ -72,7 +72,7 @@ The amount of hateful content that is spread online on social media platforms re
 
 Therefore in this project, we focus on Machine Learning (ML) models with a reject option. The goal of the reject option is to reject a prediction when the model is not confident enough \cite{hendrickx2021machine}. This thesis project is about building a smart rejector for detecting hate speech. A system in which the machine assists the human in detecting hate speech automatically and in which the human makes the decisions when the machine is not confident enough.
 
-The first goal of the project was to find a confidence metric that calculates the optimal rejection threshold. This threshold is calculated based on the confidence values of the ML predictions, the ground-truth labels of the underlying data samples, and a set of cost values. These cost values represent the impact of the True Positive (TP: correctly predicting content as hateful), True Negative (TN: correctly predicting content as non-hateful), False Positive (FP: predicting content as hateful while it is non-hateful), False Negative (FN: predicting content as non-hateful while it is hateful) and rejected predictions. Rejecting a prediction means that the ML predictor was not confident enough and, therefore, a human moderator needs to make the final judgment. We understand that there are different ways of handling rejected predictions. In this project, we treat rejected predictions as content that remains publicly visible online for, at most, 24 hours until a human moderator decides to remove/tolerate it. We based the timespan of 24 hours on a news article that stated that Germany fines social media platforms if they do not remove hate speech within 24 hours\footnote{\url{https://www.nytimes.com/2017/06/30/business/germany-facebook-google-twitter.html}}.
+The first goal of the project was to find a confidence metric that calculates the optimal rejection threshold. This threshold is calculated based on the confidence values of the ML predictions, the ground-truth labels of the underlying data samples, and a set of cost values. These cost values represent the impact of the True Positive (TP: correctly predicting content as hateful), True Negative (TN: correctly predicting content as non-hateful), False Positive (FP: predicting content as hateful while it is non-hateful), False Negative (FN: predicting content as non-hateful while it is hateful) and rejected predictions. Rejecting a prediction means that the ML predictor was not confident enough and, therefore, a human moderator needs to make the final judgment. We understand that there are different ways of handling rejected predictions. In this project, we treat rejected predictions as content that remains publicly visible online for, at most, 24 hours until a human moderator decides to remove/allow it. We based the timespan of 24 hours on a news article that stated that Germany fines social media platforms if they do not remove hate speech within 24 hours\footnote{\url{https://www.nytimes.com/2017/06/30/business/germany-facebook-google-twitter.html}}.
 
 The second step of this project is to find out how we can retrieve the relative cost values of TP, TN, FP, FN, and rejected predictions in hate speech detection. By relative costs, we mean to figure out, for example, the cost ratio between an FP and an FN prediction. Expressing these cost values in money spent/saved is infeasible in hate speech detection due to many uncertainties \cite{sunstein2018does}. So in this experiment, we aim to define the cost values in a subjective manner by analyzing the subjects' opinions about different hate speech detection scenarios. The main research question and our hypotheses of this experiment are as follows:
 
@@ -116,9 +116,9 @@ We will list all independent, dependent, confounding, and control variables anal
     \item \textbf{Scenarios}
           \begin{itemize}
               \item \textbf{True Positive} Show a hateful post to the user and explain that SocialNet detected hate and removed the post.
-              \item \textbf{True Negative} Show a non-hateful post to the user and explain that SocialNet did not detect hate and tolerated the post.
+              \item \textbf{True Negative} Show a non-hateful post to the user and explain that SocialNet did not detect hate and allowed the post.
               \item \textbf{False Positive} Show a non-hateful post to the user and explain that SocialNet detected hate and removed the post.
-              \item \textbf{False Negative} Show a hateful post to the users and explain that SocialNet did not detect hate and tolerated the post.
+              \item \textbf{False Negative} Show a hateful post to the users and explain that SocialNet did not detect hate and allowed the post.
               \item \textbf{Rejection}
                     \begin{itemize}
                         \item Show a hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
@@ -322,7 +322,7 @@ You will be presented with a series of different scenarios.
     \item Each scenario describes one of the following situations for a specific social media post:
           \begin{enumerate}
               \item You are a user of the SocialNet platform and have not seen this post online because SocialNet \textbf{removed} the post since they considered it to be hateful.
-              \item You are a user of the SocialNet platform and just saw this post online because SocialNet \textbf{tolerated} the post since they considered it to be not hateful.
+              \item You are a user of the SocialNet platform and just saw this post online because SocialNet \textbf{allowed} the post since they considered it to be not hateful.
               \item You are a user of the SocialNet platform and just saw this post online because SocialNet \textbf{was uncertain} about whether the post was hateful or not. An internal content moderator at SocialNet needs to look at it. It will remain publicly visible for at most 24 hours until the moderator decides to remove it when necessary.
           \end{enumerate}
 \end{itemize}
@@ -381,7 +381,7 @@ Please indicate whether you feel that this post is hateful or not hateful.\\
 **Select input with options: 'hateful' or 'not hateful'**\\
 
 \textbf{Question 2}:\\
-You are a user of the SocialNet platform and just saw this post online because SocialNet \textbf{tolerated} the post since they considered it to be not hateful.
+You are a user of the SocialNet platform and just saw this post online because SocialNet \textbf{allowed} the post since they considered it to be not hateful.
 
 Please indicate how you feel about SocialNet's decision.\\
 
