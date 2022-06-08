@@ -4,28 +4,39 @@ from pydoc import doc
 import pandas as pd
 
 PATH = "F:\Thesis\Experiments\Costs\Results\/03-06-2022 (FEEDBACK) ME-100.csv"
-
-data = pd.read_csv(PATH)
-df = pd.DataFrame()
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
 
-for index, row in data.iterrows():
-    r = {}
-    for type in TYPES:
-        for i in range(1, 5):
-            decision = row.filter(regex=f"^ME{type}{i}s\.").values[0]
-            value = row.filter(regex=f"^ME{type}{i}v\.").values[0]
-            me = None
+data = pd.read_csv(PATH)
 
-            if decision == 'Agree':
-                me = value
-            elif decision == 'Disagree':
-                me = -value
-            elif decision == 'Neutral':
-                me = 0
 
-            r[f"ME{type}{i}"] = me
+def get_value(row, scale, type, index, question):
+    return row.filter(regex=f"^{scale}{type}{index}{question}\.").values[0]
 
-    df = df.append(r, ignore_index=True)
 
-print(df)
+def convert_me(decision, value):
+    if decision == 'Agree':
+        return value
+    elif decision == 'Disagree':
+        return -value
+    elif decision == 'Neutral':
+        return 0
+
+
+def magnitude_estimates(data):
+    df = pd.DataFrame()
+
+    for _index, row in data.iterrows():
+        r = {}
+        for type in TYPES:
+            for i in range(1, 5):
+                decision = get_value(row, "ME", type, i, "s")
+                value = get_value(row, "ME", type, i, "v")
+                me = convert_me(decision, value)
+                r[f"ME{type}{i}"] = me
+
+        df = df.append(r, ignore_index=True)
+
+    return df
+
+
+print(magnitude_estimates(data))
