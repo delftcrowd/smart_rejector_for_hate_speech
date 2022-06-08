@@ -1,6 +1,7 @@
 import csv
 from pickle import TRUE
 from pydoc import doc
+from numpy import mean
 import pandas as pd
 
 PATH = "F:\Thesis\Experiments\Costs\Results\/03-06-2022 (FEEDBACK) ME-100.csv"
@@ -39,4 +40,32 @@ def magnitude_estimates(data):
     return df
 
 
-print(magnitude_estimates(data))
+def normalize(data, magnitude_estimates):
+    new_df = pd.DataFrame()
+
+    for index, row in data.iterrows():
+        mes = magnitude_estimates.iloc[[index]]
+        pivot = pivot_value(row)
+        normalized_mes = mes.div(pivot)
+        new_df = new_df.append(normalized_mes, ignore_index=True)
+
+    return new_df
+
+
+def pivot_value(row):
+    NAME = "G20Q51"
+    str_dis = row.filter(regex=f"^{NAME}\[SQ001\]\.").values[0]
+    som_dis = row.filter(regex=f"^{NAME}\[SQ002\]\.").values[0]
+    dis = row.filter(regex=f"^{NAME}\[SQ003\]\.").values[0]
+    som_agr = row.filter(regex=f"^{NAME}\[SQ005\]\.").values[0]
+    agr = row.filter(regex=f"^{NAME}\[SQ006\]\.").values[0]
+    str_agr = row.filter(regex=f"^{NAME}\[SQ007\]\.").values[0]
+    calibration_vals = [str_dis, som_dis, dis, som_agr, agr, str_agr]
+    absolute_cal_vals = [abs(val) for val in calibration_vals]
+    return mean(absolute_cal_vals)
+
+
+mes = magnitude_estimates(data)
+print(mes)
+normalized_mes = normalize(data, mes)
+print(normalized_mes)
