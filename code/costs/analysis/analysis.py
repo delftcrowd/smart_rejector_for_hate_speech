@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
 import krippendorff
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy import stats
 
 PATH = "F:\Thesis\Experiments\Costs\Results\/03-06-2022 (FEEDBACK) ME-100.csv"
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
@@ -144,8 +147,34 @@ def print_reliabilities(data):
         print("===================")
 
 
+def plot_validity(data):
+    mes = data.filter(regex="ME", axis=1)
+    s100 = data.filter(regex="S100", axis=1)
+    mes = mes.mean().tolist()
+    s100 = s100.mean().tolist()
+
+    sns.regplot(x=mes, y=s100)
+    plt.title("Correlation")
+    plt.xlabel("ME")
+    plt.ylabel("100-level")
+    plt.show()
+
+
+def print_correlation(data):
+    mes = data.filter(regex="ME", axis=1)
+    s100 = data.filter(regex="S100", axis=1)
+    mes = mes.mean().tolist()
+    s100 = s100.mean().tolist()
+
+    print("Pearson", stats.pearsonr(mes, s100))
+    print("Spearman", stats.spearmanr(mes, s100))
+    print("Kendall", stats.kendalltau(mes, s100))
+
+
 data = pd.read_csv(PATH)
 data = convert_data(data)
 print(data)
 print_means(data)
 print_reliabilities(data)
+plot_validity(data)
+print_correlation(data)
