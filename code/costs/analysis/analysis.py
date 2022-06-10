@@ -1,9 +1,10 @@
 import numpy as np
 import pandas as pd
-
+import krippendorff
 
 PATH = "F:\Thesis\Experiments\Costs\Results\/03-06-2022 (FEEDBACK) ME-100.csv"
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
+SCALES = ["S100", "ME"]
 
 
 def get_value(row, scale, type, index, question):
@@ -98,24 +99,6 @@ def calculate_mean(data, scale, type):
     return column_means.mean()
 
 
-def print_means(data):
-    print("===================")
-    print("ME scale")
-    print("TP", calculate_mean(data, "ME", "TP"))
-    print("TN", calculate_mean(data, "ME", "TN"))
-    print("FP", calculate_mean(data, "ME", "FP"))
-    print("FN", calculate_mean(data, "ME", "FN"))
-    print("REJ", calculate_mean(data, "ME", "REJ"))
-    print("===================")
-    print("100-level scale")
-    print("TP", calculate_mean(data, "100", "TP"))
-    print("TN", calculate_mean(data, "100", "TN"))
-    print("FP", calculate_mean(data, "100", "FP"))
-    print("FN", calculate_mean(data, "100", "FN"))
-    print("REJ", calculate_mean(data, "100", "REJ"))
-    print("===================")
-
-
 def convert_data(data):
     mes = magnitude_estimates(data)
     normalized_mes = normalize(data, mes)
@@ -123,7 +106,46 @@ def convert_data(data):
     return pd.concat([normalized_mes, s100], axis=1)
 
 
+def reliability(data, scale='', type=''):
+    if scale != '' or type != '':
+        data = data.filter(regex=f"{scale}{type}", axis=1)
+
+    data = data.values.tolist()
+    # TODO: remove this for real data
+    data = [data[0], data[0]]
+
+    try:
+        alpha = krippendorff.alpha(reliability_data=data)
+    except:
+        # The value domain should consist of at least one item
+        # If not, then catch exception and retun np.nan
+        alpha = np.nan
+
+    return alpha
+
+
+def print_means(data):
+    print("===================")
+    for scale in SCALES:
+        print(f"{scale} scale")
+        for type in TYPES:
+            print(type, calculate_mean(data, "ME", type))
+        print("===================")
+
+
+def print_reliabilities(data):
+    print("===================")
+    print("alpha complete data:", reliability(data))
+    print("===================")
+    for scale in SCALES:
+        print(f"{scale} scale")
+        for type in TYPES:
+            print(type, reliability(data, scale=scale, type=type))
+        print("===================")
+
+
 data = pd.read_csv(PATH)
 data = convert_data(data)
 print(data)
 print_means(data)
+print_reliabilities(data)
