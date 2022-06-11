@@ -11,12 +11,13 @@ SCALES = ["S100", "ME"]
 
 class Analysis:
     @classmethod
-    def magnitude_estimates(cls, data: pd.DataFrame) -> pd.DataFrame:
+    def magnitude_estimates(cls, data: pd.DataFrame, num_scenarios: int = 5) -> pd.DataFrame:
         """Retrieves the magnitude estimates from the data.
 
         Args:
             data (pd.DataFrame): original dataframe object containing
             all survey data.
+            num_scenarios (int, optional): The number of scenarios per type. Defaults to 5.
 
         Returns:
             pd.DataFrame: new dataframe object that contains
@@ -28,7 +29,7 @@ class Analysis:
         for _index, row in data.iterrows():
             r = {}
             for type in TYPES:
-                for i in range(1, 5):
+                for i in range(1, num_scenarios + 1):
                     decision = cls.__get_value(row, "ME", type, i, "s")
                     value = cls.__get_value(row, "ME", type, i, "v")
                     me = cls.__convert_me(decision, value)
@@ -39,12 +40,13 @@ class Analysis:
         return df
 
     @classmethod
-    def s100_values(cls, data: pd.DataFrame) -> pd.DataFrame:
+    def s100_values(cls, data: pd.DataFrame, num_scenarios: int = 5) -> pd.DataFrame:
         """Retrieves the 100-level scale values from the data.
 
         Args:
             data (pd.DataFrame): original dataframe object containing
             all survey data.
+            num_scenarios (int, optional): The number of scenarios per type. Defaults to 5.
 
         Returns:
             pd.DataFrame: new dataframe object that contains
@@ -55,7 +57,7 @@ class Analysis:
         for _index, row in data.iterrows():
             r = {}
             for type in TYPES:
-                for i in range(1, 5):
+                for i in range(1, num_scenarios + 1):
                     decision = cls.__get_value(row, "S100", type, i, "s")
                     agree_value = cls.__get_value(
                         row, "S100", type, i, "a\[SQ001\]")
