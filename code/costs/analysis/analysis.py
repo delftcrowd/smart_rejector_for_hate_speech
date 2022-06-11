@@ -220,8 +220,8 @@ class Analysis:
         """
         NAME = "G20Q51"
         str_dis = row.filter(regex=f"^{NAME}\[SQ001\]\.").values[0]
-        som_dis = row.filter(regex=f"^{NAME}\[SQ002\]\.").values[0]
-        dis = row.filter(regex=f"^{NAME}\[SQ003\]\.").values[0]
+        dis = row.filter(regex=f"^{NAME}\[SQ002\]\.").values[0]
+        som_dis = row.filter(regex=f"^{NAME}\[SQ003\]\.").values[0]
         som_agr = row.filter(regex=f"^{NAME}\[SQ005\]\.").values[0]
         agr = row.filter(regex=f"^{NAME}\[SQ006\]\.").values[0]
         str_agr = row.filter(regex=f"^{NAME}\[SQ007\]\.").values[0]
