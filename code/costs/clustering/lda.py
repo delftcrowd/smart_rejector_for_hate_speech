@@ -1,4 +1,3 @@
-from re import S
 from sklearn.decomposition import LatentDirichletAllocation
 from typing import Any, List
 from sklearn.feature_extraction.text import CountVectorizer
