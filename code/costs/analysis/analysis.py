@@ -158,8 +158,6 @@ class Analysis:
             data = data.filter(regex=f"{scale}{type}", axis=1)
 
         data = data.values.tolist()
-        # TODO: remove this for real data
-        data = [data[0], data[0]]
 
         try:
             alpha = krippendorff.alpha(reliability_data=data)

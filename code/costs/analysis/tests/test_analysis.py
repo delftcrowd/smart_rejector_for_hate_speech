@@ -79,7 +79,7 @@ class TestAnalysis(unittest.TestCase):
                        })
 
         pivot_value = Analysis.pivot_value(s)
-        self.assertEquals(pivot_value, 88)
+        self.assertEqual(pivot_value, 88)
 
     def test_normalize(self):
         data = pd.DataFrame({'G20Q51[SQ001].': [-100, -10, -1],
@@ -106,6 +106,52 @@ class TestAnalysis(unittest.TestCase):
 
         normalized_mes = Analysis.normalize(data, mes)
         self.assertTrue(normalized_mes.equals(expected))
+
+    def test_reliabilty(self):
+        mes = pd.DataFrame({'METP1': [2.0, 2.0, 2.0],
+                            'METN1': [0.6, 1.2, 1.2],
+                            'MEFP1': [-0.2, -0.2, -0.2],
+                            'MEFN1': [-2.0, -2.0, -2.0],
+                            'MEREJ1': [-0.6, -0.6, -0.6],
+                            'S100TP1': [20.0, 20.0, 20.0],
+                            'S100TN1': [8.0, 12.0, 12.0],
+                            'S100FP1': [-2.0, -2.0, -2.0],
+                            'S100FN1': [-20.0, -20.0, -20.0],
+                            'S100REJ1': [-6.0, -6.0, -6.0],
+                            })
+
+        # alpha = Analysis.reliability(mes)
+        # self.assertAlmostEqual(alpha, 0.9945, 4)
+
+        # alpha = Analysis.reliability(mes, type="TP")
+        # self.assertEqual(alpha, 1.0)
+
+        # alpha = Analysis.reliability(mes, type="TN")
+        # self.assertAlmostEqual(alpha, 0.9098, 4)
+
+        # alpha = Analysis.reliability(mes, type="FP")
+        # self.assertEqual(alpha, 1.0)
+
+        # alpha = Analysis.reliability(mes, type="FN")
+        # self.assertEqual(alpha, 1.0)
+
+        # alpha = Analysis.reliability(mes, scale="ME")
+        # self.assertAlmostEqual(alpha, 0.9882, 4)
+
+        # alpha = Analysis.reliability(mes, scale="S100")
+        # self.assertAlmostEqual(alpha, 0.9948, 4)
+
+        mes = pd.DataFrame({'METN1': [1.2, 1.2, 1.2],
+                            'METN2': [0.8, 0.8, 0.8],
+                            'S100TN1': [12.0, 12.0, 12.0],
+                            'S100TN2': [5.5, 6.0, 6.0]
+                            })
+
+        alpha = Analysis.reliability(mes, scale="ME", type="TN")
+        self.assertEqual(alpha, 1.0)
+
+        alpha = Analysis.reliability(mes, scale="S100", type="TN")
+        self.assertAlmostEqual(alpha, 0.9964, 4)
 
 
 if __name__ == '__main__':
