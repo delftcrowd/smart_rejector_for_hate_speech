@@ -82,7 +82,6 @@ class Analysis:
         Returns:
             pd.DataFrame:  dataframe with normalized magnitude estimates.
         """
-
         new_df = pd.DataFrame()
 
         for index, row in data.iterrows():

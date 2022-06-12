@@ -61,6 +61,52 @@ class TestAnalysis(unittest.TestCase):
         mes = Analysis.s100_values(data=df, num_scenarios=1)
         self.assertTrue(mes.equals(expected))
 
+    def test_pivot_value(self):
+        df = pd.DataFrame({'G20Q51[SQ001].': [-100, -10, -1],
+                           'G20Q51[SQ002].': [-50, -5, -0.5],
+                           'G20Q51[SQ003].': [-10, -1, -0.1],
+                           'G20Q51[SQ005].': [10, 1, 0.1],
+                           'G20Q51[SQ006].': [50, 5, 0.5],
+                           'G20Q51[SQ007].': [100, 10, 1],
+                           })
+
+        s = pd.Series({'G20Q51[SQ001].': -100,
+                       'G20Q51[SQ002].': -20,
+                       'G20Q51[SQ003].': -2,
+                       'G20Q51[SQ005].': 2,
+                       'G20Q51[SQ006].': 4,
+                       'G20Q51[SQ007].': 400,
+                       })
+
+        pivot_value = Analysis.pivot_value(s)
+        self.assertEquals(pivot_value, 88)
+
+    def test_normalize(self):
+        data = pd.DataFrame({'G20Q51[SQ001].': [-100, -10, -1],
+                             'G20Q51[SQ002].': [-50, -5, -0.5],
+                             'G20Q51[SQ003].': [-10, -1, -0.1],
+                             'G20Q51[SQ005].': [10, 1, 0.1],
+                             'G20Q51[SQ006].': [30, 3, 0.3],
+                             'G20Q51[SQ007].': [100, 10, 1]
+                             })
+
+        mes = pd.DataFrame({'METP1': [100.0, 10.0, 1.0],
+                            'METN1': [60.0, 6.0, 0.6],
+                            'MEFP1': [-10.0, -1.0, -0.1],
+                            'MEFN1': [-100.0, -10.0, -1],
+                            'MEREJ1': [-30.0, -3.0, -0.3]
+                            })
+
+        expected = pd.DataFrame({'METP1': [2.0, 2.0, 2.0],
+                                 'METN1': [1.2, 1.2, 1.2],
+                                 'MEFP1': [-0.2, -0.2, -0.2],
+                                 'MEFN1': [-2.0, -2.0, -2.0],
+                                 'MEREJ1': [-0.6, -0.6, -0.6]
+                                 })
+
+        normalized_mes = Analysis.normalize(data, mes)
+        self.assertTrue(normalized_mes.equals(expected))
+
 
 if __name__ == '__main__':
     unittest.main()
