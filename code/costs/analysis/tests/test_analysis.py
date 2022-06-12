@@ -188,6 +188,28 @@ class TestAnalysis(unittest.TestCase):
         mean = Analysis.calculate_mean(data, scale='S100', type='REJ')
         self.assertEqual(mean, -6.0)
 
+    def test_filter_slow_subjects(self):
+        data = pd.DataFrame({'startdate.': ['2022-06-12 12:00:0', '2022-06-12 12:00:0', '2022-06-12 12:00:0'],
+                             'submitdate.': ['2022-06-12 13:00:0', '2022-06-12 13:00:0', '2022-06-12 13:00:0']})
+
+        durations = Analysis.filter_slow_subjects(
+            data).filter(regex="duration")
+
+        expected = pd.DataFrame({'duration': [3600.0, 3600.0, 3600.0]})
+
+        self.assertTrue(durations.equals(expected))
+
+        data = pd.DataFrame({'startdate.': ['2022-06-12 12:00:0'] * 100,
+                             'submitdate.': ['2022-06-12 13:00:0'] * 99 + ['2022-06-12 12:01:0']})
+
+        durations = Analysis.filter_slow_subjects(
+            data).filter(regex="duration")
+
+        expected = pd.DataFrame({'duration': [3600.0] * 99 + [None]})
+
+        # The last subject contains a None value because it's more than 3 times the stdv below the mean duration.
+        self.assertTrue(durations.equals(expected))
+
 
 if __name__ == '__main__':
     unittest.main()
