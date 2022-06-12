@@ -173,6 +173,21 @@ class TestAnalysis(unittest.TestCase):
         mean = Analysis.calculate_mean(data, scale='ME', type='REJ')
         self.assertEqual(mean, -0.6)
 
+        mean = Analysis.calculate_mean(data, scale='S100', type='TP')
+        self.assertEqual(mean, 20.0)
+
+        mean = Analysis.calculate_mean(data, scale='S100', type='TN')
+        self.assertAlmostEqual(mean, 10.667, 3)
+
+        mean = Analysis.calculate_mean(data, scale='S100', type='FP')
+        self.assertEqual(mean, -2.0)
+
+        mean = Analysis.calculate_mean(data, scale='S100', type='FN')
+        self.assertEqual(mean, -20.0)
+
+        mean = Analysis.calculate_mean(data, scale='S100', type='REJ')
+        self.assertEqual(mean, -6.0)
+
 
 if __name__ == '__main__':
     unittest.main()
