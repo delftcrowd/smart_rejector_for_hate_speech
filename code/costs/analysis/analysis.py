@@ -4,6 +4,7 @@ import krippendorff
 import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy import stats
+from datetime import datetime
 
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
 SCALES = ["S100", "ME"]
@@ -11,7 +12,7 @@ SCALES = ["S100", "ME"]
 
 class Analysis:
     @classmethod
-    def magnitude_estimates(cls, data: pd.DataFrame, num_scenarios: int = 5) -> pd.DataFrame:
+    def magnitude_estimates(cls, data: pd.DataFrame, num_scenarios: int = 4) -> pd.DataFrame:
         """Retrieves the magnitude estimates from the data.
 
         Args:
@@ -40,7 +41,7 @@ class Analysis:
         return df
 
     @classmethod
-    def s100_values(cls, data: pd.DataFrame, num_scenarios: int = 5) -> pd.DataFrame:
+    def s100_values(cls, data: pd.DataFrame, num_scenarios: int = 4) -> pd.DataFrame:
         """Retrieves the 100-level scale values from the data.
 
         Args:
@@ -225,6 +226,33 @@ class Analysis:
         calibration_vals = [str_dis, som_dis, dis, som_agr, agr, str_agr]
         absolute_cal_vals = [abs(val) for val in calibration_vals]
         return np.mean(absolute_cal_vals)
+
+    @staticmethod
+    def filter_slow_subjects(data: pd.DataFrame) -> pd.DataFrame:
+        """Adds duration column to the dataframe and replaces all duration 
+        values with None when the subject is 3 times the standard deviation
+        below the mean duration.
+
+        Args:
+            data (pd.DataFrame): the original input data.
+
+        Returns:
+            pd.DataFrame: the original input data with one additional duration column.
+        """
+        durations = []
+        for index, row in data.iterrows():
+            startdate = row.filter(regex="startdate\.").values[0]
+            submitdate = row.filter(regex="submitdate\.").values[0]
+            startdate = datetime.strptime(startdate, '%Y-%m-%d %H:%M:%S')
+            submitdate = datetime.strptime(submitdate, '%Y-%m-%d %H:%M:%S')
+            duration = submitdate - startdate
+            durations.append(duration.total_seconds())
+
+        mean = np.mean(durations)
+        std = np.std(durations)
+        min_value = mean - 3 * std
+        data['duration'] = durations
+        return data.mask(data['duration'] < min_value)
 
     @staticmethod
     def calculate_mean(data: pd.DataFrame, scale: str, type: str) -> float:
