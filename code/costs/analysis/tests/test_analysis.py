@@ -62,14 +62,6 @@ class TestAnalysis(unittest.TestCase):
         self.assertTrue(mes.equals(expected))
 
     def test_pivot_value(self):
-        df = pd.DataFrame({'G20Q51[SQ001].': [-100, -10, -1],
-                           'G20Q51[SQ002].': [-50, -5, -0.5],
-                           'G20Q51[SQ003].': [-10, -1, -0.1],
-                           'G20Q51[SQ005].': [10, 1, 0.1],
-                           'G20Q51[SQ006].': [50, 5, 0.5],
-                           'G20Q51[SQ007].': [100, 10, 1],
-                           })
-
         s = pd.Series({'G20Q51[SQ001].': -100,
                        'G20Q51[SQ002].': -20,
                        'G20Q51[SQ003].': -2,
@@ -120,26 +112,26 @@ class TestAnalysis(unittest.TestCase):
                             'S100REJ1': [-6.0, -6.0, -6.0],
                             })
 
-        # alpha = Analysis.reliability(mes)
-        # self.assertAlmostEqual(alpha, 0.9945, 4)
+        alpha = Analysis.reliability(mes)
+        self.assertAlmostEqual(alpha, 0.9945, 4)
 
-        # alpha = Analysis.reliability(mes, type="TP")
-        # self.assertEqual(alpha, 1.0)
+        alpha = Analysis.reliability(mes, type="TP")
+        self.assertEqual(alpha, 1.0)
 
-        # alpha = Analysis.reliability(mes, type="TN")
-        # self.assertAlmostEqual(alpha, 0.9098, 4)
+        alpha = Analysis.reliability(mes, type="TN")
+        self.assertAlmostEqual(alpha, 0.9098, 4)
 
-        # alpha = Analysis.reliability(mes, type="FP")
-        # self.assertEqual(alpha, 1.0)
+        alpha = Analysis.reliability(mes, type="FP")
+        self.assertEqual(alpha, 1.0)
 
-        # alpha = Analysis.reliability(mes, type="FN")
-        # self.assertEqual(alpha, 1.0)
+        alpha = Analysis.reliability(mes, type="FN")
+        self.assertEqual(alpha, 1.0)
 
-        # alpha = Analysis.reliability(mes, scale="ME")
-        # self.assertAlmostEqual(alpha, 0.9882, 4)
+        alpha = Analysis.reliability(mes, scale="ME")
+        self.assertAlmostEqual(alpha, 0.9882, 4)
 
-        # alpha = Analysis.reliability(mes, scale="S100")
-        # self.assertAlmostEqual(alpha, 0.9948, 4)
+        alpha = Analysis.reliability(mes, scale="S100")
+        self.assertAlmostEqual(alpha, 0.9948, 4)
 
         mes = pd.DataFrame({'METN1': [1.2, 1.2, 1.2],
                             'METN2': [0.8, 0.8, 0.8],
@@ -152,6 +144,34 @@ class TestAnalysis(unittest.TestCase):
 
         alpha = Analysis.reliability(mes, scale="S100", type="TN")
         self.assertAlmostEqual(alpha, 0.9964, 4)
+
+    def test_calculate_mean(self):
+        data = pd.DataFrame({'METP1': [2.0, 2.0, 2.0],
+                            'METN1': [0.6, 1.2, 1.2],
+                             'MEFP1': [-0.2, -0.2, -0.2],
+                             'MEFN1': [-2.0, -2.0, -2.0],
+                             'MEREJ1': [-0.6, -0.6, -0.6],
+                             'S100TP1': [20.0, 20.0, 20.0],
+                             'S100TN1': [8.0, 12.0, 12.0],
+                             'S100FP1': [-2.0, -2.0, -2.0],
+                             'S100FN1': [-20.0, -20.0, -20.0],
+                             'S100REJ1': [-6.0, -6.0, -6.0],
+                             })
+
+        mean = Analysis.calculate_mean(data, scale='ME', type='TP')
+        self.assertEqual(mean, 2.0)
+
+        mean = Analysis.calculate_mean(data, scale='ME', type='TN')
+        self.assertEqual(mean, 1.0)
+
+        mean = Analysis.calculate_mean(data, scale='ME', type='FP')
+        self.assertEqual(mean, -0.2)
+
+        mean = Analysis.calculate_mean(data, scale='ME', type='FN')
+        self.assertEqual(mean, -2.0)
+
+        mean = Analysis.calculate_mean(data, scale='ME', type='REJ')
+        self.assertEqual(mean, -0.6)
 
 
 if __name__ == '__main__':

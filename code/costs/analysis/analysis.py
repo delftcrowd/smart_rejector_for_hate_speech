@@ -241,7 +241,7 @@ class Analysis:
         """
         type_values = data.filter(regex=f"{scale}{type}", axis=1)
         column_means = type_values.mean()
-        return column_means.mean()
+        return round(column_means.mean(), 6)
 
     @staticmethod
     def __get_value(row, scale, type, index, question):
