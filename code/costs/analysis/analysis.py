@@ -272,7 +272,9 @@ class Analysis:
         s100 = data.filter(regex="^S100.*$", axis=1)
         mes = mes.mean().tolist()
         s100 = s100.mean().tolist()
-
+        cohens_d = (np.mean(mes) - np.mean(s100)) / (np.sqrt((np.std(mes) ** 2 + np.std(s100) ** 2) / 2))
+        print("Cohen's d", cohens_d)
+        print("Unpaired T-test", stats.ttest_ind(mes, s100))
         print("Pearson", stats.pearsonr(mes, s100))
         print("Spearman", stats.spearmanr(mes, s100))
         print("Kendall", stats.kendalltau(mes, s100))
