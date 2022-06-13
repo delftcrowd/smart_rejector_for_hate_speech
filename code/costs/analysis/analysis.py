@@ -7,7 +7,7 @@ from scipy import stats
 from datetime import datetime
 
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
-SCALES = ["S100", "ME"]
+SCALES = ["ME", "S100"]
 
 
 class Analysis:
@@ -73,6 +73,35 @@ class Analysis:
         return df
 
     @classmethod
+    def hatefulness(cls, data: pd.DataFrame, num_scenarios: int = 4) -> pd.DataFrame:
+        """Retrieves the binary values of the hatefulness questions from the data.
+        Each scenario contains one question about whether the tweet was considered hateful
+        or non-hateful by the subject.
+
+        Args:
+            data (pd.DataFrame): original dataframe object containing all survey data.
+            num_scenarios (int, optional): The number of scenarios per type. Defaults to 5.
+
+        Returns:
+            pd.DataFrame: new dataframe object that contains
+            all question codes with boolean values about the hatefulness.
+        """
+        df = pd.DataFrame()
+
+        for _index, row in data.iterrows():
+            r = {}
+            for scale in SCALES:
+                for type in TYPES:
+                    for i in range(1, num_scenarios + 1):
+                        hatefulness = cls.__get_value(row, scale, type, i, "h")
+                        hateful = cls.__convert_hatefulness(hatefulness)
+                        r[f"Hateful_{scale}{type}{i}"] = hateful
+
+            df = df.append(r, ignore_index=True)
+
+        return df
+
+    @classmethod
     def normalize(cls, data: pd.DataFrame, magnitude_estimates: pd.DataFrame) -> pd.DataFrame:
         """Converts the magnitude_estimates dataframe to a normalized one.
 
@@ -108,7 +137,8 @@ class Analysis:
         mes = cls.magnitude_estimates(data)
         normalized_mes = cls.normalize(data, mes)
         s100 = cls.s100_values(data)
-        return pd.concat([normalized_mes, s100], axis=1)
+        hatefulness = cls.hatefulness(data)
+        return pd.concat([normalized_mes, s100, hatefulness], axis=1)
 
     @classmethod
     def print_means(cls, data: pd.DataFrame) -> None:
@@ -172,8 +202,14 @@ class Analysis:
             float: Krippendorff's alpha value.
         """
 
-        if scale != '' or type != '':
-            data = data.filter(regex=f"{scale}{type}", axis=1)
+        if scale != '' and type != '':
+            data = data.filter(regex=f"^{scale}{type}.*$", axis=1)
+        elif scale != '' and type == '':
+            data = data.filter(regex=f"^{scale}(TP|TN|FP|FN|REJ).*$", axis=1)
+        elif scale == '' and type == '':
+            data = data.filter(regex=f"^(ME|S100)(TP|TN|FP|FN|REJ).*$", axis=1)
+        elif scale == '' and type != '':
+            data = data.filter(regex=f"^(ME|S100){type}.*$", axis=1)
 
         data = data.values.tolist()
 
@@ -194,8 +230,8 @@ class Analysis:
         Args:
             data (pd.DataFrame): the converted data.
         """
-        mes = data.filter(regex="ME", axis=1)
-        s100 = data.filter(regex="S100", axis=1)
+        mes = data.filter(regex="^ME.*$", axis=1)
+        s100 = data.filter(regex="^S100.*$", axis=1)
         mes = mes.mean().tolist()
         s100 = s100.mean().tolist()
 
@@ -213,8 +249,8 @@ class Analysis:
         Args:
             data (pd.DataFrame): the converted data.
         """
-        mes = data.filter(regex="ME", axis=1)
-        s100 = data.filter(regex="S100", axis=1)
+        mes = data.filter(regex="^ME.*$", axis=1)
+        s100 = data.filter(regex="^S100.*$", axis=1)
         mes = mes.mean().tolist()
         s100 = s100.mean().tolist()
 
@@ -284,17 +320,13 @@ class Analysis:
         Returns:
             float: the mean cost value.
         """
-        type_values = data.filter(regex=f"{scale}{type}", axis=1)
+        type_values = data.filter(regex=f"^{scale}{type}.*$", axis=1)
         column_means = type_values.mean()
         return round(column_means.mean(), 6)
 
     @staticmethod
     def convert_to_boxplot_data(data: pd.DataFrame) -> pd.DataFrame:
-        mes = data.filter(regex="ME", axis=1)
-        s100 = data.filter(regex="S100", axis=1)
-        mes = mes.mean().tolist()
-        s100 = s100.mean().tolist()
-
+        data = data.filter(regex=f"^(ME|S100).*$", axis=1)
         question_names = data.columns.values.tolist()
         plot_data = []
         for index, question in enumerate(question_names):
@@ -334,4 +366,10 @@ class Analysis:
         elif decision == 'Neutral':
             return 0
 
+    @staticmethod
+    def __convert_hatefulness(hatefulness):
+        if hatefulness == 'Hateful':
+            return True
+        elif hatefulness == 'Not hateful':
+            return False
   
