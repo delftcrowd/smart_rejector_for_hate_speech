@@ -40,3 +40,4 @@ dependencies:
       # The packages below are required for the cost analysis
       - seaborn==0.11.2
       - krippendorff==0.5.1
+      - ipympl==0.9.1

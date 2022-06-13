@@ -99,10 +99,10 @@ class Analysis:
         of all normalized magnitude estimates and 100-level scale values.
 
         Args:
-            data (pd.DataFrame): 
+            data (pd.DataFrame):
 
         Returns:
-            pd.DataFrame: dataframe that consists of all normalized 
+            pd.DataFrame: dataframe that consists of all normalized
             magnitude estimates and 100-level scale values.
         """
         mes = cls.magnitude_estimates(data)
@@ -141,9 +141,26 @@ class Analysis:
                 print(type, cls.reliability(data, scale=scale, type=type))
             print("===================")
 
+    @classmethod
+    def plot_boxplots(cls, data: pd.DataFrame) -> None:
+        """Plots boxplots of all individual scenarios.
+
+        Args:
+            data (pd.DataFrame): the converted data.
+        """
+        plot_data = cls.convert_to_boxplot_data(data)
+
+        sns.boxplot(x="Scenario", y="(Dis)agreement",
+                    hue="Scale", data=plot_data)
+        sns.despine(offset=10, trim=True)
+        plt.title("Boxplots of all questions")
+        plt.xlabel("Scenario")
+        plt.ylabel("(Dis)Agreement")
+        plt.show()
+
     @staticmethod
     def reliability(data: pd.DataFrame, scale: str = '', type: str = '') -> float:
-        """Calculates Krippendorffs's alpha values for the complete data 
+        """Calculates Krippendorffs's alpha values for the complete data
         or for the filtered data if a scale and type filter is passed.
 
         Args:
@@ -171,7 +188,7 @@ class Analysis:
 
     @staticmethod
     def plot_validity(data: pd.DataFrame) -> None:
-        """Plots a correlation plot between 100-level scores 
+        """Plots a correlation plot between 100-level scores
         and the magnitude estimates.
 
         Args:
@@ -229,7 +246,7 @@ class Analysis:
 
     @staticmethod
     def append_durations(data: pd.DataFrame) -> pd.DataFrame:
-        """Adds duration column to the dataframe and replaces all duration 
+        """Adds duration column to the dataframe and replaces all duration
         values with None when the subject is 3 times the standard deviation
         below the mean duration.
 
@@ -272,6 +289,30 @@ class Analysis:
         return round(column_means.mean(), 6)
 
     @staticmethod
+    def convert_to_boxplot_data(data: pd.DataFrame) -> pd.DataFrame:
+        mes = data.filter(regex="ME", axis=1)
+        s100 = data.filter(regex="S100", axis=1)
+        mes = mes.mean().tolist()
+        s100 = s100.mean().tolist()
+
+        question_names = data.columns.values.tolist()
+        plot_data = []
+        for index, question in enumerate(question_names):
+            values = data[question]
+
+            if question.startswith("ME"):
+                scale = "ME"
+                type = question.replace("ME", "")
+            elif question.startswith("S100"):
+                scale = "100-level"
+                type = question.replace("S100", "")
+            for value in values:
+                plot_data.append([value, scale, type])
+
+        return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scale", "Scenario"])
+
+
+    @staticmethod
     def __get_value(row, scale, type, index, question):
         return row.filter(regex=f"^{scale}{type}{index}{question}\.").values[0]
 
@@ -292,3 +333,5 @@ class Analysis:
             return -value
         elif decision == 'Neutral':
             return 0
+
+  
