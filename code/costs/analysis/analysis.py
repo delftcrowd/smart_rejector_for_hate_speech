@@ -228,7 +228,7 @@ class Analysis:
         return np.mean(absolute_cal_vals)
 
     @staticmethod
-    def filter_slow_subjects(data: pd.DataFrame) -> pd.DataFrame:
+    def append_durations(data: pd.DataFrame) -> pd.DataFrame:
         """Adds duration column to the dataframe and replaces all duration 
         values with None when the subject is 3 times the standard deviation
         below the mean duration.
