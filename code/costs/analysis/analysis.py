@@ -5,6 +5,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy import stats
 from datetime import datetime
+import matplotlib.ticker as mtick
 
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
 SCALES = ["ME", "S100"]
@@ -188,6 +189,24 @@ class Analysis:
         plt.ylabel("(Dis)Agreement")
         plt.show()
 
+    
+    @classmethod
+    def plot_hatefulness(cls, data: pd.DataFrame) -> None:
+        """Plots the percentage of (non)hateful rated scenarios.
+
+        Args:
+            data (pd.DataFrame): the converted data.
+        """        
+        plot_data = cls.convert_to_stackedbar_data(data)
+        sns.set(style='whitegrid')
+        ax = plot_data.plot(kind='bar', stacked=True, x="Scenario")
+        ax.yaxis.set_major_formatter(mtick.PercentFormatter())
+
+        plt.xlabel('Scenario')
+        plt.ylabel('Percentage')
+        plt.title('Percentage of (non)hateful rated scenarios')
+        plt.show()
+
     @staticmethod
     def reliability(data: pd.DataFrame, scale: str = '', type: str = '') -> float:
         """Calculates Krippendorffs's alpha values for the complete data
@@ -207,7 +226,7 @@ class Analysis:
         elif scale != '' and type == '':
             data = data.filter(regex=f"^{scale}(TP|TN|FP|FN|REJ).*$", axis=1)
         elif scale == '' and type == '':
-            data = data.filter(regex=f"^(ME|S100)(TP|TN|FP|FN|REJ).*$", axis=1)
+            data = data.filter(regex="^(ME|S100)(TP|TN|FP|FN|REJ).*$", axis=1)
         elif scale == '' and type != '':
             data = data.filter(regex=f"^(ME|S100){type}.*$", axis=1)
 
@@ -326,7 +345,17 @@ class Analysis:
 
     @staticmethod
     def convert_to_boxplot_data(data: pd.DataFrame) -> pd.DataFrame:
-        data = data.filter(regex=f"^(ME|S100).*$", axis=1)
+        """Converts the converted data to a new dataframe that is suitable
+        for plotting the boxplots of all individual scenarios.
+
+        Args:
+            data (pd.DataFrame): the converted data.
+
+        Returns:
+            pd.DataFrame: converted to boxplot suitable data with three columns:
+            (dis)agreement, scale, and scenario.
+        """        
+        data = data.filter(regex="^(ME|S100).*$", axis=1)
         question_names = data.columns.values.tolist()
         plot_data = []
         for index, question in enumerate(question_names):
@@ -342,6 +371,33 @@ class Analysis:
                 plot_data.append([value, scale, type])
 
         return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scale", "Scenario"])
+
+    @staticmethod
+    def convert_to_stackedbar_data(data: pd.DataFrame) -> pd.DataFrame:
+        """Converts the converted data to a new dataframe that is suitable
+        for plotting the stacked bars with the percentages of (non)hateful
+        rated scenarios.
+
+        Args:
+            data (pd.DataFrame): the converted data.
+
+        Returns:
+            pd.DataFrame: converted to stacked bar suitable data with three columns:
+            scenario, hateful (percentage), and not hateful (percentage).
+        """        
+        data = data.filter(regex="^Hateful_(ME|S100).*$", axis=1)
+        question_names = data.columns.values.tolist()
+        plot_data = []
+
+        for index, question in enumerate(question_names):
+            values = data[question].tolist()
+            count_hateful = sum(1 for value in values if value == True)
+            total = len(values)
+            percentage_hateful = round((count_hateful / total) * 100.0, 2)
+            percentage_non_hateful = 100.0 - percentage_hateful
+            plot_data.append([question.replace("Hateful_", ""), percentage_hateful, percentage_non_hateful])
+
+        return pd.DataFrame(plot_data, columns=["Scenario", "Hateful", "Not hateful"])
 
 
     @staticmethod
