@@ -282,6 +282,19 @@ class TestAnalysis(unittest.TestCase):
 
         self.assertTrue(plot_data.equals(expected))
 
+    def test_convert_to_stackedbar_data(self):
+        data = pd.DataFrame({'METP1': [1.5, 2.0, 2.5, 3.0],
+                             'S100TP1': [20.0, 25.0, 35.0, 10.0],
+                            'Hateful_METP1': [True, False, False, False],
+                             'Hateful_S100TP1': [False, False, False, False]
+                             })
+
+        plot_data = Analysis.convert_to_stackedbar_data(data)
+        expected = pd.DataFrame({'Scenario': ['METP1', 'S100TP1'],
+                                 'Hateful': [25.0, 0.0], "Not hateful": [75.0, 100.0]})
+
+        self.assertTrue(plot_data.equals(expected))
+
 
 if __name__ == '__main__':
     unittest.main()
