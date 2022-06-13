@@ -58,8 +58,60 @@ class TestAnalysis(unittest.TestCase):
                                  'S100FN1': [10.0, -50.0, 0.0],
                                  'S100REJ1': [10.0, -50.0, 0.0]
                                  })
-        mes = Analysis.s100_values(data=df, num_scenarios=1)
-        self.assertTrue(mes.equals(expected))
+        s100 = Analysis.s100_values(data=df, num_scenarios=1)
+        self.assertTrue(s100.equals(expected))
+
+    def test_hatefulness(self):
+        df = pd.DataFrame({'METP1h.': ['Hateful', 'Not hateful', 'Not hateful'],
+                           'METP1s.': ['Agree', 'Disagree', 'Neutral'],
+                           'METP1v.': [10.0, 50.0, None],
+                           'METN1h.': ['Hateful', 'Not hateful', 'Not hateful'],
+                           'METN1s.': ['Agree', 'Disagree', 'Neutral'],
+                           'METN1v.': [10.0, 50.0, None],
+                           'MEFP1h.': ['Hateful', 'Not hateful', 'Not hateful'],
+                           'MEFP1s.': ['Agree', 'Disagree', 'Neutral'],
+                           'MEFP1v.': [10.0, 50.0, None],
+                           'MEFN1h.': ['Hateful', 'Not hateful', 'Not hateful'],
+                           'MEFN1s.': ['Agree', 'Disagree', 'Neutral'],
+                           'MEFN1v.': [10.0, 50.0, None],
+                           'MEREJ1h.': ['Hateful', 'Not hateful', 'Not hateful'],
+                           'MEREJ1s.': ['Agree', 'Disagree', 'Neutral'],
+                           'MEREJ1v.': [10.0, 50.0, None],
+                           'S100TP1h.': ['Hateful', 'Not hateful', 'Not hateful'],
+                           'S100TP1s.': ['Agree', 'Disagree', 'Neutral'],
+                           'S100TP1a[SQ001].': [10.0, None, None],
+                           'S100TP1d[SQ001].': [None, 50.0, None],
+                           'S100TN1h.': ['Hateful', 'Not hateful', 'Not hateful'],
+                           'S100TN1s.': ['Agree', 'Disagree', 'Neutral'],
+                           'S100TN1a[SQ001].': [10.0, None, None],
+                           'S100TN1d[SQ001].': [None, 50.0, None],
+                           'S100FP1h.': ['Hateful', 'Not hateful', 'Not hateful'],
+                           'S100FP1s.': ['Agree', 'Disagree', 'Neutral'],
+                           'S100FP1a[SQ001].': [10.0, None, None],
+                           'S100FP1d[SQ001].': [None, 50.0, None],
+                           'S100FN1h.': ['Hateful', 'Not hateful', 'Not hateful'],
+                           'S100FN1s.': ['Agree', 'Disagree', 'Neutral'],
+                           'S100FN1a[SQ001].': [10.0, None, None],
+                           'S100FN1d[SQ001].': [None, 50.0, None],
+                           'S100REJ1h.': ['Hateful', 'Not hateful', 'Not hateful'],
+                           'S100REJ1s.': ['Agree', 'Disagree', 'Neutral'],
+                           'S100REJ1a[SQ001].': [10.0, None, None],
+                           'S100REJ1d[SQ001].': [None, 50.0, None]
+                           })
+
+        expected = pd.DataFrame({'Hateful_METP1': [1.0, 0.0, 0.0],
+                                 'Hateful_METN1': [1.0, 0.0, 0.0],
+                                 'Hateful_MEFP1': [1.0, 0.0, 0.0],
+                                 'Hateful_MEFN1': [1.0, 0.0, 0.0],
+                                 'Hateful_MEREJ1': [1.0, 0.0, 0.0],
+                                 'Hateful_S100TP1': [1.0, 0.0, 0.0],
+                                 'Hateful_S100TN1': [1.0, 0.0, 0.0],
+                                 'Hateful_S100FP1': [1.0, 0.0, 0.0],
+                                 'Hateful_S100FN1': [1.0, 0.0, 0.0],
+                                 'Hateful_S100REJ1': [1.0, 0.0, 0.0]})
+
+        hatefulness = Analysis.hatefulness(data=df, num_scenarios=1)
+        self.assertTrue(hatefulness.equals(expected))
 
     def test_pivot_value(self):
         s = pd.Series({'G20Q51[SQ001].': -100,
@@ -79,7 +131,7 @@ class TestAnalysis(unittest.TestCase):
                              'G20Q51[SQ003].': [-10, -1, -0.1],
                              'G20Q51[SQ005].': [10, 1, 0.1],
                              'G20Q51[SQ006].': [30, 3, 0.3],
-                             'G20Q51[SQ007].': [100, 10, 1]
+                             'G20Q51[SQ007].': [100, 10, 1],
                              })
 
         mes = pd.DataFrame({'METP1': [100.0, 10.0, 1.0],
@@ -110,6 +162,8 @@ class TestAnalysis(unittest.TestCase):
                             'S100FP1': [-2.0, -2.0, -2.0],
                             'S100FN1': [-20.0, -20.0, -20.0],
                             'S100REJ1': [-6.0, -6.0, -6.0],
+                            'Hateful_METP1': [True, False, False],
+                            'Hateful_S100FN1': [False, False, False]
                             })
 
         alpha = Analysis.reliability(mes)
@@ -156,6 +210,8 @@ class TestAnalysis(unittest.TestCase):
                              'S100FP1': [-2.0, -2.0, -2.0],
                              'S100FN1': [-20.0, -20.0, -20.0],
                              'S100REJ1': [-6.0, -6.0, -6.0],
+                             'Hateful_METP1': [True, False, False],
+                             'Hateful_S100TP1': [False, False, False]
                              })
 
         mean = Analysis.calculate_mean(data, scale='ME', type='TP')
@@ -213,6 +269,8 @@ class TestAnalysis(unittest.TestCase):
     def test_convert_to_boxplot_data(self):
         data = pd.DataFrame({'METP1': [1.5, 2.0, 2.5],
                              'S100TP1': [20.0, 25.0, 35.0],
+                            'Hateful_METP1': [True, False, False],
+                             'Hateful_S100TP1': [False, False, False]
                              })
 
         plot_data = Analysis.convert_to_boxplot_data(data)
