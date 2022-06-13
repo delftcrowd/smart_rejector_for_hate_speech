@@ -192,7 +192,7 @@ class TestAnalysis(unittest.TestCase):
         data = pd.DataFrame({'startdate.': ['2022-06-12 12:00:0', '2022-06-12 12:00:0', '2022-06-12 12:00:0'],
                              'submitdate.': ['2022-06-12 13:00:0', '2022-06-12 13:00:0', '2022-06-12 13:00:0']})
 
-        durations = Analysis.filter_slow_subjects(
+        durations = Analysis.append_durations(
             data).filter(regex="duration")
 
         expected = pd.DataFrame({'duration': [3600.0, 3600.0, 3600.0]})
@@ -202,13 +202,27 @@ class TestAnalysis(unittest.TestCase):
         data = pd.DataFrame({'startdate.': ['2022-06-12 12:00:0'] * 100,
                              'submitdate.': ['2022-06-12 13:00:0'] * 99 + ['2022-06-12 12:01:0']})
 
-        durations = Analysis.filter_slow_subjects(
+        durations = Analysis.append_durations(
             data).filter(regex="duration")
 
         expected = pd.DataFrame({'duration': [3600.0] * 99 + [None]})
 
         # The last subject contains a None value because it's more than 3 times the stdv below the mean duration.
         self.assertTrue(durations.equals(expected))
+
+    def test_convert_to_boxplot_data(self):
+        data = pd.DataFrame({'METP1': [1.5, 2.0, 2.5],
+                             'S100TP1': [20.0, 25.0, 35.0],
+                             })
+
+        plot_data = Analysis.convert_to_boxplot_data(data)
+
+        expected = pd.DataFrame({'(Dis)agreement': [1.5, 2.0, 2.5, 20.0, 25.0, 35.0],
+                                 'Scale': ["ME", "ME", "ME", "100-level", "100-level", "100-level"],
+                                 'Scenario': ["TP1", "TP1", "TP1", "TP1", "TP1", "TP1"]
+                                 })
+
+        self.assertTrue(plot_data.equals(expected))
 
 
 if __name__ == '__main__':
