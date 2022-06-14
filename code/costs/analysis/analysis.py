@@ -103,6 +103,29 @@ class Analysis:
         return df
 
     @classmethod
+    def attention_checks(cls, data: pd.DataFrame) -> pd.DataFrame:
+        """Returns a dataframe that contains a column attention_checks_passed
+        that indicates whether the subject has passed the attention check or not.
+
+        Args:
+            data (pd.DataFrame): original dataframe object containing all survey data.
+
+        Returns:
+            pd.DataFrame: new dataframe object that contains one column that indicates
+            whether the subject has passed the attention checks or not.
+        """
+        df = pd.DataFrame()
+
+        for _index, row in data.iterrows():
+            attention1 = row.filter(regex="^attention1\.").values[0]
+            attention2 = row.filter(regex="^attention2\.").values[0]
+            attention_checks_passed = attention1 == "Blue" and attention2 == "Orange"
+
+            df = df.append({'attention_checks_passed': attention_checks_passed}, ignore_index=True)
+
+        return df        
+
+    @classmethod
     def normalize(cls, data: pd.DataFrame, magnitude_estimates: pd.DataFrame) -> pd.DataFrame:
         """Converts the magnitude_estimates dataframe to a normalized one.
 
@@ -139,7 +162,8 @@ class Analysis:
         normalized_mes = cls.normalize(data, mes)
         s100 = cls.s100_values(data)
         hatefulness = cls.hatefulness(data)
-        return pd.concat([normalized_mes, s100, hatefulness], axis=1)
+        attention_checks = cls.attention_checks(data)
+        return pd.concat([normalized_mes, s100, hatefulness, attention_checks], axis=1)
 
     @classmethod
     def print_means(cls, data: pd.DataFrame) -> None:

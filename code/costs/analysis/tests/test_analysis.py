@@ -113,6 +113,16 @@ class TestAnalysis(unittest.TestCase):
         hatefulness = Analysis.hatefulness(data=df, num_scenarios=1)
         self.assertTrue(hatefulness.equals(expected))
 
+    def test_attention_checks(self):
+        df = pd.DataFrame({'attention1.': ['Blue', 'Red', 'Blue'],
+                           'attention2.': ['Orange', 'Orange', 'Blue']
+                           })
+
+        expected = pd.DataFrame({'attention_checks_passed': [1.0, 0.0, 0.0]})
+
+        attention_checks = Analysis.attention_checks(data=df)
+        self.assertTrue(attention_checks.equals(expected))
+
     def test_pivot_value(self):
         s = pd.Series({'G20Q51[SQ001].': -100,
                        'G20Q51[SQ002].': -20,
@@ -277,7 +287,7 @@ class TestAnalysis(unittest.TestCase):
 
         expected = pd.DataFrame({'(Dis)agreement': [1.5, 2.0, 2.5, 20.0, 25.0, 35.0],
                                  'Scale': ["ME", "ME", "ME", "100-level", "100-level", "100-level"],
-                                 'Scenario': ["TP1", "TP1", "TP1", "TP1", "TP1", "TP1"]
+                                'Scenario': ["TP1", "TP1", "TP1", "TP1", "TP1", "TP1"]
                                  })
 
         self.assertTrue(plot_data.equals(expected))
