@@ -1,3 +1,4 @@
+from typing import List
 import numpy as np
 import pandas as pd
 import krippendorff
@@ -74,7 +75,7 @@ class Analysis:
         return df
 
     @classmethod
-    def hatefulness(cls, data: pd.DataFrame, num_scenarios: int = 4) -> pd.DataFrame:
+    def hatefulness(cls, data: pd.DataFrame, scales: List[str] = SCALES, num_scenarios: int = 4) -> pd.DataFrame:
         """Retrieves the binary values of the hatefulness questions from the data.
         Each scenario contains one question about whether the tweet was considered hateful
         or non-hateful by the subject.
@@ -91,7 +92,7 @@ class Analysis:
 
         for _index, row in data.iterrows():
             r = {}
-            for scale in SCALES:
+            for scale in scales:
                 for type in TYPES:
                     for i in range(1, num_scenarios + 1):
                         hatefulness = cls.__get_value(row, scale, type, i, "h")
@@ -147,23 +148,61 @@ class Analysis:
         return new_df
 
     @classmethod
-    def convert_data(cls, data: pd.DataFrame) -> pd.DataFrame:
+    def convert_both_scales_data(cls, data: pd.DataFrame, num_scenarios: int = 4) -> pd.DataFrame:
         """Convert the original data to a dataframe that consists
         of all normalized magnitude estimates and 100-level scale values.
 
         Args:
-            data (pd.DataFrame):
+            data (pd.DataFrame): the original data.
+            num_scenarios (int, optional): The number of scenarios per type. Defaults to 5.
 
         Returns:
             pd.DataFrame: dataframe that consists of all normalized
             magnitude estimates and 100-level scale values.
         """
-        mes = cls.magnitude_estimates(data)
+        mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
         normalized_mes = cls.normalize(data, mes)
-        s100 = cls.s100_values(data)
+        s100 = cls.s100_values(data=data, num_scenarios=num_scenarios)
         hatefulness = cls.hatefulness(data)
         attention_checks = cls.attention_checks(data)
         return pd.concat([normalized_mes, s100, hatefulness, attention_checks], axis=1)
+    
+    @classmethod
+    def convert_me_data(cls, data: pd.DataFrame, num_scenarios: int = 8) -> pd.DataFrame:
+        """Convert the original data to a dataframe that consists
+        of all normalized magnitude estimates.
+
+        Args:
+            data (pd.DataFrame): the original data.
+            num_scenarios (int, optional): The number of scenarios per type. Defaults to 5.
+
+        Returns:
+            pd.DataFrame: dataframe that consists of all normalized
+            magnitude estimates.
+        """
+        mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
+        normalized_mes = cls.normalize(data, mes)
+        hatefulness = cls.hatefulness(data=data, scales=["S100"], num_scenarios=num_scenarios)
+        attention_checks = cls.attention_checks(data)
+        return pd.concat([normalized_mes, hatefulness, attention_checks], axis=1)
+    
+    @classmethod
+    def convert_100_data(cls, data: pd.DataFrame, num_scenarios: int = 8) -> pd.DataFrame:
+        """Convert the original data to a dataframe that consists
+        of 100-level scale values.
+
+        Args:
+            data (pd.DataFrame): the original data.
+            num_scenarios (int, optional): The number of scenarios per type. Defaults to 5.
+
+        Returns:
+            pd.DataFrame: dataframe that consists of all normalized
+            100-level scale values.
+        """
+        s100 = cls.s100_values(data=data, num_scenarios=num_scenarios)
+        hatefulness = cls.hatefulness(data=data, scales=["S100"], num_scenarios=num_scenarios)
+        attention_checks = cls.attention_checks(data)
+        return pd.concat([s100, hatefulness, attention_checks], axis=1)
 
     @classmethod
     def print_means(cls, data: pd.DataFrame) -> None:
@@ -176,7 +215,7 @@ class Analysis:
         for scale in SCALES:
             print(f"{scale} scale")
             for type in TYPES:
-                print(type, cls.calculate_mean(data, "ME", type))
+                print(type, cls.calculate_mean(data=data, scale=scale, type=type))
             print("===================")
 
     @classmethod
@@ -351,6 +390,11 @@ class Analysis:
         min_value = mean - 3 * std
         data['duration'] = durations
         return data.mask(data['duration'] < min_value)
+
+    @staticmethod
+    def any_failed_attention_checks(data: pd.DataFrame) -> bool:
+        failed = data['attention_checks_passed'].loc[data['attention_checks_passed'] == False].values
+        return failed.size > 0
 
     @staticmethod
     def calculate_mean(data: pd.DataFrame, scale: str, type: str) -> float:

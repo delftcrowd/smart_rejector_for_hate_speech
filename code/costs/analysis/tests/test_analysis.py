@@ -122,6 +122,11 @@ class TestAnalysis(unittest.TestCase):
 
         attention_checks = Analysis.attention_checks(data=df)
         self.assertTrue(attention_checks.equals(expected))
+        self.assertTrue(Analysis.any_failed_attention_checks(expected))
+
+        none_failed = pd.DataFrame(
+            {'attention_checks_passed': [1.0, 1.0, 1.0]})
+        self.assertFalse(Analysis.any_failed_attention_checks(none_failed))
 
     def test_pivot_value(self):
         s = pd.Series({'G20Q51[SQ001].': -100,
