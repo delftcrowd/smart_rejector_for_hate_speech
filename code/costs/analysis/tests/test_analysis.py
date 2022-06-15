@@ -99,16 +99,11 @@ class TestAnalysis(unittest.TestCase):
                            'S100REJ1d[SQ001].': [None, 50.0, None]
                            })
 
-        expected = pd.DataFrame({'Hateful_METP1': [1.0, 0.0, 0.0],
-                                 'Hateful_METN1': [1.0, 0.0, 0.0],
-                                 'Hateful_MEFP1': [1.0, 0.0, 0.0],
-                                 'Hateful_MEFN1': [1.0, 0.0, 0.0],
-                                 'Hateful_MEREJ1': [1.0, 0.0, 0.0],
-                                 'Hateful_S100TP1': [1.0, 0.0, 0.0],
-                                 'Hateful_S100TN1': [1.0, 0.0, 0.0],
-                                 'Hateful_S100FP1': [1.0, 0.0, 0.0],
-                                 'Hateful_S100FN1': [1.0, 0.0, 0.0],
-                                 'Hateful_S100REJ1': [1.0, 0.0, 0.0]})
+        expected = pd.DataFrame({'Hateful_TP1': [1.0, 0.0, 0.0],
+                                 'Hateful_TN1': [1.0, 0.0, 0.0],
+                                 'Hateful_FP1': [1.0, 0.0, 0.0],
+                                 'Hateful_FN1': [1.0, 0.0, 0.0],
+                                 'Hateful_REJ1': [1.0, 0.0, 0.0]})
 
         hatefulness = Analysis.hatefulness(data=df, num_scenarios=1)
         self.assertTrue(hatefulness.equals(expected))
@@ -167,40 +162,47 @@ class TestAnalysis(unittest.TestCase):
         self.assertTrue(normalized_mes.equals(expected))
 
     def test_reliabilty(self):
+        # self.assertEquals(0.811, krippendorff.alpha(reliability_data=[[np.nan, np.nan, np.nan, np.nan, np.nan, 3, 4, 1, 2, 1, 1, 3, 3, np.nan, 3],  [
+        #     1, np.nan, 2, 1, 3, 3, 4, 3, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan], [np.nan, np.nan, 2, 1, 3, 4, 4, np.nan, 2, 1, 1, 3, 3, np.nan, 4]], level_of_measurement="interval"))
+
         mes = pd.DataFrame({'METP1': [2.0, 2.0, 2.0],
-                            'METN1': [0.6, 1.2, 1.2],
+                            'METP2': [2.0, 2.0, 2.0],
+                            'METN1': [3.0, 3.0, 3.0],
+                            'METN2': [4.0, 4.0, 4.0],
                             'MEFP1': [-0.2, -0.2, -0.2],
+                            'MEFP2': [-0.3, -0.3, -0.3],
                             'MEFN1': [-2.0, -2.0, -2.0],
-                            'MEREJ1': [-0.6, -0.6, -0.6],
+                            'MEFN2': [-2.0, -2.0, -2.0],
+                            'MEREJ1': [-0.5, -0.6, -0.6],
+                            'MEREJ2': [-0.6, -0.6, -0.6],
                             'S100TP1': [20.0, 20.0, 20.0],
+                            'S100TP2': [20.0, 20.0, 20.0],
                             'S100TN1': [8.0, 12.0, 12.0],
+                            'S100TN2': [8.0, 12.0, 12.0],
                             'S100FP1': [-2.0, -2.0, -2.0],
-                            'S100FN1': [-20.0, -20.0, -20.0],
+                            'S100FP2': [-3.0, -3.0, -3.0],
+                            'S100FN1': [-19.0, -16.0, -17.0],
+                            'S100FN2': [-51.0, -55.0, -45.0],
                             'S100REJ1': [-6.0, -6.0, -6.0],
+                            'S100REJ2': [-6.0, -6.0, -6.0],
                             'Hateful_METP1': [True, False, False],
                             'Hateful_S100FN1': [False, False, False]
                             })
 
-        alpha = Analysis.reliability(mes)
-        self.assertAlmostEqual(alpha, 0.9945, 4)
-
-        alpha = Analysis.reliability(mes, type="TP")
+        alpha = Analysis.reliability(mes, scale="ME", type="TN")
         self.assertEqual(alpha, 1.0)
 
-        alpha = Analysis.reliability(mes, type="TN")
-        self.assertAlmostEqual(alpha, 0.9098, 4)
-
-        alpha = Analysis.reliability(mes, type="FP")
+        alpha = Analysis.reliability(mes, scale="S100", type="FP")
         self.assertEqual(alpha, 1.0)
 
-        alpha = Analysis.reliability(mes, type="FN")
-        self.assertEqual(alpha, 1.0)
+        alpha = Analysis.reliability(mes, scale="S100", type="FN")
+        self.assertAlmostEqual(alpha, 0.9590, 4)
 
         alpha = Analysis.reliability(mes, scale="ME")
-        self.assertAlmostEqual(alpha, 0.9882, 4)
+        self.assertAlmostEqual(alpha, 0.9997, 4)
 
         alpha = Analysis.reliability(mes, scale="S100")
-        self.assertAlmostEqual(alpha, 0.9948, 4)
+        self.assertAlmostEqual(alpha, 0.9905, 4)
 
         mes = pd.DataFrame({'METN1': [1.2, 1.2, 1.2],
                             'METN2': [0.8, 0.8, 0.8],

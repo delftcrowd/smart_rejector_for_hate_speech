@@ -97,7 +97,7 @@ class Analysis:
                     for i in range(1, num_scenarios + 1):
                         hatefulness = cls.__get_value(row, scale, type, i, "h")
                         hateful = cls.__convert_hatefulness(hatefulness)
-                        r[f"Hateful_{scale}{type}{i}"] = hateful
+                        r[f"Hateful_{type}{i}"] = hateful
 
             df = df.append(r, ignore_index=True)
 
@@ -227,10 +227,9 @@ class Analysis:
             data (pd.DataFrame): the converted data.
         """
         print("===================")
-        print("alpha complete data:", cls.reliability(data))
-        print("===================")
         for scale in SCALES:
             print(f"{scale} scale")
+            print("Reliability scale: ", cls.reliability(data, scale=scale))
             for type in TYPES:
                 print(type, cls.reliability(data, scale=scale, type=type))
             print("===================")
@@ -285,18 +284,19 @@ class Analysis:
         """
 
         if scale != '' and type != '':
-            data = data.filter(regex=f"^{scale}{type}.*$", axis=1)
+            column = f"^{scale}{type}.*$"
         elif scale != '' and type == '':
-            data = data.filter(regex=f"^{scale}(TP|TN|FP|FN|REJ).*$", axis=1)
-        elif scale == '' and type == '':
-            data = data.filter(regex="^(ME|S100)(TP|TN|FP|FN|REJ).*$", axis=1)
-        elif scale == '' and type != '':
-            data = data.filter(regex=f"^(ME|S100){type}.*$", axis=1)
+            column = f"^{scale}(TP|TN|FP|FN|REJ).*$"
 
-        data = data.values.tolist()
+        if scale == "ME":
+            level_of_measurement = "ratio"
+        elif scale == "S100":
+            level_of_measurement = "interval"
+        
+        data = data.filter(regex=column, axis=1).values.tolist()
 
         try:
-            alpha = krippendorff.alpha(reliability_data=data)
+            alpha = krippendorff.alpha(reliability_data=data, level_of_measurement=level_of_measurement)
         except:
             # The value domain should consist of at least one item
             # If not, then catch exception and retun np.nan
