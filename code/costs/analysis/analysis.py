@@ -182,7 +182,7 @@ class Analysis:
         """
         mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
         normalized_mes = cls.normalize(data, mes)
-        hatefulness = cls.hatefulness(data=data, scales=["S100"], num_scenarios=num_scenarios)
+        hatefulness = cls.hatefulness(data=data, scales=["ME"], num_scenarios=num_scenarios)
         attention_checks = cls.attention_checks(data)
         return pd.concat([normalized_mes, hatefulness, attention_checks], axis=1)
     
