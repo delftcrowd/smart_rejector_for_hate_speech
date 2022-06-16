@@ -63,9 +63,9 @@ class Analysis:
                 for i in range(1, num_scenarios + 1):
                     decision = cls.__get_value(row, "S100", type, i, "s")
                     agree_value = cls.__get_value(
-                        row, "S100", type, i, "a\[SQ001\]")
+                        row, "S100", type, i, r"a\[SQ001\]")
                     disagree_value = cls.__get_value(
-                        row, "S100", type, i, "d\[SQ001\]")
+                        row, "S100", type, i, r"d\[SQ001\]")
                     v100 = cls.__convert_100(
                         decision, agree_value, disagree_value)
                     r[f"S100{type}{i}"] = v100
@@ -118,13 +118,13 @@ class Analysis:
         df = pd.DataFrame()
 
         for _index, row in data.iterrows():
-            attention1 = row.filter(regex="^attention1\.").values[0]
-            attention2 = row.filter(regex="^attention2\.").values[0]
+            attention1 = row.filter(regex=r"^attention1\.").values[0]
+            attention2 = row.filter(regex=r"^attention2\.").values[0]
             attention_checks_passed = attention1 == "Blue" and attention2 == "Orange"
 
             df = df.append({'attention_checks_passed': attention_checks_passed}, ignore_index=True)
 
-        return df        
+        return df
 
     @classmethod
     def normalize(cls, data: pd.DataFrame, magnitude_estimates: pd.DataFrame) -> pd.DataFrame:
@@ -166,7 +166,7 @@ class Analysis:
         hatefulness = cls.hatefulness(data)
         attention_checks = cls.attention_checks(data)
         return pd.concat([normalized_mes, s100, hatefulness, attention_checks], axis=1)
-    
+
     @classmethod
     def convert_me_data(cls, data: pd.DataFrame, num_scenarios: int = 8) -> pd.DataFrame:
         """Convert the original data to a dataframe that consists
@@ -185,7 +185,7 @@ class Analysis:
         hatefulness = cls.hatefulness(data=data, scales=["ME"], num_scenarios=num_scenarios)
         attention_checks = cls.attention_checks(data)
         return pd.concat([normalized_mes, hatefulness, attention_checks], axis=1)
-    
+
     @classmethod
     def convert_100_data(cls, data: pd.DataFrame, num_scenarios: int = 8) -> pd.DataFrame:
         """Convert the original data to a dataframe that consists
@@ -249,16 +249,16 @@ class Analysis:
         plt.title("Boxplots of all questions")
         plt.xlabel("Scenario")
         plt.ylabel("(Dis)Agreement")
+        plt.xticks(rotation=90)
         plt.show()
 
-    
     @classmethod
     def plot_hatefulness(cls, data: pd.DataFrame) -> None:
         """Plots the percentage of (non)hateful rated scenarios.
 
         Args:
             data (pd.DataFrame): the converted data.
-        """        
+        """
         plot_data = cls.convert_to_stackedbar_data(data)
         sns.set(style='whitegrid')
         ax = plot_data.plot(kind='bar', stacked=True, x="Scenario")
@@ -292,15 +292,10 @@ class Analysis:
             level_of_measurement = "ratio"
         elif scale == "S100":
             level_of_measurement = "interval"
-        
+
         data = data.filter(regex=column, axis=1).values.tolist()
 
-        try:
-            alpha = krippendorff.alpha(reliability_data=data, level_of_measurement=level_of_measurement)
-        except:
-            # The value domain should consist of at least one item
-            # If not, then catch exception and retun np.nan
-            alpha = np.nan
+        alpha = krippendorff.alpha(reliability_data=data, level_of_measurement=level_of_measurement)
 
         return alpha
 
@@ -354,12 +349,12 @@ class Analysis:
             float: the pivot value.
         """
         NAME = "G20Q51"
-        str_dis = row.filter(regex=f"^{NAME}\[SQ001\]\.").values[0]
-        dis = row.filter(regex=f"^{NAME}\[SQ002\]\.").values[0]
-        som_dis = row.filter(regex=f"^{NAME}\[SQ003\]\.").values[0]
-        som_agr = row.filter(regex=f"^{NAME}\[SQ005\]\.").values[0]
-        agr = row.filter(regex=f"^{NAME}\[SQ006\]\.").values[0]
-        str_agr = row.filter(regex=f"^{NAME}\[SQ007\]\.").values[0]
+        str_dis = row.filter(regex=fr"^{NAME}\[SQ001\]\.").values[0]
+        dis = row.filter(regex=fr"^{NAME}\[SQ002\]\.").values[0]
+        som_dis = row.filter(regex=fr"^{NAME}\[SQ003\]\.").values[0]
+        som_agr = row.filter(regex=fr"^{NAME}\[SQ005\]\.").values[0]
+        agr = row.filter(regex=fr"^{NAME}\[SQ006\]\.").values[0]
+        str_agr = row.filter(regex=fr"^{NAME}\[SQ007\]\.").values[0]
         calibration_vals = [str_dis, som_dis, dis, som_agr, agr, str_agr]
         absolute_cal_vals = [abs(val) for val in calibration_vals]
         return np.mean(absolute_cal_vals)
@@ -378,8 +373,8 @@ class Analysis:
         """
         durations = []
         for index, row in data.iterrows():
-            startdate = row.filter(regex="startdate\.").values[0]
-            submitdate = row.filter(regex="submitdate\.").values[0]
+            startdate = row.filter(regex=r"startdate\.").values[0]
+            submitdate = row.filter(regex=r"submitdate\.").values[0]
             startdate = datetime.strptime(startdate, '%Y-%m-%d %H:%M:%S')
             submitdate = datetime.strptime(submitdate, '%Y-%m-%d %H:%M:%S')
             duration = submitdate - startdate
@@ -393,7 +388,7 @@ class Analysis:
 
     @staticmethod
     def any_failed_attention_checks(data: pd.DataFrame) -> bool:
-        failed = data['attention_checks_passed'].loc[data['attention_checks_passed'] == False].values
+        failed = data['attention_checks_passed'].loc[data['attention_checks_passed'] == 0.0].values
         return failed.size > 0
 
     @staticmethod
@@ -424,7 +419,7 @@ class Analysis:
         Returns:
             pd.DataFrame: converted to boxplot suitable data with three columns:
             (dis)agreement, scale, and scenario.
-        """        
+        """
         data = data.filter(regex="^(ME|S100).*$", axis=1)
         question_names = data.columns.values.tolist()
         plot_data = []
@@ -454,14 +449,14 @@ class Analysis:
         Returns:
             pd.DataFrame: converted to stacked bar suitable data with three columns:
             scenario, hateful (percentage), and not hateful (percentage).
-        """        
-        data = data.filter(regex="^Hateful_(ME|S100).*$", axis=1)
+        """
+        data = data.filter(regex="^Hateful_.*$", axis=1)
         question_names = data.columns.values.tolist()
         plot_data = []
 
         for index, question in enumerate(question_names):
             values = data[question].tolist()
-            count_hateful = sum(1 for value in values if value == True)
+            count_hateful = sum(1 for value in values if value is True)
             total = len(values)
             percentage_hateful = round((count_hateful / total) * 100.0, 2)
             percentage_non_hateful = 100.0 - percentage_hateful
@@ -469,10 +464,9 @@ class Analysis:
 
         return pd.DataFrame(plot_data, columns=["Scenario", "Hateful", "Not hateful"])
 
-
     @staticmethod
     def __get_value(row, scale, type, index, question):
-        return row.filter(regex=f"^{scale}{type}{index}{question}\.").values[0]
+        return row.filter(regex=fr"^{scale}{type}{index}{question}\.").values[0]
 
     @staticmethod
     def __convert_100(decision, agree_value, disagree_value):
@@ -498,4 +492,3 @@ class Analysis:
             return True
         elif hatefulness == 'Not hateful':
             return False
-  

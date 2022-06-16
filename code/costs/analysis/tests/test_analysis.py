@@ -159,12 +159,10 @@ class TestAnalysis(unittest.TestCase):
                                  })
 
         normalized_mes = Analysis.normalize(data, mes)
+
         self.assertTrue(normalized_mes.equals(expected))
 
     def test_reliabilty(self):
-        # self.assertEquals(0.811, krippendorff.alpha(reliability_data=[[np.nan, np.nan, np.nan, np.nan, np.nan, 3, 4, 1, 2, 1, 1, 3, 3, np.nan, 3],  [
-        #     1, np.nan, 2, 1, 3, 3, 4, 3, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan], [np.nan, np.nan, 2, 1, 3, 4, 4, np.nan, 2, 1, 1, 3, 3, np.nan, 4]], level_of_measurement="interval"))
-
         mes = pd.DataFrame({'METP1': [2.0, 2.0, 2.0],
                             'METP2': [2.0, 2.0, 2.0],
                             'METN1': [3.0, 3.0, 3.0],
