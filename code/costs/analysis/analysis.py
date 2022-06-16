@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from datetime import datetime
 import matplotlib.ticker as mtick
+from string import digits
 
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
 SCALES = ["ME", "S100"]
@@ -244,11 +245,11 @@ class Analysis:
             show_individual (bool, optional): Whether to show one boxplot per scenario or not. Defaults to True.
         """
         if scale is None:
-            plot_data = cls.convert_to_dual_boxplot_data(data)
+            plot_data = cls.convert_to_dual_boxplot_data(data=data, show_individual=show_individual)
             sns.boxplot(x="Scenario", y="(Dis)agreement", hue="Scale", data=plot_data)
             plt.title("Boxplots of all questions")
         else:
-            plot_data = cls.convert_to_boxplot_data(data, scale)
+            plot_data = cls.convert_to_boxplot_data(data=data, show_individual=show_individual, scale=scale)
             sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data)
             plt.title(f"Boxplots of all questions for the {scale} scale")
 
@@ -417,13 +418,15 @@ class Analysis:
         column_means = type_values.mean()
         return round(column_means.mean(), 6)
 
-    @staticmethod
-    def convert_to_dual_boxplot_data(data: pd.DataFrame) -> pd.DataFrame:
+    @classmethod
+    def convert_to_dual_boxplot_data(cls, data: pd.DataFrame, show_individual: bool) -> pd.DataFrame:
         """Converts the converted data to a new dataframe that is suitable
         for plotting the boxplots of all individual scenarios.
 
         Args:
             data (pd.DataFrame): the converted data.
+            scale (str): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
+            show_individual (bool): Whether to show one boxplot per scenario or not. Defaults to True.
 
         Returns:
             pd.DataFrame: converted to boxplot suitable data with three columns:
@@ -444,18 +447,25 @@ class Analysis:
                 type = question.replace("S100", "")
                 multiplier = 1
 
+            # Important: the magnitude estimates are multiplied by 100 (since they are normalized)
+            # so that the boxplots can more easily be compared between both scale types.
             for value in values:
-                plot_data.append([value * multiplier, scale, type])
+                plot_data.append([value * multiplier, type, scale])
 
-        return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scale", "Scenario"])
+        if not show_individual:
+            cls.__remove_question_numbers_from_plot_data(plot_data)
 
-    @staticmethod
-    def convert_to_boxplot_data(data: pd.DataFrame, scale: str) -> pd.DataFrame:
+        return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scenario", "Scale"])
+
+    @classmethod
+    def convert_to_boxplot_data(cls, data: pd.DataFrame, scale: str, show_individual: bool) -> pd.DataFrame:
         """Converts the converted data to a new dataframe that is suitable
         for plotting the boxplots of all individual scenarios.
 
         Args:
             data (pd.DataFrame): the converted data.
+            scale (str): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
+            show_individual (bool): Whether to show one boxplot per scenario or not. Defaults to True.
 
         Returns:
             pd.DataFrame: converted to boxplot suitable data with three columns:
@@ -470,6 +480,9 @@ class Analysis:
 
             for value in values:
                 plot_data.append([value, type])
+
+        if not show_individual:
+            cls.__remove_question_numbers_from_plot_data(plot_data)
 
         return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scenario"])
 
@@ -527,3 +540,9 @@ class Analysis:
             return True
         elif hatefulness == 'Not hateful':
             return False
+
+    @staticmethod
+    def __remove_question_numbers_from_plot_data(data: pd.DataFrame) -> pd.DataFrame:
+        for index, row in enumerate(data):
+            # Remove the question number, e.g. 'TP1' becomes 'TP'
+            row[1] = row[1].translate(str.maketrans('', '', digits))
