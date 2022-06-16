@@ -319,8 +319,8 @@ class Analysis:
         plt.show()
 
     @staticmethod
-    def print_correlation(data: pd.DataFrame):
-        """Prints the correlation between the 100-level scores
+    def print_statistics(data: pd.DataFrame):
+        """Prints all statistics between the 100-level scores
         and the magnitude estimates.
 
         Args:
@@ -332,10 +332,14 @@ class Analysis:
         s100 = s100.mean().tolist()
         cohens_d = (np.mean(mes) - np.mean(s100)) / (np.sqrt((np.std(mes) ** 2 + np.std(s100) ** 2) / 2))
         print("Cohen's d", cohens_d)
-        print("Unpaired T-test", stats.ttest_ind(mes, s100))
-        print("Pearson", stats.pearsonr(mes, s100))
-        print("Spearman", stats.spearmanr(mes, s100))
-        print("Kendall", stats.kendalltau(mes, s100))
+        print("Shapiro Wilk normality test MES: ", stats.shapiro(mes))
+        print("Shapiro Wilk normality test S100: ", stats.shapiro(s100))
+        print("Bartlett's test for equal variances:  ", stats.bartlett(mes, s100))
+        print("Mann-Whitney U test: ", stats.mannwhitneyu(mes, s100))
+        print("Unpaired T-test: ", stats.ttest_ind(mes, s100))
+        print("Pearson: ", stats.pearsonr(mes, s100))
+        print("Spearman: ", stats.spearmanr(mes, s100))
+        print("Kendall: ", stats.kendalltau(mes, s100))
 
     @staticmethod
     def pivot_value(row: pd.Series) -> float:
