@@ -457,10 +457,9 @@ class Analysis:
         data = data.filter(regex="^Hateful_.*$", axis=1)
         question_names = data.columns.values.tolist()
         plot_data = []
-
         for index, question in enumerate(question_names):
             values = data[question].tolist()
-            count_hateful = sum(1 for value in values if value is True)
+            count_hateful = sum(1 for value in values if value == 1.0)
             total = len(values)
             percentage_hateful = round((count_hateful / total) * 100.0, 2)
             percentage_non_hateful = 100.0 - percentage_hateful
