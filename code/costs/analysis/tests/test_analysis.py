@@ -281,18 +281,65 @@ class TestAnalysis(unittest.TestCase):
         # The last subject contains a None value because it's more than 3 times the stdv below the mean duration.
         self.assertTrue(durations.equals(expected))
 
-    def test_convert_to_boxplot_data(self):
+    def test_convert_to_dual_boxplot_data_individual(self):
         data = pd.DataFrame({'METP1': [1.5, 2.0, 2.5],
                              'S100TP1': [20.0, 25.0, 35.0],
                             'Hateful_METP1': [True, False, False],
                              'Hateful_S100TP1': [False, False, False]
                              })
 
-        plot_data = Analysis.convert_to_boxplot_data(data)
+        plot_data = Analysis.convert_to_dual_boxplot_data(data, show_individual=True)
 
-        expected = pd.DataFrame({'(Dis)agreement': [1.5, 2.0, 2.5, 20.0, 25.0, 35.0],
+        expected = pd.DataFrame({'(Dis)agreement': [150.0, 200.0, 250.0, 20.0, 25.0, 35.0],
+                                'Scenario': ["TP1", "TP1", "TP1", "TP1", "TP1", "TP1"],
                                  'Scale': ["ME", "ME", "ME", "100-level", "100-level", "100-level"],
-                                'Scenario': ["TP1", "TP1", "TP1", "TP1", "TP1", "TP1"]
+
+                                 })
+
+        self.assertTrue(plot_data.equals(expected))
+
+    def test_convert_to_dual_boxplot_data_grouped(self):
+        data = pd.DataFrame({'METP1': [1.5, 2.0, 2.5],
+                             'S100TP1': [20.0, 25.0, 35.0],
+                            'Hateful_METP1': [True, False, False],
+                             'Hateful_S100TP1': [False, False, False]
+                             })
+
+        plot_data = Analysis.convert_to_dual_boxplot_data(data, show_individual=False)
+
+        expected = pd.DataFrame({'(Dis)agreement': [150.0, 200.0, 250.0, 20.0, 25.0, 35.0],
+                                 'Scenario': ["TP", "TP", "TP", "TP", "TP", "TP"],
+                                 'Scale': ["ME", "ME", "ME", "100-level", "100-level", "100-level"],
+                                 })
+
+        self.assertTrue(plot_data.equals(expected))
+
+    def test_convert_to_boxplot_data_grouped(self):
+        data = pd.DataFrame({'METP1': [1.5, 2.0, 2.5],
+                             'S100TP1': [20.0, 25.0, 35.0],
+                            'Hateful_METP1': [True, False, False],
+                             'Hateful_S100TP1': [False, False, False]
+                             })
+
+        plot_data = Analysis.convert_to_boxplot_data(data, scale="ME", show_individual=False)
+
+        expected = pd.DataFrame({'(Dis)agreement': [1.5, 2.0, 2.5],
+                                'Scenario': ["TP", "TP", "TP"]
+                                 })
+
+        self.assertTrue(plot_data.equals(expected))
+
+    def test_convert_to_boxplot_data_individual(self):
+        data = pd.DataFrame({'METP1': [1.5, 2.0, 2.5],
+                             'S100TP1': [20.0, 25.0, 35.0],
+                             'Hateful_METP1': [True, False, False],
+                             'Hateful_S100TP1': [False, False, False]
+                             })
+
+        plot_data = Analysis.convert_to_boxplot_data(data, scale="ME", show_individual=True)
+
+        expected = pd.DataFrame({'(Dis)agreement': [1.5, 2.0, 2.5],
+                                'Scenario': ["TP1", "TP1", "TP1"]
                                  })
 
         self.assertTrue(plot_data.equals(expected))
