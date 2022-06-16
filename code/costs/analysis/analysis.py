@@ -235,18 +235,24 @@ class Analysis:
             print("===================")
 
     @classmethod
-    def plot_boxplots(cls, data: pd.DataFrame) -> None:
+    def plot_boxplots(cls, data: pd.DataFrame, scale: str = None, show_individual: bool = True) -> None:
         """Plots boxplots of all individual scenarios.
 
         Args:
             data (pd.DataFrame): the converted data.
+            scale (str, optional): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
+            show_individual (bool, optional): Whether to show one boxplot per scenario or not. Defaults to True.
         """
-        plot_data = cls.convert_to_boxplot_data(data)
+        if scale is None:
+            plot_data = cls.convert_to_dual_boxplot_data(data)
+            sns.boxplot(x="Scenario", y="(Dis)agreement", hue="Scale", data=plot_data)
+            plt.title("Boxplots of all questions")
+        else:
+            plot_data = cls.convert_to_boxplot_data(data, scale)
+            sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data)
+            plt.title(f"Boxplots of all questions for the {scale} scale")
 
-        sns.boxplot(x="Scenario", y="(Dis)agreement",
-                    hue="Scale", data=plot_data)
         sns.despine(offset=10, trim=True)
-        plt.title("Boxplots of all questions")
         plt.xlabel("Scenario")
         plt.ylabel("(Dis)Agreement")
         plt.xticks(rotation=90)
@@ -260,7 +266,6 @@ class Analysis:
             data (pd.DataFrame): the converted data.
         """
         plot_data = cls.convert_to_stackedbar_data(data)
-        sns.set(style='whitegrid')
         ax = plot_data.plot(kind='bar', stacked=True, x="Scenario")
         ax.yaxis.set_major_formatter(mtick.PercentFormatter())
 
@@ -413,7 +418,7 @@ class Analysis:
         return round(column_means.mean(), 6)
 
     @staticmethod
-    def convert_to_boxplot_data(data: pd.DataFrame) -> pd.DataFrame:
+    def convert_to_dual_boxplot_data(data: pd.DataFrame) -> pd.DataFrame:
         """Converts the converted data to a new dataframe that is suitable
         for plotting the boxplots of all individual scenarios.
 
@@ -433,13 +438,40 @@ class Analysis:
             if question.startswith("ME"):
                 scale = "ME"
                 type = question.replace("ME", "")
+                multiplier = 100
             elif question.startswith("S100"):
                 scale = "100-level"
                 type = question.replace("S100", "")
+                multiplier = 1
+
             for value in values:
-                plot_data.append([value, scale, type])
+                plot_data.append([value * multiplier, scale, type])
 
         return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scale", "Scenario"])
+
+    @staticmethod
+    def convert_to_boxplot_data(data: pd.DataFrame, scale: str) -> pd.DataFrame:
+        """Converts the converted data to a new dataframe that is suitable
+        for plotting the boxplots of all individual scenarios.
+
+        Args:
+            data (pd.DataFrame): the converted data.
+
+        Returns:
+            pd.DataFrame: converted to boxplot suitable data with three columns:
+            (dis)agreement, and scenario.
+        """
+        data = data.filter(regex=fr"^{scale}.*$", axis=1)
+        question_names = data.columns.values.tolist()
+        plot_data = []
+        for index, question in enumerate(question_names):
+            values = data[question]
+            type = question.replace(scale, "")
+
+            for value in values:
+                plot_data.append([value, type])
+
+        return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scenario"])
 
     @staticmethod
     def convert_to_stackedbar_data(data: pd.DataFrame) -> pd.DataFrame:

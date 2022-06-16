@@ -186,7 +186,7 @@ class TestAnalysis(unittest.TestCase):
                             'Hateful_METP1': [True, False, False],
                             'Hateful_S100FN1': [False, False, False]
                             })
-
+        
         alpha = Analysis.reliability(mes, scale="ME", type="TN")
         self.assertEqual(alpha, 1.0)
 
@@ -307,7 +307,7 @@ class TestAnalysis(unittest.TestCase):
         plot_data = Analysis.convert_to_stackedbar_data(data)
         expected = pd.DataFrame({'Scenario': ['METP1', 'S100TP1'],
                                  'Hateful': [25.0, 0.0], "Not hateful": [75.0, 100.0]})
-
+        Analysis.plot_hatefulness(data)
         self.assertTrue(plot_data.equals(expected))
 
 
