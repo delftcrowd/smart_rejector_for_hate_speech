@@ -7,15 +7,15 @@ from new_idea.pdfs import PDFs
 
 
 class Metric():
-    """Provides helper functions for handling predictions and calculating sets of
-    TP, TN, FP, and FN.
+    """Provides helper functions for handling predictions.
     """
 
-    def __init__(self, values: Values, predictions: List[Prediction], estimator_conf: Dict[str, Dict[str, object]] = None) -> None:
+    def __init__(self, values: Values, predictions: List[Prediction],
+                 estimator_conf: Dict[str, Dict[str, object]] = None) -> None:
         """Initializes the metric
 
         Args:
-            values (Values): The values of TP, TN, FP, and FN.
+            values (Values): The values of correct/incorrect predictions and rejections.
             predictions (List[Prediction]): The list of predictions.
             estimator_conf (Dict[str, Dict[str, object]], optional): Dictionary that contains
                 the KDE params. Defaults to {} and finds the optimal
@@ -35,16 +35,16 @@ class Metric():
         Returns:
             float: The effectiveness of the model.
         """
-        return (self.values.value_FP - self.values.value_rejection) * \
-            self.pdfs.fps.integral(threshold) \
-            + (self.values.value_FN - self.values.value_rejection) * \
-            self.pdfs.fns.integral(threshold) \
-            - (self.values.value_TP + self.values.value_rejection) * \
-            self.pdfs.tps.integral(threshold) \
-            - (self.values.value_TN + self.values.value_rejection) * \
-            self.pdfs.tns.integral(threshold)
+        return (self.values.value_correct - self.values.value_rejection) \
+            * self.pdfs.correct.integral(min=threshold, max=1.0) \
+            + (self.values.value_incorrect - self.values.value_rejection) \
+            * self.pdfs.incorrect.integral(min=threshold, max=1.0) \
+            + (self.values.value_rejection - self.values.value_incorrect) \
+            * self.pdfs.incorrect.integral(min=0.0, max=threshold) \
+            + (self.values.value_rejection - self.values.value_correct) \
+            * self.pdfs.correct.integral(min=0.0, max=threshold)
 
-    def caculate_derivative(self,  threshold: float) -> float:
+    def caculate_derivative(self, threshold: float) -> float:
         """Calculates the derivative of the effectivness for a specific threshold and
         values
 
@@ -54,25 +54,16 @@ class Metric():
         Returns:
             float: The derivative of the effectiveness of the model.
         """
-        return (self.values.value_FP - self.values.value_rejection) \
-            * self.pdfs.fps.D(threshold) \
-            + (self.values.value_FN - self.values.value_rejection) \
-            * self.pdfs.fns.D(threshold) \
-            - (self.values.value_TP + self.values.value_rejection) \
-            * self.pdfs.tps.D(threshold) \
-            - (self.values.value_TN + self.values.value_rejection) * \
-            self.pdfs.tns.D(threshold)
+        return ((self.values.value_incorrect - self.values.value_rejection)
+                / (self.values.value_rejection + self.values.value_correct)) \
+            * self.pdfs.incorrect.D(threshold) - self.pdfs.correct.D(threshold)
 
     def plot_pdfs(self) -> None:
         """Plots the Probability Density Functions for TP, TN, FP, and FN      
         """
-        fig, axs = pyplot.subplots(2, 2)
-        plot_conf = [{'plt_y': 0, 'plt_x': 0, 'data': self.pdfs.tps, 'title': "True Positives"},
-                     {'plt_y': 0, 'plt_x': 1, 'data': self.pdfs.tns,
-                         'title': "True Negatives"},
-                     {'plt_y': 1, 'plt_x': 0, 'data': self.pdfs.fps,
-                         'title': "False Positives"},
-                     {'plt_y': 1, 'plt_x': 1, 'data': self.pdfs.fns, 'title': "False Negatives"}]
+        fig, axs = pyplot.subplots(1, 2)
+        plot_conf = [{'index': 0, 'data': self.pdfs.correct, 'title': "Correct"},
+                     {'index': 1, 'data': self.pdfs.incorrect, 'title': "Incorrect"}]
 
         for conf in plot_conf:
             reliability_values = list(
@@ -80,15 +71,15 @@ class Metric():
             x_values = conf['data'].pdf_x
             y_values = conf['data'].pdf_y
 
-            axs[conf['plt_y'], conf['plt_x']].hist(
+            axs[conf['index']].hist(
                 reliability_values, bins=50, density=True)
-            axs[conf['plt_y'], conf['plt_x']].plot(x_values[:], y_values)
-            axs[conf['plt_y'], conf['plt_x']].set_title(conf['title'])
-            axs[conf['plt_y'], conf['plt_x']].set_xlabel(
+            axs[conf['index']].plot(x_values[:], y_values)
+            axs[conf['index']].set_title(conf['title'])
+            axs[conf['index']].set_xlabel(
                 "Reliability value")
-            axs[conf['plt_y'], conf['plt_x']].set_ylabel("Probability Density")
+            axs[conf['index']].set_ylabel("Probability Density")
 
-        pyplot.suptitle("Probability Density Functions for the sets of TP, TN, FP, and FN\n" +
+        pyplot.suptitle("Probability Density Functions for the sets of correct and incorrect predictions\n" +
                         "The orange line is the estimated PDF that is derived using Kernel Density Estimation by fitting " +
                         "it with the original data. The blue histogram is the probability density of the original data")
         pyplot.show()
@@ -101,19 +92,22 @@ class Metric():
         effectiveness_values = list(
             map(lambda t:  self.calculate_effectiveness(t), thresholds))
 
-        (index, max_effectiveness) = self.maximum_effectiveness(effectiveness_values)
+        (index, max_effectiveness) = self.maximum_effectiveness(
+            effectiveness_values)
 
         pyplot.plot(thresholds, effectiveness_values)
         pyplot.plot(thresholds[index], max_effectiveness,
                     marker='o', markersize=3, color="red")
-        pyplot.annotate(f'Maximum effectiveness: (Threshold: {round(thresholds[index], 4)}, Effectiveness: {round(max_effectiveness, 4)})', (
-            thresholds[index], max_effectiveness))
+        pyplot.annotate(
+            f'Maximum effectiveness: (Threshold: {round(thresholds[index], 4)}, Effectiveness: {round(max_effectiveness, 4)})',
+            (thresholds[index],
+             max_effectiveness))
         pyplot.xlabel("Rejection threshold (σ)")
         pyplot.ylabel("Effectiveness of the model (P(σ))")
         pyplot.title(
             "Measuring the model's effectiveness for different rejection thresholds\n" +
-            f"value TP: {self.values.value_TP}, value TN: {self.values.value_TN}, value FP: {self.values.value_FP}, " +
-            f"value FN: {self.values.value_FN}, value rejection: {self.values.value_rejection}")
+            f"value correct: {self.values.value_correct}, value incorrect: {self.values.value_incorrect}" +
+            f", value rejection: {self.values.value_rejection}")
         pyplot.show()
 
     @staticmethod

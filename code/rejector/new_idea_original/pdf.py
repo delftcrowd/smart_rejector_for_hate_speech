@@ -30,13 +30,13 @@ class PDF():
             self.fraction = fraction
 
     def D(self, threshold: float) -> float:
-        """Returns the Probability Density Function value for a specific threshold.
+        """Returns the Probability Density Function value for a specific threshold
 
         Args:
             threshold (float): The threshold for which you want to retrieve the PDF y axis value.
 
         Returns:
-            float: The PDF value
+            float: the PDF value
         """
         index = -1
         for idx, pdf_x in enumerate(self.pdf_x):
@@ -49,7 +49,7 @@ class PDF():
         else:
             return 0
 
-    def integral(self, threshold: float) -> float:
+    def integral(self, min: float = 0.0, max: float = 1.0) -> float:
         """Calculate the area under PDF curve for the interval [0, threshold].
 
         Args:
@@ -58,10 +58,11 @@ class PDF():
         Returns:
             float: The integral of the PDF for interval [0, threshold]
         """
-        below_threshold_filtered = list(
-            filter(lambda v: v < threshold, self.pdf_x))
-        if len(below_threshold_filtered) == 0:
+        zipped = list(zip(self.pdf_x, self.pdf_y))
+        filtered = [point for point in zipped if point[0] >= min and point[0] <= max]
+        filtered_y = [point[1] for point in filtered]
+        filtered_x = [point[0] for point in filtered]
+        if len(filtered_y) == 0:
             return 0
         else:
-            return simps(
-                self.pdf_y[:len(below_threshold_filtered)], below_threshold_filtered) * self.fraction
+            return simps(filtered_y, filtered_x) * self.fraction

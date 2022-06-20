@@ -1,8 +1,8 @@
 import unittest
 import numpy as np
-from rejector.costs import Costs
-from rejector.metric import Metric
-from rejector.prediction import Prediction
+from new_idea.values import Values
+from new_idea.metric import Metric
+from new_idea.prediction import Prediction
 
 
 class TestMetric(unittest.TestCase):
@@ -11,33 +11,33 @@ class TestMetric(unittest.TestCase):
         # Add False Negatives
         for p in np.linspace(0, 0.3, 100):
             prediction = Prediction(
-                "negative", "positive", p, "positive", None)
+                "negative", "positive", p, None)
             predictions.append(prediction)
 
         # Add False Positives
         for p in np.linspace(0, 0.3, 100):
             prediction = Prediction(
-                "positive", "negative", p, "positive", None)
+                "positive", "negative", p, None)
             predictions.append(prediction)
 
         # Add True Negatives
         for p in np.linspace(0.7, 1.0, 100):
             prediction = Prediction(
-                "negative", "negative", p, "positive", None)
+                "negative", "negative", p, None)
             predictions.append(prediction)
 
         # Add True Positives
         for p in np.linspace(0.7, 1.0, 100):
             prediction = Prediction(
-                "positive", "positive", p, "positive", None)
+                "positive", "positive", p, None)
             predictions.append(prediction)
 
         self.predictions = predictions
 
     def test_ideal_case(self):
-        costs = Costs(1, 1, 5, 5, 1)
-        metric = Metric(costs, self.predictions)
-
+        values = Values(value_correct=1, value_incorrect=-5, value_rejection=-2)
+        metric = Metric(values, self.predictions)
+        metric.plot_effectiveness()
         # The effectiveness of the reject option should be around 1.0  when all
         # samples are rejected
         self.assertTrue(0.90 <= metric.calculate_effectiveness(1.0) <= 1.1)
@@ -52,10 +52,10 @@ class TestMetric(unittest.TestCase):
         self.assertTrue(0 <= metric.calculate_effectiveness(0) <= 0.2)
 
     def test_ideal_case_with_kde_config(self):
-        costs = Costs(1, 1, 5, 5, 1)
-        estimator_conf = {'TPS': {'bandwidth': 0.02018681}, 'TNS': {'bandwidth': 0.02018681}, 'FPS': {
-            'bandwidth': 0.02018681}, 'FNS': {'bandwidth': 0.02018681}}
-        metric = Metric(costs, self.predictions, estimator_conf)
+        values = Values(value_correct=1, value_incorrect=-5, value_rejection=-1)
+        estimator_conf = {'Correct': {'bandwidth': 0.02018681},
+                          'Incorrect': {'bandwidth': 0.02018681}}
+        metric = Metric(values, self.predictions, estimator_conf)
 
         # The effectiveness of the reject option should be around 1.0  when all
         # samples are rejected
