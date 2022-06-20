@@ -142,7 +142,7 @@ class Analysis:
 
         for index, row in data.iterrows():
             mes = magnitude_estimates.iloc[[index]]
-            pivot = cls.pivot_value(row)
+            pivot = np.max(np.abs(mes.values))
             normalized_mes = mes.div(pivot)
             new_df = new_df.append(normalized_mes, ignore_index=True)
 
@@ -346,28 +346,6 @@ class Analysis:
         print("Pearson: ", stats.pearsonr(mes, s100))
         print("Spearman: ", stats.spearmanr(mes, s100))
         print("Kendall: ", stats.kendalltau(mes, s100))
-
-    @staticmethod
-    def pivot_value(row: pd.Series) -> float:
-        """Calculates the pivot value.
-
-        Args:
-            row (pd.Series): row from the original data.
-            Each row represents one subject.
-
-        Returns:
-            float: the pivot value.
-        """
-        NAME = "G20Q51"
-        str_dis = row.filter(regex=fr"^{NAME}\[SQ001\]\.").values[0]
-        dis = row.filter(regex=fr"^{NAME}\[SQ002\]\.").values[0]
-        som_dis = row.filter(regex=fr"^{NAME}\[SQ003\]\.").values[0]
-        som_agr = row.filter(regex=fr"^{NAME}\[SQ005\]\.").values[0]
-        agr = row.filter(regex=fr"^{NAME}\[SQ006\]\.").values[0]
-        str_agr = row.filter(regex=fr"^{NAME}\[SQ007\]\.").values[0]
-        calibration_vals = [str_dis, som_dis, dis, som_agr, agr, str_agr]
-        absolute_cal_vals = [abs(val) for val in calibration_vals]
-        return np.mean(absolute_cal_vals)
 
     @staticmethod
     def append_durations(data: pd.DataFrame) -> pd.DataFrame:
