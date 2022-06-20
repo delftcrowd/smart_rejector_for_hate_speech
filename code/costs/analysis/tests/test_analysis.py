@@ -123,18 +123,6 @@ class TestAnalysis(unittest.TestCase):
             {'attention_checks_passed': [1.0, 1.0, 1.0]})
         self.assertFalse(Analysis.any_failed_attention_checks(none_failed))
 
-    def test_pivot_value(self):
-        s = pd.Series({'G20Q51[SQ001].': -100,
-                       'G20Q51[SQ002].': -20,
-                       'G20Q51[SQ003].': -2,
-                       'G20Q51[SQ005].': 2,
-                       'G20Q51[SQ006].': 4,
-                       'G20Q51[SQ007].': 400,
-                       })
-
-        pivot_value = Analysis.pivot_value(s)
-        self.assertEqual(pivot_value, 400)
-
     def test_normalize(self):
         data = pd.DataFrame({'G20Q51[SQ001].': [-100, -10, -1],
                              'G20Q51[SQ002].': [-50, -5, -0.5],

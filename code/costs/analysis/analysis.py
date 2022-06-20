@@ -348,22 +348,6 @@ class Analysis:
         print("Kendall: ", stats.kendalltau(mes, s100))
 
     @staticmethod
-    def pivot_value(row: pd.Series) -> float:
-        """Calculates the pivot value.
-
-        Args:
-            row (pd.Series): row from the original data.
-            Each row represents one subject.
-
-        Returns:
-            float: the pivot value.
-        """
-        NAME = "G20Q51"
-        str_dis = row.filter(regex=fr"^{NAME}\[SQ001\]\.").values[0]
-        str_agr = row.filter(regex=fr"^{NAME}\[SQ007\]\.").values[0]
-        return np.max([str_dis, str_agr])
-
-    @staticmethod
     def append_durations(data: pd.DataFrame) -> pd.DataFrame:
         """Adds duration column to the dataframe and replaces all duration
         values with None when the subject is 3 times the standard deviation
