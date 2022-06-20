@@ -133,7 +133,7 @@ class TestAnalysis(unittest.TestCase):
                        })
 
         pivot_value = Analysis.pivot_value(s)
-        self.assertEqual(pivot_value, 88)
+        self.assertEqual(pivot_value, 400)
 
     def test_normalize(self):
         data = pd.DataFrame({'G20Q51[SQ001].': [-100, -10, -1],
@@ -151,11 +151,11 @@ class TestAnalysis(unittest.TestCase):
                             'MEREJ1': [-30.0, -3.0, -0.3]
                             })
 
-        expected = pd.DataFrame({'METP1': [2.0, 2.0, 2.0],
-                                 'METN1': [1.2, 1.2, 1.2],
-                                 'MEFP1': [-0.2, -0.2, -0.2],
-                                 'MEFN1': [-2.0, -2.0, -2.0],
-                                 'MEREJ1': [-0.6, -0.6, -0.6]
+        expected = pd.DataFrame({'METP1': [1.0, 1.0, 1.0],
+                                 'METN1': [0.6, 0.6, 0.6],
+                                 'MEFP1': [-0.1, -0.1, -0.1],
+                                 'MEFN1': [-1.0, -1.0, -1.0],
+                                 'MEREJ1': [-0.3, -0.3, -0.3]
                                  })
 
         normalized_mes = Analysis.normalize(data, mes)
