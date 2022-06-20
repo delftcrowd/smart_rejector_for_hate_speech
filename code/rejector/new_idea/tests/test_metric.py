@@ -1,8 +1,8 @@
 import unittest
 import numpy as np
-from original_rejector.costs import Costs
-from original_rejector.metric import Metric
-from original_rejector.prediction import Prediction
+from new_idea.values import Values
+from new_idea.metric import Metric
+from new_idea.prediction import Prediction
 
 
 class TestMetric(unittest.TestCase):
@@ -35,8 +35,8 @@ class TestMetric(unittest.TestCase):
         self.predictions = predictions
 
     def test_ideal_case(self):
-        costs = Costs(1, 5, 2)
-        metric = Metric(costs, self.predictions)
+        values = Values(value_correct=1, value_incorrect=-5, value_rejection=-2)
+        metric = Metric(values, self.predictions)
         metric.plot_effectiveness()
         # The effectiveness of the reject option should be around 1.0  when all
         # samples are rejected
@@ -52,10 +52,10 @@ class TestMetric(unittest.TestCase):
         self.assertTrue(0 <= metric.calculate_effectiveness(0) <= 0.2)
 
     def test_ideal_case_with_kde_config(self):
-        costs = Costs(1, 5, 1)
+        values = Values(value_correct=1, value_incorrect=-5, value_rejection=-1)
         estimator_conf = {'Correct': {'bandwidth': 0.02018681},
                           'Incorrect': {'bandwidth': 0.02018681}}
-        metric = Metric(costs, self.predictions, estimator_conf)
+        metric = Metric(values, self.predictions, estimator_conf)
 
         # The effectiveness of the reject option should be around 1.0  when all
         # samples are rejected
