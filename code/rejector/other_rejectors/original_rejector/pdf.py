@@ -1,5 +1,5 @@
 from __future__ import annotations
-from rejector.prediction import Prediction
+from original_rejector.prediction import Prediction
 from scipy.integrate import simps
 from typing import List
 import numpy as np
@@ -30,13 +30,13 @@ class PDF():
             self.fraction = fraction
 
     def D(self, threshold: float) -> float:
-        """Returns the Probability Density Function value for a specific threshold.
+        """Returns the Probability Density Function value for a specific threshold
 
         Args:
             threshold (float): The threshold for which you want to retrieve the PDF y axis value.
 
         Returns:
-            float: The PDF value
+            float: the PDF value
         """
         index = -1
         for idx, pdf_x in enumerate(self.pdf_x):

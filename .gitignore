@@ -167,3 +167,6 @@ report/thesis report/fonts/
 *.eps
 # Data
 *.pkl
+
+# Test notebooks
+test*.ipynb

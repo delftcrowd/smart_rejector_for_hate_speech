@@ -1,6 +1,6 @@
-from rejector.pdf import PDF
-from rejector.pdfs import PDFs
-from rejector.prediction import Prediction
+from original_independent_rejector.pdf import PDF
+from original_independent_rejector.pdfs import PDFs
+from original_independent_rejector.prediction import Prediction
 from scipy.integrate import simps
 import numpy as np
 import unittest
@@ -11,7 +11,7 @@ class TestPDF(unittest.TestCase):
         predictions = []
         for p in np.linspace(0, 0.5, 100):
             prediction = Prediction(
-                "positive", "positive", p, "positive", None)
+                "positive", "positive", p, None)
             predictions.append(prediction)
 
         self.predictions = predictions
@@ -30,12 +30,10 @@ class TestPDF(unittest.TestCase):
     def test_integral(self):
         kde = PDFs.estimator(self.predictions)
         pdf = PDF(self.predictions, 1.0, kde)
-        self.assertTrue(0.97 <= pdf.integral(min=0.0, max=1.0) <= 1.0)
-        self.assertTrue(0.9 <= pdf.integral(min=0.0, max=0.5) <= 1.0)
-        self.assertTrue(0.47 <= pdf.integral(min=0.0, max=0.25) <= 0.5)
-        self.assertTrue(0 <= pdf.integral(min=0.0, max=0.0) <= 0.1)
-        self.assertAlmostEqual(0.0, pdf.integral(min=0.5, max=1.0), 1)
-        self.assertAlmostEqual(0.0, pdf.integral(min=0.75, max=1.0), 1)
+        self.assertTrue(0.97 <= pdf.integral(1.0) <= 1.0)
+        self.assertTrue(0.9 <= pdf.integral(0.5) <= 1.0)
+        self.assertTrue(0.47 <= pdf.integral(0.25) <= 0.5)
+        self.assertTrue(0 <= pdf.integral(0) <= 0.1)
 
 
 if __name__ == '__main__':

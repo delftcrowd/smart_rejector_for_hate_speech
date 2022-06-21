@@ -1,6 +1,6 @@
-from original_rejector.pdf import PDF
-from original_rejector.prediction import Prediction
-from original_rejector.pdfs import PDFs
+from independent_rejector.pdf import PDF
+from independent_rejector.prediction import Prediction
+from independent_rejector.pdfs import PDFs
 import unittest
 import numpy as np
 from scipy.integrate import simps
@@ -11,7 +11,7 @@ class TestPDF(unittest.TestCase):
         predictions = []
         for p in np.linspace(0, 0.5, 100):
             prediction = Prediction(
-                "positive", "positive", p, None)
+                "positive", "positive", p, "positive", None)
             predictions.append(prediction)
 
         self.predictions = predictions

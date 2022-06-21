@@ -1,9 +1,9 @@
 from __future__ import annotations
+from original_independent_rejector.prediction import Prediction
+from scipy.integrate import simps
+from typing import List
 import numpy as np
 import statsmodels.api as sm
-from typing import List
-from scipy.integrate import simps
-from original_rejector.prediction import Prediction
 
 
 class PDF():

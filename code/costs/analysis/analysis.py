@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from datetime import datetime
 import matplotlib.ticker as mtick
+from string import digits
 
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
 SCALES = ["ME", "S100"]
@@ -141,7 +142,7 @@ class Analysis:
 
         for index, row in data.iterrows():
             mes = magnitude_estimates.iloc[[index]]
-            pivot = cls.pivot_value(row)
+            pivot = np.max(np.abs(mes.values))
             normalized_mes = mes.div(pivot)
             new_df = new_df.append(normalized_mes, ignore_index=True)
 
@@ -235,18 +236,24 @@ class Analysis:
             print("===================")
 
     @classmethod
-    def plot_boxplots(cls, data: pd.DataFrame) -> None:
+    def plot_boxplots(cls, data: pd.DataFrame, scale: str = None, show_individual: bool = True) -> None:
         """Plots boxplots of all individual scenarios.
 
         Args:
             data (pd.DataFrame): the converted data.
+            scale (str, optional): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
+            show_individual (bool, optional): Whether to show one boxplot per scenario or not. Defaults to True.
         """
-        plot_data = cls.convert_to_boxplot_data(data)
+        if scale is None:
+            plot_data = cls.convert_to_dual_boxplot_data(data=data, show_individual=show_individual)
+            sns.boxplot(x="Scenario", y="(Dis)agreement", hue="Scale", data=plot_data)
+            plt.title("Boxplots of all questions")
+        else:
+            plot_data = cls.convert_to_boxplot_data(data=data, show_individual=show_individual, scale=scale)
+            sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data)
+            plt.title(f"Boxplots of all questions for the {scale} scale")
 
-        sns.boxplot(x="Scenario", y="(Dis)agreement",
-                    hue="Scale", data=plot_data)
         sns.despine(offset=10, trim=True)
-        plt.title("Boxplots of all questions")
         plt.xlabel("Scenario")
         plt.ylabel("(Dis)Agreement")
         plt.xticks(rotation=90)
@@ -260,7 +267,6 @@ class Analysis:
             data (pd.DataFrame): the converted data.
         """
         plot_data = cls.convert_to_stackedbar_data(data)
-        sns.set(style='whitegrid')
         ax = plot_data.plot(kind='bar', stacked=True, x="Scenario")
         ax.yaxis.set_major_formatter(mtick.PercentFormatter())
 
@@ -342,28 +348,6 @@ class Analysis:
         print("Kendall: ", stats.kendalltau(mes, s100))
 
     @staticmethod
-    def pivot_value(row: pd.Series) -> float:
-        """Calculates the pivot value.
-
-        Args:
-            row (pd.Series): row from the original data.
-            Each row represents one subject.
-
-        Returns:
-            float: the pivot value.
-        """
-        NAME = "G20Q51"
-        str_dis = row.filter(regex=fr"^{NAME}\[SQ001\]\.").values[0]
-        dis = row.filter(regex=fr"^{NAME}\[SQ002\]\.").values[0]
-        som_dis = row.filter(regex=fr"^{NAME}\[SQ003\]\.").values[0]
-        som_agr = row.filter(regex=fr"^{NAME}\[SQ005\]\.").values[0]
-        agr = row.filter(regex=fr"^{NAME}\[SQ006\]\.").values[0]
-        str_agr = row.filter(regex=fr"^{NAME}\[SQ007\]\.").values[0]
-        calibration_vals = [str_dis, som_dis, dis, som_agr, agr, str_agr]
-        absolute_cal_vals = [abs(val) for val in calibration_vals]
-        return np.mean(absolute_cal_vals)
-
-    @staticmethod
     def append_durations(data: pd.DataFrame) -> pd.DataFrame:
         """Adds duration column to the dataframe and replaces all duration
         values with None when the subject is 3 times the standard deviation
@@ -412,13 +396,15 @@ class Analysis:
         column_means = type_values.mean()
         return round(column_means.mean(), 6)
 
-    @staticmethod
-    def convert_to_boxplot_data(data: pd.DataFrame) -> pd.DataFrame:
+    @classmethod
+    def convert_to_dual_boxplot_data(cls, data: pd.DataFrame, show_individual: bool) -> pd.DataFrame:
         """Converts the converted data to a new dataframe that is suitable
         for plotting the boxplots of all individual scenarios.
 
         Args:
             data (pd.DataFrame): the converted data.
+            scale (str): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
+            show_individual (bool): Whether to show one boxplot per scenario or not. Defaults to True.
 
         Returns:
             pd.DataFrame: converted to boxplot suitable data with three columns:
@@ -433,13 +419,50 @@ class Analysis:
             if question.startswith("ME"):
                 scale = "ME"
                 type = question.replace("ME", "")
+                multiplier = 100
             elif question.startswith("S100"):
                 scale = "100-level"
                 type = question.replace("S100", "")
-            for value in values:
-                plot_data.append([value, scale, type])
+                multiplier = 1
 
-        return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scale", "Scenario"])
+            # Important: the magnitude estimates are multiplied by 100 (since they are normalized)
+            # so that the boxplots can more easily be compared between both scale types.
+            for value in values:
+                plot_data.append([value * multiplier, type, scale])
+
+        if not show_individual:
+            cls.__remove_question_numbers_from_plot_data(plot_data)
+
+        return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scenario", "Scale"])
+
+    @classmethod
+    def convert_to_boxplot_data(cls, data: pd.DataFrame, scale: str, show_individual: bool) -> pd.DataFrame:
+        """Converts the converted data to a new dataframe that is suitable
+        for plotting the boxplots of all individual scenarios.
+
+        Args:
+            data (pd.DataFrame): the converted data.
+            scale (str): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
+            show_individual (bool): Whether to show one boxplot per scenario or not. Defaults to True.
+
+        Returns:
+            pd.DataFrame: converted to boxplot suitable data with three columns:
+            (dis)agreement, and scenario.
+        """
+        data = data.filter(regex=fr"^{scale}.*$", axis=1)
+        question_names = data.columns.values.tolist()
+        plot_data = []
+        for index, question in enumerate(question_names):
+            values = data[question]
+            type = question.replace(scale, "")
+
+            for value in values:
+                plot_data.append([value, type])
+
+        if not show_individual:
+            cls.__remove_question_numbers_from_plot_data(plot_data)
+
+        return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scenario"])
 
     @staticmethod
     def convert_to_stackedbar_data(data: pd.DataFrame) -> pd.DataFrame:
@@ -495,3 +518,9 @@ class Analysis:
             return True
         elif hatefulness == 'Not hateful':
             return False
+
+    @staticmethod
+    def __remove_question_numbers_from_plot_data(data: pd.DataFrame) -> pd.DataFrame:
+        for index, row in enumerate(data):
+            # Remove the question number, e.g. 'TP1' becomes 'TP'
+            row[1] = row[1].translate(str.maketrans('', '', digits))
