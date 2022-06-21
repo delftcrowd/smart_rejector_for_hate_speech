@@ -7,10 +7,14 @@ dependencies:
   - libpython
   - pip
   - pip:
+      - pyflakes==2.4.0
+      - autopep8==1.6.0
+      
       # The packages below are required for the model
       - scikit-learn==1.0.2
       - spacy==3.2.1
       - tqdm==4.62.3
+
       # Use specific keras and tensorflow 2.7.0 version to include a bug fix
       # For saving the model with a TextVectorization layer.
       - keras==2.7.0rc0
@@ -20,10 +24,8 @@ dependencies:
       - h5py==3.1.0
       - tensorflow-probability==0.15.0
       - pandas==1.3.5
-
+      
       # The packages below are required for the rejector
-      - pyflakes==2.4.0
-      - autopep8==1.6.0
       - matplotlib==3.4.3
       - sklearn==0.0
       - scipy==1.7.1
@@ -31,7 +33,7 @@ dependencies:
 
       # The packages below are required for both
       - tqdm==4.62.3
-      - numpy==1.19.2
+      - numpy==1.22.4
       - ipykernel==6.9.1
 
       # The packages below are required for content-analysis

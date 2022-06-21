@@ -13,7 +13,7 @@ class Reader:
     """Helper class for reading, preprocessing and splitting the text data.
     """
 
-    def __init__(self, filename: str, num_classes: int, vocab_len: int) -> None:
+    def __init__(self, filename: str, num_classes: int, vocab_len: int = 10000) -> None:
         self.filename = filename
         self.num_classes = num_classes
         self.vocab_len = vocab_len
@@ -61,7 +61,9 @@ class Reader:
 
         return X, y
 
-    def preprocess(self, X_train: list, X_test: list, y_train: list, y_test: list, max_len: int = None, tokenizer=None) -> tuple[list, list, list, list, int]:
+    def preprocess(
+            self, X_train: list, X_test: list, y_train: list, y_test: list, max_len: int = None, tokenizer=None) -> tuple[
+            list, list, list, list, int]:
         """Preprocesses a splitted train and test dataset.
 
         Args:
