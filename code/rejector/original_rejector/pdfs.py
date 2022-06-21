@@ -1,9 +1,9 @@
 from __future__ import annotations
-from typing import List, Dict
+from original_rejector.pdf import PDF
 from original_rejector.prediction import Prediction
-import numpy as np
-from rejector.pdf import PDF
+from typing import List, Dict
 import logging
+import numpy as np
 import statsmodels.api as sm
 
 
@@ -65,7 +65,9 @@ class PDFs():
         return kde
 
     @ classmethod
-    def estimator(cls, predictions: List[Prediction], bandwidth: str | float = "cv_ml") -> sm.nonparametric.KDEMultivariate:
+    def estimator(
+            cls, predictions: List[Prediction],
+            bandwidth: str | float = "cv_ml") -> sm.nonparametric.KDEMultivariate:
         """Returns the KernelDensity estimator that is fitted on the predictions.
         If no bandwidths are passed, then the optimal bandwidths are automatically calculated (is slower).
 

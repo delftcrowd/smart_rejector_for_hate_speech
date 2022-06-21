@@ -1,6 +1,6 @@
-from rejector.pdf import PDF
-from rejector.prediction import Prediction
-from rejector.pdfs import PDFs
+from independent_rejector.pdf import PDF
+from independent_rejector.prediction import Prediction
+from independent_rejector.pdfs import PDFs
 import unittest
 import numpy as np
 from scipy.integrate import simps

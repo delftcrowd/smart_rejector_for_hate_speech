@@ -1,4 +1,4 @@
-from rejector.costs import Costs
+from rejector.values import Values
 from rejector.prediction import Prediction
 from typing import List, Dict
 import numpy as np
@@ -11,23 +11,24 @@ class Metric():
     TP, TN, FP, and FN.
     """
 
-    def __init__(self, costs: Costs, predictions: List[Prediction], estimator_conf: Dict[str, Dict[str, object]] = None) -> None:
+    def __init__(self, values: Values, predictions: List[Prediction],
+                 estimator_conf: Dict[str, Dict[str, object]] = None) -> None:
         """Initializes the metric
 
         Args:
-            costs (Costs): The costs of TP, TN, FP, and FN.
+            values (Values): The values of TP, TN, FP, and FN.
             predictions (List[Prediction]): The list of predictions.
             estimator_conf (Dict[str, Dict[str, object]], optional): Dictionary that contains
                 the KDE params. Defaults to {} and finds the optimal
                 params automatically. Defaults to None.
         """
-        self.costs = costs
+        self.values = values
         self.predictions = predictions
         self.estimator_conf = estimator_conf
         self.pdfs = PDFs(self.predictions, self.estimator_conf)
 
     def calculate_effectiveness(self, threshold: float) -> float:
-        """Calculates the effectiveness of a model for a specific threshold and cost values
+        """Calculates the effectiveness of a model for a specific threshold and value values
 
         Args:
             threshold (float): The reliability threshold value.
@@ -35,33 +36,24 @@ class Metric():
         Returns:
             float: The effectiveness of the model.
         """
-        return (self.costs.cost_FP - self.costs.cost_rejection) * \
-            self.pdfs.fps.integral(threshold) \
-            + (self.costs.cost_FN - self.costs.cost_rejection) * \
-            self.pdfs.fns.integral(threshold) \
-            - (self.costs.cost_TP + self.costs.cost_rejection) * \
-            self.pdfs.tps.integral(threshold) \
-            - (self.costs.cost_TN + self.costs.cost_rejection) * \
-            self.pdfs.tns.integral(threshold)
+        value_TP = self.values.value_TP
+        value_TN = self.values.value_TN
+        value_FP = self.values.value_FP
+        value_FN = self.values.value_FN
+        value_rejection = self.values.value_rejection
+        tps = self.pdfs.tps
+        tns = self.pdfs.tns
+        fps = self.pdfs.fps
+        fns = self.pdfs.fns
 
-    def caculate_derivative(self,  threshold: float) -> float:
-        """Calculates the derivative of the effectivness for a specific threshold and
-        costs
-
-        Args:
-            threshold (float): The reliability threshold value.
-
-        Returns:
-            float: The derivative of the effectiveness of the model.
-        """
-        return (self.costs.cost_FP - self.costs.cost_rejection) \
-            * self.pdfs.fps.D(threshold) \
-            + (self.costs.cost_FN - self.costs.cost_rejection) \
-            * self.pdfs.fns.D(threshold) \
-            - (self.costs.cost_TP + self.costs.cost_rejection) \
-            * self.pdfs.tps.D(threshold) \
-            - (self.costs.cost_TN + self.costs.cost_rejection) * \
-            self.pdfs.tns.D(threshold)
+        return (value_TP + value_rejection) * tps.integral(min=threshold, max=1.0) \
+            + (value_TN + value_rejection) * tns.integral(min=threshold, max=1.0) \
+            + (value_rejection - value_FP) * fps.integral(min=threshold, max=1.0) \
+            + (value_rejection - value_FN) * fns.integral(min=threshold, max=1.0) \
+            - (value_rejection + value_TP) * tps.integral(min=0, max=threshold) \
+            - (value_rejection + value_TN) * tns.integral(min=0, max=threshold) \
+            + (value_FP - value_rejection) * fps.integral(min=0, max=threshold) \
+            + (value_FN - value_rejection) * fns.integral(min=0, max=threshold)
 
     def plot_pdfs(self) -> None:
         """Plots the Probability Density Functions for TP, TN, FP, and FN      
@@ -106,14 +98,16 @@ class Metric():
         pyplot.plot(thresholds, effectiveness_values)
         pyplot.plot(thresholds[index], max_effectiveness,
                     marker='o', markersize=3, color="red")
-        pyplot.annotate(f'Maximum effectiveness: (Threshold: {round(thresholds[index], 4)}, Effectiveness: {round(max_effectiveness, 4)})', (
-            thresholds[index], max_effectiveness))
+        pyplot.annotate(
+            f'Maximum effectiveness: (Threshold: {round(thresholds[index], 4)}, Effectiveness: {round(max_effectiveness, 4)})',
+            (thresholds[index],
+             max_effectiveness))
         pyplot.xlabel("Rejection threshold (σ)")
         pyplot.ylabel("Effectiveness of the model (P(σ))")
         pyplot.title(
             "Measuring the model's effectiveness for different rejection thresholds\n" +
-            f"cost TP: {self.costs.cost_TP}, cost TN: {self.costs.cost_TN}, cost FP: {self.costs.cost_FP}, " +
-            f"cost FN: {self.costs.cost_FN}, cost rejection: {self.costs.cost_rejection}")
+            f"value TP: {self.values.value_TP}, value TN: {self.values.value_TN}, value FP: {self.values.value_FP}, " +
+            f"value FN: {self.values.value_FN}, value rejection: {self.values.value_rejection}")
         pyplot.show()
 
     @staticmethod

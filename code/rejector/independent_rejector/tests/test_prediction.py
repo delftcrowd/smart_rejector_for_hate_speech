@@ -2,7 +2,7 @@ import unittest
 import pickle
 import os
 
-from rejector.prediction import Prediction
+from independent_rejector.prediction import Prediction
 
 
 class TestPrediction(unittest.TestCase):

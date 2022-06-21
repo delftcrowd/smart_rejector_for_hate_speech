@@ -3,15 +3,14 @@ import numpy as np
 import statsmodels.api as sm
 from typing import List
 from scipy.integrate import simps
-from new_idea.prediction import Prediction
+from independent_rejector.prediction import Prediction
 
 
 class PDF():
     """Class that contains information about the Probability Density Function.
     """
 
-    def __init__(self, predictions: List[Prediction],
-                 fraction: float, kde: sm.nonparametric.KDEMultivariate = None) -> None:
+    def __init__(self, predictions: List[Prediction], fraction: float, kde: sm.nonparametric.KDEMultivariate = None) -> None:
         """
         Args:
             predictions (List[Prediction]): The list of Predictions.

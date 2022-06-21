@@ -1,9 +1,9 @@
-from new_idea.pdf import PDF
-from new_idea.prediction import Prediction
-from new_idea.pdfs import PDFs
-import unittest
-import numpy as np
+from original_independent_rejector.pdf import PDF
+from original_independent_rejector.pdfs import PDFs
+from original_independent_rejector.prediction import Prediction
 from scipy.integrate import simps
+import numpy as np
+import unittest
 
 
 class TestPDF(unittest.TestCase):

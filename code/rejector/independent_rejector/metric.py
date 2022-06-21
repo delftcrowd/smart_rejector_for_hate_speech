@@ -1,9 +1,9 @@
-from new_idea.values import Values
-from new_idea.prediction import Prediction
+from independent_rejector.costs import Costs
+from independent_rejector.prediction import Prediction
 from typing import List, Dict
 import numpy as np
 from matplotlib import pyplot
-from new_idea.pdfs import PDFs
+from independent_rejector.pdfs import PDFs
 
 
 class Metric():
@@ -11,23 +11,23 @@ class Metric():
     TP, TN, FP, and FN.
     """
 
-    def __init__(self, values: Values, predictions: List[Prediction], estimator_conf: Dict[str, Dict[str, object]] = None) -> None:
+    def __init__(self, costs: Costs, predictions: List[Prediction], estimator_conf: Dict[str, Dict[str, object]] = None) -> None:
         """Initializes the metric
 
         Args:
-            values (Values): The values of TP, TN, FP, and FN.
+            costs (Costs): The costs of TP, TN, FP, and FN.
             predictions (List[Prediction]): The list of predictions.
             estimator_conf (Dict[str, Dict[str, object]], optional): Dictionary that contains
                 the KDE params. Defaults to {} and finds the optimal
                 params automatically. Defaults to None.
         """
-        self.values = values
+        self.costs = costs
         self.predictions = predictions
         self.estimator_conf = estimator_conf
         self.pdfs = PDFs(self.predictions, self.estimator_conf)
 
     def calculate_effectiveness(self, threshold: float) -> float:
-        """Calculates the effectiveness of a model for a specific threshold and value values
+        """Calculates the effectiveness of a model for a specific threshold and cost values
 
         Args:
             threshold (float): The reliability threshold value.
@@ -35,18 +35,18 @@ class Metric():
         Returns:
             float: The effectiveness of the model.
         """
-        return (self.values.value_FP - self.values.value_rejection) * \
+        return (self.costs.cost_FP - self.costs.cost_rejection) * \
             self.pdfs.fps.integral(threshold) \
-            + (self.values.value_FN - self.values.value_rejection) * \
+            + (self.costs.cost_FN - self.costs.cost_rejection) * \
             self.pdfs.fns.integral(threshold) \
-            - (self.values.value_TP + self.values.value_rejection) * \
+            - (self.costs.cost_TP + self.costs.cost_rejection) * \
             self.pdfs.tps.integral(threshold) \
-            - (self.values.value_TN + self.values.value_rejection) * \
+            - (self.costs.cost_TN + self.costs.cost_rejection) * \
             self.pdfs.tns.integral(threshold)
 
     def caculate_derivative(self,  threshold: float) -> float:
         """Calculates the derivative of the effectivness for a specific threshold and
-        values
+        costs
 
         Args:
             threshold (float): The reliability threshold value.
@@ -54,13 +54,13 @@ class Metric():
         Returns:
             float: The derivative of the effectiveness of the model.
         """
-        return (self.values.value_FP - self.values.value_rejection) \
+        return (self.costs.cost_FP - self.costs.cost_rejection) \
             * self.pdfs.fps.D(threshold) \
-            + (self.values.value_FN - self.values.value_rejection) \
+            + (self.costs.cost_FN - self.costs.cost_rejection) \
             * self.pdfs.fns.D(threshold) \
-            - (self.values.value_TP + self.values.value_rejection) \
+            - (self.costs.cost_TP + self.costs.cost_rejection) \
             * self.pdfs.tps.D(threshold) \
-            - (self.values.value_TN + self.values.value_rejection) * \
+            - (self.costs.cost_TN + self.costs.cost_rejection) * \
             self.pdfs.tns.D(threshold)
 
     def plot_pdfs(self) -> None:
@@ -112,8 +112,8 @@ class Metric():
         pyplot.ylabel("Effectiveness of the model (P(σ))")
         pyplot.title(
             "Measuring the model's effectiveness for different rejection thresholds\n" +
-            f"value TP: {self.values.value_TP}, value TN: {self.values.value_TN}, value FP: {self.values.value_FP}, " +
-            f"value FN: {self.values.value_FN}, value rejection: {self.values.value_rejection}")
+            f"cost TP: {self.costs.cost_TP}, cost TN: {self.costs.cost_TN}, cost FP: {self.costs.cost_FP}, " +
+            f"cost FN: {self.costs.cost_FN}, cost rejection: {self.costs.cost_rejection}")
         pyplot.show()
 
     @staticmethod

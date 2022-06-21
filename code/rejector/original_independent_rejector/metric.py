@@ -1,33 +1,32 @@
-from new_idea.values import Values
-from new_idea.prediction import Prediction
+from matplotlib import pyplot
+from original_independent_rejector.costs import Costs
+from original_independent_rejector.pdfs import PDFs
+from original_independent_rejector.prediction import Prediction
 from typing import List, Dict
 import numpy as np
-from matplotlib import pyplot
-from new_idea.pdfs import PDFs
 
 
 class Metric():
     """Provides helper functions for handling predictions.
     """
 
-    def __init__(self, values: Values, predictions: List[Prediction],
-                 estimator_conf: Dict[str, Dict[str, object]] = None) -> None:
+    def __init__(self, costs: Costs, predictions: List[Prediction], estimator_conf: Dict[str, Dict[str, object]] = None) -> None:
         """Initializes the metric
 
         Args:
-            values (Values): The values of correct/incorrect predictions and rejections.
+            costs (Costs): The costs of correct/incorrect predictions and rejections.
             predictions (List[Prediction]): The list of predictions.
             estimator_conf (Dict[str, Dict[str, object]], optional): Dictionary that contains
                 the KDE params. Defaults to {} and finds the optimal
                 params automatically. Defaults to None.
         """
-        self.values = values
+        self.costs = costs
         self.predictions = predictions
         self.estimator_conf = estimator_conf
         self.pdfs = PDFs(self.predictions, self.estimator_conf)
 
     def calculate_effectiveness(self, threshold: float) -> float:
-        """Calculates the effectiveness of a model for a specific threshold and value values
+        """Calculates the effectiveness of a model for a specific threshold and cost values
 
         Args:
             threshold (float): The reliability threshold value.
@@ -35,18 +34,14 @@ class Metric():
         Returns:
             float: The effectiveness of the model.
         """
-        return (self.values.value_correct - self.values.value_rejection) \
-            * self.pdfs.correct.integral(min=threshold, max=1.0) \
-            + (self.values.value_incorrect - self.values.value_rejection) \
-            * self.pdfs.incorrect.integral(min=threshold, max=1.0) \
-            + (self.values.value_rejection - self.values.value_incorrect) \
-            * self.pdfs.incorrect.integral(min=0.0, max=threshold) \
-            + (self.values.value_rejection - self.values.value_correct) \
-            * self.pdfs.correct.integral(min=0.0, max=threshold)
+        return (self.costs.cost_incorrect - self.costs.cost_rejection) * \
+            self.pdfs.incorrect.integral(threshold) \
+            - (self.costs.cost_correct + self.costs.cost_rejection) * \
+            self.pdfs.correct.integral(threshold)
 
     def caculate_derivative(self, threshold: float) -> float:
         """Calculates the derivative of the effectivness for a specific threshold and
-        values
+        costs
 
         Args:
             threshold (float): The reliability threshold value.
@@ -54,8 +49,8 @@ class Metric():
         Returns:
             float: The derivative of the effectiveness of the model.
         """
-        return ((self.values.value_incorrect - self.values.value_rejection)
-                / (self.values.value_rejection + self.values.value_correct)) \
+        return ((self.costs.cost_incorrect - self.costs.cost_rejection)
+                / (self.costs.cost_rejection + self.costs.cost_correct)) \
             * self.pdfs.incorrect.D(threshold) - self.pdfs.correct.D(threshold)
 
     def plot_pdfs(self) -> None:
@@ -98,16 +93,14 @@ class Metric():
         pyplot.plot(thresholds, effectiveness_values)
         pyplot.plot(thresholds[index], max_effectiveness,
                     marker='o', markersize=3, color="red")
-        pyplot.annotate(
-            f'Maximum effectiveness: (Threshold: {round(thresholds[index], 4)}, Effectiveness: {round(max_effectiveness, 4)})',
-            (thresholds[index],
-             max_effectiveness))
+        pyplot.annotate(f'Maximum effectiveness: (Threshold: {round(thresholds[index], 4)}, Effectiveness: {round(max_effectiveness, 4)})', (
+            thresholds[index], max_effectiveness))
         pyplot.xlabel("Rejection threshold (σ)")
         pyplot.ylabel("Effectiveness of the model (P(σ))")
         pyplot.title(
             "Measuring the model's effectiveness for different rejection thresholds\n" +
-            f"value correct: {self.values.value_correct}, value incorrect: {self.values.value_incorrect}" +
-            f", value rejection: {self.values.value_rejection}")
+            f"cost correct: {self.costs.cost_correct}, cost incorrect: {self.costs.cost_incorrect}" +
+            f", cost rejection: {self.costs.cost_rejection}")
         pyplot.show()
 
     @staticmethod

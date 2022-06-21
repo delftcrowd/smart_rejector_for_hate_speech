@@ -1,8 +1,8 @@
-import unittest
-import pickle
-import os
 
-from new_idea.prediction import Prediction
+from original_independent_rejector.prediction import Prediction
+import os
+import pickle
+import unittest
 
 
 class TestPrediction(unittest.TestCase):
