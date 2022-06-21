@@ -1,8 +1,8 @@
-
-from rejector.prediction import Prediction
-import os
-import pickle
 import unittest
+import pickle
+import os
+
+from independent_rejector.prediction import Prediction
 
 
 class TestPrediction(unittest.TestCase):

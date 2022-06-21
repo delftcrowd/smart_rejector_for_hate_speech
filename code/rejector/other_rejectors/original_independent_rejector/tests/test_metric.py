@@ -1,8 +1,8 @@
-import unittest
+from original_independent_rejector.costs import Costs
+from original_independent_rejector.metric import Metric
+from original_independent_rejector.prediction import Prediction
 import numpy as np
-from original_rejector.costs import Costs
-from original_rejector.metric import Metric
-from original_rejector.prediction import Prediction
+import unittest
 
 
 class TestMetric(unittest.TestCase):
