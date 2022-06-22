@@ -48,6 +48,22 @@ class Reader:
             X, y, random_state=42, stratify=y, test_size=0.10)
         return X_train, X_test, y_train, y_test
 
+    def split_with_validation(self, X: list, y: list) -> tuple[list, list, list, list, list, list]:
+        """Splits a list of data samples X and list of labels Y into a train,
+        test, and validation dataset.
+
+        Args:
+            X (list): list of data samples.
+            y (list): list of labels.
+
+        Returns:
+            tuple[list, list, list, list]: splitted train, validation, and test sets.
+        """
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, random_state=42, stratify=y, test_size=0.10)
+        X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=.2)
+        return X_train, X_val, X_test, y_train, y_val, y_test
+
     def preprocess_test(self, X: list, y: list, max_len: int) -> tuple[list, list]:
         """Preprocesses a test dataset only.
 
