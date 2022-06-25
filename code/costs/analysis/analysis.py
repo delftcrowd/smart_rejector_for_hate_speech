@@ -37,7 +37,7 @@ class Analysis:
                     decision = cls.__get_value(row, "ME", type, i, "s")
                     value = cls.__get_value(row, "ME", type, i, "v")
                     me = cls.__convert_me(decision, value)
-                    r[f"ME{type}{i}"] = me
+                    r[f"{type}{i}"] = me
 
             df = df.append(r, ignore_index=True)
 
@@ -69,7 +69,7 @@ class Analysis:
                         row, "S100", type, i, r"d\[SQ001\]")
                     v100 = cls.__convert_100(
                         decision, agree_value, disagree_value)
-                    r[f"S100{type}{i}"] = v100
+                    r[f"{type}{i}"] = v100
 
             df = df.append(r, ignore_index=True)
 
@@ -149,26 +149,6 @@ class Analysis:
         return new_df
 
     @classmethod
-    def convert_both_scales_data(cls, data: pd.DataFrame, num_scenarios: int = 4) -> pd.DataFrame:
-        """Convert the original data to a dataframe that consists
-        of all normalized magnitude estimates and 100-level scale values.
-
-        Args:
-            data (pd.DataFrame): the original data.
-            num_scenarios (int, optional): The number of scenarios per type. Defaults to 5.
-
-        Returns:
-            pd.DataFrame: dataframe that consists of all normalized
-            magnitude estimates and 100-level scale values.
-        """
-        mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
-        normalized_mes = cls.normalize(data, mes)
-        s100 = cls.s100_values(data=data, num_scenarios=num_scenarios)
-        hatefulness = cls.hatefulness(data)
-        attention_checks = cls.attention_checks(data)
-        return pd.concat([normalized_mes, s100, hatefulness, attention_checks], axis=1)
-
-    @classmethod
     def convert_me_data(cls, data: pd.DataFrame, num_scenarios: int = 8) -> pd.DataFrame:
         """Convert the original data to a dataframe that consists
         of all normalized magnitude estimates.
@@ -213,14 +193,12 @@ class Analysis:
             data (pd.DataFrame): the converted data.
         """
         print("===================")
-        for scale in SCALES:
-            print(f"{scale} scale")
-            for type in TYPES:
-                print(type, cls.calculate_mean(data=data, scale=scale, type=type))
-            print("===================")
+        for type in TYPES:
+            print(type, cls.calculate_mean(data=data, type=type))
+        print("===================")
 
     @classmethod
-    def print_reliabilities(cls, data: pd.DataFrame) -> None:
+    def print_reliabilities(cls, data: pd.DataFrame, scale: str) -> None:
         """Prints the reliability values of each scenario type and scale.
          The reliability values are Krippendorff's alpha values.
 
@@ -228,15 +206,13 @@ class Analysis:
             data (pd.DataFrame): the converted data.
         """
         print("===================")
-        for scale in SCALES:
-            print(f"{scale} scale")
-            print("Reliability scale: ", cls.reliability(data, scale=scale))
-            for type in TYPES:
-                print(type, cls.reliability(data, scale=scale, type=type))
-            print("===================")
+        print("Reliability scale: ", cls.reliability(data=data, scale=scale))
+        for type in TYPES:
+            print(type, cls.reliability(data, scale=scale, type=type))
+        print("===================")
 
     @classmethod
-    def plot_boxplots(cls, data: pd.DataFrame, scale: str = None, show_individual: bool = True) -> None:
+    def plot_dual_boxplots(cls, data_mes: pd.DataFrame, data_s100: pd.DataFrame, show_individual: bool = True) -> None:
         """Plots boxplots of all individual scenarios.
 
         Args:
@@ -244,14 +220,28 @@ class Analysis:
             scale (str, optional): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
             show_individual (bool, optional): Whether to show one boxplot per scenario or not. Defaults to True.
         """
-        if scale is None:
-            plot_data = cls.convert_to_dual_boxplot_data(data=data, show_individual=show_individual)
-            sns.boxplot(x="Scenario", y="(Dis)agreement", hue="Scale", data=plot_data)
-            plt.title("Boxplots of all questions")
-        else:
-            plot_data = cls.convert_to_boxplot_data(data=data, show_individual=show_individual, scale=scale)
-            sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data)
-            plt.title(f"Boxplots of all questions for the {scale} scale")
+        plot_data = cls.convert_to_dual_boxplot_data(
+            data_mes=data_mes, data_s100=data_s100, show_individual=show_individual)
+        sns.boxplot(x="Scenario", y="(Dis)agreement", hue="Scale", data=plot_data)
+        plt.title("Boxplots of all questions")
+        sns.despine(offset=10, trim=True)
+        plt.xlabel("Scenario")
+        plt.ylabel("(Dis)Agreement")
+        plt.xticks(rotation=90)
+        plt.show()
+
+    @classmethod
+    def plot_boxplots(cls, data: pd.DataFrame, scale_title: str, show_individual: bool = True) -> None:
+        """Plots boxplots of all individual scenarios.
+
+        Args:
+            data (pd.DataFrame): the converted data.
+            scale (str, optional): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
+            show_individual (bool, optional): Whether to show one boxplot per scenario or not. Defaults to True.
+        """
+        plot_data = cls.convert_to_boxplot_data(data=data, show_individual=show_individual)
+        sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data)
+        plt.title(f"Boxplots of all questions for the {scale_title} scale")
 
         sns.despine(offset=10, trim=True)
         plt.xlabel("Scenario")
@@ -260,12 +250,13 @@ class Analysis:
         plt.show()
 
     @classmethod
-    def plot_hatefulness(cls, data: pd.DataFrame) -> None:
+    def plot_hatefulness(cls, data_mes: pd.DataFrame, data_s100: pd.DataFrame) -> None:
         """Plots the percentage of (non)hateful rated scenarios.
 
         Args:
             data (pd.DataFrame): the converted data.
         """
+        data = data_mes.append(data_s100)
         plot_data = cls.convert_to_stackedbar_data(data)
         ax = plot_data.plot(kind='bar', stacked=True, x="Scenario")
         ax.yaxis.set_major_formatter(mtick.PercentFormatter())
@@ -276,7 +267,7 @@ class Analysis:
         plt.show()
 
     @staticmethod
-    def reliability(data: pd.DataFrame, scale: str = '', type: str = '') -> float:
+    def reliability(data: pd.DataFrame, scale: str, type: str = '') -> float:
         """Calculates Krippendorffs's alpha values for the complete data
         or for the filtered data if a scale and type filter is passed.
 
@@ -289,10 +280,10 @@ class Analysis:
             float: Krippendorff's alpha value.
         """
 
-        if scale != '' and type != '':
-            column = f"^{scale}{type}.*$"
-        elif scale != '' and type == '':
-            column = f"^{scale}(TP|TN|FP|FN|REJ).*$"
+        if type != '':
+            column = f"^{type}.*$"
+        else:
+            column = "^(TP|TN|FP|FN|REJ).*$"
 
         if scale == "ME":
             level_of_measurement = "ratio"
@@ -300,21 +291,20 @@ class Analysis:
             level_of_measurement = "interval"
 
         data = data.filter(regex=column, axis=1).values.tolist()
-
         alpha = krippendorff.alpha(reliability_data=data, level_of_measurement=level_of_measurement)
 
         return alpha
 
     @staticmethod
-    def plot_validity(data: pd.DataFrame) -> None:
+    def plot_validity(data_mes: pd.DataFrame, data_s100: pd.DataFrame) -> None:
         """Plots a correlation plot between 100-level scores
         and the magnitude estimates.
 
         Args:
             data (pd.DataFrame): the converted data.
         """
-        mes = data.filter(regex="^ME.*$", axis=1)
-        s100 = data.filter(regex="^S100.*$", axis=1)
+        mes = data_mes.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
+        s100 = data_s100.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
         mes = mes.mean().tolist()
         s100 = s100.mean().tolist()
 
@@ -325,17 +315,18 @@ class Analysis:
         plt.show()
 
     @staticmethod
-    def print_statistics(data: pd.DataFrame):
+    def print_statistics(data_mes: pd.DataFrame, data_s100: pd.DataFrame):
         """Prints all statistics between the 100-level scores
         and the magnitude estimates.
 
         Args:
             data (pd.DataFrame): the converted data.
         """
-        mes = data.filter(regex="^ME.*$", axis=1)
-        s100 = data.filter(regex="^S100.*$", axis=1)
+        mes = data_mes.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
+        s100 = data_s100.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
         mes = mes.mean().tolist()
         s100 = s100.mean().tolist()
+
         cohens_d = (np.mean(mes) - np.mean(s100)) / (np.sqrt((np.std(mes) ** 2 + np.std(s100) ** 2) / 2))
         print("Cohen's d", cohens_d)
         print("Shapiro Wilk normality test MES: ", stats.shapiro(mes))
@@ -380,7 +371,7 @@ class Analysis:
         return failed.size > 0
 
     @staticmethod
-    def calculate_mean(data: pd.DataFrame, scale: str, type: str) -> float:
+    def calculate_mean(data: pd.DataFrame, type: str) -> float:
         """Calculates the mean cost for a specific
         scale and scenario type.
 
@@ -392,12 +383,13 @@ class Analysis:
         Returns:
             float: the mean cost value.
         """
-        type_values = data.filter(regex=f"^{scale}{type}.*$", axis=1)
+        type_values = data.filter(regex=f"^{type}.*$", axis=1)
         column_means = type_values.mean()
         return round(column_means.mean(), 6)
 
     @classmethod
-    def convert_to_dual_boxplot_data(cls, data: pd.DataFrame, show_individual: bool) -> pd.DataFrame:
+    def convert_to_dual_boxplot_data(
+            cls, data_mes: pd.DataFrame, data_s100: pd.DataFrame, show_individual: bool) -> pd.DataFrame:
         """Converts the converted data to a new dataframe that is suitable
         for plotting the boxplots of all individual scenarios.
 
@@ -410,25 +402,20 @@ class Analysis:
             pd.DataFrame: converted to boxplot suitable data with three columns:
             (dis)agreement, scale, and scenario.
         """
-        data = data.filter(regex="^(ME|S100).*$", axis=1)
-        question_names = data.columns.values.tolist()
+        data_types = data_mes.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
+        question_names = data_types.columns.values.tolist()
         plot_data = []
         for index, question in enumerate(question_names):
-            values = data[question]
-
-            if question.startswith("ME"):
-                scale = "ME"
-                type = question.replace("ME", "")
-                multiplier = 100
-            elif question.startswith("S100"):
-                scale = "100-level"
-                type = question.replace("S100", "")
-                multiplier = 1
+            mes_values = data_mes[question]
+            s100_values = data_s100[question]
 
             # Important: the magnitude estimates are multiplied by 100 (since they are normalized)
             # so that the boxplots can more easily be compared between both scale types.
-            for value in values:
-                plot_data.append([value * multiplier, type, scale])
+            for value in mes_values:
+                plot_data.append([value * 100, question, "ME"])
+
+            for value in s100_values:
+                plot_data.append([value, question, "100-level"])
 
         if not show_individual:
             cls.__remove_question_numbers_from_plot_data(plot_data)
@@ -436,7 +423,7 @@ class Analysis:
         return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scenario", "Scale"])
 
     @classmethod
-    def convert_to_boxplot_data(cls, data: pd.DataFrame, scale: str, show_individual: bool) -> pd.DataFrame:
+    def convert_to_boxplot_data(cls, data: pd.DataFrame, show_individual: bool) -> pd.DataFrame:
         """Converts the converted data to a new dataframe that is suitable
         for plotting the boxplots of all individual scenarios.
 
@@ -449,15 +436,14 @@ class Analysis:
             pd.DataFrame: converted to boxplot suitable data with three columns:
             (dis)agreement, and scenario.
         """
-        data = data.filter(regex=fr"^{scale}.*$", axis=1)
+        data = data.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
         question_names = data.columns.values.tolist()
         plot_data = []
         for index, question in enumerate(question_names):
             values = data[question]
-            type = question.replace(scale, "")
 
             for value in values:
-                plot_data.append([value, type])
+                plot_data.append([value, question])
 
         if not show_individual:
             cls.__remove_question_numbers_from_plot_data(plot_data)
