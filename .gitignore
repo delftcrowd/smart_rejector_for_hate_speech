@@ -175,4 +175,4 @@ test*.ipynb
 code/model/logs
 code/model/runs
 code/model/test_trainer
-code/model/tmp_trainer
+code/model/tmp_trainer 
