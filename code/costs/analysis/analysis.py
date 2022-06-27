@@ -161,7 +161,7 @@ class Analysis:
             magnitude estimates.
         """
         mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
-        normalized_mes = cls.normalize(data, mes)
+        normalized_mes = cls.normalize(data, mes).mul(100)
         hatefulness = cls.hatefulness(data=data, scale="ME", num_scenarios=num_scenarios)
         attention_checks = cls.attention_checks(data)
         return pd.concat([normalized_mes, hatefulness, attention_checks], axis=1)
@@ -414,7 +414,7 @@ class Analysis:
             # Important: the magnitude estimates are multiplied by 100 (since they are normalized)
             # so that the boxplots can more easily be compared between both scale types.
             for value in mes_values:
-                plot_data.append([value * 100, question, "ME"])
+                plot_data.append([value, question, "ME"])
 
             for value in s100_values:
                 plot_data.append([value, question, "100-level"])
