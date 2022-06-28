@@ -29,6 +29,16 @@ class TestPrediction(unittest.TestCase):
         self.assertEqual(Prediction.set_of_fns(self.predictions), [
             Prediction("negative", "positive", 0.8, "positive", None)])
 
+    def test_count_above_threshold(self):
+        self.assertEqual(Prediction.count_above_threshold(self.predictions, 0.5), 4)
+        self.assertEqual(Prediction.count_above_threshold(self.predictions, 0.7), 4)
+        self.assertEqual(Prediction.count_above_threshold(self.predictions, 0.8), 0)
+
+    def test_count_below_threshold(self):
+        self.assertEqual(Prediction.count_below_threshold(self.predictions, 0.5), 0)
+        self.assertEqual(Prediction.count_below_threshold(self.predictions, 0.7), 0)
+        self.assertEqual(Prediction.count_below_threshold(self.predictions, 0.8), 4)
+
     def test_is_tp(self):
         self.assertTrue(self.tp.is_tp())
         self.assertFalse(self.tn.is_tp())
