@@ -356,7 +356,7 @@ class Analysis:
         durations = []
         for index, row in data.iterrows():
             startdate = row.filter(regex=r"startdate\.").values[0]
-            submitdate = row.filter(regex=r"submitdate\.").values[0]
+            submitdate = row.filter(regex=r"datestamp\.").values[0]
             startdate = datetime.strptime(startdate, '%Y-%m-%d %H:%M:%S')
             submitdate = datetime.strptime(submitdate, '%Y-%m-%d %H:%M:%S')
             duration = submitdate - startdate
