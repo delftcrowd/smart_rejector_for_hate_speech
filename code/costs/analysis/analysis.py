@@ -146,9 +146,8 @@ class Analysis:
                 pivot = np.max(np.abs(log_row.values))
                 normalized_mes = log_row.div(pivot)
             else:
-                mes = magnitude_estimates.iloc[[index]]
-                pivot = np.max(np.abs(mes.values))
-                normalized_mes = mes.div(pivot)
+                pivot = np.max(np.abs(row.values))
+                normalized_mes = row.div(pivot)
             new_df = new_df.append(normalized_mes, ignore_index=True)
 
         return new_df
