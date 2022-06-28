@@ -27,11 +27,13 @@ class Metric():
         self.estimator_conf = estimator_conf
         self.pdfs = PDFs(self.predictions, self.estimator_conf)
 
-    def calculate_effectiveness(self, threshold: float) -> float:
+    def calculate_effectiveness(self, threshold: float, use_pdf: bool = True) -> float:
         """Calculates the effectiveness of a model for a specific threshold and value values
 
         Args:
             threshold (float): The reliability threshold value.
+            use_pdf (bool, optional): Whether to use the Probability Density Functions or not.
+            Otherwise, we simply count the number of predictions above/below the threshold. Defaults to True.
 
         Returns:
             float: The effectiveness of the model.
@@ -41,29 +43,45 @@ class Metric():
         value_FP = self.values.value_FP
         value_FN = self.values.value_FN
         value_rejection = self.values.value_rejection
-        tps = self.pdfs.tps
-        tns = self.pdfs.tns
-        fps = self.pdfs.fps
-        fns = self.pdfs.fns
 
-        # Keep more simplistic metric, just in case
-        # return value_TP * tps.integral(min=threshold, max=1.0) \
-        #     + value_TN * tns.integral(min=threshold, max=1.0) \
-        #     - value_FP * fps.integral(min=threshold, max=1.0) \
-        #     - value_FN * fns.integral(min=threshold, max=1.0) \
-        #     - value_rejection * tps.integral(min=0, max=threshold) \
-        #     - value_rejection * tns.integral(min=0, max=threshold) \
-        #     - value_rejection * fps.integral(min=0, max=threshold) \
-        #     - value_rejection * fns.integral(min=0, max=threshold)
+        if use_pdf:
+            tps = self.pdfs.tps
+            tns = self.pdfs.tns
+            fps = self.pdfs.fps
+            fns = self.pdfs.fns
 
-        return (value_TP + value_rejection) * tps.integral(min=threshold, max=1.0) \
-            + (value_TN + value_rejection) * tns.integral(min=threshold, max=1.0) \
-            + (value_rejection - value_FP) * fps.integral(min=threshold, max=1.0) \
-            + (value_rejection - value_FN) * fns.integral(min=threshold, max=1.0) \
-            - (value_rejection + value_TP) * tps.integral(min=0, max=threshold) \
-            - (value_rejection + value_TN) * tns.integral(min=0, max=threshold) \
-            + (value_FP - value_rejection) * fps.integral(min=0, max=threshold) \
-            + (value_FN - value_rejection) * fns.integral(min=0, max=threshold)
+            # Keep more simplistic metric, just in case
+            # return value_TP * tps.integral(min=threshold, max=1.0) \
+            #     + value_TN * tns.integral(min=threshold, max=1.0) \
+            #     - value_FP * fps.integral(min=threshold, max=1.0) \
+            #     - value_FN * fns.integral(min=threshold, max=1.0) \
+            #     - value_rejection * tps.integral(min=0, max=threshold) \
+            #     - value_rejection * tns.integral(min=0, max=threshold) \
+            #     - value_rejection * fps.integral(min=0, max=threshold) \
+            #     - value_rejection * fns.integral(min=0, max=threshold)
+
+            return (value_TP + value_rejection) * tps.integral(min=threshold, max=1.0) \
+                + (value_TN + value_rejection) * tns.integral(min=threshold, max=1.0) \
+                + (value_rejection - value_FP) * fps.integral(min=threshold, max=1.0) \
+                + (value_rejection - value_FN) * fns.integral(min=threshold, max=1.0) \
+                - (value_rejection + value_TP) * tps.integral(min=0, max=threshold) \
+                - (value_rejection + value_TN) * tns.integral(min=0, max=threshold) \
+                + (value_FP - value_rejection) * fps.integral(min=0, max=threshold) \
+                + (value_FN - value_rejection) * fns.integral(min=0, max=threshold)
+        else:
+            tps = Prediction.set_of_tps(self.predictions)
+            tns = Prediction.set_of_tns(self.predictions)
+            fps = Prediction.set_of_fps(self.predictions)
+            fns = Prediction.set_of_fns(self.predictions)
+
+            return (value_TP + value_rejection) * Prediction.count_above_threshold(tps, threshold) \
+                + (value_TN + value_rejection) * Prediction.count_above_threshold(tns, threshold) \
+                + (value_rejection - value_FP) * Prediction.count_above_threshold(fps, threshold) \
+                + (value_rejection - value_FN) * Prediction.count_above_threshold(fns, threshold) \
+                - (value_rejection + value_TP) * Prediction.count_below_threshold(tps, threshold) \
+                - (value_rejection + value_TN) * Prediction.count_above_threshold(tns, threshold) \
+                + (value_FP - value_rejection) * Prediction.count_above_threshold(fps, threshold) \
+                + (value_FN - value_rejection) * Prediction.count_above_threshold(fns, threshold)
 
     def plot_pdfs(self) -> None:
         """Plots the Probability Density Functions for TP, TN, FP, and FN      
@@ -95,13 +113,17 @@ class Metric():
                         "it with the original data. The blue histogram is the probability density of the original data")
         pyplot.show()
 
-    def plot_effectiveness(self) -> None:
+    def plot_effectiveness(self, use_pdf: bool = False) -> None:
         """Plots the model's effectiveness.
+
+        Args:
+            use_pdf (bool, optional): Whether to use the Probability Density Functions or not.
+            Otherwise, we simply count the number of predictions above/below the threshold. Defaults to True.
         """
         thresholds = np.linspace(0, 1, 1000)
 
         effectiveness_values = list(
-            map(lambda t:  self.calculate_effectiveness(t), thresholds))
+            map(lambda t:  self.calculate_effectiveness(t, use_pdf=use_pdf), thresholds))
 
         (index, max_effectiveness) = self.maximum_effectiveness(effectiveness_values)
 
