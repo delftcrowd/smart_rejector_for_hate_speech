@@ -70,6 +70,32 @@ class Prediction():
         """
         return list(filter(lambda p: p.is_fn(), predictions))
 
+    @staticmethod
+    def count_above_threshold(predictions: List[Prediction], threshold: float) -> int:
+        """Counts the number of predictions with a confidence value larger than `threshold`.
+
+        Args:
+            predictions (List[Prediction]): list of predictions.
+            threshold (float): the confidence threshold.
+
+        Returns:
+            int: number of predictions.
+        """
+        return len(list(filter(lambda p: p.predicted_value > threshold, predictions)))
+
+    @staticmethod
+    def count_below_threshold(predictions: List[Prediction], threshold: float) -> int:
+        """Counts the number of predictions with a confidence value less than or equal to `threshold`.
+
+        Args:
+            predictions (List[Prediction]): list of predictions.
+            threshold (float): the confidence threshold.
+
+        Returns:
+            int: number of predictions.
+        """
+        return len(list(filter(lambda p: p.predicted_value <= threshold, predictions)))
+
     def is_tp(self) -> bool:
         """Checks if a prediction is a True Positive
 
@@ -121,7 +147,16 @@ class Prediction():
         file = open(path, "rb")
         predictions = pickle.load(file)
         file.close()
-        return list(map(lambda res: Prediction(res['predicted_class'], res['actual_class'], res['predicted_value'], gold_class, res['text']), predictions))
+        return list(
+            map(
+                lambda
+                res:
+                Prediction(
+                    res['predicted_class'],
+                    res['actual_class'],
+                    res['predicted_value'],
+                    gold_class, res['text']),
+                predictions))
 
     def __eq__(self, other):
         return self.predicted_class == other.predicted_class and \
