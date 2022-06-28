@@ -74,14 +74,24 @@ class Metric():
             fps = Prediction.set_of_fps(self.predictions)
             fns = Prediction.set_of_fns(self.predictions)
 
+            # Keep more simplistic metric, just in case
+            # return value_TP * Prediction.count_above_threshold(tps, threshold) \
+            #     + value_TN * Prediction.count_above_threshold(tns, threshold) \
+            #     - value_FP * Prediction.count_above_threshold(fps, threshold) \
+            #     - value_FN * Prediction.count_above_threshold(fns, threshold) \
+            #     - value_rejection * Prediction.count_below_threshold(tps, threshold) \
+            #     - value_rejection * Prediction.count_below_threshold(tns, threshold) \
+            #     - value_rejection * Prediction.count_below_threshold(fps, threshold) \
+            #     - value_rejection * Prediction.count_below_threshold(fns, threshold)
+
             return (value_TP + value_rejection) * Prediction.count_above_threshold(tps, threshold) \
                 + (value_TN + value_rejection) * Prediction.count_above_threshold(tns, threshold) \
                 + (value_rejection - value_FP) * Prediction.count_above_threshold(fps, threshold) \
                 + (value_rejection - value_FN) * Prediction.count_above_threshold(fns, threshold) \
                 - (value_rejection + value_TP) * Prediction.count_below_threshold(tps, threshold) \
-                - (value_rejection + value_TN) * Prediction.count_above_threshold(tns, threshold) \
-                + (value_FP - value_rejection) * Prediction.count_above_threshold(fps, threshold) \
-                + (value_FN - value_rejection) * Prediction.count_above_threshold(fns, threshold)
+                - (value_rejection + value_TN) * Prediction.count_below_threshold(tns, threshold) \
+                + (value_FP - value_rejection) * Prediction.count_below_threshold(fps, threshold) \
+                + (value_FN - value_rejection) * Prediction.count_below_threshold(fns, threshold)
 
     def plot_pdfs(self) -> None:
         """Plots the Probability Density Functions for TP, TN, FP, and FN      
