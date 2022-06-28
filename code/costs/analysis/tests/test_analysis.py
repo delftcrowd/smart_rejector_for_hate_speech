@@ -129,14 +129,6 @@ class TestAnalysis(unittest.TestCase):
         self.assertFalse(Analysis.any_failed_attention_checks(none_failed))
 
     def test_normalize(self):
-        data = pd.DataFrame({'G20Q51[SQ001].': [-100, -10, -1],
-                             'G20Q51[SQ002].': [-50, -5, -0.5],
-                             'G20Q51[SQ003].': [-10, -1, -0.1],
-                             'G20Q51[SQ005].': [10, 1, 0.1],
-                             'G20Q51[SQ006].': [30, 3, 0.3],
-                             'G20Q51[SQ007].': [100, 10, 1],
-                             })
-
         mes = pd.DataFrame({'TP1': [100.0, 10.0, 1.0],
                             'TN1': [60.0, 6.0, 0.6],
                             'FP1': [-10.0, -1.0, -0.1],
@@ -151,7 +143,7 @@ class TestAnalysis(unittest.TestCase):
                                  'REJ1': [-0.3, -0.3, -0.3]
                                  })
 
-        normalized_mes = Analysis.normalize(data, mes)
+        normalized_mes = Analysis.normalize(mes)
 
         self.assertTrue(normalized_mes.equals(expected))
 
@@ -282,7 +274,7 @@ class TestAnalysis(unittest.TestCase):
 
     def test_convert_to_dual_boxplot_data_individual(self):
         mes = pd.DataFrame({
-            'TP1': [1.5, 2.0, 2.5],
+            'TP1': [15.0, 20.0, 25.0],
             'Hateful_TP1': [True, False, False]
         })
 
@@ -293,17 +285,16 @@ class TestAnalysis(unittest.TestCase):
 
         plot_data = Analysis.convert_to_dual_boxplot_data(data_mes=mes, data_s100=s100, show_individual=True)
 
-        expected = pd.DataFrame({'(Dis)agreement': [150.0, 200.0, 250.0, 20.0, 25.0, 35.0],
+        expected = pd.DataFrame({'(Dis)agreement': [15.0, 20.0, 25.0, 20.0, 25.0, 35.0],
                                 'Scenario': ["TP1", "TP1", "TP1", "TP1", "TP1", "TP1"],
                                  'Scale': ["ME", "ME", "ME", "100-level", "100-level", "100-level"],
-
                                  })
 
         self.assertTrue(plot_data.equals(expected))
 
     def test_convert_to_dual_boxplot_data_grouped(self):
         mes = pd.DataFrame({
-            'TP1': [1.5, 2.0, 2.5],
+            'TP1': [15.0, 20.0, 25.0],
             'Hateful_TP1': [True, False, False]
         })
 
@@ -314,7 +305,7 @@ class TestAnalysis(unittest.TestCase):
 
         plot_data = Analysis.convert_to_dual_boxplot_data(data_mes=mes, data_s100=s100, show_individual=False)
 
-        expected = pd.DataFrame({'(Dis)agreement': [150.0, 200.0, 250.0, 20.0, 25.0, 35.0],
+        expected = pd.DataFrame({'(Dis)agreement': [15.0, 20.0, 25.0, 20.0, 25.0, 35.0],
                                  'Scenario': ["TP", "TP", "TP", "TP", "TP", "TP"],
                                  'Scale': ["ME", "ME", "ME", "100-level", "100-level", "100-level"],
                                  })

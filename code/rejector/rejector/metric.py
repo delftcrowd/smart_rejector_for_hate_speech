@@ -46,6 +46,16 @@ class Metric():
         fps = self.pdfs.fps
         fns = self.pdfs.fns
 
+        # Keep more simplistic metric, just in case
+        # return value_TP * tps.integral(min=threshold, max=1.0) \
+        #     + value_TN * tns.integral(min=threshold, max=1.0) \
+        #     - value_FP * fps.integral(min=threshold, max=1.0) \
+        #     - value_FN * fns.integral(min=threshold, max=1.0) \
+        #     - value_rejection * tps.integral(min=0, max=threshold) \
+        #     - value_rejection * tns.integral(min=0, max=threshold) \
+        #     - value_rejection * fps.integral(min=0, max=threshold) \
+        #     - value_rejection * fns.integral(min=0, max=threshold)
+
         return (value_TP + value_rejection) * tps.integral(min=threshold, max=1.0) \
             + (value_TN + value_rejection) * tns.integral(min=threshold, max=1.0) \
             + (value_rejection - value_FP) * fps.integral(min=threshold, max=1.0) \
