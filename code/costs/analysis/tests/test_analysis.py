@@ -252,7 +252,7 @@ class TestAnalysis(unittest.TestCase):
 
     def test_filter_slow_subjects(self):
         data = pd.DataFrame({'startdate.': ['2022-06-12 12:00:0', '2022-06-12 12:00:0', '2022-06-12 12:00:0'],
-                             'submitdate.': ['2022-06-12 13:00:0', '2022-06-12 13:00:0', '2022-06-12 13:00:0']})
+                             'datestamp.': ['2022-06-12 13:00:0', '2022-06-12 13:00:0', '2022-06-12 13:00:0']})
 
         durations = Analysis.append_durations(
             data).filter(regex="duration")
@@ -262,7 +262,7 @@ class TestAnalysis(unittest.TestCase):
         self.assertTrue(durations.equals(expected))
 
         data = pd.DataFrame({'startdate.': ['2022-06-12 12:00:0'] * 100,
-                             'submitdate.': ['2022-06-12 13:00:0'] * 99 + ['2022-06-12 12:01:0']})
+                             'datestamp.': ['2022-06-12 13:00:0'] * 99 + ['2022-06-12 12:01:0']})
 
         durations = Analysis.append_durations(
             data).filter(regex="duration")
