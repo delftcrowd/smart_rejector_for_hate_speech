@@ -7,6 +7,7 @@ from scipy import stats
 from datetime import datetime
 import matplotlib.ticker as mtick
 from string import digits
+import math
 
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
 SCALES = ["ME", "S100"]
@@ -127,22 +128,27 @@ class Analysis:
         return df
 
     @classmethod
-    def normalize(cls, data: pd.DataFrame, magnitude_estimates: pd.DataFrame) -> pd.DataFrame:
+    def normalize(cls, magnitude_estimates: pd.DataFrame, apply_log: bool = False) -> pd.DataFrame:
         """Converts the magnitude_estimates dataframe to a normalized one.
 
         Args:
-            data (pd.DataFrame): the original data is needed to retrieve the calibration values.
             magnitude_estimates (pd.DataFrame): dataframe with unnormalized magnitude estimates.
+            apply_log (bool, optional): Whether we need to apply a log value to the absolute values. Defaults to False.
 
         Returns:
             pd.DataFrame:  dataframe with normalized magnitude estimates.
         """
         new_df = pd.DataFrame()
 
-        for index, row in data.iterrows():
-            mes = magnitude_estimates.iloc[[index]]
-            pivot = np.max(np.abs(mes.values))
-            normalized_mes = mes.div(pivot)
+        for index, row in magnitude_estimates.iterrows():
+            if apply_log is True:
+                log_row = row.apply(cls.abs_log)
+                pivot = np.max(np.abs(log_row.values))
+                normalized_mes = log_row.div(pivot)
+            else:
+                mes = magnitude_estimates.iloc[[index]]
+                pivot = np.max(np.abs(mes.values))
+                normalized_mes = mes.div(pivot)
             new_df = new_df.append(normalized_mes, ignore_index=True)
 
         return new_df
@@ -161,7 +167,7 @@ class Analysis:
             magnitude estimates.
         """
         mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
-        normalized_mes = cls.normalize(data, mes).mul(100)
+        normalized_mes = cls.normalize(mes).mul(100)
         hatefulness = cls.hatefulness(data=data, scale="ME", num_scenarios=num_scenarios)
         attention_checks = cls.attention_checks(data)
         return pd.concat([normalized_mes, hatefulness, attention_checks], axis=1)
@@ -356,7 +362,7 @@ class Analysis:
         durations = []
         for index, row in data.iterrows():
             startdate = row.filter(regex=r"startdate\.").values[0]
-            submitdate = row.filter(regex=r"submitdate\.").values[0]
+            submitdate = row.filter(regex=r"datestamp\.").values[0]
             startdate = datetime.strptime(startdate, '%Y-%m-%d %H:%M:%S')
             submitdate = datetime.strptime(submitdate, '%Y-%m-%d %H:%M:%S')
             duration = submitdate - startdate
@@ -511,3 +517,12 @@ class Analysis:
         for index, row in enumerate(data):
             # Remove the question number, e.g. 'TP1' becomes 'TP'
             row[1] = row[1].translate(str.maketrans('', '', digits))
+
+    @staticmethod
+    def abs_log(value):
+        if value == 0:
+            return 0
+        elif value < 0:
+            return -math.log10(abs(value))
+        elif value > 0:
+            return math.log10(value)

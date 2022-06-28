@@ -168,10 +168,7 @@ report/thesis report/fonts/
 # Data
 *.pkl
 
-# Test notebooks
-test*.ipynb
-
-# Models
+# Model logs
 code/model/logs
 code/model/runs
 code/model/test_trainer

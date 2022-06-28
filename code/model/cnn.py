@@ -5,8 +5,7 @@ from keras.engine.input_layer import Input
 from keras.layers import Conv1D, GlobalMaxPooling1D, Concatenate, Embedding, Dense, Dropout, TextVectorization
 from keras.regularizers import l2
 from keras.models import Model
-from os import environ as env
-env['CUDA_VISIBLE_DEVICES'] = '0,1'
+import keras
 
 
 class CNN:
@@ -23,7 +22,9 @@ class CNN:
                  loss_type: str = "softmax",
                  checkpoint_path: str = "results/cp.ckpt",
                  save_path: str = "results/model.tf",
-                 save_model: bool = False
+                 save_model: bool = False,
+                 text_vectorizer: any = None,
+                 embedding_matrix: any = None
                  ):
         """Initializes the CNN model.
 
@@ -38,6 +39,8 @@ class CNN:
             save_path (str, optional): the path to save the final model. Defaults to "results/model.h5".
             loss_type (str, optional): either 'logits' or 'softmax'. Defaults to 'softmax'.
             save_model (boolean, optional): whether the model needs to be saved or not.
+            text_vectorizer (any, optional): the TextVectorization layer.
+            embedding_matrix (any, optional): pretrained embedding matrix.
         """
 
         self.max_len = max_len
@@ -50,8 +53,9 @@ class CNN:
         self.vocab_len = vocab_len
         self.loss_type = loss_type
         self.save_model = save_model
-        self.text_vectorizer = None
+        self.text_vectorizer = text_vectorizer
         self.cnn = None
+        self.embedding_matrix = embedding_matrix
 
     def fit(self, X: list, y: list) -> Model:
         """Fits the CNN model with the list of data samples X
@@ -64,8 +68,9 @@ class CNN:
         Returns:
             Model: keras Model.
         """
-        self.text_vectorizer = TextVectorization(output_mode="int")
-        self.text_vectorizer.adapt(X)
+        if self.text_vectorizer is None:
+            self.text_vectorizer = TextVectorization(output_mode="int")
+            self.text_vectorizer.adapt(X)
 
         cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=self.checkpoint_path,
                                                          save_weights_only=True,
@@ -137,8 +142,17 @@ class CNN:
         """
         _input = Input(shape=(1,), dtype="string")
         pre = self.text_vectorizer(_input)
-        emb = Embedding(self.text_vectorizer.vocabulary_size(),
-                        self.max_len, trainable=True)(pre)
+
+        if self.embedding_matrix is not None:
+            emb = Embedding(
+                self.vocab_len,
+                self.embed_size,
+                embeddings_initializer=keras.initializers.Constant(self.embedding_matrix),
+                trainable=False,
+            )(pre)
+        else:
+            emb = Embedding(self.text_vectorizer.vocabulary_size(),
+                            self.embed_size, trainable=True)(pre)
         x = Dropout(0.25)(emb)
         x1 = Conv1D(self.embed_size, 3, padding='valid', kernel_regularizer=l2(.01),
                     activation='relu')(x)

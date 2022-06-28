@@ -1,5 +1,5 @@
 import unittest
-from clustering.kmeans import KMeansClustering
+from kmeans import KMeansClustering
 from sklearn.datasets import fetch_20newsgroups
 import numpy as np
 
