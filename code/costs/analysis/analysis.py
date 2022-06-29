@@ -313,7 +313,7 @@ class Analysis:
         mes = data_mes.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
         s100 = data_s100.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
         mes = mes.mean().tolist()
-        s100 = s100.mean().tolist()
+        s100 = s100.median().tolist()
 
         sns.regplot(x=mes, y=s100)
         plt.title("Correlation")
@@ -332,8 +332,8 @@ class Analysis:
         """
         mes = data_mes.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
         s100 = data_s100.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
-        mes = mes.mean().tolist()
-        s100 = s100.mean().tolist()
+        mes = mes.median().tolist()
+        s100 = s100.median().tolist()
 
         cohens_d = (np.mean(mes) - np.mean(s100)) / (np.sqrt((np.std(mes) ** 2 + np.std(s100) ** 2) / 2))
         print("Cohen's d", cohens_d)
