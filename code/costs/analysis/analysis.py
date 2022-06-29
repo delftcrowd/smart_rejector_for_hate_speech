@@ -312,13 +312,14 @@ class Analysis:
         """
         mes = data_mes.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
         s100 = data_s100.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
-        mes = mes.mean().tolist()
+        mes = mes.median().tolist()
         s100 = s100.median().tolist()
 
         sns.regplot(x=mes, y=s100)
-        plt.title("Correlation")
         plt.xlabel("ME")
         plt.ylabel("100-level")
+        plt.tight_layout()
+        plt.savefig("correlation.pdf", format='pdf', bbox_inches='tight')
         plt.show()
 
     @staticmethod
@@ -391,7 +392,7 @@ class Analysis:
             float: the mean cost value.
         """
         type_values = data.filter(regex=f"^{type}.*$", axis=1)
-        # First calculate the median for the individual questions since the distribution
+        # Calculate the median for the individual questions since the distribution
         # of the scores is skewed.
         column_means = type_values.median()
         return column_means.mean()
