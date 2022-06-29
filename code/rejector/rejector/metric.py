@@ -179,24 +179,26 @@ class Metric():
             filename: str,
             show_yaxis_title: bool,
             use_pdf: bool = False):
-        thresholds = np.linspace(0, 1, 1000)
+        # We only plot the last 500 values (tau=0.5) since the confidence values are always greater than 0.5
+        thresholds = np.arange(0.4, 1.0, 0.001)
         colors = sns.color_palette("colorblind")
+
         for index, (label, metric) in enumerate(metrics):
             eff = list(map(lambda t: metric.calculate_effectiveness(t, use_pdf=use_pdf), thresholds))
-            (max_index, max_eff) = cls.maximum_effectiveness(eff)
-            pyplot.plot(thresholds[max_index], max_eff, color="black", zorder=2, marker="d",
-                        markerfacecolor='None', markeredgecolor="black", linestyle='None', label="Optimal τ")
-            pyplot.plot(thresholds, eff, color=colors[index], label=f"{label}", zorder=1)
+            (max_index, max_eff) = cls.maximum_effectiveness(eff[100:])
+            pyplot.plot(
+                thresholds[max_index + 100],
+                max_eff, color="black", zorder=2, marker="d", markerfacecolor='None', markeredgewidth=3, markersize=10,
+                markeredgecolor="black", linestyle='None', label="Optimal τ", linewidth=3)
+            pyplot.plot(thresholds, eff, color=colors[index], label=f"{label}", zorder=1, linewidth=3)
 
         if show_yaxis_title:
             pyplot.ylabel("Total value of the model (V(τ))")
-        
+
         pyplot.xlabel("Rejection threshold (τ)")
-        pyplot.xlim([0.5, 1.0])
+        pyplot.xlim([0.4, 1.0])
         handles, labels = pyplot.gca().get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        print(by_label.values())
-        print(by_label.keys())
         pyplot.tight_layout()
         pyplot.legend(by_label.values(), by_label.keys())
         pyplot.savefig(filename, format='pdf', bbox_inches='tight')
