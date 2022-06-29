@@ -51,7 +51,7 @@ class Metric():
             fns = self.pdfs.fns
 
             # Keep more simplistic metric, just in case
-            # return value_TP * tps.integral(min=threshold, max=1.0) \
+            # yesterday = value_TP * tps.integral(min=threshold, max=1.0) \
             #     + value_TN * tns.integral(min=threshold, max=1.0) \
             #     - value_FP * fps.integral(min=threshold, max=1.0) \
             #     - value_FN * fns.integral(min=threshold, max=1.0) \
@@ -59,6 +59,16 @@ class Metric():
             #     - value_rejection * tns.integral(min=0, max=threshold) \
             #     - value_rejection * fps.integral(min=0, max=threshold) \
             #     - value_rejection * fns.integral(min=0, max=threshold)
+
+            # Another alternative, only keep correct and incorrect into account.
+            # new = value_TP * tps.integral(min=threshold, max=1.0) \
+            #     + value_TN * tns.integral(min=threshold, max=1.0) \
+            #     - value_FP * fps.integral(min=threshold, max=1.0) \
+            #     - value_FN * fns.integral(min=threshold, max=1.0)\
+            #     - value_TP * tps.integral(min=0, max=threshold) \
+            #     - value_TN * tns.integral(min=0, max=threshold) \
+            #     + value_FP * fps.integral(min=0, max=threshold) \
+            #     + value_FN * fns.integral(min=0, max=threshold)
 
             return (value_TP + value_rejection) * tps.integral(min=threshold, max=1.0) \
                 + (value_TN + value_rejection) * tns.integral(min=threshold, max=1.0) \
@@ -75,7 +85,7 @@ class Metric():
             fns = Prediction.set_of_fns(self.predictions)
 
             # Keep more simplistic metric, just in case
-            # return value_TP * Prediction.count_above_threshold(tps, threshold) \
+            # yesterday = value_TP * Prediction.count_above_threshold(tps, threshold) \
             #     + value_TN * Prediction.count_above_threshold(tns, threshold) \
             #     - value_FP * Prediction.count_above_threshold(fps, threshold) \
             #     - value_FN * Prediction.count_above_threshold(fns, threshold) \
@@ -85,7 +95,7 @@ class Metric():
             #     - value_rejection * Prediction.count_below_threshold(fns, threshold)
 
             # Another alternative, only keep correct and incorrect into account.
-            # return value_TP * Prediction.count_above_threshold(tps, threshold) \
+            # new = value_TP * Prediction.count_above_threshold(tps, threshold) \
             #     + value_TN * Prediction.count_above_threshold(tns, threshold) \
             #     - value_FP * Prediction.count_above_threshold(fps, threshold) \
             #     - value_FN * Prediction.count_above_threshold(fns, threshold) \
@@ -143,7 +153,7 @@ class Metric():
         thresholds = np.linspace(0, 1, 1000)
 
         effectiveness_values = list(
-            map(lambda t:  self.calculate_effectiveness(t, use_pdf=use_pdf), thresholds))
+            map(lambda t: self.calculate_effectiveness(t, use_pdf=use_pdf), thresholds))
 
         (index, max_effectiveness) = self.maximum_effectiveness(effectiveness_values)
 
