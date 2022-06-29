@@ -62,23 +62,23 @@ class Metric():
             #     - value_rejection * fps.integral(min=0, max=threshold) \
             #     - value_rejection * fns.integral(min=0, max=threshold)
 
-            # return (value_TP + value_rejection) * tps.integral(min=threshold, max=1.0) \
-            #     + (value_TN + value_rejection) * tns.integral(min=threshold, max=1.0) \
-            #     + (value_rejection - value_FP) * fps.integral(min=threshold, max=1.0) \
-            #     + (value_rejection - value_FN) * fns.integral(min=threshold, max=1.0) \
-            #     - (value_rejection + value_TP) * tps.integral(min=0, max=threshold) \
-            #     - (value_rejection + value_TN) * tns.integral(min=0, max=threshold) \
-            #     + (value_FP - value_rejection) * fps.integral(min=0, max=threshold) \
-            #     + (value_FN - value_rejection) * fns.integral(min=0, max=threshold)
+            return (value_TP + value_rejection) * tps.integral(min=threshold, max=1.0) \
+                + (value_TN + value_rejection) * tns.integral(min=threshold, max=1.0) \
+                + (value_rejection - value_FP) * fps.integral(min=threshold, max=1.0) \
+                + (value_rejection - value_FN) * fns.integral(min=threshold, max=1.0) \
+                - (value_rejection + value_TP) * tps.integral(min=0, max=threshold) \
+                - (value_rejection + value_TN) * tns.integral(min=0, max=threshold) \
+                + (value_FP - value_rejection) * fps.integral(min=0, max=threshold) \
+                + (value_FN - value_rejection) * fns.integral(min=0, max=threshold)
 
-            return value_TP * tps.integral(min=threshold, max=1.0) \
-                + value_TN * tns.integral(min=threshold, max=1.0) \
-                - value_FP * fps.integral(min=threshold, max=1.0) \
-                - value_FN * fns.integral(min=threshold, max=1.0) \
-                - value_TP * tps.integral(min=0, max=threshold) \
-                - value_TN * tns.integral(min=0, max=threshold) \
-                + value_FP * fps.integral(min=0, max=threshold) \
-                + value_FN * fns.integral(min=0, max=threshold)
+            # return value_TP * tps.integral(min=threshold, max=1.0) \
+            #     + value_TN * tns.integral(min=threshold, max=1.0) \
+            #     - value_FP * fps.integral(min=threshold, max=1.0) \
+            #     - value_FN * fns.integral(min=threshold, max=1.0) \
+            #     - value_TP * tps.integral(min=0, max=threshold) \
+            #     - value_TN * tns.integral(min=0, max=threshold) \
+            #     + value_FP * fps.integral(min=0, max=threshold) \
+            #     + value_FN * fns.integral(min=0, max=threshold)
         else:
             tps = Prediction.set_of_tps(self.predictions)
             tns = Prediction.set_of_tns(self.predictions)
@@ -96,23 +96,23 @@ class Metric():
             #     - value_rejection * Prediction.count_below_threshold(fns, threshold)
 
             # Another alternative, only keep correct and incorrect into account.
-            return value_TP * Prediction.count_above_threshold(tps, threshold) \
-                + value_TN * Prediction.count_above_threshold(tns, threshold) \
-                - value_FP * Prediction.count_above_threshold(fps, threshold) \
-                - value_FN * Prediction.count_above_threshold(fns, threshold) \
-                - value_TP * Prediction.count_below_threshold(tps, threshold) \
-                - value_TN * Prediction.count_below_threshold(tns, threshold) \
-                + value_FP * Prediction.count_below_threshold(fps, threshold) \
-                + value_FN * Prediction.count_below_threshold(fns, threshold)
+            # return value_rejection * Prediction.count_above_threshold(tps, threshold) \
+            #     + value_rejection * Prediction.count_above_threshold(tns, threshold) \
+            #     - value_FP * Prediction.count_above_threshold(fps, threshold) \
+            #     - value_FN * Prediction.count_above_threshold(fns, threshold) \
+            #     - value_rejection * Prediction.count_below_threshold(tps, threshold) \
+            #     - value_rejection * Prediction.count_below_threshold(tns, threshold) \
+            #     + value_FP * Prediction.count_below_threshold(fps, threshold) \
+            #     + value_FN * Prediction.count_below_threshold(fns, threshold)
 
-            # return (value_TP + value_rejection) * Prediction.count_above_threshold(tps, threshold) \
-            #     + (value_TN + value_rejection) * Prediction.count_above_threshold(tns, threshold) \
-            #     + (value_rejection - value_FP) * Prediction.count_above_threshold(fps, threshold) \
-            #     + (value_rejection - value_FN) * Prediction.count_above_threshold(fns, threshold) \
-            #     - (value_rejection + value_TP) * Prediction.count_below_threshold(tps, threshold) \
-            #     - (value_rejection + value_TN) * Prediction.count_below_threshold(tns, threshold) \
-            #     + (value_FP - value_rejection) * Prediction.count_below_threshold(fps, threshold) \
-            #     + (value_FN - value_rejection) * Prediction.count_below_threshold(fns, threshold)
+            return (value_TP + value_rejection) * Prediction.count_above_threshold(tps, threshold) \
+                + (value_TN + value_rejection) * Prediction.count_above_threshold(tns, threshold) \
+                + (value_rejection - value_FP) * Prediction.count_above_threshold(fps, threshold) \
+                + (value_rejection - value_FN) * Prediction.count_above_threshold(fns, threshold) \
+                - (value_rejection + value_TP) * Prediction.count_below_threshold(tps, threshold) \
+                - (value_rejection + value_TN) * Prediction.count_below_threshold(tns, threshold) \
+                + (value_FP - value_rejection) * Prediction.count_below_threshold(fps, threshold) \
+                + (value_FN - value_rejection) * Prediction.count_below_threshold(fns, threshold)
 
     def plot_pdfs(self) -> None:
         """Plots the Probability Density Functions for TP, TN, FP, and FN      
@@ -175,31 +175,31 @@ class Metric():
 
     @classmethod
     def plot_multiple_effectiveness(
-            cls, metrics: List[Tuple[str, Metric, Metric]],
-            values: Values,
+            cls, metrics: List[Tuple[str, Metric]],
+            filename: str,
+            show_yaxis_title: bool,
             use_pdf: bool = False):
         thresholds = np.linspace(0, 1, 1000)
         colors = sns.color_palette("colorblind")
+        for index, (label, metric) in enumerate(metrics):
+            eff = list(map(lambda t: metric.calculate_effectiveness(t, use_pdf=use_pdf), thresholds))
+            (max_index, max_eff) = cls.maximum_effectiveness(eff)
+            pyplot.plot(thresholds[max_index], max_eff, color="black", zorder=2, marker="d",
+                        markerfacecolor='None', markeredgecolor="black", linestyle='None', label="Optimal τ")
+            pyplot.plot(thresholds, eff, color=colors[index], label=f"{label}", zorder=1)
 
-        for index, (label, metric_same_dataset, metric_other_dataset) in enumerate(metrics):
-            eff_same = list(map(lambda t: metric_same_dataset.calculate_effectiveness(t, use_pdf=use_pdf), thresholds))
-            eff_other = list(map(lambda t: metric_other_dataset.calculate_effectiveness(t, use_pdf=use_pdf), thresholds))
-            (index_same, max_eff_same) = cls.maximum_effectiveness(eff_same)
-            (index_other, max_eff_other) = cls.maximum_effectiveness(eff_other)
-            pyplot.plot(thresholds, eff_same, color=colors[index], linestyle='dotted', label=f"{label} TS1")
-            pyplot.plot(thresholds, eff_other, color=colors[index], label=f"{label} TS2")
-            pyplot.plot(thresholds[index_same], max_eff_same,
-                        marker='o', markersize=3, color="red")
-            pyplot.plot(thresholds[index_other], max_eff_other,
-                        marker='o', markersize=3, color="red")
-
+        if show_yaxis_title:
+            pyplot.ylabel("Total value of the model (V(τ))")
+        
         pyplot.xlabel("Rejection threshold (τ)")
-        pyplot.ylabel("Total value of the model (V(τ))")
-        # pyplot.title(
-        #     "Total value of all models\n" +
-        #     f"value TP: {values.value_TP}, value TN: {values.value_TN}, value FP: {values.value_FP}, " +
-        #     f"value FN: {values.value_FN}, value rejection: {values.value_rejection}")
-        pyplot.legend()
+        pyplot.xlim([0.5, 1.0])
+        handles, labels = pyplot.gca().get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        print(by_label.values())
+        print(by_label.keys())
+        pyplot.tight_layout()
+        pyplot.legend(by_label.values(), by_label.keys())
+        pyplot.savefig(filename, format='pdf', bbox_inches='tight')
         pyplot.show()
 
     @staticmethod

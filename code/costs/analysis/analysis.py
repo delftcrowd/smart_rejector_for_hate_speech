@@ -391,8 +391,10 @@ class Analysis:
             float: the mean cost value.
         """
         type_values = data.filter(regex=f"^{type}.*$", axis=1)
-        column_means = type_values.mean()
-        return round(column_means.mean(), 6)
+        # First calculate the median for the individual questions since the distribution
+        # of the scores is skewed.
+        column_means = type_values.median()
+        return column_means.mean()
 
     @classmethod
     def convert_to_dual_boxplot_data(
