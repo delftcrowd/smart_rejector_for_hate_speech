@@ -175,4 +175,4 @@ code/model/test_trainer
 code/model/tmp_trainer 
 
 # Code plots
-code/*.pdf
+code/**/*.pdf

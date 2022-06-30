@@ -52,16 +52,6 @@ class Metric():
             fps = self.pdfs.fps
             fns = self.pdfs.fns
 
-            # Keep more simplistic metric, just in case
-            # return value_TP * tps.integral(min=threshold, max=1.0) \
-            #     + value_TN * tns.integral(min=threshold, max=1.0) \
-            #     - value_FP * fps.integral(min=threshold, max=1.0) \
-            #     - value_FN * fns.integral(min=threshold, max=1.0) \
-            #     - value_rejection * tps.integral(min=0, max=threshold) \
-            #     - value_rejection * tns.integral(min=0, max=threshold) \
-            #     - value_rejection * fps.integral(min=0, max=threshold) \
-            #     - value_rejection * fns.integral(min=0, max=threshold)
-
             return (value_TP + value_rejection) * tps.integral(min=threshold, max=1.0) \
                 + (value_TN + value_rejection) * tns.integral(min=threshold, max=1.0) \
                 + (value_rejection - value_FP) * fps.integral(min=threshold, max=1.0) \
@@ -71,39 +61,11 @@ class Metric():
                 + (value_FP - value_rejection) * fps.integral(min=0, max=threshold) \
                 + (value_FN - value_rejection) * fns.integral(min=0, max=threshold)
 
-            # return value_TP * tps.integral(min=threshold, max=1.0) \
-            #     + value_TN * tns.integral(min=threshold, max=1.0) \
-            #     - value_FP * fps.integral(min=threshold, max=1.0) \
-            #     - value_FN * fns.integral(min=threshold, max=1.0) \
-            #     - value_TP * tps.integral(min=0, max=threshold) \
-            #     - value_TN * tns.integral(min=0, max=threshold) \
-            #     + value_FP * fps.integral(min=0, max=threshold) \
-            #     + value_FN * fns.integral(min=0, max=threshold)
         else:
             tps = Prediction.set_of_tps(self.predictions)
             tns = Prediction.set_of_tns(self.predictions)
             fps = Prediction.set_of_fps(self.predictions)
             fns = Prediction.set_of_fns(self.predictions)
-
-            # Keep more simplistic metric, just in case
-            # return value_TP * Prediction.count_above_threshold(tps, threshold) \
-            #     + value_TN * Prediction.count_above_threshold(tns, threshold) \
-            #     - value_FP * Prediction.count_above_threshold(fps, threshold) \
-            #     - value_FN * Prediction.count_above_threshold(fns, threshold) \
-            #     - value_rejection * Prediction.count_below_threshold(tps, threshold) \
-            #     - value_rejection * Prediction.count_below_threshold(tns, threshold) \
-            #     - value_rejection * Prediction.count_below_threshold(fps, threshold) \
-            #     - value_rejection * Prediction.count_below_threshold(fns, threshold)
-
-            # Another alternative, only keep correct and incorrect into account.
-            # return value_rejection * Prediction.count_above_threshold(tps, threshold) \
-            #     + value_rejection * Prediction.count_above_threshold(tns, threshold) \
-            #     - value_FP * Prediction.count_above_threshold(fps, threshold) \
-            #     - value_FN * Prediction.count_above_threshold(fns, threshold) \
-            #     - value_rejection * Prediction.count_below_threshold(tps, threshold) \
-            #     - value_rejection * Prediction.count_below_threshold(tns, threshold) \
-            #     + value_FP * Prediction.count_below_threshold(fps, threshold) \
-            #     + value_FN * Prediction.count_below_threshold(fns, threshold)
 
             return (value_TP + value_rejection) * Prediction.count_above_threshold(tps, threshold) \
                 + (value_TN + value_rejection) * Prediction.count_above_threshold(tns, threshold) \
@@ -174,6 +136,8 @@ class Metric():
         pyplot.show()
 
     def print_optimal_threshold_stats(self) -> None:
+        """Prints the statistics for the optimal rejection threshold.
+        """
         thresholds = np.arange(0.5, 1.0, 0.001)
 
         effectiveness_values = list(
@@ -199,6 +163,16 @@ class Metric():
             show_yaxis_title: bool,
             legend_loc: str,
             use_pdf: bool = False):
+        """Plots the effectiveness (total value) of multiple metrics.
+
+        Args:
+            metrics (List[Tuple[str, Metric]]): List of tuples where the first element indicates
+            the name of the model and the second element the metric itself.
+            filename (str): The exportation filename.
+            show_yaxis_title (bool): Whether to show the y-axis title or not.
+            legend_loc (str): The location of the legend.
+            use_pdf (bool, optional): Whether to use the PDFs or not. Defaults to False.
+        """
         # We only plot the last 500 values (tau=0.5) since the confidence values are always greater than 0.5
         thresholds = np.arange(0.4, 1.0, 0.001)
         colors = sns.color_palette("colorblind")
