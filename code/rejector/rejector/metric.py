@@ -77,7 +77,7 @@ class Metric():
                 + (value_FN - value_rejection) * Prediction.count_below_threshold(fns, threshold)
 
     def plot_pdfs(self) -> None:
-        """Plots the Probability Density Functions for TP, TN, FP, and FN      
+        """Plots the Probability Density Functions for TP, TN, FP, and FN
         """
         fig, axs = pyplot.subplots(2, 2)
         plot_conf = [{'plt_y': 0, 'plt_x': 0, 'data': self.pdfs.tps, 'title': "True Positives"},
@@ -198,6 +198,42 @@ class Metric():
         by_label = dict(zip(labels, handles))
         pyplot.tight_layout()
         pyplot.legend(by_label.values(), by_label.keys(), loc=legend_loc)
+        pyplot.savefig(filename, format='pdf', bbox_inches='tight')
+        pyplot.show()
+
+    @classmethod
+    def plot_multiple_confidence_densities(
+            cls, metrics: List[Tuple[str, Metric]],
+            filename: str,
+            show_yaxis_title: bool,
+            bw_adjust: float):
+        colors = sns.color_palette("colorblind")
+        fig, ax = pyplot.subplots(2, 2)
+
+        for index, (label, metric) in enumerate(metrics):
+            tps = Prediction.set_of_tps(metric.predictions)
+            tns = Prediction.set_of_tns(metric.predictions)
+            fps = Prediction.set_of_fps(metric.predictions)
+            fns = Prediction.set_of_fns(metric.predictions)
+            tps_conf = list(map(lambda p: p.predicted_value, tps))
+            tns_conf = list(map(lambda p: p.predicted_value, tns))
+            fps_conf = list(map(lambda p: p.predicted_value, fps))
+            fns_conf = list(map(lambda p: p.predicted_value, fns))
+            sns.kdeplot(tps_conf, color=colors[index], label=f"{label}",
+                        zorder=1, linewidth=3, ax=ax[0, 0], bw_adjust=bw_adjust)
+            sns.kdeplot(tns_conf, color=colors[index], label=f"{label}",
+                        zorder=1, linewidth=3, ax=ax[0, 1], bw_adjust=bw_adjust)
+            sns.kdeplot(fps_conf, color=colors[index], label=f"{label}",
+                        zorder=1, linewidth=3, ax=ax[1, 0], bw_adjust=bw_adjust)
+            sns.kdeplot(fns_conf, color=colors[index], label=f"{label}",
+                        zorder=1, linewidth=3, ax=ax[1, 1], bw_adjust=bw_adjust)
+
+        if show_yaxis_title:
+            pyplot.ylabel("Density")
+
+        pyplot.xlabel("Confidence value")
+        pyplot.tight_layout()
+        pyplot.legend()
         pyplot.savefig(filename, format='pdf', bbox_inches='tight')
         pyplot.show()
 
