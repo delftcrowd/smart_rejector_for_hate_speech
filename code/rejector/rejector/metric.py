@@ -144,13 +144,16 @@ class Metric():
             map(lambda t: self.calculate_effectiveness(t, use_pdf=False), thresholds))
 
         (index, max_effectiveness) = self.maximum_effectiveness(effectiveness_values)
+        correct_original = list(filter(lambda p: p.predicted_class == p.actual_class, self.predictions))
         optimal_threshold = thresholds[index]
         accepted = list(filter(lambda p: p.predicted_value >= optimal_threshold, self.predictions))
         correct_accepted = list(filter(lambda p: p.predicted_class == p.actual_class, accepted))
         rejected = list(filter(lambda p: p.predicted_value < optimal_threshold, self.predictions))
         print("Optimal threshold: ", optimal_threshold)
+        print("Optimal V(threshold): ", max_effectiveness)
         print("Total value: ", max_effectiveness)
         print("Num accepted: ", len(accepted))
+        print("Accuracy original model: ", len(correct_original) / len(self.predictions))
         print("Accuracy accepted: ", len(correct_accepted) / len(accepted))
         print("Num rejected: ", len(rejected))
         RR = len(rejected) / len(self.predictions)
@@ -191,6 +194,54 @@ class Metric():
 
         pyplot.xlabel("Rejection threshold (τ)")
         pyplot.xlim([0.49, 1.01])
+        handles, labels = pyplot.gca().get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        pyplot.tight_layout()
+        pyplot.legend(by_label.values(), by_label.keys(), loc=legend_loc)
+        pyplot.savefig(filename, format='pdf', bbox_inches='tight')
+        pyplot.show()
+
+    @classmethod
+    def plot_accuracy_rejection_curves(
+            cls, metrics: List[Tuple[str, Metric]],
+            filename: str,
+            show_yaxis_title: bool,
+            legend_loc: str,
+            use_pdf: bool = False):
+        X = np.arange(0.0, 1.0, 0.001)
+        colors = sns.color_palette("colorblind")
+
+        for index, (label, metric) in enumerate(metrics):
+            sorted_predictions = sorted(metric.predictions, key=lambda x: x.predicted_value)
+            y = []
+            effectiveness = list(map(lambda t: metric.calculate_effectiveness(t, use_pdf=use_pdf), X))
+            (max_index, max_eff) = cls.maximum_effectiveness(effectiveness)
+            optimal_threshold = X[max_index]
+            rejected = list(filter(lambda p: p.predicted_value < optimal_threshold, metric.predictions))
+            optimal_t_rr = round(len(rejected) / len(metric.predictions), 2)
+
+            for x in X:
+                n = int(x * 100)
+                accepted = sorted_predictions[n:]
+                correct_accepted = list(filter(lambda p: p.predicted_class == p.actual_class, accepted))
+                accuracy = len(correct_accepted) / len(accepted)
+                y.append(accuracy)
+
+            n = int(optimal_t_rr * 100)
+            accepted = sorted_predictions[n:]
+            correct_accepted = list(filter(lambda p: p.predicted_class == p.actual_class, accepted))
+            optimal_t_accuracy = len(correct_accepted) / len(accepted)
+
+            pyplot.plot(
+                optimal_t_rr,
+                optimal_t_accuracy, color="black", zorder=2, marker="d", markerfacecolor='None', markeredgewidth=3, markersize=10,
+                markeredgecolor="black", linestyle='None', label="Optimal τ", linewidth=3)
+            pyplot.plot(X, y, color=colors[index], label=f"{label}", zorder=1, linewidth=3)
+
+        if show_yaxis_title:
+            pyplot.ylabel("Accuracy")
+
+        pyplot.xlabel("Rejection Rate")
         handles, labels = pyplot.gca().get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         pyplot.tight_layout()
