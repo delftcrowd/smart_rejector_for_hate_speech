@@ -178,6 +178,7 @@ class Metric():
             cls, metrics: List[Tuple[str, Metric]],
             filename: str,
             show_yaxis_title: bool,
+            legend_loc: str,
             use_pdf: bool = False):
         # We only plot the last 500 values (tau=0.5) since the confidence values are always greater than 0.5
         thresholds = np.arange(0.4, 1.0, 0.001)
@@ -196,11 +197,11 @@ class Metric():
             pyplot.ylabel("Total value of the model (V(τ))")
 
         pyplot.xlabel("Rejection threshold (τ)")
-        pyplot.xlim([0.4, 1.0])
+        pyplot.xlim([0.49, 1.01])
         handles, labels = pyplot.gca().get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         pyplot.tight_layout()
-        pyplot.legend(by_label.values(), by_label.keys())
+        pyplot.legend(by_label.values(), by_label.keys(), loc=legend_loc)
         pyplot.savefig(filename, format='pdf', bbox_inches='tight')
         pyplot.show()
 

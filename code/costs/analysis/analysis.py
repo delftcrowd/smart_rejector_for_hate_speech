@@ -316,7 +316,7 @@ class Analysis:
         s100 = s100.median().tolist()
 
         sns.regplot(x=mes, y=s100)
-        plt.xlabel("ME")
+        plt.xlabel("Magnitude Estimation")
         plt.ylabel("100-level")
         plt.tight_layout()
         plt.savefig("correlation.pdf", format='pdf', bbox_inches='tight')
