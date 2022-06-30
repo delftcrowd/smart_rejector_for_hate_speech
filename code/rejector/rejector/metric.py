@@ -173,6 +173,25 @@ class Metric():
             f"value FN: {self.values.value_FN}, value rejection: {self.values.value_rejection}")
         pyplot.show()
 
+    def print_optimal_threshold_stats(self) -> None:
+        thresholds = np.arange(0.5, 1.0, 0.001)
+
+        effectiveness_values = list(
+            map(lambda t: self.calculate_effectiveness(t, use_pdf=False), thresholds))
+
+        (index, max_effectiveness) = self.maximum_effectiveness(effectiveness_values)
+        optimal_threshold = thresholds[index]
+        accepted = list(filter(lambda p: p.predicted_value >= optimal_threshold, self.predictions))
+        correct_accepted = list(filter(lambda p: p.predicted_class == p.actual_class, accepted))
+        rejected = list(filter(lambda p: p.predicted_value < optimal_threshold, self.predictions))
+        print("Optimal threshold: ", optimal_threshold)
+        print("Total value: ", max_effectiveness)
+        print("Num accepted: ", len(accepted))
+        print("Accuracy accepted: ", len(correct_accepted) / len(accepted))
+        print("Num rejected: ", len(rejected))
+        RR = len(rejected) / len(self.predictions)
+        print("Percentage rejected: ", RR)
+
     @classmethod
     def plot_multiple_effectiveness(
             cls, metrics: List[Tuple[str, Metric]],
