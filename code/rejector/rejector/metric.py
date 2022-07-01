@@ -1,9 +1,11 @@
+from __future__ import annotations
 from rejector.values import Values
 from rejector.prediction import Prediction
-from typing import List, Dict
+from typing import List, Dict, Tuple
 import numpy as np
 from matplotlib import pyplot
 from rejector.pdfs import PDFs
+import seaborn as sns
 
 
 class Metric():
@@ -50,16 +52,6 @@ class Metric():
             fps = self.pdfs.fps
             fns = self.pdfs.fns
 
-            # Keep more simplistic metric, just in case
-            # return value_TP * tps.integral(min=threshold, max=1.0) \
-            #     + value_TN * tns.integral(min=threshold, max=1.0) \
-            #     - value_FP * fps.integral(min=threshold, max=1.0) \
-            #     - value_FN * fns.integral(min=threshold, max=1.0) \
-            #     - value_rejection * tps.integral(min=0, max=threshold) \
-            #     - value_rejection * tns.integral(min=0, max=threshold) \
-            #     - value_rejection * fps.integral(min=0, max=threshold) \
-            #     - value_rejection * fns.integral(min=0, max=threshold)
-
             return (value_TP + value_rejection) * tps.integral(min=threshold, max=1.0) \
                 + (value_TN + value_rejection) * tns.integral(min=threshold, max=1.0) \
                 + (value_rejection - value_FP) * fps.integral(min=threshold, max=1.0) \
@@ -68,31 +60,12 @@ class Metric():
                 - (value_rejection + value_TN) * tns.integral(min=0, max=threshold) \
                 + (value_FP - value_rejection) * fps.integral(min=0, max=threshold) \
                 + (value_FN - value_rejection) * fns.integral(min=0, max=threshold)
+
         else:
             tps = Prediction.set_of_tps(self.predictions)
             tns = Prediction.set_of_tns(self.predictions)
             fps = Prediction.set_of_fps(self.predictions)
             fns = Prediction.set_of_fns(self.predictions)
-
-            # Keep more simplistic metric, just in case
-            # return value_TP * Prediction.count_above_threshold(tps, threshold) \
-            #     + value_TN * Prediction.count_above_threshold(tns, threshold) \
-            #     - value_FP * Prediction.count_above_threshold(fps, threshold) \
-            #     - value_FN * Prediction.count_above_threshold(fns, threshold) \
-            #     - value_rejection * Prediction.count_below_threshold(tps, threshold) \
-            #     - value_rejection * Prediction.count_below_threshold(tns, threshold) \
-            #     - value_rejection * Prediction.count_below_threshold(fps, threshold) \
-            #     - value_rejection * Prediction.count_below_threshold(fns, threshold)
-
-            # Another alternative, only keep correct and incorrect into account.
-            # return value_TP * Prediction.count_above_threshold(tps, threshold) \
-            #     + value_TN * Prediction.count_above_threshold(tns, threshold) \
-            #     - value_FP * Prediction.count_above_threshold(fps, threshold) \
-            #     - value_FN * Prediction.count_above_threshold(fns, threshold) \
-            #     - value_TP * Prediction.count_below_threshold(tps, threshold) \
-            #     - value_TN * Prediction.count_below_threshold(tns, threshold) \
-            #     + value_FP * Prediction.count_below_threshold(fps, threshold) \
-            #     + value_FN * Prediction.count_below_threshold(fns, threshold)
 
             return (value_TP + value_rejection) * Prediction.count_above_threshold(tps, threshold) \
                 + (value_TN + value_rejection) * Prediction.count_above_threshold(tns, threshold) \
@@ -104,7 +77,7 @@ class Metric():
                 + (value_FN - value_rejection) * Prediction.count_below_threshold(fns, threshold)
 
     def plot_pdfs(self) -> None:
-        """Plots the Probability Density Functions for TP, TN, FP, and FN      
+        """Plots the Probability Density Functions for TP, TN, FP, and FN
         """
         fig, axs = pyplot.subplots(2, 2)
         plot_conf = [{'plt_y': 0, 'plt_x': 0, 'data': self.pdfs.tps, 'title': "True Positives"},
@@ -160,6 +133,167 @@ class Metric():
             "Measuring the model's effectiveness for different rejection thresholds\n" +
             f"value TP: {self.values.value_TP}, value TN: {self.values.value_TN}, value FP: {self.values.value_FP}, " +
             f"value FN: {self.values.value_FN}, value rejection: {self.values.value_rejection}")
+        pyplot.show()
+
+    def print_optimal_threshold_stats(self) -> None:
+        """Prints the statistics for the optimal rejection threshold.
+        """
+        thresholds = np.arange(0.5, 1.0, 0.001)
+
+        effectiveness_values = list(
+            map(lambda t: self.calculate_effectiveness(t, use_pdf=False), thresholds))
+
+        (index, max_effectiveness) = self.maximum_effectiveness(effectiveness_values)
+        correct_original = list(filter(lambda p: p.predicted_class == p.actual_class, self.predictions))
+        optimal_threshold = thresholds[index]
+        accepted = list(filter(lambda p: p.predicted_value >= optimal_threshold, self.predictions))
+        correct_accepted = list(filter(lambda p: p.predicted_class == p.actual_class, accepted))
+        rejected = list(filter(lambda p: p.predicted_value < optimal_threshold, self.predictions))
+        print("Optimal threshold: ", optimal_threshold)
+        print("Optimal V(threshold): ", max_effectiveness)
+        print("Total value: ", max_effectiveness)
+        print("Num accepted: ", len(accepted))
+        print("Accuracy original model: ", len(correct_original) / len(self.predictions))
+        print("Accuracy accepted: ", len(correct_accepted) / len(accepted))
+        print("Num rejected: ", len(rejected))
+        RR = len(rejected) / len(self.predictions)
+        print("Percentage rejected: ", RR)
+
+    @classmethod
+    def plot_multiple_effectiveness(
+            cls, metrics: List[Tuple[str, Metric]],
+            filename: str,
+            show_yaxis_title: bool,
+            legend_loc: str,
+            use_pdf: bool = False):
+        """Plots the effectiveness (total value) of multiple metrics.
+
+        Args:
+            metrics (List[Tuple[str, Metric]]): List of tuples where the first element indicates
+            the name of the model and the second element the metric itself.
+            filename (str): The exportation filename.
+            show_yaxis_title (bool): Whether to show the y-axis title or not.
+            legend_loc (str): The location of the legend.
+            use_pdf (bool, optional): Whether to use the PDFs or not. Defaults to False.
+        """
+        # We only plot the last 500 values (tau=0.5) since the confidence values are always greater than 0.5
+        thresholds = np.arange(0.4, 1.0, 0.001)
+        colors = sns.color_palette("colorblind")
+
+        for index, (label, metric) in enumerate(metrics):
+            eff = list(map(lambda t: metric.calculate_effectiveness(t, use_pdf=use_pdf), thresholds))
+            (max_index, max_eff) = cls.maximum_effectiveness(eff[100:])
+            pyplot.plot(
+                thresholds[max_index + 100],
+                max_eff, color="black", zorder=2, marker="d", markerfacecolor='None', markeredgewidth=3, markersize=10,
+                markeredgecolor="black", linestyle='None', label="Optimal τ", linewidth=3)
+            pyplot.plot(thresholds, eff, color=colors[index], label=f"{label}", zorder=1, linewidth=3)
+
+        if show_yaxis_title:
+            pyplot.ylabel("Total value of the model (V(τ))")
+        pyplot.xlabel("Rejection threshold (τ)")
+        pyplot.xlim([0.49, 1.01])
+        handles, labels = pyplot.gca().get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        pyplot.legend(by_label.values(), by_label.keys(), loc=legend_loc)
+        pyplot.savefig(filename, format='pdf', bbox_inches='tight')
+        pyplot.show()
+
+    @classmethod
+    def plot_multiple_confidence_densities(
+            cls, metrics: List[Tuple[str, Metric]],
+            filename: str,
+            show_yaxis_title: bool,
+            bw_adjust: float):
+        colors = sns.color_palette("colorblind")
+        fig, ax = pyplot.subplots(2, 2)
+
+        for index, (label, metric) in enumerate(metrics):
+            tps = Prediction.set_of_tps(metric.predictions)
+            tns = Prediction.set_of_tns(metric.predictions)
+            fps = Prediction.set_of_fps(metric.predictions)
+            fns = Prediction.set_of_fns(metric.predictions)
+            tps_conf = list(map(lambda p: p.predicted_value, tps))
+            tns_conf = list(map(lambda p: p.predicted_value, tns))
+            fps_conf = list(map(lambda p: p.predicted_value, fps))
+            fns_conf = list(map(lambda p: p.predicted_value, fns))
+            sns.kdeplot(tps_conf, color=colors[index], label=f"{label}",
+                        zorder=1, linewidth=3, ax=ax[0, 0], bw_adjust=bw_adjust)
+            sns.kdeplot(tns_conf, color=colors[index], label=f"{label}",
+                        zorder=1, linewidth=3, ax=ax[0, 1], bw_adjust=bw_adjust)
+            sns.kdeplot(fps_conf, color=colors[index], label=f"{label}",
+                        zorder=1, linewidth=3, ax=ax[1, 0], bw_adjust=bw_adjust)
+            sns.kdeplot(fns_conf, color=colors[index], label=f"{label}",
+                        zorder=1, linewidth=3, ax=ax[1, 1], bw_adjust=bw_adjust)
+            ax[0, 1].legend(loc="upper left")
+
+            ax[0, 0].set_title("TP")
+            ax[0, 1].set_title("TN")
+            ax[1, 0].set_title("FP")
+            ax[1, 1].set_title("FN")
+
+            ax[0, 0].set_xlabel("Confidence value")
+            ax[0, 1].set_xlabel("Confidence value")
+            ax[1, 0].set_xlabel("Confidence value")
+            ax[1, 1].set_xlabel("Confidence value")
+
+            ax[0, 0].set_xlim(0.4, 1.1)
+            ax[0, 1].set_xlim(0.4, 1.1)
+            ax[1, 0].set_xlim(0.4, 1.1)
+            ax[1, 1].set_xlim(0.4, 1.1)
+
+        if show_yaxis_title:
+            pyplot.ylabel("Density")
+        pyplot.tight_layout()
+        pyplot.savefig(filename, format='pdf', bbox_inches='tight')
+        pyplot.show()
+
+    @classmethod
+    def plot_accuracy_rejection_curves(
+            cls, metrics: List[Tuple[str, Metric]],
+            filename: str,
+            show_yaxis_title: bool,
+            legend_loc: str,
+            use_pdf: bool = False):
+        X = np.arange(0.0, 1.0, 0.001)
+        colors = sns.color_palette("colorblind")
+
+        for index, (label, metric) in enumerate(metrics):
+            sorted_predictions = sorted(metric.predictions, key=lambda x: x.predicted_value)
+            y = []
+            effectiveness = list(map(lambda t: metric.calculate_effectiveness(t, use_pdf=use_pdf), X))
+            (max_index, max_eff) = cls.maximum_effectiveness(effectiveness)
+            optimal_threshold = X[max_index]
+            rejected = list(filter(lambda p: p.predicted_value < optimal_threshold, metric.predictions))
+            optimal_t_rr = round(len(rejected) / len(metric.predictions), 2)
+
+            for x in X:
+                n = int(x * 100)
+                accepted = sorted_predictions[n:]
+                correct_accepted = list(filter(lambda p: p.predicted_class == p.actual_class, accepted))
+                accuracy = len(correct_accepted) / len(accepted)
+                y.append(accuracy)
+
+            n = int(optimal_t_rr * 100)
+            accepted = sorted_predictions[n:]
+            correct_accepted = list(filter(lambda p: p.predicted_class == p.actual_class, accepted))
+            optimal_t_accuracy = len(correct_accepted) / len(accepted)
+
+            pyplot.plot(
+                optimal_t_rr,
+                optimal_t_accuracy, color="black", zorder=2, marker="d", markerfacecolor='None', markeredgewidth=3, markersize=10,
+                markeredgecolor="black", linestyle='None', label="Optimal τ", linewidth=3)
+            pyplot.plot(X, y, color=colors[index], label=f"{label}", zorder=1, linewidth=3)
+
+        if show_yaxis_title:
+            pyplot.ylabel("Accuracy")
+
+        pyplot.xlabel("Rejection Rate")
+        handles, labels = pyplot.gca().get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        pyplot.tight_layout()
+        pyplot.legend(by_label.values(), by_label.keys(), loc=legend_loc)
+        pyplot.savefig(filename, format='pdf', bbox_inches='tight')
         pyplot.show()
 
     @staticmethod

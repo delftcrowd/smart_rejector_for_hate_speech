@@ -312,13 +312,14 @@ class Analysis:
         """
         mes = data_mes.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
         s100 = data_s100.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
-        mes = mes.mean().tolist()
-        s100 = s100.mean().tolist()
+        mes = mes.median().tolist()
+        s100 = s100.median().tolist()
 
         sns.regplot(x=mes, y=s100)
-        plt.title("Correlation")
-        plt.xlabel("ME")
+        plt.xlabel("Magnitude Estimation")
         plt.ylabel("100-level")
+        plt.tight_layout()
+        plt.savefig("correlation.pdf", format='pdf', bbox_inches='tight')
         plt.show()
 
     @staticmethod
@@ -332,8 +333,8 @@ class Analysis:
         """
         mes = data_mes.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
         s100 = data_s100.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
-        mes = mes.mean().tolist()
-        s100 = s100.mean().tolist()
+        mes = mes.median().tolist()
+        s100 = s100.median().tolist()
 
         cohens_d = (np.mean(mes) - np.mean(s100)) / (np.sqrt((np.std(mes) ** 2 + np.std(s100) ** 2) / 2))
         print("Cohen's d", cohens_d)
@@ -391,8 +392,10 @@ class Analysis:
             float: the mean cost value.
         """
         type_values = data.filter(regex=f"^{type}.*$", axis=1)
-        column_means = type_values.mean()
-        return round(column_means.mean(), 6)
+        # Calculate the median for the individual questions since the distribution
+        # of the scores is skewed.
+        column_means = type_values.median()
+        return column_means.mean()
 
     @classmethod
     def convert_to_dual_boxplot_data(
