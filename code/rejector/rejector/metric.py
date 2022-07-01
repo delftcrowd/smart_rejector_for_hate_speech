@@ -191,12 +191,10 @@ class Metric():
 
         if show_yaxis_title:
             pyplot.ylabel("Total value of the model (V(τ))")
-
         pyplot.xlabel("Rejection threshold (τ)")
         pyplot.xlim([0.49, 1.01])
         handles, labels = pyplot.gca().get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        pyplot.tight_layout()
         pyplot.legend(by_label.values(), by_label.keys(), loc=legend_loc)
         pyplot.savefig(filename, format='pdf', bbox_inches='tight')
         pyplot.show()
@@ -243,11 +241,6 @@ class Metric():
             ax[0, 1].set_xlim(0.4, 1.1)
             ax[1, 0].set_xlim(0.4, 1.1)
             ax[1, 1].set_xlim(0.4, 1.1)
-
-            # ax[0, 0].set_ylim(0, 12)
-            # ax[0, 1].set_ylim(0, 12)
-            # ax[1, 0].set_ylim(0, 12)
-            # ax[1, 1].set_ylim(0, 12)
 
         if show_yaxis_title:
             pyplot.ylabel("Density")
