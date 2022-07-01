@@ -224,7 +224,7 @@ class TestAnalysis(unittest.TestCase):
         self.assertEqual(mean, 2.0)
 
         mean = Analysis.calculate_mean(mes,  type='TN')
-        self.assertEqual(mean, 1.0)
+        self.assertEqual(mean, 1.2)
 
         mean = Analysis.calculate_mean(mes,  type='FP')
         self.assertEqual(mean, -0.2)
@@ -239,7 +239,7 @@ class TestAnalysis(unittest.TestCase):
         self.assertEqual(mean, 20.0)
 
         mean = Analysis.calculate_mean(s100,  type='TN')
-        self.assertAlmostEqual(mean, 10.667, 3)
+        self.assertEqual(mean, 12.0)
 
         mean = Analysis.calculate_mean(s100,  type='FP')
         self.assertEqual(mean, -2.0)
