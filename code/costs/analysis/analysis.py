@@ -394,8 +394,8 @@ class Analysis:
         type_values = data.filter(regex=f"^{type}.*$", axis=1)
         # Calculate the median for the individual questions since the distribution
         # of the scores is skewed.
-        column_means = type_values.median()
-        return column_means.mean()
+        column_medians = type_values.median()
+        return column_medians.mean()
 
     @classmethod
     def convert_to_dual_boxplot_data(
