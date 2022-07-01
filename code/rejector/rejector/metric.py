@@ -227,13 +227,31 @@ class Metric():
                         zorder=1, linewidth=3, ax=ax[1, 0], bw_adjust=bw_adjust)
             sns.kdeplot(fns_conf, color=colors[index], label=f"{label}",
                         zorder=1, linewidth=3, ax=ax[1, 1], bw_adjust=bw_adjust)
+            ax[0, 1].legend(loc="upper left")
+
+            ax[0, 0].set_title("TP")
+            ax[0, 1].set_title("TN")
+            ax[1, 0].set_title("FP")
+            ax[1, 1].set_title("FN")
+
+            ax[0, 0].set_xlabel("Confidence value")
+            ax[0, 1].set_xlabel("Confidence value")
+            ax[1, 0].set_xlabel("Confidence value")
+            ax[1, 1].set_xlabel("Confidence value")
+
+            ax[0, 0].set_xlim(0.4, 1.1)
+            ax[0, 1].set_xlim(0.4, 1.1)
+            ax[1, 0].set_xlim(0.4, 1.1)
+            ax[1, 1].set_xlim(0.4, 1.1)
+
+            # ax[0, 0].set_ylim(0, 12)
+            # ax[0, 1].set_ylim(0, 12)
+            # ax[1, 0].set_ylim(0, 12)
+            # ax[1, 1].set_ylim(0, 12)
 
         if show_yaxis_title:
             pyplot.ylabel("Density")
-
-        pyplot.xlabel("Confidence value")
         pyplot.tight_layout()
-        pyplot.legend()
         pyplot.savefig(filename, format='pdf', bbox_inches='tight')
         pyplot.show()
 
