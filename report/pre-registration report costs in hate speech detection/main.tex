@@ -101,7 +101,7 @@ In \ref{sec:likert}, we concluded that Likert scales are not suitable since they
 
 The main advantage of ME is that it provides the ratio scale properties we need. Another advantage is that the scale is unbounded compared to other commonly used response scales, such as Likert scales. For example, suppose we first show a scenario and the subject provides a 'strongly disagree' judgment. Suppose we now present an even worse scenario. The subject is now limited to the response items in the Likert scale and can only give the same 'strongly disagree' judgement. We do not have this problem when using ME because the subject always has the freedom to assign a value of disagreement that is even larger. However, there are two main drawbacks of using ME. First, we need to normalize the results. Second, it can be hard to validate if we can use ME to measure the subjects' judgements for different scenarios of hate speech detection.
 
-The resulting data needs to be normalized since each subject can use any value they like. For example, one may judge the scenarios using values of 1, 2, and 10, while another may use 100, 200, and 1000. Luckily, there are different solutions for normalizing ME data, such as modulus normalization or external calibration \cite{moskowitz1977magnitude}. The most commonly used method for modulus normalization is geometric averaging since this preserves the ratio information \cite{moskowitz1977magnitude, mcgee2004master}. However, as opposed to the unipolar scales used in \cite{bard1996magnitude, mcgee2004master}, we are using bipolar scales (disagree-agree). By including 0 (neutral) and negative values (disagree), we cannot use geometric averaging anymore because it uses log calculations \cite{moskowitz1977magnitude}. Using the algorithmic mean is also not an option since it would destroy the ratio scale properties \cite{moskowitz1977magnitude}. Therefore \cite{moskowitz1977magnitude} proposed an external calibration method that keeps the ratio scale properties. This method instructs the subjects at the end of the survey to indicate which verbal label (such as 'strongly agree') corresponds with which numerical value they used before \cite{moskowitz1977magnitude}. Then we calculate the average value, called the pivot value, and divide each ME value by the pivot value \cite{moskowitz1977magnitude}. This allows normalization of the ME values among all subjects while the ratios are maintained.
+The resulting data needs to be normalized since each subject can use any value they like. For example, one may judge the scenarios using values of 1, 2, and 10, while another may use 100, 200, and 1000. Luckily, there are different solutions for normalizing ME data, such as modulus normalization \cite{moskowitz1977magnitude}. The most commonly used method for modulus normalization is geometric averaging since this preserves the ratio information \cite{moskowitz1977magnitude, mcgee2004master}. However, as opposed to the unipolar scales used in \cite{bard1996magnitude, mcgee2004master}, we are using bipolar scales (disagree-agree). By including 0 (neutral) and negative values (disagree), we cannot use geometric averaging anymore because it uses log calculations \cite{moskowitz1977magnitude}. Using the algorithmic mean is also not an option since it would destroy the ratio scale properties \cite{moskowitz1977magnitude}. Therefore, we normalize the magnitude estimates by dividing all estimates of each subject by the maximum given value. This way, all magnitudes estimates are in the range [−100, 100] while maintaining the ratio properties.
 
 Most papers that use the ME method apply some form of validation. Cross-modality validation is a technique that is often applied to validate the ME results \cite{bard1996magnitude}. Psychophysicists compare the magnitude estimates to the physical stimuli \cite{bard1996magnitude}. They analyze the correlation between the magnitude estimates and the physical stimuli by taking the log of each value and plotting them against each other \cite{bard1996magnitude}. In the case of estimating line lengths, we can easily vary the line length, for example, by showing a line that is twice as long as the previous line. Subjects can then estimate the line length using a number twice as large. However, this becomes more difficult in the social science and psychology domains. In hate speech detection and other applications in social science and psychology, we do not have an exact measure of the stimulus \cite{bard1996magnitude}. Luckily, related work has shown that ME is still a suitable technique for eliciting opinions about different types of non-physical stimuli \cite{bard1996magnitude, mcgee2004master, maddalena2017crowdsourcing, lodge1979comparisons}. We can validate the magnitude estimates by adopting the cross-modality technique but instead compare judgements against judgements \cite{bard1996magnitude, lodge1979comparisons}. Some papers analyze the correlation between different ME scales for validation, such as handgrip measurements or drawing lines \cite{bard1996magnitude, lodge1976calibration}. Others compare ME with another validated scale that can be of any type. For example, in \cite{maddalena2017crowdsourcing} about judging the relevance of documents, the authors compared the ME scale with two validated ordinal scales for the same dataset \cite{maddalena2017crowdsourcing}. So, we also need to validate our findings by checking the correlation between the ME scale and another scale. Validating two different measures is a form of convergent validation \cite{fitzner2007reliability}. Refer to \ref{sec:analysis-validity} for more details about validation.
 
@@ -191,7 +191,7 @@ We use \href{https://www.limesurvey.org}{LimeSurvey} as our survey tool since it
 We will use 40 different social media posts where 20 are hateful and 20 are not hateful to create 40 different scenarios. So, each subject will need to judge four scenarios for each type (TP, TN, FP, FN, and rejection) for each scale type (ME and 100-level) since we let each subject use both scales. We used the dataset from \cite{basile2019semeval} that contains 13,000 English tweets. Each tweet is annotated in three categories: hate speech (yes/no), target (generic group or an individual), and aggressiveness (yes/no). Therefore, we have four different groups of hateful tweets: generic target + aggressive, individual target + aggressive, generic target + non-aggressive, and individual target + aggressive. We filtered out all tweets that contain replies and mentions since the context is not always clear in these messages. Then we preprocessed all tweets by removing the URLs and hashtags. We performed term frequency-inverse document frequency (TF-IDF), latent semantic analysis (LSA), and k-means clustering on each group of tweets. We calculated the silhouette coefficient to determine the optimal cluster size (k value) for the neutral tweets and the four groups of hateful tweets. The silhouette analysis indicated to set k as large as possible. We selected the tweets by taking the nearest data sample to each cluster centroid. We used a cluster size of 20 for the neutral tweets and sampled one tweet per cluster to collect 20 neutral tweets. And we used a cluster size of 5 for each group of hateful tweets to collect 20 hateful tweets.
 
 \section{Procedure}
-This section will explain all steps of the survey. \autoref{sec:appendix} contains all presentation texts, the informed consent, and some scenario examples. In this experiment, we will shuffle and present the TP, TN, FP, FN, and rejection settings to the subjects. We include one additional question in each scenario after showing the social media post in which we ask the subjects whether they think the post is hateful or not. This question is binary and can be answered with yes or no. The results of these questions are purely informative and used to understand the results of the final question about the agreement with SocialNet's decision. All subjects have 10 seconds before they can continue to the next scenario. There is no limit to the amount of time they spend on each question. All the collected data is completely anonymous. Finally, we will inform the participants not to put personal identifiers in their answers.
+This section will explain all steps of the survey. \autoref{sec:appendix} contains all presentation texts, the informed consent, and some scenario examples. In this experiment, we will shuffle and present the TP, TN, FP, FN, and rejection settings to the subjects. We include one additional question in each scenario after showing the social media post in which we ask the subjects whether they think the post is hateful or not. This question is binary and can be answered with yes or no. The results of these questions are purely informative and used to understand the results of the final question about the agreement with SocialNet's decision. There is no limit to the amount of time they spend on each question. All the collected data is completely anonymous. Finally, we will inform the participants not to put personal identifiers in their answers.
 
 \begin{itemize}[leftmargin=*, label={}]
     \item \textbf{Step 1: provide informed consent}
@@ -203,46 +203,24 @@ This section will explain all steps of the survey. \autoref{sec:appendix} contai
           \begin{itemize}
               \item Show introductory text about what is expected from the subject.
               \item We split all participants up into two groups.
-              \item The first group first uses the ME scale to rate the first half of all scenarios and then uses the 100-level scale for the second half.
-              \item The second group first uses the 100-level scale to rate the first half of all scenarios and then uses the ME scale for the second half.
-              \item Provide an explanation in the introduction about the first scale.
+              \item The first group first uses the ME scale to rate all scenarios.
+              \item The second group first uses the 100-level scale to rate all scenarios.
+              \item Provide an explanation in the introduction about the scale.
           \end{itemize}
-    \item \textbf{Step 3: attention check}
+    \item \textbf{Step 3: two attention checks}
           \begin{itemize}
-              \item Simple attention check where we ask the subject to select one option.
+              \item Two simple attention checks where we ask the subject to select one option (shuffled through all scenarios).
           \end{itemize}
-    \item \textbf{Step 4a: ME practice phase (when ME is used first)}
+    \item \textbf{Step 4a: ME practice phase (when ME is used)}
           \begin{itemize}
               \item To let subjects learn how to use ME, we first run a practice phase where we shuffle and present 5 different line lengths.
               \item Each subject needs to estimate the line length using any positive value.
           \end{itemize}
-    \item \textbf{Step 4b: first half of all scenarios using the first scale (ME or 100-level)}
+    \item \textbf{Step 4b: all scenarios using the scale (ME or 100-level)}
           \begin{itemize}
-              \item Show 20 different scenarios in random order: 4 TP, 4 TN, 4 FP, 4 FN, and 4 rejection.
+              \item Show 40 different scenarios in random order: 8 TP, 8 TN, 8 FP, 8 FN, and 8 rejection.
           \end{itemize}
-    \item \textbf{Step 4c: ME calibration phase (when ME is used first)}
-          \begin{itemize}
-              \item Ask subjects what numbers correspond with the following verbal labels: Strongly disagree, disagree, somewhat disagree, somewhat agree, agree, strongly agree.
-              \item We will use this to normalize the magnitude estimates as explained in the external calibration method from \cite{moskowitz1977magnitude}.
-          \end{itemize}
-    \item \textbf{Step 5a: ME practice phase (when ME is used second)}
-          \begin{itemize}
-              \item Explain that we are going to use the ME scale in the second part.
-              \item To let subjects learn how to use ME, we first run a practice phase where we shuffle and present 5 different line lengths.
-              \item Each subject needs to estimate the line length using any positive value.
-          \end{itemize}
-    \item \textbf{Step 5b: second half of all scenarios using the second scale (ME or 100-level)}
-          \begin{itemize}
-              \item In case we now use the 100-level scale, explain that we now switch to the 100-level scale and how this scale works.
-              \item Show 20 different scenarios in random order: 4 TP, 4 TN, 4 FP, 4 FN, and 4 rejection.
-          \end{itemize}
-    \item \textbf{Step 5c: ME calibration phase (when ME is used second)}
-          \begin{itemize}
-              \item Ask subjects what numbers correspond with the following verbal labels: strongly disagree, disagree, somewhat disagree, somewhat agree, agree, strongly agree.
-              \item We will use this to normalize the magnitude estimates as explained in the external calibration method from \cite{moskowitz1977magnitude}.
-          \end{itemize}
-
-    \item \textbf{Step 6: finish}
+    \item \textbf{Step 5: finish}
           \begin{itemize}
               \item Show a thank you message and redirect the users to Prolific to complete the task.
           \end{itemize}
