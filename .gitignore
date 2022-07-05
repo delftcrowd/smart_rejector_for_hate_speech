@@ -169,10 +169,10 @@ report/thesis report/fonts/
 *.pkl
 
 # Model logs
-code/model/logs
-code/model/runs
-code/model/test_trainer
-code/model/tmp_trainer 
+code/models/logs
+code/models/runs
+code/models/test_trainer
+code/models/tmp_trainer 
 
 # Code plots
 code/**/*.pdf
