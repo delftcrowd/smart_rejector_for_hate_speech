@@ -15,7 +15,9 @@ SCALES = ["ME", "S100"]
 
 class Analysis:
     @classmethod
-    def magnitude_estimates(cls, data: pd.DataFrame, num_scenarios: int = 4) -> pd.DataFrame:
+    def magnitude_estimates(
+        cls, data: pd.DataFrame, num_scenarios: int = 4
+    ) -> pd.DataFrame:
         """Retrieves the magnitude estimates from the data.
 
         Args:
@@ -63,12 +65,11 @@ class Analysis:
             for type in TYPES:
                 for i in range(1, num_scenarios + 1):
                     decision = cls.__get_value(row, "S100", type, i, "s")
-                    agree_value = cls.__get_value(
-                        row, "S100", type, i, r"a\[SQ001\]")
+                    agree_value = cls.__get_value(row, "S100", type, i, r"a\[SQ001\]")
                     disagree_value = cls.__get_value(
-                        row, "S100", type, i, r"d\[SQ001\]")
-                    v100 = cls.__convert_100(
-                        decision, agree_value, disagree_value)
+                        row, "S100", type, i, r"d\[SQ001\]"
+                    )
+                    v100 = cls.__convert_100(decision, agree_value, disagree_value)
                     r[f"{type}{i}"] = v100
 
             df = df.append(r, ignore_index=True)
@@ -76,7 +77,9 @@ class Analysis:
         return df
 
     @classmethod
-    def hatefulness(cls, data: pd.DataFrame, scale: str, num_scenarios: int = 4) -> pd.DataFrame:
+    def hatefulness(
+        cls, data: pd.DataFrame, scale: str, num_scenarios: int = 4
+    ) -> pd.DataFrame:
         """Retrieves the binary values of the hatefulness questions from the data.
         Each scenario contains one question about whether the tweet was considered hateful
         or non-hateful by the subject.
@@ -123,12 +126,16 @@ class Analysis:
             attention2 = row.filter(regex=r"^attention2\.").values[0]
             attention_checks_passed = attention1 == "Blue" and attention2 == "Orange"
 
-            df = df.append({'attention_checks_passed': attention_checks_passed}, ignore_index=True)
+            df = df.append(
+                {"attention_checks_passed": attention_checks_passed}, ignore_index=True
+            )
 
         return df
 
     @classmethod
-    def normalize(cls, magnitude_estimates: pd.DataFrame, apply_log: bool = False) -> pd.DataFrame:
+    def normalize(
+        cls, magnitude_estimates: pd.DataFrame, apply_log: bool = False
+    ) -> pd.DataFrame:
         """Converts the magnitude_estimates dataframe to a normalized one.
 
         Args:
@@ -153,7 +160,9 @@ class Analysis:
         return new_df
 
     @classmethod
-    def convert_me_data(cls, data: pd.DataFrame, num_scenarios: int = 8) -> pd.DataFrame:
+    def convert_me_data(
+        cls, data: pd.DataFrame, num_scenarios: int = 8
+    ) -> pd.DataFrame:
         """Convert the original data to a dataframe that consists
         of all normalized magnitude estimates.
 
@@ -167,12 +176,16 @@ class Analysis:
         """
         mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
         normalized_mes = cls.normalize(mes).mul(100)
-        hatefulness = cls.hatefulness(data=data, scale="ME", num_scenarios=num_scenarios)
+        hatefulness = cls.hatefulness(
+            data=data, scale="ME", num_scenarios=num_scenarios
+        )
         attention_checks = cls.attention_checks(data)
         return pd.concat([normalized_mes, hatefulness, attention_checks], axis=1)
 
     @classmethod
-    def convert_100_data(cls, data: pd.DataFrame, num_scenarios: int = 8) -> pd.DataFrame:
+    def convert_100_data(
+        cls, data: pd.DataFrame, num_scenarios: int = 8
+    ) -> pd.DataFrame:
         """Convert the original data to a dataframe that consists
         of 100-level scale values.
 
@@ -185,7 +198,9 @@ class Analysis:
             100-level scale values.
         """
         s100 = cls.s100_values(data=data, num_scenarios=num_scenarios)
-        hatefulness = cls.hatefulness(data=data, scale="S100", num_scenarios=num_scenarios)
+        hatefulness = cls.hatefulness(
+            data=data, scale="S100", num_scenarios=num_scenarios
+        )
         attention_checks = cls.attention_checks(data)
         return pd.concat([s100, hatefulness, attention_checks], axis=1)
 
@@ -217,7 +232,12 @@ class Analysis:
         print("===================")
 
     @classmethod
-    def plot_dual_boxplots(cls, data_mes: pd.DataFrame, data_s100: pd.DataFrame, show_individual: bool = True) -> None:
+    def plot_dual_boxplots(
+        cls,
+        data_mes: pd.DataFrame,
+        data_s100: pd.DataFrame,
+        show_individual: bool = True,
+    ) -> None:
         """Plots boxplots of all individual scenarios.
 
         Args:
@@ -226,7 +246,8 @@ class Analysis:
             show_individual (bool, optional): Whether to show one boxplot per scenario or not. Defaults to True.
         """
         plot_data = cls.convert_to_dual_boxplot_data(
-            data_mes=data_mes, data_s100=data_s100, show_individual=show_individual)
+            data_mes=data_mes, data_s100=data_s100, show_individual=show_individual
+        )
         sns.boxplot(x="Scenario", y="(Dis)agreement", hue="Scale", data=plot_data)
         plt.title("Boxplots of all questions")
         sns.despine(offset=10, trim=True)
@@ -236,7 +257,9 @@ class Analysis:
         plt.show()
 
     @classmethod
-    def plot_boxplots(cls, data: pd.DataFrame, scale_title: str, show_individual: bool = True) -> None:
+    def plot_boxplots(
+        cls, data: pd.DataFrame, scale_title: str, show_individual: bool = True
+    ) -> None:
         """Plots boxplots of all individual scenarios.
 
         Args:
@@ -244,7 +267,9 @@ class Analysis:
             scale (str, optional): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
             show_individual (bool, optional): Whether to show one boxplot per scenario or not. Defaults to True.
         """
-        plot_data = cls.convert_to_boxplot_data(data=data, show_individual=show_individual)
+        plot_data = cls.convert_to_boxplot_data(
+            data=data, show_individual=show_individual
+        )
         sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data)
         plt.title(f"Boxplots of all questions for the {scale_title} scale")
 
@@ -264,16 +289,16 @@ class Analysis:
         """
         data = data_mes.append(data_s100)
         plot_data = cls.convert_to_stackedbar_data(data)
-        ax = plot_data.plot(kind='bar', stacked=True, x="Scenario")
+        ax = plot_data.plot(kind="bar", stacked=True, x="Scenario")
         ax.yaxis.set_major_formatter(mtick.PercentFormatter())
 
-        plt.xlabel('Scenario')
-        plt.ylabel('Percentage')
-        plt.title('Percentage of (non)hateful rated scenarios')
+        plt.xlabel("Scenario")
+        plt.ylabel("Percentage")
+        plt.title("Percentage of (non)hateful rated scenarios")
         plt.show()
 
     @staticmethod
-    def reliability(data: pd.DataFrame, scale: str, type: str = '') -> float:
+    def reliability(data: pd.DataFrame, scale: str, type: str = "") -> float:
         """Calculates Krippendorffs's alpha values for the complete scale data
         or for the filtered data if a scale and type filter is passed.
 
@@ -286,7 +311,7 @@ class Analysis:
             float: Krippendorff's alpha value.
         """
 
-        if type != '':
+        if type != "":
             column = f"^{type}.*$"
         else:
             column = "^(TP|TN|FP|FN|REJ).*$"
@@ -297,7 +322,9 @@ class Analysis:
             level_of_measurement = "interval"
 
         data = data.filter(regex=column, axis=1).values.tolist()
-        alpha = krippendorff.alpha(reliability_data=data, level_of_measurement=level_of_measurement)
+        alpha = krippendorff.alpha(
+            reliability_data=data, level_of_measurement=level_of_measurement
+        )
 
         return alpha
 
@@ -319,7 +346,7 @@ class Analysis:
         plt.xlabel("Magnitude Estimation")
         plt.ylabel("100-level")
         plt.tight_layout()
-        plt.savefig("correlation.pdf", format='pdf', bbox_inches='tight')
+        plt.savefig("correlation.pdf", format="pdf", bbox_inches="tight")
         plt.show()
 
     @staticmethod
@@ -336,7 +363,9 @@ class Analysis:
         mes = mes.median().tolist()
         s100 = s100.median().tolist()
 
-        cohens_d = (np.mean(mes) - np.mean(s100)) / (np.sqrt((np.std(mes) ** 2 + np.std(s100) ** 2) / 2))
+        cohens_d = (np.mean(mes) - np.mean(s100)) / (
+            np.sqrt((np.std(mes) ** 2 + np.std(s100) ** 2) / 2)
+        )
         print("Cohen's d", cohens_d)
         print("Shapiro Wilk normality test MES: ", stats.shapiro(mes))
         print("Shapiro Wilk normality test S100: ", stats.shapiro(s100))
@@ -363,20 +392,24 @@ class Analysis:
         for index, row in data.iterrows():
             startdate = row.filter(regex=r"startdate\.").values[0]
             submitdate = row.filter(regex=r"datestamp\.").values[0]
-            startdate = datetime.strptime(startdate, '%Y-%m-%d %H:%M:%S')
-            submitdate = datetime.strptime(submitdate, '%Y-%m-%d %H:%M:%S')
+            startdate = datetime.strptime(startdate, "%Y-%m-%d %H:%M:%S")
+            submitdate = datetime.strptime(submitdate, "%Y-%m-%d %H:%M:%S")
             duration = submitdate - startdate
             durations.append(duration.total_seconds())
 
         mean = np.mean(durations)
         std = np.std(durations)
         min_value = mean - 3 * std
-        data['duration'] = durations
-        return data.mask(data['duration'] < min_value)
+        data["duration"] = durations
+        return data.mask(data["duration"] < min_value)
 
     @staticmethod
     def any_failed_attention_checks(data: pd.DataFrame) -> bool:
-        failed = data['attention_checks_passed'].loc[data['attention_checks_passed'] == 0.0].values
+        failed = (
+            data["attention_checks_passed"]
+            .loc[data["attention_checks_passed"] == 0.0]
+            .values
+        )
         return failed.size > 0
 
     @staticmethod
@@ -399,7 +432,8 @@ class Analysis:
 
     @classmethod
     def convert_to_dual_boxplot_data(
-            cls, data_mes: pd.DataFrame, data_s100: pd.DataFrame, show_individual: bool) -> pd.DataFrame:
+        cls, data_mes: pd.DataFrame, data_s100: pd.DataFrame, show_individual: bool
+    ) -> pd.DataFrame:
         """Converts the converted data to a new dataframe that is suitable
         for plotting the boxplots of all individual scenarios.
 
@@ -433,7 +467,9 @@ class Analysis:
         return pd.DataFrame(plot_data, columns=["(Dis)agreement", "Scenario", "Scale"])
 
     @classmethod
-    def convert_to_boxplot_data(cls, data: pd.DataFrame, show_individual: bool) -> pd.DataFrame:
+    def convert_to_boxplot_data(
+        cls, data: pd.DataFrame, show_individual: bool
+    ) -> pd.DataFrame:
         """Converts the converted data to a new dataframe that is suitable
         for plotting the boxplots of all individual scenarios.
 
@@ -481,44 +517,50 @@ class Analysis:
             total = len(values)
             percentage_hateful = round((count_hateful / total) * 100.0, 2)
             percentage_non_hateful = 100.0 - percentage_hateful
-            plot_data.append([question.replace("Hateful_", ""), percentage_hateful, percentage_non_hateful])
+            plot_data.append(
+                [
+                    question.replace("Hateful_", ""),
+                    percentage_hateful,
+                    percentage_non_hateful,
+                ]
+            )
 
         return pd.DataFrame(plot_data, columns=["Scenario", "Hateful", "Not hateful"])
 
     @staticmethod
     def __get_value(row, scale, type, index, question):
-        return row.filter(regex=fr"^{scale}{type}{index}{question}\.").values[0]
+        return row.filter(regex=rf"^{scale}{type}{index}{question}\.").values[0]
 
     @staticmethod
     def __convert_100(decision, agree_value, disagree_value):
-        if decision == 'Agree':
+        if decision == "Agree":
             return agree_value
-        elif decision == 'Disagree':
+        elif decision == "Disagree":
             return -disagree_value
-        elif decision == 'Neutral':
+        elif decision == "Neutral":
             return 0
 
     @staticmethod
     def __convert_me(decision, value):
-        if decision == 'Agree':
+        if decision == "Agree":
             return value
-        elif decision == 'Disagree':
+        elif decision == "Disagree":
             return -value
-        elif decision == 'Neutral':
+        elif decision == "Neutral":
             return 0
 
     @staticmethod
     def __convert_hatefulness(hatefulness):
-        if hatefulness == 'Hateful':
+        if hatefulness == "Hateful":
             return True
-        elif hatefulness == 'Not hateful':
+        elif hatefulness == "Not hateful":
             return False
 
     @staticmethod
     def __remove_question_numbers_from_plot_data(data: pd.DataFrame) -> pd.DataFrame:
         for index, row in enumerate(data):
             # Remove the question number, e.g. 'TP1' becomes 'TP'
-            row[1] = row[1].translate(str.maketrans('', '', digits))
+            row[1] = row[1].translate(str.maketrans("", "", digits))
 
     @staticmethod
     def abs_log(value):

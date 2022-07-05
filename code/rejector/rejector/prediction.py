@@ -3,11 +3,17 @@ import pickle
 from typing import List
 
 
-class Prediction():
-    """Contains information about the prediction
-    """
+class Prediction:
+    """Contains information about the prediction"""
 
-    def __init__(self, predicted_class: str, actual_class: str, predicted_value: float, gold_class: str, text: str) -> None:
+    def __init__(
+        self,
+        predicted_class: str,
+        actual_class: str,
+        predicted_value: float,
+        gold_class: str,
+        text: str,
+    ) -> None:
         """
         Args:
             predicted_class (str): the predicted class name
@@ -102,8 +108,10 @@ class Prediction():
         Returns:
             bool
         """
-        return self.predicted_class == self.gold_class and \
-            self.predicted_class == self.actual_class
+        return (
+            self.predicted_class == self.gold_class
+            and self.predicted_class == self.actual_class
+        )
 
     def is_tn(self) -> bool:
         """Checks if a prediction is a True Negative
@@ -111,8 +119,10 @@ class Prediction():
         Returns:
             bool
         """
-        return self.predicted_class != self.gold_class and \
-            self.predicted_class == self.actual_class
+        return (
+            self.predicted_class != self.gold_class
+            and self.predicted_class == self.actual_class
+        )
 
     def is_fp(self):
         """Checks if a prediction is a False Positve
@@ -120,8 +130,10 @@ class Prediction():
         Returns:
             bool
         """
-        return self.predicted_class == self.gold_class and \
-            self.predicted_class != self.actual_class
+        return (
+            self.predicted_class == self.gold_class
+            and self.predicted_class != self.actual_class
+        )
 
     def is_fn(self):
         """Checks if a prediction is a False Negative
@@ -129,8 +141,10 @@ class Prediction():
         Returns:
             bool
         """
-        return self.actual_class == self.gold_class and \
-            self.predicted_class != self.actual_class
+        return (
+            self.actual_class == self.gold_class
+            and self.predicted_class != self.actual_class
+        )
 
     @staticmethod
     def load(path: str, gold_class: str) -> List[Prediction]:
@@ -149,17 +163,21 @@ class Prediction():
         file.close()
         return list(
             map(
-                lambda
-                res:
-                Prediction(
-                    res['predicted_class'],
-                    res['actual_class'],
-                    res['predicted_value'],
-                    gold_class, res['text']),
-                predictions))
+                lambda res: Prediction(
+                    res["predicted_class"],
+                    res["actual_class"],
+                    res["predicted_value"],
+                    gold_class,
+                    res["text"],
+                ),
+                predictions,
+            )
+        )
 
     def __eq__(self, other):
-        return self.predicted_class == other.predicted_class and \
-            self.actual_class == other.actual_class and \
-            self.gold_class == other.gold_class and \
-            self.text == other.text
+        return (
+            self.predicted_class == other.predicted_class
+            and self.actual_class == other.actual_class
+            and self.gold_class == other.gold_class
+            and self.text == other.text
+        )

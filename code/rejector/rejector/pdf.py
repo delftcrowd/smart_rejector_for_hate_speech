@@ -6,12 +6,15 @@ import numpy as np
 import statsmodels.api as sm
 
 
-class PDF():
-    """Class that contains information about the Probability Density Function.
-    """
+class PDF:
+    """Class that contains information about the Probability Density Function."""
 
-    def __init__(self, predictions: List[Prediction],
-                 fraction: float, kde: sm.nonparametric.KDEMultivariate = None) -> None:
+    def __init__(
+        self,
+        predictions: List[Prediction],
+        fraction: float,
+        kde: sm.nonparametric.KDEMultivariate = None,
+    ) -> None:
         """
         Args:
             predictions (List[Prediction]): The list of Predictions.
@@ -45,7 +48,9 @@ class PDF():
                 if pdf_x <= threshold <= next_pdf_x:
                     index = idx
         if index != -1:
-            return np.average([self.pdf_y[index], self.pdf_y[index+1]]) * self.fraction
+            return (
+                np.average([self.pdf_y[index], self.pdf_y[index + 1]]) * self.fraction
+            )
         else:
             return 0
 

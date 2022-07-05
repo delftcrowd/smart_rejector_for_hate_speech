@@ -10,8 +10,7 @@ class TestPDF(unittest.TestCase):
     def setUp(self):
         predictions = []
         for p in np.linspace(0, 0.5, 100):
-            prediction = Prediction(
-                "positive", "positive", p, "positive", None)
+            prediction = Prediction("positive", "positive", p, "positive", None)
             predictions.append(prediction)
 
         self.predictions = predictions
@@ -38,5 +37,5 @@ class TestPDF(unittest.TestCase):
         self.assertAlmostEqual(0.0, pdf.integral(min=0.75, max=1.0), 1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

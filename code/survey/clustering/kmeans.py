@@ -13,8 +13,7 @@ import sys
 
 
 class KMeansClustering:
-    """K-means clustering class.
-    """
+    """K-means clustering class."""
 
     def __init__(self):
         """Initializes K-means clustering
@@ -77,8 +76,11 @@ class KMeansClustering:
         X = lsa.fit_transform(X)
 
         explained_variance = svd.explained_variance_ratio_.sum()
-        logging.info("Explained variance of the SVD step: {}%".format(
-            int(explained_variance * 100)))
+        logging.info(
+            "Explained variance of the SVD step: {}%".format(
+                int(explained_variance * 100)
+            )
+        )
 
         self.svd = svd
         self.lsa = lsa
@@ -104,11 +106,11 @@ class KMeansClustering:
         return km
 
     def print_top_terms(self) -> None:
-        """Prints the 10 top terms per cluster.
-        """
+        """Prints the 10 top terms per cluster."""
         if self.svd:
             original_space_centroids = self.svd.inverse_transform(
-                self.km.cluster_centers_)
+                self.km.cluster_centers_
+            )
             ordered_centroids = original_space_centroids.argsort()[:, ::-1]
         else:
             ordered_centroids = self.km.cluster_centers_.argsort()[:, ::-1]
@@ -122,7 +124,9 @@ class KMeansClustering:
             print()
             print()
 
-    def print_most_representative_samples(self, original_data: list, X: List[str], num_samples: int) -> None:
+    def print_most_representative_samples(
+        self, original_data: list, X: List[str], num_samples: int
+    ) -> None:
         """Prints the most representative samples per cluster.
 
         Args:
@@ -135,7 +139,8 @@ class KMeansClustering:
 
         for k in range(self.K):
             ind = self.most_representative_sample_indices(
-                distances, predictions, k, num_samples)
+                distances, predictions, k, num_samples
+            )
 
             print(f"Cluster {k}: most representative sample indices: {ind}")
             for i in ind:
@@ -144,7 +149,12 @@ class KMeansClustering:
             print()
 
     @staticmethod
-    def most_representative_sample_indices(distances: List[List[float]], predictions: List[int], cluster_index: int, num_samples: int) -> List[int]:
+    def most_representative_sample_indices(
+        distances: List[List[float]],
+        predictions: List[int],
+        cluster_index: int,
+        num_samples: int,
+    ) -> List[int]:
         """Returns the indices of the most representative samples.
 
         Args:
@@ -181,9 +191,9 @@ class KMeansClustering:
 
         plt.plot(range(2, max_k + 1), plot_x)
         plt.grid(True)
-        plt.title('Elbow curve')
-        plt.xlabel('K (cluster size)')
-        plt.ylabel('Sum of squared distances to closest center')
+        plt.title("Elbow curve")
+        plt.xlabel("K (cluster size)")
+        plt.ylabel("Sum of squared distances to closest center")
         plt.show()
 
     @staticmethod
@@ -203,9 +213,9 @@ class KMeansClustering:
 
         plt.plot(range(2, max_k + 1), sil_scores)
         plt.grid(True)
-        plt.title('Silhouette analysis')
-        plt.xlabel('K (cluster size)')
-        plt.ylabel('Silhouette coefficient')
+        plt.title("Silhouette analysis")
+        plt.xlabel("K (cluster size)")
+        plt.ylabel("Silhouette coefficient")
         plt.show()
 
     @staticmethod
@@ -225,9 +235,9 @@ class KMeansClustering:
 
         plt.plot(range(2, max_k + 1), sil_scores)
         plt.grid(True)
-        plt.title('Calinski-Harabasz analysis')
-        plt.xlabel('K (cluster size)')
-        plt.ylabel('Calinski-Harabasz score')
+        plt.title("Calinski-Harabasz analysis")
+        plt.xlabel("K (cluster size)")
+        plt.ylabel("Calinski-Harabasz score")
         plt.show()
 
     @staticmethod
@@ -247,7 +257,7 @@ class KMeansClustering:
 
         plt.plot(range(2, max_k + 1), sil_scores)
         plt.grid(True)
-        plt.title('Davies-Bouldin analysis')
-        plt.xlabel('K (cluster size)')
-        plt.ylabel('Davies-Bouldin score')
+        plt.title("Davies-Bouldin analysis")
+        plt.xlabel("K (cluster size)")
+        plt.ylabel("Davies-Bouldin score")
         plt.show()

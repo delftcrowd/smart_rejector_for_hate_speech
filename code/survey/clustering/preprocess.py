@@ -7,8 +7,7 @@ import pickle
 
 
 class Preprocess:
-    """Class that contains helper functions for preprocessing the data.
-    """
+    """Class that contains helper functions for preprocessing the data."""
 
     @classmethod
     def filter_waseem_hovy(cls, X: list, label: str) -> list:
@@ -24,14 +23,15 @@ class Preprocess:
         logging.info("Original data length: %s", len(X) - 1)
 
         # Filter out
-        filtered_data = list(filter(lambda x: x['label'] == label, X))
+        filtered_data = list(filter(lambda x: x["label"] == label, X))
 
         logging.info("After applying filters: %s", len(filtered_data))
 
-        filtered_data = [x for x in filtered_data if cls.valid_text(x['text'])]
+        filtered_data = [x for x in filtered_data if cls.valid_text(x["text"])]
 
-        logging.info("Data length after removing invalid tweets: %s",
-                     len(filtered_data))
+        logging.info(
+            "Data length after removing invalid tweets: %s", len(filtered_data)
+        )
 
         # Remove all tweets that are invalid (contain urls, mentions, or not enough text after cleaning)
         return filtered_data
@@ -53,7 +53,8 @@ class Preprocess:
 
         # Filter out
         filtered_data = list(
-            filter(lambda x: x[2] == HS and x[3] == TR and x[4] == AG, X))
+            filter(lambda x: x[2] == HS and x[3] == TR and x[4] == AG, X)
+        )
 
         logging.info("After applying filters: %s", len(filtered_data))
 
@@ -61,8 +62,9 @@ class Preprocess:
         filtered_data = filtered_data[1:]
         filtered_data = [x for x in filtered_data if cls.valid_text(x[1])]
 
-        logging.info("Data length after removing invalid tweets: %s",
-                     len(filtered_data))
+        logging.info(
+            "Data length after removing invalid tweets: %s", len(filtered_data)
+        )
 
         # Remove all tweets that are invalid (contain urls, mentions, or not enough text after cleaning)
         return filtered_data
@@ -92,7 +94,7 @@ class Preprocess:
         Returns:
             list: list of rows read.
         """
-        with open(file_path, newline='', encoding='utf-8') as f:
+        with open(file_path, newline="", encoding="utf-8") as f:
             reader = csv.reader(f)
             data = list(reader)
         return data
@@ -125,4 +127,8 @@ class Preprocess:
         """
         tokenized_text = p.tokenize(text)
         cleaned_text = p.clean(html.unescape(text))
-        return "$MENTION$" not in tokenized_text and "$URL$" not in tokenized_text and cleaned_text != ''
+        return (
+            "$MENTION$" not in tokenized_text
+            and "$URL$" not in tokenized_text
+            and cleaned_text != ""
+        )

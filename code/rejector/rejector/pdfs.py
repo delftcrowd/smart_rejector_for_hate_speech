@@ -7,11 +7,14 @@ import numpy as np
 import statsmodels.api as sm
 
 
-class PDFs():
-    """Class that contains information about the Probability Density Functions of TP, TN, FP, and FN.
-    """
+class PDFs:
+    """Class that contains information about the Probability Density Functions of TP, TN, FP, and FN."""
 
-    def __init__(self, predictions: List[Prediction], estimator_conf: Dict[str, Dict[str, object]] = None) -> None:
+    def __init__(
+        self,
+        predictions: List[Prediction],
+        estimator_conf: Dict[str, Dict[str, object]] = None,
+    ) -> None:
         """Initializes the Probability Density Functions for TP, TN, FP, and FN.
 
         Args:
@@ -35,10 +38,10 @@ class PDFs():
         logging.info("Fraction of FNS: %s", fraction_fns)
 
         if estimator_conf != None:
-            tps_bandwidth = estimator_conf.get('TPS').get('bandwidth')
-            tns_bandwidth = estimator_conf.get('TNS').get('bandwidth')
-            fps_bandwidth = estimator_conf.get('FPS').get('bandwidth')
-            fns_bandwidth = estimator_conf.get('FNS').get('bandwidth')
+            tps_bandwidth = estimator_conf.get("TPS").get("bandwidth")
+            tns_bandwidth = estimator_conf.get("TNS").get("bandwidth")
+            fps_bandwidth = estimator_conf.get("FPS").get("bandwidth")
+            fns_bandwidth = estimator_conf.get("FNS").get("bandwidth")
 
             self.tps = self.to_pdf(tps, fraction_tps, tps_bandwidth)
             self.tns = self.to_pdf(tns, fraction_tns, tns_bandwidth)
@@ -51,7 +54,9 @@ class PDFs():
             self.fns = self.to_pdf(fns, fraction_fns)
 
     @staticmethod
-    def kde(values: List[float], bandwidth: str | float) -> sm.nonparametric.KDEMultivariate:
+    def kde(
+        values: List[float], bandwidth: str | float
+    ) -> sm.nonparametric.KDEMultivariate:
         """Returns the best Kernel Density Estimator
         by performing cross validation by trying out different bandwidth
         (smoothing factor) values or uses the user-specified bandwidth
@@ -68,15 +73,14 @@ class PDFs():
         else:
             bw = bandwidth
 
-        kde = sm.nonparametric.KDEMultivariate(
-            data=values, var_type='c', bw=bw)
+        kde = sm.nonparametric.KDEMultivariate(data=values, var_type="c", bw=bw)
         logging.info("KDE optimal bandwidths: %s", kde.bw)
         return kde
 
     @classmethod
     def estimator(
-            cls, predictions: List[Prediction],
-            bandwidth: str | float = "cv_ml") -> sm.nonparametric.KDEMultivariate:
+        cls, predictions: List[Prediction], bandwidth: str | float = "cv_ml"
+    ) -> sm.nonparametric.KDEMultivariate:
         """Returns the KernelDensity estimator that is fitted on the predictions.
         If no bandwidths are passed, then the optimal bandwidths are automatically calculated (is slower).
 
@@ -88,15 +92,20 @@ class PDFs():
             sm.nonparametric.KDEMultivariate: The KernelDensity estimator fitted on the predictions.
         """
         reliability_values = np.asarray(
-            list(map(lambda p: p.predicted_value, predictions)))
+            list(map(lambda p: p.predicted_value, predictions))
+        )
 
-        reliability_values = reliability_values.reshape(
-            (len(reliability_values), 1))
+        reliability_values = reliability_values.reshape((len(reliability_values), 1))
 
         return cls.kde(reliability_values, bandwidth)
 
     @classmethod
-    def to_pdf(cls, predictions: List[Prediction], fraction: float, bandwidth: str | float = "cv_ml") -> PDF:
+    def to_pdf(
+        cls,
+        predictions: List[Prediction],
+        fraction: float,
+        bandwidth: str | float = "cv_ml",
+    ) -> PDF:
         """Creates a Probability Density Function object from a list of predictions.
 
         Args:

@@ -5,12 +5,10 @@ import matplotlib.pyplot as plt
 
 
 class LDA:
-    """Latent Dirichlet Allocation (LDA) class.
-    """
+    """Latent Dirichlet Allocation (LDA) class."""
 
     def __init__(self) -> None:
-        """Initializes the LDA object.
-        """
+        """Initializes the LDA object."""
         self.lda = None
         self.vectorizer = None
 
@@ -44,12 +42,11 @@ class LDA:
         return lda
 
     def print_top_terms(self) -> None:
-        """Prints the 10 top words per topic.
-        """
+        """Prints the 10 top words per topic."""
         feature_names = self.vectorizer.get_feature_names_out()
 
         for index, topic in enumerate(self.lda.components_):
-            top_features_ind = topic.argsort()[: -10 - 1: -1]
+            top_features_ind = topic.argsort()[: -10 - 1 : -1]
             top_features = [feature_names[i] for i in top_features_ind]
             print("Topic: ", index)
             print(top_features)
@@ -70,7 +67,7 @@ class LDA:
 
         plt.plot(range(2, max_n), plot_x)
         plt.grid(True)
-        plt.title('LDA perplexity analysis')
-        plt.xlabel('N (number of topics)')
-        plt.ylabel('Perplexity')
+        plt.title("LDA perplexity analysis")
+        plt.xlabel("N (number of topics)")
+        plt.ylabel("Perplexity")
         plt.show()
