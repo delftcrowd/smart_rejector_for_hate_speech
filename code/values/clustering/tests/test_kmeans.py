@@ -36,35 +36,35 @@ class TestKMeansClustering(unittest.TestCase):
         self.assertNotEqual(pred1, pred3)
 
     def test_most_representative_sample_indices_1(self):
-        distances = [[2, 0.9], [0.8, 2], [
-            2,  0.7], [0.4, 2], [2, 0.2], [0.1, 2]]
+        distances = [[2, 0.9], [0.8, 2], [2, 0.7], [0.4, 2], [2, 0.2], [0.1, 2]]
         predictions = [1, 0, 1, 0, 1, 0]
         cluster_index = 0
         num_samples = 2
         indices = KMeansClustering.most_representative_sample_indices(
-            distances, predictions, cluster_index, num_samples)
+            distances, predictions, cluster_index, num_samples
+        )
         self.assertListEqual(list(indices), [5, 3])
 
     def test_most_representative_sample_indices_2(self):
-        distances = [[2, 0.9], [0.8, 2], [
-            2,  0.7], [0.4, 2], [2, 0.2], [0.1, 2]]
+        distances = [[2, 0.9], [0.8, 2], [2, 0.7], [0.4, 2], [2, 0.2], [0.1, 2]]
         predictions = [1, 0, 1, 0, 1, 0]
         cluster_index = 1
         num_samples = 2
         indices = KMeansClustering.most_representative_sample_indices(
-            distances, predictions, cluster_index, num_samples)
+            distances, predictions, cluster_index, num_samples
+        )
         self.assertListEqual(list(indices), [4, 2])
 
     def test_most_representative_sample_indices_3(self):
-        distances = [[2, 0.9], [0.8, 2], [
-            2,  0.7], [0.4, 2], [2, 0.2], [0.1, 2]]
+        distances = [[2, 0.9], [0.8, 2], [2, 0.7], [0.4, 2], [2, 0.2], [0.1, 2]]
         predictions = [1, 0, 1, 0, 1, 0]
         cluster_index = 1
         num_samples = 3
         indices = KMeansClustering.most_representative_sample_indices(
-            distances, predictions, cluster_index, num_samples)
+            distances, predictions, cluster_index, num_samples
+        )
         self.assertListEqual(list(indices), [4, 2, 0])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
