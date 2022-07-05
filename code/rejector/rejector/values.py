@@ -1,8 +1,14 @@
-class Values():
-    """Contains information about the values
-    """
+class Values:
+    """Contains information about the values"""
 
-    def __init__(self, value_TP: float, value_TN: float, value_FP: float, value_FN: float, value_rejection: float):
+    def __init__(
+        self,
+        value_TP: float,
+        value_TN: float,
+        value_FP: float,
+        value_FN: float,
+        value_rejection: float,
+    ):
         """
         Args:
             value_TP (float): value of True Positive

@@ -2,30 +2,38 @@ import tensorflow as tf
 import numpy as np
 from keras.losses import CategoricalCrossentropy
 from keras.engine.input_layer import Input
-from keras.layers import Conv1D, GlobalMaxPooling1D, Concatenate, Embedding, Dense, Dropout, TextVectorization
+from keras.layers import (
+    Conv1D,
+    GlobalMaxPooling1D,
+    Concatenate,
+    Embedding,
+    Dense,
+    Dropout,
+    TextVectorization,
+)
 from keras.regularizers import l2
 from keras.models import Model
 import keras
 
 
 class CNN:
-    """Convolutional Neural Network.
-    """
+    """Convolutional Neural Network."""
 
-    def __init__(self,
-                 max_len: int,
-                 num_classes: int,
-                 vocab_len: int,
-                 batch_size: int,
-                 epochs: int,
-                 embed_size: int,
-                 loss_type: str = "softmax",
-                 checkpoint_path: str = "results/cp.ckpt",
-                 save_path: str = "results/model.tf",
-                 save_model: bool = False,
-                 text_vectorizer: any = None,
-                 embedding_matrix: any = None
-                 ):
+    def __init__(
+        self,
+        max_len: int,
+        num_classes: int,
+        vocab_len: int,
+        batch_size: int,
+        epochs: int,
+        embed_size: int,
+        loss_type: str = "softmax",
+        checkpoint_path: str = "results/cp.ckpt",
+        save_path: str = "results/model.tf",
+        save_model: bool = False,
+        text_vectorizer: any = None,
+        embedding_matrix: any = None,
+    ):
         """Initializes the CNN model.
 
         Args:
@@ -72,9 +80,9 @@ class CNN:
             self.text_vectorizer = TextVectorization(output_mode="int")
             self.text_vectorizer.adapt(X)
 
-        cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=self.checkpoint_path,
-                                                         save_weights_only=True,
-                                                         verbose=1)
+        cp_callback = tf.keras.callbacks.ModelCheckpoint(
+            filepath=self.checkpoint_path, save_weights_only=True, verbose=1
+        )
 
         if self.save_model:
             callbacks = [cp_callback]
@@ -84,9 +92,16 @@ class CNN:
         validation_data = None
 
         model = self.model()
-        model.fit(X, y, epochs=self.epochs, batch_size=self.batch_size,
-                  shuffle=True, verbose=1, callbacks=callbacks,
-                  validation_data=validation_data)
+        model.fit(
+            X,
+            y,
+            epochs=self.epochs,
+            batch_size=self.batch_size,
+            shuffle=True,
+            verbose=1,
+            callbacks=callbacks,
+            validation_data=validation_data,
+        )
 
         if self.save_model:
             model.save(self.save_path)
@@ -147,19 +162,37 @@ class CNN:
             emb = Embedding(
                 self.vocab_len,
                 self.embed_size,
-                embeddings_initializer=keras.initializers.Constant(self.embedding_matrix),
+                embeddings_initializer=keras.initializers.Constant(
+                    self.embedding_matrix
+                ),
                 trainable=False,
             )(pre)
         else:
-            emb = Embedding(self.text_vectorizer.vocabulary_size(),
-                            self.embed_size, trainable=True)(pre)
+            emb = Embedding(
+                self.text_vectorizer.vocabulary_size(), self.embed_size, trainable=True
+            )(pre)
         x = Dropout(0.25)(emb)
-        x1 = Conv1D(self.embed_size, 3, padding='valid', kernel_regularizer=l2(.01),
-                    activation='relu')(x)
-        x2 = Conv1D(self.embed_size, 4, padding='valid', kernel_regularizer=l2(.01),
-                    activation='relu')(x)
-        x3 = Conv1D(self.embed_size, 5, padding='valid', kernel_regularizer=l2(.01),
-                    activation='relu')(x)
+        x1 = Conv1D(
+            self.embed_size,
+            3,
+            padding="valid",
+            kernel_regularizer=l2(0.01),
+            activation="relu",
+        )(x)
+        x2 = Conv1D(
+            self.embed_size,
+            4,
+            padding="valid",
+            kernel_regularizer=l2(0.01),
+            activation="relu",
+        )(x)
+        x3 = Conv1D(
+            self.embed_size,
+            5,
+            padding="valid",
+            kernel_regularizer=l2(0.01),
+            activation="relu",
+        )(x)
         x = Concatenate(axis=1)([x1, x2, x3])
         x = GlobalMaxPooling1D()(x)
         x = Dropout(0.5)(x)
@@ -167,14 +200,12 @@ class CNN:
             custom_loss = CategoricalCrossentropy(from_logits=True)
             model = Dense(self.num_classes)(x)
             model = Model(_input, model)
-            model.compile(loss=custom_loss,
-                          optimizer='adam',
-                          metrics=['accuracy'])
+            model.compile(loss=custom_loss, optimizer="adam", metrics=["accuracy"])
         if self.loss_type == "softmax":
-            model = Dense(self.num_classes, activation='softmax')(x)
+            model = Dense(self.num_classes, activation="softmax")(x)
             model = Model(_input, model)
-            model.compile(loss='categorical_crossentropy',
-                          optimizer='adam',
-                          metrics=['accuracy'])
+            model.compile(
+                loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"]
+            )
 
         return model
