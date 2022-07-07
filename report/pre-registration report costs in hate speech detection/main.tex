@@ -116,9 +116,9 @@ We will list all independent, dependent, confounding, and control variables anal
 \begin{itemize}
     \item \textbf{Scenarios}
           \begin{itemize}
-              \item \textbf{True Positive} Show a hateful post to the user and explain that SocialNet detected hate and removed the post.
+              \item \textbf{True Positive} Show a hateful post to the user and explain that SocialNet detected hate and ranked the post lower on people's feeds.
               \item \textbf{True Negative} Show a non-hateful post to the user and explain that SocialNet did not detect hate and allowed the post.
-              \item \textbf{False Positive} Show a non-hateful post to the user and explain that SocialNet detected hate and removed the post.
+              \item \textbf{False Positive} Show a non-hateful post to the user and explain that SocialNet detected hate and ranked the post lower on people's feeds.
               \item \textbf{False Negative} Show a hateful post to the users and explain that SocialNet did not detect hate and allowed the post.
               \item \textbf{Rejection}
                     \begin{itemize}
@@ -175,6 +175,7 @@ We use the following exclusion/rejection criteria:
     \item Participants who fail the two attention checks. We will include two Instructional Manipulation Checks to check if the user pays attention to the survey\footnote{\url{https://researcher-help.prolific.co/hc/en-gb/articles/360009223553}}.
     \item Participants who do not complete all questions.
     \item Participants who do not agree with the informed consent before the start of the survey. We are not allowed to collect and process their data if they do not consent.
+    \item Participants who do fail the ME training phase, for example by providing random values that do not make any sense.
 \end{itemize}
 
 \subsubsection{Participant Compensation}
