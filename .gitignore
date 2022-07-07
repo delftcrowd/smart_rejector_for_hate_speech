@@ -165,6 +165,9 @@ dmypy.json
 report/thesis report/cover/
 report/thesis report/fonts/
 *.eps
+*.synctex(busy)
+*.synctex
+
 # Data
 *.pkl
 
