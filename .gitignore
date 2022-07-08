@@ -167,6 +167,10 @@ report/thesis report/fonts/
 *.eps
 *.synctex(busy)
 *.synctex
+*.lof
+*.log
+*.lot
+report/thesis/report-blx.bib
 
 # Data
 *.pkl
