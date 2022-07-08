@@ -66,19 +66,18 @@ headsepline, % Uncomment to get a line under the header
 %----------------------------------------------------------------------------------------
 %	THESIS INFORMATION
 %----------------------------------------------------------------------------------------
-
-\thesistitle{Thesis Title} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
-\supervisor{Dr. James \textsc{Smith}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
+\thesistitle{Value-Sensitive Rejection of Machine Decisions for Hate Speech Detection} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\supervisor{Dr.\ J. Yang} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{Master of Science} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
-\author{John \textsc{Smith}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
+\author{Philippe Lammerts} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
 \addresses{} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
 
 \subject{Biological Sciences} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
 \keywords{} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
 \university{\href{http://www.tudelft.nl}{Delft University of Technology}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
 \department{\href{https://www.tudelft.nl/en/eemcs/the-faculty/departments/software-technology/}{Software Technology}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
-\group{\href{http://www.wis.ewi.tudelft.nl/}{Web Information Systems Group}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
+\group{\href{http://www.wis.ewi.tudelft.nl/}{Web Information Systems Group} - \href{https://www.wis.ewi.tudelft.nl/crowd-computing}{Crowd Computing}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
 \faculty{\href{https://www.tudelft.nl/en/ewi/}{Electrical Engineering, Mathematics and Computer Science}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
 
 \AtBeginDocument{
@@ -111,25 +110,43 @@ headsepline, % Uncomment to get a line under the header
 		\begin{minipage}[t]{0.4\textwidth}
 			\begin{flushleft} \large
 				\emph{Author:}\\
-				\href{http://www.johnsmith.com}{\authorname} % Author name - remove the \href bracket to remove the link
+				\authorname % Author name - remove the \href bracket to remove the link
 			\end{flushleft}
 		\end{minipage}
-		\begin{minipage}[t]{0.4\textwidth}
+		\begin{minipage}[t]{0.5\textwidth}
 			\begin{flushright} \large
-				\emph{Supervisor:} \\
-				\href{http://www.jamessmith.com}{\supname} % Supervisor name - remove the \href bracket to remove the link  
+				\emph{Thesis advisor:}\\
+				Prof. dr. ir. G.J.P.M. Houben\\
+				Delft University of Technology
 			\end{flushright}
-		\end{minipage}\\[3cm]
+
+			\begin{flushright} \large
+				\emph{Daily supervisor:} \\
+				Dr. J. Yang\\
+				Delft University of Technology
+			\end{flushright}
+
+			\begin{flushright} \large
+				\emph{Co-daily supervisors:} \\
+				Dr. Y-C. Hsu\\
+				University of Amsterdam\\
+				\vspace{5mm}
+				P. Lippmann\\
+				Delft University of Technology\\
+			\end{flushright}
+
+
+		\end{minipage}\\[1.5cm]
 
 		\vfill
 
 		\large \textit{A thesis submitted in fulfillment of the requirements\\ for the degree of \degreename}\\[0.3cm] % University requirement text
 		\textit{in the}\\[0.4cm]
-		\groupname\\\deptname\\[2cm] % Research group name and department name
+		\groupname\\\deptname\\[1cm] % Research group name and department name
 
 		\vfill
 
-		{\large \today}\\[4cm] % Date
+		{\large \today}\\[1cm] % Date
 		%\includegraphics{Logo} % University/department logo - uncomment to place it
 
 		\vfill
