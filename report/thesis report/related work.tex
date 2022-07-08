@@ -4,37 +4,37 @@
 \section{Hate speech detection}
 In this section, we first briefly introduce the definition of hate speech and the challenges of detecting it. Then, we provide an overview of some methods commonly used for automatically detecting hate speech.
 
-There exist different types of online conflictual languages, such as cyberbullying, offensive language, toxic language, or hate speech, and all come with different definitions from domains such as psychology, political science, or computer science \cite{balayn2021automatic}.
+Different types of online conflictual languages exist, such as cyberbullying, offensive language, toxic language, or hate speech, and come with different definitions from domains such as psychology, political science, or computer science \cite{balayn2021automatic}.
 %
 We can broadly define hate speech as "language that is used to express hatred towards a targeted group or is intended to be derogatory, to humiliate, or to insult the members of the group" \cite{davidson2017automated, balayn2021automatic}.
 %
-It is different from other types of conflictual languages since it's mostly focused on specific target groups or individuals \cite{balayn2021automatic}.
+It differs from other conflictual languages since it's mostly focused on specific target groups or individuals \cite{balayn2021automatic}.
 %
-But there exist many more definitions of hate speech in literature and the main reason for this is that there is a lot of discussion about what is considered hate speech and what not.
+But there exist many more definitions of hate speech in literature mainly because there is a lot of discussion about what is considered hate speech and what not.
 %
-From several studies it appears that there is low agreement among humans when it comes to annotating hate speech \cite{fortuna2018survey, ross2017measuring, waseem2016you}.
+From several studies, it appears that there is low agreement among humans when it comes to annotating hate speech \cite{fortuna2018survey, ross2017measuring, waseem2016you}.
 %
 \citet{ross2017measuring} found low inter-rater reliability scores (Krippendorff's alpha values of around $0.2-0.3$) in a study where they asked humans about the hatefulness and offensiveness of 20 tweets.
 %
 They also found that the inter-rater reliability value does not increase when showing a definition of hate speech to the human annotators before the survey.
 %
-\citet{waseem2016you} found a slight increase in the inter-rater reliability when considering annotations of human experts only but it remained low overall.
+\citet{waseem2016you} found a slight increase in the inter-rater reliability when considering annotations of human experts only, but it remained low overall.
 %
-This low agreement can be explained since there exist many differences in people's personalities and backgrounds.
+This low agreement makes sense since there are many differences in people's personalities and backgrounds.
 %
-This makes hate speech detection a challenging task, especially in computer science since we have to be very careful with introducing bias.
+Therefore, hate speech detection is challenging, especially in computer science, since we have to be careful with bias.
 %
-For example, most annotated hate speech datasets that are publicly available contain bias.
+Most annotated hate speech datasets that are publicly available contain bias.
 %
-Datasets such as \cite{waseem2016hateful} or \cite{basile2019semeval} collected their data using specific keywords which can introduce \textit{sample retrieval} bias and annotated their data using only three independent human annotators which might result into \textit{sample annotation} bias \cite{balayn2021automatic}.
+Datasets such as \cite{waseem2016hateful} or \cite{basile2019semeval} collected their data using specific keywords that can introduce \textit{sample retrieval} bias and annotated their data using only three independent annotators that might result in \textit{sample annotation} bias \cite{balayn2021automatic}.
 %
-Automated classification algorithms are likely become biased in their predictions as well when they are trained on biased datasets.
+Automated classification algorithms are likely to become biased in their predictions if they are trained on biased datasets.
 %
-The effects of bias become mostly visible when we are applying these pre-trained classification algorithms to new and unseen data in deployment.
+Bias becomes most notable when applying pre-trained classification algorithms to new and unseen data in deployment.
 %
 For example, \citet{grondahl2018all} and \citet{arango2019hate} report significant drops in F1 scores when training a hate speech detection model on one dataset and evaluating it on another.
 %
-These results further strengh our stance that hate speech detection cannot and should not be solved by machines only but rather by a human-in-the-loop approach.
+These results further strengthen our stance that hate speech detection cannot and should not be done by machines only but rather by a human-in-the-loop approach.
 
 
 \section{Machine Learning models with rejection}
