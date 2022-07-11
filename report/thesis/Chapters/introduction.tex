@@ -20,9 +20,7 @@ This thesis research will tackle the problems of proactive moderation by focusin
 
 In this work, we focus on \textit{value-senstive} rejection. There are gains of accepting correct predictions (positive value) and costs of accepting incorrect or rejecting predictions (negative value). We should weigh these values according to the task of hate speech detection and incorporate them in the design of the human-AI collaboration framework \cite{sayin2021science}. We will mainly focus on the user-centred value since the social media users are the most affected by the consequences of hate speech.
 
-\todo[inline]{Continue here}
-
-The idea of most ML models with rejection is that we reject predictions when the model's confidence is too low. Therefore, we need a metric that measures the utility of ML models with a reject option. We can use the resulting metric to determine when to reject/accept predictions by maximizing the utility value. Second, we need to find out how we can define the user-centred values in the context of hate speech detection. We will attempt to retrieve the value ratios since it is hard to come up with the absolute cost values in the hate speech domain. By value ratios, we mean to figure out, for example, the ratio between an FP and an FN prediction. Therefore, our first sub-research question is as follows:
+The idea of most ML models with rejection is that we reject predictions when the model's confidence is too low. Therefore, we need a metric that measures the total value of ML models with a reject option. We can use the resulting metric to determine when to reject/accept predictions by maximizing the total value. Second, we need to find out how we can define the user-centred values in the context of hate speech detection. We will attempt to retrieve the value ratios since it is hard to come up with the absolute cost values in the hate speech domain. By value ratios, we mean to figure out, for example, the ratio between an FP and an FN prediction. Therefore, our first sub-research question is as follows:
 
 This leads to the following research questions:
 
@@ -32,7 +30,7 @@ This leads to the following research questions:
 \noindent\customtextbox{
 	\textbf{RQ} How can we maximize the value of Machine Learning models in hate speech detection using a reject option?
 	\begin{itemize}
-		\item \textbf{SRQ1} How can we measure the utility of Machine Learning models with a reject option?
+		\item \textbf{SRQ1} How can we measure the value of Machine Learning models with a reject option?
 		\item \textbf{SRQ1} How can we determine the value ratios between rejections and True Positive (TP), True Negative (TN), False Positive (FP), and False Negative (FN) predictions?
 	\end{itemize}
 }
