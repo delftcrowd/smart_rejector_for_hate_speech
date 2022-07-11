@@ -1,9 +1,11 @@
 \chapter{Related work}
-\todo[inline]{This section gives some background information about ML with rejection, hate speech detection, and unknown unknown detection}
+This section briefly defines hate speech and why it is such a challenging topic to tackle, especially in computer science.
+%
+Then, we give an overview of some algorithms we can use to detect hate speech automatically. We furthermore give examples of ML models with a reject option and why our value-sensitive approach differs.
+%
+Finally, we discuss the main challenges of estimating the values of (in)correct and rejected predictions in the context of hate speech detection.
 
 \section{Hate speech detection and its challenges}
-This section briefly defines hate speech and why it is such a challenging topic to tackle, especially in computer science. Then, we give an overview of some algorithms we can use to detect hate speech automatically.
-
 Different types of online conflictual languages exist, such as cyberbullying, offensive language, toxic language, or hate speech, and come with varying definitions from domains such as psychology, political science, or computer science \citep{balayn2021automatic}.
 %
 We can broadly define \textit{hate speech} as ``language that is used to express hatred towards a targeted group or is intended to be derogatory, to humiliate, or to insult the members of the group'' \citep{davidson2017automated, balayn2021automatic}.
@@ -30,6 +32,8 @@ Therefore, hate speech detection is challenging, especially in computer science,
 %
 Most annotated hate speech datasets that are publicly available contain bias.
 %
+Annotating hate speech datasets is challenging because social media data follows a skewed distribution since there are many more neutral social media posts than hateful ones \citep{fortuna2018survey}.
+%
 Datasets such as \citet{waseem2016hateful} or \citet{basile2019semeval} collected their data using specific keywords that can introduce \textit{sample retrieval} bias and annotated their data using only three independent annotators that might result in \textit{sample annotation} bias \citep{balayn2021automatic}.
 %
 Automated classification algorithms will likely become biased in their predictions if we train them on biased datasets.
@@ -45,15 +49,37 @@ For example, \citet{grondahl2018all} and \citet{arango2019hate} report significa
 These results further strengthen our stance that we should not detect hate speech solely by machines but rather by a human-in-the-loop approach.
 
 \section{Detection algorithms}
-
-
+We will give a brief overview of the state-of-the-art Natural Language Processing (NLP) techniques used for automatically detecting hate speech.
+%
+There is an increasing academic interest in the automatic detection of hate speech since the topic has become more relevant like we explained in \nameref{ch:introduction}.
+%
+There is a wide range of approaches for detecting hate speech which are listed in several nice surveys \citep{fortuna2018survey, schmidt2019survey}.
+%
+\cite{fortuna2018survey, schmidt2019survey} identified several features that related work uses in their text classification approaches such as bag-of-words (BOW) \citep{burnap2016us, greevy2004classifying}, character/word N-grams \citep{waseem2016hateful}, lexical features (e.g. using a word blacklist containing offensive slurs) \citep{burnap2016us},  term frequency-inverse document frequency (TF-IDF) \citep{badjatiya2017deep, davidson2017automated, rodriguez2019automatic}, part-of-speech (POS) \citep{greevy2004classifying}, sentiment analysis \citep{rodriguez2019automatic}, topic modelling (e.g. Latent Dirichlet Allocation (LDA)) \citep{xiang2012detecting}, meta-information (e.g. location) \citep{waseem2016hateful}, or word embeddings \citep{badjatiya2017deep}.
+%
+\citet{burnap2016us} used two features BOW and whether a post contained offensive slurs.
+%
+\citet{greevy2004classifying} used BOW..
+\todo[inline]{Read Greevy paper}
+%
+\citet{waseem2016hateful} found that character N-gram achieves higher classification performance than word N-gram.
+%
+\citet{xiang2012detecting} used LDA and ....
+%
+\todo[inline]{read the Xiang paper}
+\citet{rodriguez2019automatic} used Tf-IDF and sentiment analysis for detecting hate speech..
+\todo[inline]{read rodriguez paper}
+%
+Most are evaluated using accuracy \citep{fortuna2018survey}.
+%
+\todo[inline]{Mention hate speech benchmark dataset}
 
 \section{Machine Learning models with rejection}
 \todo[inline]{Explain the different architectures of ML with rejection}
 \todo[inline]{Explain the different types of confidence metrics}
 \todo[inline]{Explain the original metric from De Stefano}
 \todo[inline]{Provide examples of ML models with rejection from other domains}
-
+\todo[inline]{Explain that \cite{olteanu2017limits} claims that we need human-centred metrics instead of abstract metrics such as precision}
 
 \section{Value-sensitive hate speech detection}
 \todo[inline]{Explain how we could do value analysis in hate speech detection and why some methods do not work (such as expressing the values in money or time) and which methods might work (such as using surveys for retrieving subjective values). Also, explain what Magnitude Estimation is and provide examples of studies that used it to retrieve subjective judgements.}
