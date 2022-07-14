@@ -1,11 +1,13 @@
 \chapter{Related work}
 This section briefly defines hate speech and why it is such a challenging topic to tackle, especially in computer science.
 %
-Then, we give an overview of some algorithms we can use to detect hate speech automatically. We furthermore give examples of ML models with a reject option and why our value-sensitive approach differs.
+Then, we give an overview of some algorithms we can use to detect hate speech automatically.
 %
-Finally, we discuss the main challenges of estimating the values of (in)correct and rejected predictions in the context of hate speech detection.
+We provide examples of rejecting ML model predictions and discuss the main challenges of assessing the values of (in)correct and rejected predictions in the context of hate speech detection.
+%
+Finally, we discuss why standard metric, such as accuracy, are unsuitable to evaluate hate speech detection models and why we need human-centred metrics instead.
 
-\section{Hate speech detection and its challenges}
+\section{Challenges of hate speech detection}
 Different types of online conflictual languages exist, such as cyberbullying, offensive language, toxic language, or hate speech, and come with varying definitions from domains such as psychology, political science, or computer science \citep{balayn2021automatic}.
 %
 We can broadly define \textit{hate speech} as ``language that is used to express hatred towards a targeted group or is intended to be derogatory, to humiliate, or to insult the members of the group'' \citep{davidson2017automated, balayn2021automatic}.
@@ -49,39 +51,54 @@ For example, \citet{grondahl2018all} and \citet{arango2019hate} report significa
 These results further strengthen our stance that we should not detect hate speech solely by machines but rather by a human-in-the-loop approach.
 
 \section{Detection algorithms}
-We will give a brief overview of the state-of-the-art Natural Language Processing (NLP) techniques used for automatically detecting hate speech.
+There is an increasing academic interest in the automatic detection of hate speech since the topic has become more relevant, as explained in the \nameref{ch:introduction}.
 %
-There is an increasing academic interest in the automatic detection of hate speech since the topic has become more relevant like we explained in \nameref{ch:introduction}.
+We will list the state-of-the-art Natural Language Processing (NLP) techniques for automatic hate speech detection from literature.
 %
-There is a wide range of approaches for detecting hate speech which are listed in several nice surveys \citep{fortuna2018survey, schmidt2019survey}.
+First, we will list the different features used in the classification approaches.
 %
-\cite{fortuna2018survey, schmidt2019survey} identified several features that related work uses in their text classification approaches such as bag-of-words (BOW) \citep{burnap2016us, greevy2004classifying}, character/word N-grams \citep{waseem2016hateful}, lexical features (e.g. using a word blacklist containing offensive slurs) \citep{burnap2016us},  term frequency-inverse document frequency (TF-IDF) \citep{badjatiya2017deep, davidson2017automated, rodriguez2019automatic}, part-of-speech (POS) \citep{greevy2004classifying}, sentiment analysis \citep{rodriguez2019automatic}, topic modelling (e.g. Latent Dirichlet Allocation (LDA)) \citep{xiang2012detecting}, meta-information (e.g. location) \citep{waseem2016hateful}, or word embeddings \citep{badjatiya2017deep}.
+Then, we will list the currently used classification algorithms ranging from supervised to unsupervised learning.
 %
-\citet{burnap2016us} used two features BOW and whether a post contained offensive slurs.
+
 %
-\citet{greevy2004classifying} used BOW..
-\todo[inline]{Read Greevy paper}
+Several excellent surveys outlined the classification approaches from literature  \citep{fortuna2018survey, schmidt2019survey}.
+%
+Commonly used features are bag-of-words (BOW) \citep{greevy2004classifying}, character/word N-grams \citep{waseem2016hateful}, lexicon features (e.g. using a word blacklist containing offensive slurs) \citep{xiang2012detecting},  term frequency-inverse document frequency (TF-IDF) \citep{badjatiya2017deep, davidson2017automated, rodriguez2019automatic}, part-of-speech (POS) \citep{greevy2004classifying}, sentiment analysis \citep{rodriguez2019automatic}, topic modelling (e.g. Latent Dirichlet Allocation (LDA)) \citep{xiang2012detecting}, meta-information (e.g. location) \citep{waseem2016hateful}, or word embeddings \citep{badjatiya2017deep}.
+%
+\citet{greevy2004classifying} found that the classification performance is higher with BOW features than with POS features.
 %
 \citet{waseem2016hateful} found that character N-gram achieves higher classification performance than word N-gram.
 %
-\citet{xiang2012detecting} used LDA and ....
+They also found that using demographic information such as the location does not improve the results significantly.
 %
-\todo[inline]{read the Xiang paper}
-\citet{rodriguez2019automatic} used Tf-IDF and sentiment analysis for detecting hate speech..
-\todo[inline]{read rodriguez paper}
+\citet{xiang2012detecting} used the topic distributions from an LDA analysis and a lexicon feature.
 %
-Most are evaluated using accuracy \citep{fortuna2018survey}.
+\citet{rodriguez2019automatic} used TF-IDF and sentiment analysis to detect and cluster topics on Facebook pages that are likely to promote hate speech.
 %
-\todo[inline]{Mention hate speech benchmark dataset}
+\citet{badjatiya2017deep} experimented with different word embeddings: fastText\footnote{\url{https://fasttext.cc/}}, GloVe\footnote{\url{https://nlp.stanford.edu/projects/glove/}}, and random word embeddings.
+%
+
+Most hate speech-related studies use supervised learning techniques that range from traditional ML to deep learning classification models, and a few use unsupervised learning techniques to cluster social media posts.
+%
+Support Vector Machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and Logistic Regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
+%
+\citet{davidson2017automated} found that SVM and LR perform significantly better than traditional ML techniques such as Naive Bayes, Decision Trees, and Random Forests.
+%
+\citet{badjatiya2017deep} experimented with various configurations of word embeddings and two deep learning models: a convolutional neural network (CNN) and a long short-term memory (LSTM) model.
+%
+They found that CNN performs better than LSTM and that using pre-trained word embeddings such as GloVe does not result in better classification performance than using random embeddings.
+%
+\citet{rodriguez2019automatic} use the unsupervised learning method, K-means clustering, to cluster social media posts to identify topics that potentially promote hate speech.
+%
+
 
 \section{Machine Learning models with rejection}
 \todo[inline]{Explain the different architectures of ML with rejection}
 \todo[inline]{Explain the different types of confidence metrics}
 \todo[inline]{Explain the original metric from De Stefano}
 \todo[inline]{Provide examples of ML models with rejection from other domains}
-\todo[inline]{Explain that \cite{olteanu2017limits} claims that we need human-centred metrics instead of abstract metrics such as precision}
 
-\section{Value-sensitive hate speech detection}
+\section{Value assessment}
 \todo[inline]{Explain how we could do value analysis in hate speech detection and why some methods do not work (such as expressing the values in money or time) and which methods might work (such as using surveys for retrieving subjective values). Also, explain what Magnitude Estimation is and provide examples of studies that used it to retrieve subjective judgements.}
 
 In this research, we focus on Machine Learning models with a reject option. The decision to accept or reject predictions depends heavily on the context. We argued in the \nameref{ch:introduction} that this decision should depend on the costs of incorrect predictions and the gains of correct predictions. We can express the costs of incorrect (FP and FN predictions) and rejected predictions as negative values. The gains of correct predictions (TP and TN predictions) as positive values. In some domains, we can define these values in money or time. For example, suppose there is a factory that uses a camera and an ML model to check if a package is damaged or not. Using an ML model will save the company time since these packages no longer have to be inspected manually by humans. However, the ML model could be incorrect sometimes. For example, a customer of the factory received a damaged package, while the ML model did not detect any damage. Fixing this issue could cost the factory money. At the same time, the factory could prevent these cases by rejecting the low confidence predictions from the ML model. For example, the ML model predicted with low confidence that a package did not contain any damage. An employee can then inspect it to prevent the customer from receiving a damaged one. Manually checking the rejected ones costs the factory a fraction of the time/money compared to the first situation. In this example, we can easily express the values of FP, FN, TP, TN, and rejections in time/money spent/saved.
@@ -90,7 +107,7 @@ However, it is not evident to express these values in the hate speech domain. Tw
 
 In this section, we will look at the related work to get an understanding of how we could retrieve the value ratios in hate speech detection. The goal is to retrieve ratios between rejection, FP, FN, TP, and TN cases. We would like to know whether an FN is, for example, two times worse compared to an FP. The main challenge is to express all values using a single unit. We could take two directions. First, we could define the values using an objective measure, such as time or money spent/saved. Second, we could define the values subjectively, e.g. by analyzing people's stance towards the consequence of incorrect predictions in hate speech detection. In the next two sections, we discuss the relevant related work in both directions.
 
-\subsection{Objective values}
+\subsection{Objective assessment}
 In this section, we explain the difficulties of defining the values using objective measurements. We do this by looking at some related work. We can retrieve the value of rejection by looking at how much time a human moderator spends on average to check whether some social media post contains hateful content or not. We can convert this into money by taking the moderator's salary into account. We could also argue that the value of a TP and a TN is equal to the negative value of rejection since we saved human effort by letting the ML model correctly predict whether something is hateful or not. The problem, however, starts to arise when we look at the FP and the FN predictions. How can we express the values of FP and FN predictions in terms of money or time?
 
 First, we look at the social media company as a stakeholder. As we explained in the previous section, the values of rejection, TP, and TN can be determined. So the values of FP and FN are yet to be defined. However, most social media companies are not transparent in how they moderate hate speech \citep{klonick2017new}. So we do not have clear insights into the costs for these companies. There do exist country-specific fines. For example, Germany approved a plan where social media companies can be fined up to 50 million euros if they do not remove hate speech in time \citep{bbc-firms-face-fine-germany}. However, this is location-specific, and it is unclear how this applies to individual cases of hate speech. Defining the value of FP cases is even more difficult. It is unclear how filtering out too much content would affect the company (apart from many annoyed users whose freedom of speech is violated). Therefore, we abstain from estimating the values from the perspective of these companies.
@@ -99,4 +116,18 @@ Second, both FP and FN predictions have consequences on the users as the stakeho
 
 Therefore, we believe that using objective measurements, such as money, is not realistic for generically expressing the cost values in our project for both stakeholders.
 
-\subsection{Subjective costs}
+\subsection{Subjective assessment}
+
+\section{Evaluation metrics}
+Most hate speech-related studies evaluate their work using standard \textit{machine} metrics such as accuracy, precision, recall, or F1.
+%
+\citet{rottger2020hatecheck} recognized the shortcomings of these metrics since it is hard to recognize the weak points of classification models.
+%
+Therefore, the authors presented a suite of 29 carefully selected functional tests to help identify the model's weaknesses \citep{rottger2020hatecheck}.
+%
+Each test checks different criteria, such as the ability to cope with spelling variations or using slurs in neutral texts \citep{rottger2020hatecheck}.
+%
+We believe this is a step in the right direction of evaluating and improving hate speech detection models.
+%
+However, our approach is different since we do not solely focus on evaluating the underlying classification model but instead on evaluating models with a reject option while taking into account the human-perceived value of (in)correct and rejected predictions.
+\todo[inline]{Explain that \cite{olteanu2017limits} claims that we need human-centred metrics instead of abstract metrics such as precision}

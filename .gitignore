@@ -171,6 +171,8 @@ report/thesis report/fonts/
 *.log
 *.lot
 report/thesis/report-blx.bib
+*.bcf
+*.run.xml
 
 # Data
 *.pkl
