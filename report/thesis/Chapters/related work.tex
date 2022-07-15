@@ -93,6 +93,17 @@ They found that CNN performs better than LSTM and that using pre-trained word em
 \todo[inline]{Provide example of BERT model for hate speech detection}
 
 \section{Machine Learning models with rejection}
+There exist different architectures for implementing an ML model with a reject option. \citet{hendrickx2021machine} identified three types: the separated, the integrated, and the dependent rejector. The separated rejector shares no information with the predictor and decides beforehand whether a data sample needs to be handled by the predictor or by a human \cite{hendrickx2021machine}. The integrated rejector is one model that is a combination of a prediction model and a rejector \cite{hendrickx2021machine}. The dependent rejector analyzes the output of the predictor to determine whether to reject a prediction or not \cite{hendrickx2021machine}.
+
+Several previous studies have applied the reject option in the context of ML using one of the aforementioned architectures \cite{coenen2020probability, grandvalet2008reject, nadeem2009reject, geifman2017selective, geifman2019reject}. \citet{coenen2020probability} developed a separated rejector that rejects data samples before passing them to the predictor. They used different outlier detection techniques, such as the one-class Support Vector Machine (SVM), to detect data samples that are too unfamiliar with the data on which the predictor was trained \cite{coenen2020probability}.
+
+There exist multiple examples of dependent rejectors \cite{Geifman2017Selective, de2000reject, grandvalet2008reject}. \citet{grandvalet2008reject} applied support vector machines (SVMs) with a reject option to a classification problem. \citet{Geifman2017Selective} developed a dependent rejector that uses a rejection function that rejects data samples based on a predefined risk value, and the coverage accuracy of the predictor \cite{Geifman2017Selective}. \citet{de2000reject} were one of the first to develop a dependent rejector for neural networks. The authors came up with a confidence metric used for determining the optimal rejection threshold \cite{de2000reject}. This threshold is calculated based on a set of predictions with their corresponding confidence values and a set of cost values: cost of incorrect, correct, and rejected predictions \cite{de2000reject}.
+
+\citet{geifman2019reject} developed an integrated rejector by extending their work from \citet{Geifman2017Selective}. They integrated the reject option in a deep learning (DL) model by including a selection function in the last layer of the DL model.
+
+Evaluation of ML models with a reject option is often done by analyzing the accuracy and the coverage of the predictor. Therefore, \cite{nadeem2009reject} proposed the use of accuracy-rejection curves to plot the trade-off between accuracy and coverage so that different classification models with a reject option can be compared.
+
+In this work, we will focus on the dependent architecture since it can be easily applied to any existing prediction model \cite{hendrickx2021machine}. More specifically, our metric is based on the work from \cite{de2000reject} since their confidence metric is intuitive and belongs to one of the few metrics that take value (value/cost of correct, incorrect, and rejected predictions) into account.
 \todo[inline]{Explain the different architectures of ML with rejection}
 \todo[inline]{Explain the different types of confidence metrics}
 \todo[inline]{Explain the original metric from De Stefano}
