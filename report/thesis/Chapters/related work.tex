@@ -63,7 +63,7 @@ Then, we will list the currently used classification algorithms ranging from sup
 %
 Several excellent surveys outlined the classification approaches from literature  \citep{fortuna2018survey, schmidt2019survey}.
 %
-Commonly used features are bag-of-words (BOW) \citep{greevy2004classifying}, character/word N-grams \citep{waseem2016hateful}, lexicon features (e.g. using a word blacklist containing offensive slurs) \citep{xiang2012detecting},  term frequency-inverse document frequency (TF-IDF) \citep{badjatiya2017deep, davidson2017automated, rodriguez2019automatic}, part-of-speech (POS) \citep{greevy2004classifying}, sentiment analysis \citep{rodriguez2019automatic}, topic modelling (e.g. Latent Dirichlet Allocation (LDA)) \citep{xiang2012detecting}, meta-information (e.g. location) \citep{waseem2016hateful}, or word embeddings \citep{badjatiya2017deep}.
+Commonly used features are bag-of-words (BOW) \citep{greevy2004classifying}, character/word N-grams \citep{waseem2016hateful}, lexicon features (e.g. using a word blacklist containing offensive slurs) \citep{xiang2012detecting},  term frequency-inverse document frequency (TF-IDF) \citep{badjatiya2017deep, davidson2017automated, rodriguez2019automatic}, part-of-speech (POS) \citep{greevy2004classifying}, sentiment analysis \citep{rodriguez2019automatic}, topic modelling (e.g. Latent Dirichlet Allocation (LDA)) \citep{xiang2012detecting}, meta-information (e.g. location) \citep{waseem2016hateful}, or word embeddings \citep{badjatiya2017deep, agrawal2018deep}.
 %
 \citet{greevy2004classifying} found that the classification performance is higher with BOW features than with POS features.
 %
@@ -90,7 +90,7 @@ They found that CNN performs better than LSTM and that using pre-trained word em
 %
 \citet{rodriguez2019automatic} use the unsupervised learning method, K-means clustering, to cluster social media posts to identify topics that potentially promote hate speech.
 %
-
+\todo[inline]{Provide example of BERT model for hate speech detection}
 
 \section{Machine Learning models with rejection}
 \todo[inline]{Explain the different architectures of ML with rejection}
@@ -135,18 +135,20 @@ Therefore, we believe that using objective measurements, such as money, is not r
 \section{Evaluation metrics}
 Most hate speech-related studies evaluate their classification methods using standard \textit{machine} metrics such as accuracy, precision, recall, or F1.
 %
-\citet{rottger2020hatecheck} recognized the shortcomings of these metrics since it is hard to recognize the weak points of classification models.
+\citet{rottger2020hatecheck} and \citet{olteanu2017limits} recognized these metrics' shortcomings and found a gap in the evaluation of hate speech detection systems.
 %
-Therefore, the authors presented a suite of 29 carefully selected functional tests to help identify the model's weaknesses \citep{rottger2020hatecheck}.
+\citet{rottger2020hatecheck} found that it is hard to identify the weak points of classification models using machine metrics such as accuracy.
 %
-Each test checks different criteria, such as the ability to cope with spelling variations or the ability to detect neutral content that contain slurs \citep{rottger2020hatecheck}.
+Therefore, the authors presented a suite that consists of 29 carefully selected functional tests to help identify the model's weaknesses \citep{rottger2020hatecheck}.
 %
-We believe this is a step in the right direction of evaluating and improving hate speech detection models.
+Each test checks different criteria, such as the ability to cope with spelling variations or detect neutral content containing slurs \citep{rottger2020hatecheck}.
 %
-However, our approach is different since we do not solely focus on evaluating the detection performance of the underlying classification model but instead on evaluating models with a reject option while taking into account the human-perceived value of (in)correct and rejected predictions.
+Our approach is different since we focus on measuring the performance of classification models with a reject option.
 %
-Examples include outlining ethical principles of algorithmic systems (Fjeld et al. 2020), developing value-based assessment frameworks (Yurrita et al. 2022), and proposing new metrics for evaluating machine learning systems that incorporate value parameters (Casati, No ̈ el, and Yang 2021)
-
-\todo[inline]{Explain that \cite{olteanu2017limits} claims that we need human-centred metrics instead of abstract metrics such as precision}
+\citet{olteanu2017limits} promote using \textit{human-centred} metrics that measure the human-perceived value of hate speech detection algorithms.
+%
+They found that the perceived value varies for fixed machine performance measurements, such as precision, and that it depends on the user characteristics and the type of classification errors (an offensive tweet labelled as hate (low impact) and a neutral tweet labelled as hate (high impact)) \citep{olteanu2017limits}.
+%
+Our work aligns with theirs since we also create a human-centred metric for evaluating hate speech detection systems with a reject option.
 
 \todo[inline]{"proposing new metrics for evaluating machine learning systems that incorporate value parameters \citep{casati2021value}"}
