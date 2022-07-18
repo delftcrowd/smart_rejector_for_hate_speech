@@ -87,13 +87,13 @@ They also found that using demographic information such as the location does not
 \citet{badjatiya2017deep} experimented with different word embeddings: fastText\footnote{\url{https://fasttext.cc/}}, GloVe\footnote{\url{https://nlp.stanford.edu/projects/glove/}}, and random word embeddings.
 %
 
-Most hate speech-related studies use supervised learning techniques that range from traditional ML to deep learning models, and a few use unsupervised learning techniques to cluster the social media posts.
+Most hate speech-related studies use supervised learning techniques that range from traditional ML to deep learning (DL) models, and a few use unsupervised learning techniques to cluster the social media posts.
 %
 Support Vector Machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and Logistic Regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
 %
 \citet{davidson2017automated} found that SVM and LR perform significantly better than other traditional ML techniques such as Naive Bayes, Decision Trees, and Random Forests.
 %
-\citet{badjatiya2017deep} experimented with various configurations of word embeddings and two deep learning models: a convolutional neural network (CNN) and a long short-term memory (LSTM) model.
+\citet{badjatiya2017deep} experimented with various configurations of word embeddings and two DL models: a convolutional neural network (CNN) and a long short-term memory (LSTM) model.
 %
 They found that CNN performs better than LSTM and that using pre-trained word embeddings such as GloVe does not result in better classification performance than using random embeddings.
 %
@@ -103,23 +103,23 @@ They found that CNN performs better than LSTM and that using pre-trained word em
 
 \section{Machine Learning models with rejection}
 \label{sec:related-work-rejection}
-Several studies promoted the concept of rejecting ML predictions when the risk of producing an incorrect prediction is too high \citep{sayin2021science, hendrickx2021machine, woo2020future}.
+Several studies promoted the concept of rejecting ML predictions when the risk of producing an incorrect prediction is too high so that a human gives the final judgement instead \citep{sayin2021science, hendrickx2021machine, woo2020future}.
 %
-\citet{hendrickx2021machine} identified three architectures for rejecting ML predictions: the \emph{separated}, the \emph{integrated}, and the \emph{dependent} rejector.
+\citet{hendrickx2021machine} identified three ways for rejecting ML predictions: the \emph{separated}, the \emph{integrated}, and the \emph{dependent} way.
 %
-The separated rejector shares no information with the classification model and decides beforehand whether a data sample needs to be handled by the classification model or by a human \citep{hendrickx2021machine}.
+In the separated way, the rejectors decides beforehand whether a data sample needs to be handled by the classification model or by a human \citep{hendrickx2021machine}.
 %
-The integrated rejector is one model that is a combination of a classification model and a rejector \citep{hendrickx2021machine}.
+In the integrated way, the rejector is integrated in the classification model\citep{hendrickx2021machine}.
 %
-The dependent rejector analyzes the output of the classification model to determine whether to reject a prediction or not \citep{hendrickx2021machine}.
+In the dependent way, the rejector analyzes the output of the classification model to determine whether to reject a prediction or not \citep{hendrickx2021machine}.
 %
-Several studies have applied the reject option in the context of ML using one of the architectures mentioned above \citep{coenen2020probability, grandvalet2008reject, nadeem2009reject, Geifman2017Selective, geifman2019reject}.
+Several studies have applied the reject option using one of the architectures mentioned above \citep{coenen2020probability, grandvalet2008reject, nadeem2009reject, Geifman2017Selective, geifman2019reject}.
 %
 
 %
 \citet{coenen2020probability} developed a \emph{separated} rejector that rejects data samples before passing them to the classification model.
 %
-They used different outlier detection techniques, such as the one-class Support Vector Machine (SVM), to detect data samples that were unfamiliar with
+They used different outlier detection techniques, such as the one-class Support Vector Machine (SVM), to detect data samples that are unfamiliar with
 the training data  \citep{coenen2020probability}.
 %
 
@@ -140,10 +140,10 @@ This threshold is calculated based on a set of predictions with their correspond
 %
 \citet{geifman2019reject} developed an \emph{integrated} rejector by extending their work from \citet{Geifman2017Selective}.
 %
-They integrated the reject option in a deep learning (DL) model by including a selection function in the last layer of the DL model.
+They integrated the reject option in a DL model by including a selection function in the last layer of the DL model.
 %
 
-In this work, we apply the dependent architecture since it supports any existing classification model \citep{hendrickx2021machine}.
+In this work, we apply the dependent way since it supports any existing classification model \citep{hendrickx2021machine}.
 %
 The most relevant work is from \citet{de2000reject} since their confidence metric takes the value of (in)correct and rejected predictions) into account.
 %
