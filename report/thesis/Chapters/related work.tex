@@ -154,20 +154,32 @@ Thus, we obtain a threshold that captures the implications of machine decisions 
 
 \section{Value assessment}
 \label{sec:related-work-value-assessment}
-\todo[inline]{Explain what we mean by value and why we should integrate it into the design of a hate speech detection system.}
+We follow the suggestions from \citet{sayin2021science} and \citet{casati2021value} about incorporating \emph{value} in the design of a hybrid human-AI system, in our case a hate speech classification model with a reject option.
+%
+Another study from \citet{fjeld2020principled} outlined 8 principles of AI systems where \emph{fairness and discrimination} (e.g. algorithmic bias), \emph{human control of technology} (e.g. the system should request help from the human user in difficult situations), and \emph{promotion of human values} (we should integrate human value in the AI system) are the most important in our case.
+%
+However, value is a broad term and its definition is context-dependent but several works elaborate on the value-sensitive design (VSD) approach that describes how different types of value, such as privacy, can be integrated in the design of a socio-technical system \citep{zhu2018value, umbrello2021mapping}.
+%
+We will mainly focus on the first step from the VSD approach about understanding the stakeholders so that we can assess their values \citep{zhu2018value,umbrello2021mapping}.
+%
+% CONTINUE HERE
+
+In this research, we focus on Machine Learning models with a reject option.
+%
+We argued in the \nameref{ch:introduction} that this decision of rejection depends on the costs of incorrect predictions and the gains of correct predictions. We can express the costs of incorrect (FP and FN predictions) and rejected predictions as negative values.
+%
+Therefore, we need to weigh the value of (in)correct and rejected predictions according to the task of case hate speech detection \citep{sayin2021science}.
+%
+Accepting correct predictions
+%
+
+% \todo[inline]{Value sensitive Design (VSD) from \citet{umbrello2021mapping} state that we can translate values such as freedom of bias into the design of a system. So example is a tax system that needs to detect fraud. If etniticity bias can be introduced by using postal codes, than we can exclude the postal code variable from the learning algorithm. We for example have the value reliability. The AI is not reliable sometimes, so we use reject option in our design to make the use of AI more reliable/. The authors say that we not only want to optimize the tax algotihm in terms of effectiveness (rate of fraud detection) but also in terms of fairness (presenting non-biased selection of cases. So the same holds in our case, we want to optimize in using the AI as much as possible but also want to take mistakes into account (in the end we still need to invovle humans to check specific cases).}
+
+% \todo[inline]{The Value-design algorithm paper from \citet{zhu2018value} describes 5 steps of algorithm design. We focus our approach on theirs by inspecting the stakeholders. And then assessing the stakeholder values to take this into account in the algoithm design.}
 
 
-\todo[inline]{The authors of \citet{fjeld2020principled} outlined 8 principles of AI systems including fairness and discrimination (e.g. algorithmic bias), human control of technology (e.g. AI system should request help from the human user in difficult situations), and promotion of human values (we should integrate human value in the AI system).}
 
-\todo[inline]{We need to weigh the value of (in)correct and rejected predictions into account in the design of a hybrid human-AI system \citep{sayin2021science}}
-
-\todo[inline]{Value sensitive Design (VSD) from \citet{umbrello2021mapping} state that we can translate values such as freedom of bias into the design of a system. So example is a tax system that needs to detect fraud. If etniticity bias can be introduced by using postal codes, than we can exclude the postal code variable from the learning algorithm. We for example have the value reliability. The AI is not reliable sometimes, so we use reject option in our design to make the use of AI more reliable/. The authors say that we not only want to optimize the tax algotihm in terms of effectiveness (rate of fraud detection) but also in terms of fairness (presenting non-biased selection of cases. So the same holds in our case, we want to optimize in using the AI as much as possible but also want to take mistakes into account (in the end we still need to invovle humans to check specific cases).}
-
-\todo[inline]{The Value-design algorithm paper from \citet{zhu2018value} describes 5 steps of algorithm design. We focus our approach on theirs by inspecting the stakeholders. And then assessing the stakeholder values to take this into account in the algoithm design.}
-
-
-
-In this research, we focus on Machine Learning models with a reject option. The decision to accept or reject predictions depends heavily on the context. We argued in the \nameref{ch:introduction} that this decision should depend on the costs of incorrect predictions and the gains of correct predictions. We can express the costs of incorrect (FP and FN predictions) and rejected predictions as negative values. The gains of correct predictions (TP and TN predictions) as positive values. In some domains, we can define these values in money or time. For example, suppose there is a factory that uses a camera and an ML model to check if a package is damaged or not. Using an ML model will save the company time since these packages no longer have to be inspected manually by humans. However, the ML model could be incorrect sometimes. For example, a customer of the factory received a damaged package, while the ML model did not detect any damage. Fixing this issue could cost the factory money. At the same time, the factory could prevent these cases by rejecting the low confidence predictions from the ML model. For example, the ML model predicted with low confidence that a package did not contain any damage. An employee can then inspect it to prevent the customer from receiving a damaged one. Manually checking the rejected ones costs the factory a fraction of the time/money compared to the first situation. In this example, we can easily express the values of FP, FN, TP, TN, and rejections in time/money spent/saved.
+The gains of correct predictions (TP and TN predictions) as positive values. In some domains, we can define these values in money or time. For example, suppose there is a factory that uses a camera and an ML model to check if a package is damaged or not. Using an ML model will save the company time since these packages no longer have to be inspected manually by humans. However, the ML model could be incorrect sometimes. For example, a customer of the factory received a damaged package, while the ML model did not detect any damage. Fixing this issue could cost the factory money. At the same time, the factory could prevent these cases by rejecting the low confidence predictions from the ML model. For example, the ML model predicted with low confidence that a package did not contain any damage. An employee can then inspect it to prevent the customer from receiving a damaged one. Manually checking the rejected ones costs the factory a fraction of the time/money compared to the first situation. In this example, we can easily express the values of FP, FN, TP, TN, and rejections in time/money spent/saved.
 
 However, it is not evident to express these values in the hate speech domain. Two stakeholders can be considered in the design of a smart rejector: the social media company and its users. We mainly focus on the users in this research since they will be affected the most by hate speech.
 
