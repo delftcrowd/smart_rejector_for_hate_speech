@@ -58,7 +58,7 @@ For example, \citet{grondahl2018all} and \citet{arango2019hate} report significa
 %
 These results further strengthen our stance that we should not detect hate speech solely by machines but rather by a human-in-the-loop approach.
 
-\section{Detection methods}
+\section{Automatic hate speech detection}
 \label{sec:related-work-detection-algorithms}
 % There is an increasing academic interest in the automatic detection of hate speech since the topic has become more relevant, as explained in the \nameref{ch:introduction}.
 %
@@ -113,7 +113,7 @@ In the integrated way, the rejector is integrated in the classification model\ci
 %
 In the dependent way, the rejector analyzes the output of the classification model to determine whether to reject a prediction or not \citep{hendrickx2021machine}.
 %
-Several studies have applied the reject option using one of the architectures mentioned above \citep{coenen2020probability, grandvalet2008reject, nadeem2009reject, Geifman2017Selective, geifman2019reject}.
+Several studies have applied the reject option using one of the architectures mentioned above \citep{coenen2020probability, grandvalet2008reject, Geifman2017Selective, geifman2019reject, de2000reject}.
 %
 
 %
@@ -193,7 +193,7 @@ Evaluation of classification models with a reject option is often done by analyz
 %
 \citet{nadeem2009reject} proposed the use of accuracy-rejection curves to plot the trade-off between accuracy and coverage so that different classification models with a reject option can be compared.
 %
-\citet{rottger2020hatecheck} and \citet{olteanu2017limits} recognized these shortcomings of machine metrics such as accuracy and found a gap in the evaluation of hate speech detection systems.
+\citet{rottger2020hatecheck, casati2021value, olteanu2017limits} recognized the shortcomings of machine metrics such as accuracy and found a gap in the evaluation of hate speech detection systems.
 %
 \citet{rottger2020hatecheck} found that it is hard to identify the weak points of classification models using machine metrics such as accuracy.
 %
@@ -207,6 +207,6 @@ Our approach is different since we focus on measuring the performance of classif
 %
 They found that the perceived value varies for fixed machine performance measurements, such as precision, and that it depends on the user characteristics and the type of classification errors (an offensive tweet labelled as hate (low impact) and a neutral tweet labelled as hate (high impact)) \citep{olteanu2017limits}.
 %
-Our work aligns with theirs since we also create a human-centred metric for evaluating hate speech detection systems with a reject option.
-
-\todo[inline]{"proposing new metrics for evaluating machine learning systems that incorporate value parameters \citep{casati2021value}"}
+\citet{casati2021value} propose developing new metrics for evaluating ML models with a reject option that considers domain-specific values.
+%
+Our work aligns with both studies since we focus on creating a human-centred metric for evaluating hate speech detection systems with a reject option that incorporates value derived from a survey study.
