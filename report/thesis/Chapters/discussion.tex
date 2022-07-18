@@ -1,8 +1,6 @@
 \chapter{Discussion}
 \todo[inline]{Answer research questions}
-\todo[inline]{The rejection threshold is calculated using the test set. This test set needs to be as realistic as possible.}
-\todo[inline]{Hate speech is difficult domain as there tend to be a lot of disagreement between people about what is considered hate speech and what not. Most datasets are binary labeled but perhaps it's better that hate speech datasets use an ordinal scale to define how hateful a text sample is.}
-\todo[inline]{Explain difficulties in coming up with numerical cost/gain values of (in)correct predictions and rejections}
+
 \todo[inline]{Discuss future work}
 
 \section{Survey study}
@@ -13,6 +11,10 @@
 \todo[inline]{Explain that \cite{olteanu2017limits} claims that we need more human-centred metrics instead of abstract metrics such as precision and we agree with that by introducing our own human-centred metric}
 
 \section{Limitations}
+\todo[inline]{Hate speech is difficult domain as there tend to be a lot of disagreement between people about what is considered hate speech and what not. \citet{ross2017measuring} found low Krippendorff alpha values in a hate speech survey. So our findings are in line with theirs.}
+\todo[inline]{Explain limitations of the metric and the survey study}
+\todo[inline]{The rejection threshold is calculated using the test set. This test set needs to be as realistic as possible. Furthermore we need to have calibrated models since we rely purely on the confidence values. This is also hard to realize. Temperature scaling can help, but it is still limited.}
 
 \section{Recommendations}
-
+\todo[inline]{Magnitude Estimation seems promising for future research.}
+\todo[inline]{Personal and demographic characterisitcs might have  a big impact. So further analysis on those aspects seem relevant.}

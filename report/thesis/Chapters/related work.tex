@@ -1,20 +1,25 @@
 \chapter{Related work}
-This section briefly defines hate speech and why it is such a challenging topic to tackle, especially in computer science.
+In this chapter, we first define hate speech in section \ref{sec:related-work-challenges} and explain why it is such a challenging topic to tackle, especially from a computer science perspective.
 %
-Then, we give an overview of some algorithms we can use to detect hate speech automatically.
+Then, we give an overview of the state-of-the-art solutions for the automatic detection of hate speech in section \ref{sec:related-work-detection-algorithms}.
 %
-We provide examples of rejecting classification model predictions and discuss the main challenges of assessing the values of (in)correct and rejected predictions in the context of hate speech detection.
+In section \ref{sec:related-work-rejection}, we discuss the different types of ML models with a reject option.
 %
-Finally, we discuss why standard metric, such as accuracy, are unsuitable to evaluate hate speech detection models and why we need human-centred metrics instead.
+Section \ref{sec:related-work-value-assessment} discusses the main challenges of assessing the values of (in)correct and rejected predictions in the hate speech domain.
+%
+Finally, we discuss the shortcomings of standard machine metrics, such as accuracy, to evaluate detection systems and why human-centred metrics are promising.
 
-\section{Challenges of hate speech detection}
+\section{Hate speech: definition and challenges}
+\label{sec:related-work-challenges}
 Different types of online conflictual languages exist, such as cyberbullying, offensive language, toxic language, or hate speech, and come with varying definitions from domains such as psychology, political science, or computer science \citep{balayn2021automatic}.
 %
-We can broadly define \textit{hate speech} as ``language that is used to express hatred towards a targeted group or is intended to be derogatory, to humiliate, or to insult the members of the group'' \citep{davidson2017automated, balayn2021automatic}.
+We can broadly define \textit{hate speech} as \emph{``language that is used to express hatred towards a targeted group or is intended to be derogatory, to humiliate, or to insult the members of the group''} \citep{davidson2017automated, balayn2021automatic}.
 %
 It differs from other conflictual languages since it focuses on specific target groups or individuals \citep{balayn2021automatic}.
 %
-However, many more definitions exist in literature mainly because people differ on what is considered hate speech and what is not.
+% However, many more definitions exist in literature mainly because people differ on what is considered hate speech and what is not.
+%
+
 %
 \citet{balayn2021automatic} identified the mismatch between the formalisation of hate speech and how people perceive it.
 %
@@ -22,7 +27,7 @@ Many factors influence how people perceive hate speech, such as the content itse
 %
 We can identify this mismatch in other related work from which there appears to be low agreement among humans regarding annotating hate speech \citep{fortuna2018survey, ross2017measuring, waseem2016you}.
 %
-\citet{ross2017measuring} found low inter-rater reliability scores (Krippendorff's alpha values of around $0.2-0.3$) in a study where they asked humans about the hatefulness and offensiveness of 20 tweets.
+\citet{ross2017measuring} found low inter-rater reliability scores (Krippendorff's alpha values of around $0.2-0.3$) in a study where they asked humans about the hatefulness and offensiveness of a selection of tweets.
 %
 They also found that the inter-rater reliability value does not increase when showing a definition of hate speech to the human annotators beforehand.
 %
@@ -30,40 +35,44 @@ They also found that the inter-rater reliability value does not increase when sh
 %
 % This low agreement makes sense since there are many differences in people's personalities and backgrounds.
 %
-Therefore, hate speech detection is challenging, especially in computer science, since we have to be careful with bias.
+
 %
-Most annotated hate speech datasets that are publicly available contain bias.
+In the hate speech domain, we need to careful with creating biased detection systems using biased datasets.
+% Therefore, hate speech detection is challenging, especially in computer science, since we have to be careful with bias.
 %
-Annotating hate speech datasets is challenging because social media data follows a skewed distribution since there are many more neutral social media posts than hateful ones \citep{fortuna2018survey}.
+Most annotated hate speech datasets that are publicly available are likely to be biased.
+%
+% Annotating hate speech datasets is challenging because social media data follows a skewed distribution since there are many more neutral social media posts than hateful ones \citep{fortuna2018survey}.
 %
 Datasets such as \citet{waseem2016hateful} or \citet{basile2019semeval} collected their data using specific keywords that can introduce \textit{sample retrieval} bias and annotated their data using only three independent annotators that might result in \textit{sample annotation} bias \citep{balayn2021automatic}.
 %
-Automated classification algorithms will likely become biased in their predictions if we train them on biased datasets.
+Automated classification models will likely become biased in their predictions if we train them on biased datasets (\emph{garbage in, garbage out}).
 %
-Bias becomes most notable when applying pre-trained classification algorithms to new and unseen data in deployment.
+This phenomenon becomes most notable when applying pre-trained classification models to new and unseen data in deployment.
 %
-For example, \citet{grondahl2018all} and \citet{arango2019hate} report significant drops in F1 scores when training a hate speech detection model on one dataset and evaluating it on another.
+For example, \citet{grondahl2018all} and \citet{arango2019hate} report significant drops in F1 scores when training a hate speech classification model on one dataset and evaluating it on another.
 %
 \citet{grondahl2018all} found that the F1 score reduces by 69\% in the worst case and that the model choice does not affect the classification performance as much as the dataset choice.
 %
-\citet{arango2019hate} replicated several state-of-the-art hate speech detection models and found that most studies overestimate the classification performance.
+\citet{arango2019hate} replicated several state-of-the-art hate speech classification models and found that most studies overestimate the classification performance.
 %
 These results further strengthen our stance that we should not detect hate speech solely by machines but rather by a human-in-the-loop approach.
 
-\section{Detection algorithms}
-There is an increasing academic interest in the automatic detection of hate speech since the topic has become more relevant, as explained in the \nameref{ch:introduction}.
+\section{Detection methods}
+\label{sec:related-work-detection-algorithms}
+% There is an increasing academic interest in the automatic detection of hate speech since the topic has become more relevant, as explained in the \nameref{ch:introduction}.
 %
-We will list the state-of-the-art Natural Language Processing (NLP) techniques for automatic hate speech detection from literature.
+In this section, we will list the state-of-the-art Natural Language Processing (NLP) techniques for automatic hate speech detection from literature.
 %
-First, we will list the different features used in the classification approaches.
+Several excellent surveys outlined the different detection methods from literature  \citep{fortuna2018survey, schmidt2019survey}.
 %
-Then, we will list the currently used classification algorithms ranging from supervised to unsupervised learning.
+First, we will discuss the different features used in the classification models.
+%
+Then, we will state the most used classification models ranging from supervised to unsupervised learning.
 %
 
 %
-Several excellent surveys outlined the classification approaches from literature  \citep{fortuna2018survey, schmidt2019survey}.
-%
-Commonly used features are bag-of-words (BOW) \citep{greevy2004classifying}, character/word N-grams \citep{waseem2016hateful}, lexicon features (e.g. using a word blacklist containing offensive slurs) \citep{xiang2012detecting},  term frequency-inverse document frequency (TF-IDF) \citep{badjatiya2017deep, davidson2017automated, rodriguez2019automatic}, part-of-speech (POS) \citep{greevy2004classifying}, sentiment analysis \citep{rodriguez2019automatic}, topic modelling (e.g. Latent Dirichlet Allocation (LDA)) \citep{xiang2012detecting}, meta-information (e.g. location) \citep{waseem2016hateful}, or word embeddings \citep{badjatiya2017deep, agrawal2018deep}.
+Commonly used features are bag-of-words (BOW) \citep{greevy2004classifying}, character/word N-grams \citep{waseem2016hateful}, lexicon features \citep{xiang2012detecting},  term frequency-inverse document frequency (TF-IDF) \citep{badjatiya2017deep, davidson2017automated, rodriguez2019automatic}, part-of-speech (POS) \citep{greevy2004classifying}, sentiment analysis \citep{rodriguez2019automatic}, topic modelling (e.g. Latent Dirichlet Allocation (LDA)) \citep{xiang2012detecting}, meta-information (e.g. location) \citep{waseem2016hateful}, or word embeddings \citep{badjatiya2017deep, agrawal2018deep}.
 %
 \citet{greevy2004classifying} found that the classification performance is higher with BOW features than with POS features.
 %
@@ -71,28 +80,29 @@ Commonly used features are bag-of-words (BOW) \citep{greevy2004classifying}, cha
 %
 They also found that using demographic information such as the location does not improve the results significantly.
 %
-\citet{xiang2012detecting} used the topic distributions from an LDA analysis and a lexicon feature.
+\citet{xiang2012detecting} used a lexicon feature (whether a social media post contains an offensive word or not) and the topic distributions from an LDA analysis.
 %
 \citet{rodriguez2019automatic} used TF-IDF and sentiment analysis to detect and cluster topics on Facebook pages that are likely to promote hate speech.
 %
 \citet{badjatiya2017deep} experimented with different word embeddings: fastText\footnote{\url{https://fasttext.cc/}}, GloVe\footnote{\url{https://nlp.stanford.edu/projects/glove/}}, and random word embeddings.
 %
 
-Most hate speech-related studies use supervised learning techniques that range from traditional ML to deep learning classification models, and a few use unsupervised learning techniques to cluster social media posts.
+Most hate speech-related studies use supervised learning techniques that range from traditional ML to deep learning models, and a few use unsupervised learning techniques to cluster the social media posts.
 %
 Support Vector Machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and Logistic Regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
 %
-\citet{davidson2017automated} found that SVM and LR perform significantly better than traditional ML techniques such as Naive Bayes, Decision Trees, and Random Forests.
+\citet{davidson2017automated} found that SVM and LR perform significantly better than other traditional ML techniques such as Naive Bayes, Decision Trees, and Random Forests.
 %
 \citet{badjatiya2017deep} experimented with various configurations of word embeddings and two deep learning models: a convolutional neural network (CNN) and a long short-term memory (LSTM) model.
 %
 They found that CNN performs better than LSTM and that using pre-trained word embeddings such as GloVe does not result in better classification performance than using random embeddings.
 %
-\citet{rodriguez2019automatic} use the unsupervised learning method, K-means clustering, to cluster social media posts to identify topics that potentially promote hate speech.
+\citet{rodriguez2019automatic} use the unsupervised learning method, K-means clustering, to cluster social media posts for identifying topics that potentially promote hate speech.
 %
 \todo[inline]{Provide example of BERT model for hate speech detection}
 
 \section{Machine Learning models with rejection}
+\label{sec:related-work-rejection}
 Several studies promoted the concept of rejecting ML predictions when the risk of producing an incorrect prediction is too high \citep{sayin2021science, hendrickx2021machine, woo2020future}.
 %
 \citet{hendrickx2021machine} identified three architectures for rejecting ML predictions: the \emph{separated}, the \emph{integrated}, and the \emph{dependent} rejector.
@@ -142,6 +152,7 @@ While they experimented with a range of different cost values, we go further by 
 Thus, we obtain a threshold that captures the implications of machine decisions from a human perspective.
 
 \section{Value assessment}
+\label{sec:related-work-value-assessment}
 \todo[inline]{Explain what we mean by value and why we should integrate it into the design of a hate speech detection system.}
 
 
@@ -192,7 +203,7 @@ Each test checks different criteria, such as the ability to cope with spelling v
 %
 Our approach is different since we focus on measuring the performance of classification models with a reject option.
 %
-\citet{olteanu2017limits} promote using \textit{human-centred} metrics that measure the human-perceived value of hate speech detection algorithms.
+\citet{olteanu2017limits} promote using \textit{human-centred} metrics that measure the human-perceived value of hate speech classification models.
 %
 They found that the perceived value varies for fixed machine performance measurements, such as precision, and that it depends on the user characteristics and the type of classification errors (an offensive tweet labelled as hate (low impact) and a neutral tweet labelled as hate (high impact)) \citep{olteanu2017limits}.
 %
