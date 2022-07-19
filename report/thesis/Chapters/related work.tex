@@ -7,7 +7,7 @@ In section \ref{sec:related-work-rejection}, we discuss the different types of M
 %
 Section \ref{sec:related-work-value-assessment} discusses the main challenges of assessing the values of (in)correct and rejected predictions in the hate speech domain.
 %
-Finally, we discuss the shortcomings of standard machine metrics, such as accuracy, to evaluate detection systems and why human-centred metrics are promising.
+Finally, we discuss the shortcomings of standard machine metrics in section \ref{sec:related-work-evaluation-metrics}, such as accuracy, to evaluate detection systems and why human-centred metrics are promising.
 
 \section{Hate speech: definition and challenges}
 \label{sec:related-work-challenges}
@@ -40,15 +40,15 @@ They also found that the inter-rater reliability value does not increase when sh
 In the hate speech domain, we need to careful with creating biased detection systems that are trained on biased datasets.
 % Therefore, hate speech detection is challenging, especially in computer science, since we have to be careful with bias.
 %
-Most annotated hate speech datasets that are publicly available are likely to be biased.
+% Most annotated hate speech datasets that are publicly available are likely to be biased.
 %
 % Annotating hate speech datasets is challenging because social media data follows a skewed distribution since there are many more neutral social media posts than hateful ones \citep{fortuna2018survey}.
 %
-Datasets such as \citet{waseem2016hateful} or \citet{basile2019semeval} collected their data using specific keywords that can introduce \textit{sample retrieval} bias and annotated their data using only three independent annotators that might result in \textit{sample annotation} bias \citep{balayn2021automatic}.
+Hate speech datasets such as \citet{waseem2016hateful} or \citet{basile2019semeval} collected their data using specific keywords that can introduce \textit{sample retrieval} bias and annotated their data using only three independent annotators that might result in \textit{sample annotation} bias \citep{balayn2021automatic}.
 %
-Automated classification models will likely become biased in their predictions if we train them on biased datasets (\emph{garbage in, garbage out}).
+Automated classification models will likely become biased in their predictions if we train them on biased datasets (the \emph{garbage in, garbage out} principle).
 %
-This phenomenon becomes most notable when applying pre-trained classification models to new and unseen data in deployment.
+This phenomenon becomes most notable when applying pre-trained classification models to new and unseen data.
 %
 For example, \citet{grondahl2018all} and \citet{arango2019hate} report significant drops in F1 scores when training a hate speech classification model on one dataset and evaluating it on another.
 %
@@ -64,7 +64,7 @@ These results further strengthen our stance that we should not detect hate speec
 %
 In this section, we will list the state-of-the-art Natural Language Processing (NLP) techniques for automatic hate speech detection from literature.
 %
-Several excellent surveys outlined the different detection methods from literature  \citep{fortuna2018survey, schmidt2019survey}.
+Several excellent surveys outlined the different detection methods \citep{fortuna2018survey, schmidt2019survey}.
 %
 First, we will discuss the different features used in the classification models.
 %
@@ -87,7 +87,7 @@ They also found that using demographic information such as the location does not
 \citet{badjatiya2017deep} experimented with different word embeddings: fastText\footnote{\url{https://fasttext.cc/}}, GloVe\footnote{\url{https://nlp.stanford.edu/projects/glove/}}, and random word embeddings.
 %
 
-Most hate speech-related studies use supervised learning techniques that range from traditional ML to deep learning (DL) models, and a few use unsupervised learning techniques to cluster the social media posts.
+Most studies use supervised learning techniques that range from traditional ML to deep learning (DL) classification models, and a few use unsupervised learning techniques to cluster the social media posts.
 %
 Support Vector Machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and Logistic Regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
 %
@@ -100,15 +100,17 @@ They found that CNN performs better than LSTM and that using pre-trained word em
 Given the recent popularity of Bidirectional Encoder Representations from Transformers (BERT) models \citep{devlin2018bert} in the NLP field, studies such as \citep{alatawi2021detecting} found that BERT models achieve slightly better classification performance than DL models.
 %
 \citet{rodriguez2019automatic} use the unsupervised learning method, K-means clustering, to cluster social media posts for identifying topics that potentially promote hate speech.
+%
+Based on the findings of these studies, we will experiment with three models in our project: LR, CNN, and DistilBERT (a light-weight version of BERT \citep{sanh2019distilbert}).
 
 
 \section{Machine Learning models with rejection}
 \label{sec:related-work-rejection}
-Several studies promoted the concept of rejecting ML predictions when the risk of producing an incorrect prediction is too high so that a human gives the final judgement instead \citep{sayin2021science, hendrickx2021machine, woo2020future}.
+Several related studies promoted the concept of rejecting ML predictions when the risk of producing an incorrect prediction is too high so that a human gives the final judgement instead \citep{sayin2021science, hendrickx2021machine, woo2020future}.
 %
 \citet{hendrickx2021machine} identified three ways for rejecting ML predictions: the \emph{separated}, the \emph{integrated}, and the \emph{dependent} way.
 %
-In the separated way, the rejectors decides beforehand whether a data sample needs to be handled by the classification model or by a human \citep{hendrickx2021machine}.
+In the separated way, the rejector decides beforehand whether a data sample needs to be handled by the classification model or by a human \citep{hendrickx2021machine}.
 %
 In the integrated way, the rejector is integrated in the classification model\citep{hendrickx2021machine}.
 %
@@ -148,9 +150,9 @@ In this work, we apply the dependent way since it supports any existing classifi
 %
 The most relevant work is from \citet{de2000reject} since their confidence metric takes the value of (in)correct and rejected predictions) into account.
 %
-While they experimented with a range of different cost values, we go further by employing a value-sensitive approach, which determines cost values based on how users feel regarding machine decisions using a survey study with crowd workers.
+While they experimented with a range of different cost values, we go further by employing a value-sensitive approach, which determines cost values based on how users feel regarding machine predictions using a survey study with crowd workers.
 %
-Thus, we obtain a threshold that captures the implications of machine decisions from a human perspective.
+Thus, we obtain a rejection threshold that captures the implications of machine predictions from a human perspective.
 
 \section{Value assessment}
 \label{sec:related-work-value-assessment}
@@ -158,11 +160,11 @@ Thus, we obtain a threshold that captures the implications of machine decisions 
 %
 \citet{sayin2021science} and \citet{casati2021value} suggest that we should identify context-specific \emph{values} and incorporate them in the design of a hybrid human-AI system.
 %
-We adhere to these suggestions in our project since we develop a hate speech classification model with a reject option that incorporates value.
+We adhere to the suggestions of these studies in our project since we develop a hate speech classification model with a reject option that incorporates human value.
 %
 As explained in the \nameref{ch:introduction}, we have costs of incorrect and rejected predictions and gains of correct predictions.
 %
-We can express the costs of incorrect (FP and FN predictions) and rejected predictions as negative values and the gains of correct (TP and TN predictions) as positive values.
+We can express the costs of incorrect (FP and FN) and rejected predictions as negative values and the gains of correct (TP and TN) predictions as positive values.
 %
 We should weigh these values according to the task of case hate speech detection \citep{sayin2021science}.
 %
@@ -174,7 +176,7 @@ According to the VSD approach, it is key to understand the stakeholders of the s
 %
 We consider two different stakeholders: the social media platforms and the users.
 %
-The goal is to retrieve value ratios between rejection, FP, FN, TP, and TN predictions from the perspective of both stakeholders.
+The goal is to retrieve the value ratios between rejection, FP, FN, TP, and TN predictions from the perspective of both stakeholders.
 %
 We would like to know whether an FN prediction is, for example, two times worse than an FP prediction.
 %
@@ -184,7 +186,7 @@ First, we could define the values using an objective measure, such as time or mo
 %
 Second, we could define the values subjectively, for example by analyzing people's stance towards the consequence of incorrect predictions in hate speech detection.
 %
-In this section, we try to assess the values of both stakeholders emperically and conceptually and explain why we in the end decided to assess the values of the social media users emperically.
+In this section, we try to assess the values of both stakeholders emperically and conceptually and explain why we eventually go for an emperical analysis of the values of the social media users only.
 %
 
 
@@ -221,7 +223,7 @@ In this section, we try to assess the values of both stakeholders emperically an
 
 In this section, we explain the difficulties of defining the values of TP, TN, FP, FN, and rejected predictions in hate speech detection using objective measurements.
 %
-We do this by following the conceptual approach for both stakeholders by looking at some related work.
+We do this by first following the conceptual approach for both stakeholders by looking at some related work to see if the emperical approach is possible at all.
 %
 
 First, we look at the social media company as a stakeholder.
@@ -230,7 +232,7 @@ We can retrieve the value of rejection by looking at how much time a human moder
 %
 We can convert this into money by taking the moderator's salary into account.
 %
-We could also argue that the value of a TP and a TN is equal to the negative value of rejection since we saved human effort by letting the classification model correctly predict whether something is hateful or not.
+We could also argue that the value of a TP and a TN prediction is equal to the negative value of rejection since we saved human effort by letting the classification model correctly predict whether something is hateful or not.
 %
 The problem, however, starts to arise when we look at the FP and the FN predictions.
 %
@@ -238,9 +240,9 @@ How can we express the values of FP and FN predictions in terms of money or time
 %
 The main problem is that most social media companies are not transparent in how they moderate hate speech \citep{klonick2017new}.
 %
-So we do not know the exact objective values of rejected and incorrect predictions for these companies.
+So it is infeasible to assess the values of the social media companies either conceptually or emperically.
 %
-There do exist country-specific fines.
+When looking at the consequences of FN predictions then we can also look at governmental fines.
 %
 For example, Germany approved a plan where social media companies can be fined up to 50 million euros if they do not remove hate speech in time \citep{bbc-firms-face-fine-germany}.
 %
@@ -250,7 +252,7 @@ Defining the value of FP cases is even more difficult.
 %
 It is unclear how filtering out too much content would affect the company in terms of money/time lost.
 %
-Therefore, we abstain from estimating the values from the perspective of these companies as the stakeholder both emperically and conceptually.
+Therefore, we abstain from estimating the values from the perspective of the companies as the stakeholder.
 
 Second, we look at the social media users as the stakeholder.
 %
@@ -266,7 +268,7 @@ Therefore, we need to figure out how we should weigh the values of FP and FN pre
 %
 We abstain from using time as a unit since it does not make sense to express the consequences of hate speech or the benefits of freedom of speech in time.
 %
-Therefore, we want to look at the value of freedom of speech and hate speech from an economic conceptual perspective.
+Therefore, we want to look at the value of freedom of speech and hate speech from an economic perspective.
 %
 However, we noticed a lack of research in this area.
 %
@@ -284,11 +286,11 @@ The authors explained that there are too many uncertainties \citep{sunstein2018d
 %
 We can assume that there are values of free speech, but it is too difficult to quantify them \citep{sunstein2018does}.
 %
-For example, terrorist organizations use free speech to recruit people and call for acts of violence online \citep{sunstein2018does}.
+Terrorist organizations use free speech to recruit people and call for acts of violence online \citep{sunstein2018does}.
 %
 At the same time, most other hateful posts will not ever result in actual acts of violence \citep{sunstein2018does}.
 %
-Therefore, cost values using objective measurements are often case-specific and cannot be defined generically.
+Therefore, value assessment using objective measurements is already difficult for specific cases let alone for in general.
 %
 There is a nonquantifiable risk that acts of violence will happen in the unknown future \citep{sunstein2018does}.
 %
@@ -310,11 +312,11 @@ From section \ref{sec:objective-assessment}, we concluded that from related work
 %
 Instead, we will focus on the subjective measurement of values: what is people's stance towards (in)correct and rejected predictions in hate speech detection?
 %
-We do only consider the social media users as the stakeholder since they are the most affected by the consequences of hate speech detection and since it does not make sense to measure the subjective values of the social media platforms.
+We do only consider the social media users as the stakeholder since they are the most affected by the consequences of hate speech detection.
 %
-It is best to measure subjective values of the social media users in an emperical manner, for example by doing a survey study.
+In our work, we will assess the value of the social media users in an emperical manner (through a survey) since no other study exists where people's stance towards machine decisions is measured in the hate speech domain.
 %
-In this survey, we could ask social media users what their stance is towards TP, TN, FP, FN, and rejected predictions in hate speech detection.
+We ask social media users in our sruvey what their stance is towards TP, TN, FP, FN, and rejected predictions in hate speech detection.
 %
 We could use the commonly used Likert scales as our measurement scale.
 %
@@ -326,27 +328,27 @@ Therefore, in section \ref{sec:me}, we will explain why the technique called Mag
 \label{sec:likert}
 Likert scales are widely used in academic research for retrieving the opinions of a group of subjects.
 %
-Likert scales are a series of multiple Likert-type questions where subjects can answer questions with several response alternatives \cite{boone2012analyzing}.
+Likert scales are a series of multiple Likert-type questions where subjects can answer questions with several response alternatives \citep{boone2012analyzing}.
 %
 For example, we could use a bipolar scale with seven response alternatives ranging from 'strongly disagree' to 'strongly agree', including a 'neutral' midpoint.
 %
-However, there is a lot of discussion in the literature about how we should analyze these Likert scales \cite{boone2012analyzing, allen2007likert, norman2010likert, murray2013likert}.
+However, there is a lot of discussion in the literature about how we should analyze these Likert scales \citep{boone2012analyzing, allen2007likert, norman2010likert, murray2013likert}.
 %
-The scale of the questions is ordinal, which means that we do know the ranking of the responses, but we do not have an exact measurement of the distances between the response items \cite{allen2007likert}.
+The scale of the questions is ordinal, which means that we do know the ranking of the responses, but we do not have an exact measurement of the distances between the response items \citep{allen2007likert}.
 %
 For example, we know that 'strongly agree' is higher in rank than 'agree', but not the exact distance between the two responses and whether it is greater than the distance between the 'neutral' and the 'somewhat agree' responses.
 %
-Therefore, we technically cannot use parametric statistics, such as calculating the mean, when analyzing the data \cite{allen2007likert}.
+Therefore, we technically cannot use parametric statistics, such as calculating the mean, when analyzing the data \citep{allen2007likert}.
 %
-Other papers argue that we can treat a Likert scale that consists of multiple Likert items as interval data and, therefore, applying parametric statistics will not affect the conclusions \cite{boone2012analyzing, norman2010likert, murray2013likert}.
+Other papers argue that we can treat a Likert scale that consists of multiple Likert items as interval data and, therefore, applying parametric statistics will not affect the conclusions \citep{boone2012analyzing, norman2010likert, murray2013likert}.
 %
-So, we can calculate mean scores for TP, TN, FP, FN, and rejection scenarios and compare these with each other.
+So, we can calculate mean scores for TP, TN, FP, FN, and rejected predictions and compare these with each other.
 %
-For example, we can then verify that the mean value of FN cases is greater than the mean value of FP cases and conclude that the negative value of an FN is smaller than the negative value of an FP.
+For example, we can then verify that the mean value of FN cases is smaller than the mean value of FP cases and conclude that FN predictions are worse than FP predictions.
 %
-Analyzing Likert scales from our surveys would at most provide us with interval data (data for which we know the order, and we can measure the distances, but there is no true zero point \cite{allen2007likert}).
+Analyzing Likert scales would at most provide us with interval data (data for which we know the order, and we can measure the distances, but there is no true zero point \citep{allen2007likert}).
 %
-However, we need to have ratio data in this project since we want to know the exact value ratios of the TP, TN, FP, FN, and rejection scenarios.
+However, we need to have ratio data in this project since we want to know the exact value ratios between the TP, TN, FP, FN, and rejected predictions.
 
 \subsubsection{Magnitude Estimation}
 \label{sec:me}
@@ -354,17 +356,17 @@ In section \ref{sec:likert}, we concluded that Likert scales are not suitable si
 %
 In this research, we want to experiment with a technique called Magnitude Estimation (ME).
 %
-The ME technique originates from psychophysicists where human subjects need to give a quantitative estimation of sensory magnitudes \cite{stevens1956direct}.
+The ME technique originates from psychophysicists where human subjects need to give a quantitative estimation of sensory magnitudes \citep{stevens1956direct}.
 %
-For example, in one experiment, human subjects are asked to assign any number that reflects their perception of the loudness of a range of sounds \cite{stevens1956direct}.
+For example, in one experiment, human subjects are asked to assign any number that reflects their perception of the loudness of a range of sounds \citep{stevens1956direct}.
 %
 If the human subjects perceive the succeeding sound as twice as loud, they should assign a number to it that is twice as large.
 %
-Researchers applied the ME technique to different types of physical stimuli (line length, brightness, duration, etc.) and proved that the results are reproducible and that the data has ratio properties \cite{moskowitz1977magnitude}.
+Researchers applied the ME technique to different types of physical stimuli (line length, brightness, duration, etc.) and proved that the results are reproducible and that the data has ratio properties \citep{moskowitz1977magnitude}.
 %
-Other works have shown that the ME technique is also useful for rating more abstract types of stimuli, such as judging the relevance of documents \cite{maddalena2017crowdsourcing}, the linguistic acceptability of sentences \cite{bard1996magnitude}, the strength of political opinions \cite{lodge1979comparisons, lodge1976calibration}, and the usability of system interfaces \cite{mcgee2004master}.
+Other works have shown that the ME technique is also useful for rating more abstract types of stimuli, such as judging the relevance of documents \citep{maddalena2017crowdsourcing}, the linguistic acceptability of sentences \citep{bard1996magnitude}, the strength of political opinions \citep{lodge1979comparisons, lodge1976calibration}, and the usability of system interfaces \citep{mcgee2004master}.
 %
-Therefore, we think that ME is a promising method for judging the value ratios of hate speech detection scenarios.
+Therefore, we think that ME is a promising method for judging the value ratios of the different types of predictions in hate speech detection.
 %
 
 %
@@ -372,68 +374,71 @@ The main advantage of ME is that it provides the ratio scale properties we need.
 %
 Another advantage is that the scale is unbounded compared to other commonly used response scales, such as Likert scales.
 %
-For example, suppose we first show a scenario and the subject provides a 'strongly disagree' judgment.
+For example, suppose the subject provides a 'strongly disagree' judgment for the first stimulus.
 %
-Suppose we now present an even worse scenario.
+Suppose we now present an even worse stimulus.
 %
 The subject is now limited to the response items in the Likert scale and can only give the same 'strongly disagree' judgement.
 %
-We do not have this problem when using ME because the subject always has the freedom to assign a value of disagreement that is even larger.
+We do not have this problem when using ME because the subject always has the freedom to assign a larger value of disagreement.
 %
-However, there are two main drawbacks of using ME.
+However, there are two drawbacks of using ME in our use-case.
 %
-First, we need to normalize the results.
+First, we need to normalize the results since each subject uses a different range of values.
 %
-Second, it can be hard to validate if we can use ME to measure the subjects' judgements for different scenarios of hate speech detection.
+Second, since ME has not been applied to the hate speech domain before, we need to validate the ME scale to verify that it actually measures what we want to know.
 %
 
 %
-The resulting data needs to be normalized since each subject can use any value they like.
+The data needs to be normalized since each subject can use any value they like.
 %
 For example, one may judge the scenarios using values of 1, 2, and 10, while another may use 100, 200, and 1000.
 %
-There are different solutions for normalizing ME data, such as modulus normalization \cite{moskowitz1977magnitude}.
+There are different solutions for normalizing ME data, such as modulus normalization \citep{moskowitz1977magnitude}.
 %
-The most commonly used method for modulus normalization is geometric averaging since this preserves the ratio information \cite{moskowitz1977magnitude, mcgee2004master}.
+The most commonly used method for modulus normalization is geometric averaging since this preserves the ratio information \citep{moskowitz1977magnitude, mcgee2004master}.
 %
-However, as opposed to the unipolar scales used in \cite{bard1996magnitude, mcgee2004master}, we cannot apply geometric averaging to bipolar scales (disagree-agree).
+However, as opposed to the unipolar scales (with only positive values) used in \citep{bard1996magnitude, mcgee2004master}, we cannot apply geometric averaging to bipolar scales (disagree-agree).
 %
-By including 0 (neutral) and negative values (disagree), we cannot use geometric averaging anymore because it uses log calculations \cite{moskowitz1977magnitude}.
+By including 0 (neutral) and negative values (disagree), we cannot use geometric averaging anymore because it uses log calculations \citep{moskowitz1977magnitude}.
 %
-Using the algorithmic mean is also not an option since it would destroy the ratio scale properties \cite{moskowitz1977magnitude}.
+Using the algorithmic mean is also not an option since it would destroy the ratio scale properties \citep{moskowitz1977magnitude}.
 %
-Therefore, we can normalize the magnitude estimates for bipolar scales by dividing all estimates of each subject by the maximum given value.
+Therefore, we can normalize the magnitude estimates for bipolar scales by dividing all estimates of each subject by the maximum given value \citep{moskowitz1977magnitude}.
 %
 This way, all magnitudes estimates are in the range [-100, 100] while maintaining the ratio properties.
 %
 
 %
-Most papers that use the ME method apply some form of validation. Cross-modality validation is a technique that is often applied to validate the ME results \cite{bard1996magnitude}.
+Most papers that use the ME method in a new domain apply some form of validation. Cross-modality validation is a technique that is often applied to validate the ME results \citep{bard1996magnitude}.
 %
-Psychophysicists compare the magnitude estimates to the physical stimuli \cite{bard1996magnitude}.
+Psychophysicists compare the magnitude estimates to the physical stimuli \citep{bard1996magnitude}.
 %
-They analyze the correlation between the magnitude estimates and the physical stimuli by taking the log of each value and plotting them against each other \cite{bard1996magnitude}.
+They analyze the correlation between the magnitude estimates and the physical stimuli by taking the log of each value and plotting them against each other \citep{bard1996magnitude}.
 %
 In the case of estimating line lengths, we can easily vary the line length, for example, by showing a line that is twice as long as the previous line. Subjects can then estimate the line length using a number twice as large.
 %
 However, this becomes more difficult in the social science and psychology domains.
 %
-In hate speech detection and other applications in social science and psychology, we do not have an exact measure of the stimulus \cite{bard1996magnitude}.
+In hate speech detection and other applications in social science and psychology, we do not have an exact measure of the stimulus \citep{bard1996magnitude}.
 %
-However, related work has shown that ME is still a suitable technique for eliciting opinions about different types of non-physical stimuli \cite{bard1996magnitude, mcgee2004master, maddalena2017crowdsourcing, lodge1979comparisons}.
+However, related work has shown that ME is still a suitable technique for eliciting opinions about different types of non-physical stimuli \citep{bard1996magnitude, mcgee2004master, maddalena2017crowdsourcing, lodge1979comparisons}.
 %
-We can validate the magnitude estimates by adopting the cross-modality technique but instead compare judgements against judgements \cite{bard1996magnitude, lodge1979comparisons}.
+We can validate the magnitude estimates by adopting the cross-modality technique but instead compare judgements against judgements \citep{bard1996magnitude, lodge1979comparisons}.
 %
-Some papers analyze the correlation between different ME scales for validation, such as handgrip measurements or drawing lines \cite{bard1996magnitude, lodge1976calibration}.
+Some papers analyze the correlation between different ME scales for validation, such as handgrip measurements or drawing lines \citep{bard1996magnitude, lodge1976calibration}.
 %
 Others compare ME with another validated scale that can be of any type.
 %
-For example, in \cite{maddalena2017crowdsourcing} about judging the relevance of documents, the authors compared the ME scale with two validated ordinal scales for the same dataset \cite{maddalena2017crowdsourcing}.
+For example, in \cite{maddalena2017crowdsourcing} about judging the relevance of documents, the authors compared the ME scale with two validated ordinal scales for the same dataset \citep{maddalena2017crowdsourcing}.
 %
-In our work, we also validate our findings by checking the correlation between the ME scale and another scale.
+In \citet{roitero2018fine}, the authors applied cross-modality analysis between a bounded scale that consists of 100 levels (now known as the 100-level scale) and the ME scale and found that they were positively correlated.
+%
+In our work, we follow the approach from \citet{roitero2018fine} since we also validate our findings by checking the correlation between the ME scale and the 100-level scale.
 %
 
 \section{Evaluation metrics}
+\label{sec:related-work-evaluation-metrics}
 Most hate speech-related studies evaluate their classification methods using standard \textit{machine} metrics such as accuracy, precision, recall, or F1.
 % 
 Evaluation of classification models with a reject option is often done by analyzing the accuracy and the coverage of the classification model.
@@ -448,12 +453,12 @@ Therefore, the authors presented a suite that consists of 29 carefully selected 
 %
 Each test checks different criteria, such as the ability to cope with spelling variations or detect neutral content containing slurs \citep{rottger2020hatecheck}.
 %
-Our approach is different since we focus on measuring the performance of classification models with a reject option.
+Our approach is different since we focus on measuring the value of classification models with a reject option.
 %
 \citet{olteanu2017limits} promote using \textit{human-centred} metrics that measure the human-perceived value of hate speech classification models.
 %
-They found that the perceived value varies for fixed machine performance measurements, such as precision, and that it depends on the user characteristics and the type of classification errors (an offensive tweet labelled as hate (low impact) and a neutral tweet labelled as hate (high impact)) \citep{olteanu2017limits}.
+They found that the perceived value varies while the machine performance measurements, such as precision, remains fixed and that the perceived value depends on the user characteristics and the type of classification errors (an offensive tweet labelled as hate (low impact) and a neutral tweet labelled as hate (high impact)) \citep{olteanu2017limits}.
 %
 \citet{casati2021value} propose developing new metrics for evaluating ML models with a reject option that considers domain-specific values.
 %
-Our work aligns with both studies since we focus on creating a human-centred metric for evaluating hate speech detection systems with a reject option that incorporates value derived from a survey study.
+Our work aligns with both studies since we create a human-centred metric for evaluating hate speech classification models with a reject option that incorporates value derived from a survey study.
