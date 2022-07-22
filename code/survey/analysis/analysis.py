@@ -174,13 +174,16 @@ class Analysis:
             pd.DataFrame: dataframe that consists of all normalized
             magnitude estimates.
         """
+        prolific_ids = data.loc[:, "prolificid. "]
         mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
         normalized_mes = cls.normalize(mes).mul(100)
         hatefulness = cls.hatefulness(
             data=data, scale="ME", num_scenarios=num_scenarios
         )
         attention_checks = cls.attention_checks(data)
-        return pd.concat([normalized_mes, hatefulness, attention_checks], axis=1)
+        return pd.concat(
+            [prolific_ids, normalized_mes, hatefulness, attention_checks], axis=1
+        )
 
     @classmethod
     def convert_100_data(
@@ -197,12 +200,13 @@ class Analysis:
             pd.DataFrame: dataframe that consists of all normalized
             100-level scale values.
         """
+        prolific_ids = data.loc[:, "prolificid. "]
         s100 = cls.s100_values(data=data, num_scenarios=num_scenarios)
         hatefulness = cls.hatefulness(
             data=data, scale="S100", num_scenarios=num_scenarios
         )
         attention_checks = cls.attention_checks(data)
-        return pd.concat([s100, hatefulness, attention_checks], axis=1)
+        return pd.concat([prolific_ids, s100, hatefulness, attention_checks], axis=1)
 
     @classmethod
     def print_means(cls, data: pd.DataFrame) -> None:
