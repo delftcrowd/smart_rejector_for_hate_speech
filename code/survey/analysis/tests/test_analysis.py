@@ -446,6 +446,46 @@ class TestAnalysis(unittest.TestCase):
 
         self.assertTrue(demo_data.equals(expected))
 
+    def test_filter_data(self):
+        mes_demo = pd.DataFrame(
+            {
+                "Participant id": ["1", "2", "3", "4"],
+                "Sex": ["Male", "Female", "Male", "Female"],
+            }
+        )
+
+        mes = pd.DataFrame(
+            {"prolificid. ": ["1", "2", "3", "4"], "TP1": [1.5, 2.0, 3.5, 6.5]}
+        )
+
+        filtered_data = Analysis.filter_data(
+            demo_data=mes_demo, data=mes, column_name="Sex", column_value="Male"
+        )
+        expected = pd.DataFrame(
+            {
+                "prolificid. ": [
+                    "1",
+                    "3",
+                ],
+                "TP1": [1.5, 3.5],
+            }
+        )
+        self.assertTrue(filtered_data.equals(expected))
+
+        filtered_data = Analysis.filter_data(
+            demo_data=mes_demo, data=mes, column_name="Sex", column_value="Female"
+        )
+        expected = pd.DataFrame(
+            {
+                "prolificid. ": [
+                    "2",
+                    "4",
+                ],
+                "TP1": [2.0, 6.5],
+            }
+        )
+        self.assertTrue(filtered_data.equals(expected))
+
 
 if __name__ == "__main__":
     unittest.main()
