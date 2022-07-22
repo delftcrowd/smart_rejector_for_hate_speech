@@ -429,6 +429,23 @@ class TestAnalysis(unittest.TestCase):
 
         self.assertTrue(plot_data.equals(expected))
 
+    def test_filter_demographics_data(self):
+        mes_demo = pd.DataFrame(
+            {
+                "Participant id": ["1", "2", "3", "4"],
+                "Sex": ["Male", "Female", "Male", "Female"],
+            }
+        )
+
+        mes = pd.DataFrame({"prolificid. ": ["1", "2"], "TP1": [1.5, 2.0]})
+
+        demo_data = Analysis.filter_demographics_data(demo_data=mes_demo, data=mes)
+        expected = pd.DataFrame(
+            {"Participant id": ["1", "2"], "Sex": ["Male", "Female"]}
+        )
+
+        self.assertTrue(demo_data.equals(expected))
+
 
 if __name__ == "__main__":
     unittest.main()
