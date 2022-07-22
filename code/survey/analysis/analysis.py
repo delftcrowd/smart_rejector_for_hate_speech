@@ -300,9 +300,22 @@ class Analysis:
         plt.ylabel("Percentage")
         plt.title("Percentage of (non)hateful rated scenarios")
         plt.show()
-    
+
     @staticmethod
-    def filter_data(demo_data: pd.DataFrame, data: pd.DataFrame, column_name: str, column_value: any) -> pd.DataFrame:
+    def filter_data(
+        demo_data: pd.DataFrame, data: pd.DataFrame, column_name: str, column_value: any
+    ) -> pd.DataFrame:
+        """Filters the survey data on a specific column name and column value.
+
+        Args:
+            demo_data (pd.DataFrame): the demographics data.
+            data (pd.DataFrame): the survey data.
+            column_name (str): the column to filter on.
+            column_value (any): the column value to filter on.
+
+        Returns:
+            pd.DataFrame: the filtered survey data.
+        """
         filtered_demo_data = demo_data.groupby([column_name]).get_group(column_value)
         filtered_ids = filtered_demo_data.loc[:, "Participant id"].tolist()
         return data.loc[data["prolificid. "].isin(filtered_ids)].reset_index(drop=True)
@@ -311,9 +324,22 @@ class Analysis:
     def filter_demographics_data(
         demo_data: pd.DataFrame, data: pd.DataFrame
     ) -> pd.DataFrame:
+        """Filters the demographic data.
+
+        It filters out all rows with prolific ids that do not occur in the survey data.
+
+        Args:
+            demo_data (pd.DataFrame): the demographics data to filter.
+            data (pd.DataFrame): the survey data.
+
+        Returns:
+            pd.DataFrame: the filtered demographics data.
+        """
         prolific_ids = data.loc[:, "prolificid. "].tolist()
-        return demo_data.loc[demo_data["Participant id"].isin(prolific_ids)].reset_index(drop=True)
-        
+        return demo_data.loc[
+            demo_data["Participant id"].isin(prolific_ids)
+        ].reset_index(drop=True)
+
     @staticmethod
     def reliability(data: pd.DataFrame, scale: str, type: str = "") -> float:
         """Calculates Krippendorffs's alpha values for the complete scale data
