@@ -300,7 +300,20 @@ class Analysis:
         plt.ylabel("Percentage")
         plt.title("Percentage of (non)hateful rated scenarios")
         plt.show()
+    
+    @staticmethod
+    def filter_data(demo_data: pd.DataFrame, data: pd.DataFrame, column_name: str, column_value: any) -> pd.DataFrame:
+        filtered_demo_data = demo_data.groupby([column_name]).get_group(column_value)
+        filtered_ids = filtered_demo_data.loc[:, "Participant id"].tolist()
+        return data.loc[data["prolificid. "].isin(filtered_ids)].reset_index()
 
+    @staticmethod
+    def filter_demographics_data(
+        demo_data: pd.DataFrame, data: pd.DataFrame
+    ) -> pd.DataFrame:
+        prolific_ids = data.loc[:, "prolificid. "].tolist()
+        return demo_data.loc[demo_data["Participant id"].isin(prolific_ids)].reset_index()
+        
     @staticmethod
     def reliability(data: pd.DataFrame, scale: str, type: str = "") -> float:
         """Calculates Krippendorffs's alpha values for the complete scale data
