@@ -1,0 +1,19 @@
+\chapter{Value-sensitive rejection}
+\todo[inline]{Explain notations used}
+
+\section{Value metric}
+\todo[inline]{Explain and proof our value metric and how we use it to measure the total value of a ML model with a reject option}
+
+\section{State-of-the-art }
+\subsection{Models}
+\todo[inline]{Explain that we are going to use one traditional ML model (Logistic Regression since in related work we found that this got the best performance), one DL model (CNN because of the same reason), and a transformer model (DistilBERT given the recent popularity of transformer models)}
+
+\subsection{Calibration}
+\todo[inline]{Explain what model calibration is and why it's necessary}
+
+\subsection{Datasets}
+\todo[inline]{Explain that we are going to use the SemEval and Waseem datasets and the concepts of seen and unseen data}
+
+\subsection{Calculating the total value}
+\todo[inline]{Explain how we are going to apply our metric to the trained state-of-the-art models to calculate the optimal rejection threshold given the values of TP, TN, FP, FN, and rejection (that we still need estimate)}
+\todo[inline]{Explain that we use Kernel Density Estimation to calculate the PDF functions (or stick to prediction counts as in the paper).}
