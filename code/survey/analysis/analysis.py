@@ -426,12 +426,19 @@ class Analysis:
         print("Spearman: ", stats.spearmanr(mes, s100))
         print("Kendall: ", stats.kendalltau(mes, s100))
 
-    def print_kruskal_wallis(*datasets):
+    def print_group_statistics(*datasets):
+        """Prints all group statistics between all passed dataset lists."""
         args = []
         for dataset in datasets:
-            scores = dataset.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1).median().to_list()
+            scores = (
+                dataset.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1).median().to_list()
+            )
+            print("Shapiro Wilk normality test: ", stats.shapiro(scores))
             args.append(scores)
+
+        print("Bartlett's test for equal variances:  ", stats.bartlett(*args))
         print("Kruskal-Wallis test: ", stats.kruskal(*args))
+        print("One-way ANOVA: ", stats.f_oneway(*args))
 
     @staticmethod
     def append_durations(data: pd.DataFrame) -> pd.DataFrame:
