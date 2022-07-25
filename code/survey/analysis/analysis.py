@@ -320,10 +320,11 @@ class Analysis:
         if column_value in demo_data_column.groups.keys():
             filtered_demo_data = demo_data_column.get_group(column_value)
             filtered_ids = filtered_demo_data.loc[:, "Participant id"].tolist()
-            return data.loc[data["prolificid. "].isin(filtered_ids)].reset_index(drop=True)
+            return data.loc[data["prolificid. "].isin(filtered_ids)].reset_index(
+                drop=True
+            )
         else:
             return pd.DataFrame()
-       
 
     @staticmethod
     def filter_demographics_data(
@@ -424,6 +425,13 @@ class Analysis:
         print("Pearson: ", stats.pearsonr(mes, s100))
         print("Spearman: ", stats.spearmanr(mes, s100))
         print("Kendall: ", stats.kendalltau(mes, s100))
+
+    def print_kruskal_wallis(*datasets):
+        args = []
+        for dataset in datasets:
+            scores = dataset.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1).median().to_list()
+            args.append(scores)
+        print("Kruskal-Wallis test: ", stats.kruskal(*args))
 
     @staticmethod
     def append_durations(data: pd.DataFrame) -> pd.DataFrame:
