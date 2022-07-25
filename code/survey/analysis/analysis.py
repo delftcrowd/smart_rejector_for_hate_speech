@@ -316,9 +316,14 @@ class Analysis:
         Returns:
             pd.DataFrame: the filtered survey data.
         """
-        filtered_demo_data = demo_data.groupby([column_name]).get_group(column_value)
-        filtered_ids = filtered_demo_data.loc[:, "Participant id"].tolist()
-        return data.loc[data["prolificid. "].isin(filtered_ids)].reset_index(drop=True)
+        demo_data_column = demo_data.groupby([column_name])
+        if column_value in demo_data_column.groups.keys():
+            filtered_demo_data = demo_data_column.get_group(column_value)
+            filtered_ids = filtered_demo_data.loc[:, "Participant id"].tolist()
+            return data.loc[data["prolificid. "].isin(filtered_ids)].reset_index(drop=True)
+        else:
+            return pd.DataFrame()
+       
 
     @staticmethod
     def filter_demographics_data(
@@ -365,11 +370,12 @@ class Analysis:
             level_of_measurement = "interval"
 
         data = data.filter(regex=column, axis=1).values.tolist()
-        alpha = krippendorff.alpha(
-            reliability_data=data, level_of_measurement=level_of_measurement
-        )
-
-        return alpha
+        if len(data) > 0:
+            return krippendorff.alpha(
+                reliability_data=data, level_of_measurement=level_of_measurement
+            )
+        else:
+            return None
 
     @staticmethod
     def plot_validity(data_mes: pd.DataFrame, data_s100: pd.DataFrame) -> None:
