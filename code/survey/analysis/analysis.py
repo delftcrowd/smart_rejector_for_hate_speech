@@ -428,17 +428,30 @@ class Analysis:
 
     def print_group_statistics(*datasets):
         """Prints all group statistics between all passed dataset lists."""
-        args = []
+        all_scores = []
         for dataset in datasets:
-            scores = (
-                dataset.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1).median().to_list()
-            )
-            print("Shapiro Wilk normality test: ", stats.shapiro(scores))
-            args.append(scores)
+            scores = dataset.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
+            all_scores.append(scores)
 
-        print("Bartlett's test for equal variances:  ", stats.bartlett(*args))
-        print("Kruskal-Wallis test: ", stats.kruskal(*args))
-        print("One-way ANOVA: ", stats.f_oneway(*args))
+        question_names = all_scores[0].columns.values.tolist()
+        for question in question_names:
+            print("=================================")
+            print("Question: ", question)
+            question_scores = list(
+                map(lambda scores: scores[question].to_list(), all_scores)
+            )
+            print(question_scores)
+            for index, s in enumerate(question_scores):
+                print(
+                    f"Shapiro Wilk normality test dataset {index}: ", stats.shapiro(s)
+                )
+            print(
+                "Bartlett's test for equal variances:  ",
+                stats.bartlett(*question_scores),
+            )
+            print("Kruskal-Wallis test: ", stats.kruskal(*question_scores))
+            print("One-way ANOVA: ", stats.f_oneway(*question_scores))
+            print("=================================")
 
     @staticmethod
     def append_durations(data: pd.DataFrame) -> pd.DataFrame:
@@ -517,8 +530,6 @@ class Analysis:
             mes_values = data_mes[question]
             s100_values = data_s100[question]
 
-            # Important: the magnitude estimates are multiplied by 100 (since they are normalized)
-            # so that the boxplots can more easily be compared between both scale types.
             for value in mes_values:
                 plot_data.append([value, question, "ME"])
 
