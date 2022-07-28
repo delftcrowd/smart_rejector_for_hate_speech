@@ -437,21 +437,28 @@ class Analysis:
         for question in question_names:
             print("=================================")
             print("Question: ", question)
+            print("=================================")
             question_scores = list(
                 map(lambda scores: scores[question].to_list(), all_scores)
             )
-            print(question_scores)
+
             for index, s in enumerate(question_scores):
-                print(
-                    f"Shapiro Wilk normality test dataset {index}: ", stats.shapiro(s)
-                )
-            print(
-                "Bartlett's test for equal variances:  ",
-                stats.bartlett(*question_scores),
-            )
-            print("Kruskal-Wallis test: ", stats.kruskal(*question_scores))
-            print("One-way ANOVA: ", stats.f_oneway(*question_scores))
-            print("=================================")
+                shapiro = stats.shapiro(s)
+                if shapiro.pvalue > 0.05:
+                    print(f"Dataset {index} is normally distributed: ", shapiro)
+
+            bartlett = stats.bartlett(*question_scores)
+            kruskal = stats.kruskal(*question_scores)
+            f_oneway = stats.f_oneway(*question_scores)
+
+            if bartlett.pvalue > 0.05:
+                print("Variances are equal: ", bartlett)
+
+            if kruskal.pvalue < 0.05:
+                print("Statistical difference: ", kruskal)
+
+            if f_oneway.pvalue < 0.05:
+                print("Statistical difference: ", f_oneway)
 
     @staticmethod
     def append_durations(data: pd.DataFrame) -> pd.DataFrame:
