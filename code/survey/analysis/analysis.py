@@ -400,7 +400,7 @@ class Analysis:
         plt.show()
 
     @staticmethod
-    def print_statistics(data_mes: pd.DataFrame, data_s100: pd.DataFrame):
+    def print_scale_statistics(data_mes: pd.DataFrame, data_s100: pd.DataFrame):
         """Prints all statistics between the 100-level scores
         and the magnitude estimates.
 
@@ -426,8 +426,44 @@ class Analysis:
         print("Spearman: ", stats.spearmanr(mes, s100))
         print("Kendall: ", stats.kendalltau(mes, s100))
 
-    def print_group_statistics(*datasets):
-        """Prints all group statistics between all passed dataset lists."""
+    @staticmethod
+    def print_question_statistics(data1: pd.DataFrame, data2: pd.DataFrame):
+        """Prints all statistics between two datasets for each question.
+
+        Args:
+            data1 (pd.DataFrame): the first dataset.
+            data2 (pd.DataFrame): the second dataset.
+        """
+        data1 = data1.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
+        data2 = data2.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
+
+        question_names = data1.columns.values.tolist()
+        for question in question_names:
+            print("=================================")
+            print("Question: ", question)
+            print("=================================")
+            question_scores = [data1[question].to_list(), data2[question].to_list()]
+
+            for index, s in enumerate(question_scores):
+                shapiro = stats.shapiro(s)
+                if shapiro.pvalue > 0.05:
+                    print(f"Dataset {index} is normally distributed: ", shapiro)
+
+            bartlett = stats.bartlett(*question_scores)
+            kruskal = stats.kruskal(*question_scores)
+            f_oneway = stats.f_oneway(*question_scores)
+
+            if bartlett.pvalue > 0.05:
+                print("Variances are equal: ", bartlett)
+
+            if kruskal.pvalue < 0.05:
+                print("Statistical difference: ", kruskal)
+
+            if f_oneway.pvalue < 0.05:
+                print("Statistical difference: ", f_oneway)
+
+    def print_question_statistics_multiple(*datasets):
+        """Prints all statistics between all passed sample dataset lists for each question."""
         all_scores = []
         for dataset in datasets:
             scores = dataset.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
