@@ -486,6 +486,41 @@ class TestAnalysis(unittest.TestCase):
         )
         self.assertTrue(filtered_data.equals(expected))
 
+    def test_convert_to_question_scores(self):
+        group1 = pd.DataFrame(
+            {
+                "TP1": [100.0, 10.0, 1.0],
+                "TN1": [60.0, 6.0, 0.6],
+                "FP1": [10.0, 1.0, 0.1],
+                "FN1": [100.0, 10.0, 1.0],
+                "REJ1": [30.0, 3.0, 0.3],
+            }
+        )
+
+        group2 = pd.DataFrame(
+            {
+                "TP1": [-100.0, -10.0, -1.0],
+                "TN1": [-60.0, -6.0, -0.6],
+                "FP1": [-10.0, -1.0, -0.1],
+                "FN1": [-100.0, -10.0, -1.0],
+                "REJ1": [-30.0, -3.0, -0.3],
+            }
+        )
+
+        tp1 = [[100.0, 10.0, 1.0], [-100.0, -10.0, -1.0]]
+        tn1 = [[60.0, 6.0, 0.6], [-60.0, -6.0, -0.6]]
+        fp1 = [[10.0, 1.0, 0.1], [-10.0, -1.0, -0.1]]
+        fn1 = [[100.0, 10.0, 1], [-100.0, -10.0, -1]]
+        rej1 = [[30.0, 3.0, 0.3], [-30.0, -3.0, -0.3]]
+        expected = [tp1, tn1, fp1, fn1, rej1]
+
+        question_scores, question_names = Analysis.convert_to_question_scores(
+            group1, group2
+        )
+
+        self.assertEqual(expected, question_scores)
+        self.assertEqual(question_names, ["TP1", "TN1", "FP1", "FN1", "REJ1"])
+
 
 if __name__ == "__main__":
     unittest.main()

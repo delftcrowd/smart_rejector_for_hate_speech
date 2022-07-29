@@ -301,6 +301,68 @@ class Analysis:
         plt.title("Percentage of (non)hateful rated scenarios")
         plt.show()
 
+    @classmethod
+    def print_question_statistics(cls, data1: pd.DataFrame, data2: pd.DataFrame):
+        """Prints all statistics between two datasets for each question.
+
+        Args:
+            data1 (pd.DataFrame): the first dataset.
+            data2 (pd.DataFrame): the second dataset.
+        """
+        all_scores, question_names = cls.convert_to_question_scores(data1, data2)
+
+        for question in question_names:
+            print("=================================")
+            print("Question: ", question)
+            print("=================================")
+            question_scores = all_scores[index]
+
+            for index, s in enumerate(question_scores):
+                shapiro = stats.shapiro(s)
+                if shapiro.pvalue > 0.05:
+                    print(f"Dataset {index} is normally distributed: ", shapiro)
+
+            bartlett = stats.bartlett(*question_scores)
+            kruskal = stats.kruskal(*question_scores)
+            f_oneway = stats.f_oneway(*question_scores)
+
+            if bartlett.pvalue > 0.05:
+                print("Variances are equal: ", bartlett)
+
+            if kruskal.pvalue < 0.05:
+                print("Statistical difference: ", kruskal)
+
+            if f_oneway.pvalue < 0.05:
+                print("Statistical difference: ", f_oneway)
+
+    @classmethod
+    def print_question_statistics_multiple(cls, *datasets):
+        """Prints all statistics between all passed sample dataset lists for each question."""
+        all_scores, question_names = cls.convert_to_question_scores(*datasets)
+        for index, question in enumerate(question_names):
+            print("=================================")
+            print("Question: ", question)
+            print("=================================")
+            question_scores = all_scores[index]
+
+            for index, s in enumerate(question_scores):
+                shapiro = stats.shapiro(s)
+                if shapiro.pvalue > 0.05:
+                    print(f"Dataset {index} is normally distributed: ", shapiro)
+
+            bartlett = stats.bartlett(*question_scores)
+            kruskal = stats.kruskal(*question_scores)
+            f_oneway = stats.f_oneway(*question_scores)
+
+            if bartlett.pvalue > 0.05:
+                print("Variances are equal: ", bartlett)
+
+            if kruskal.pvalue < 0.05:
+                print("Statistical difference: ", kruskal)
+
+            if f_oneway.pvalue < 0.05:
+                print("Statistical difference: ", f_oneway)
+
     @staticmethod
     def filter_data(
         demo_data: pd.DataFrame, data: pd.DataFrame, column_name: str, column_value: any
@@ -425,76 +487,6 @@ class Analysis:
         print("Pearson: ", stats.pearsonr(mes, s100))
         print("Spearman: ", stats.spearmanr(mes, s100))
         print("Kendall: ", stats.kendalltau(mes, s100))
-
-    @staticmethod
-    def print_question_statistics(data1: pd.DataFrame, data2: pd.DataFrame):
-        """Prints all statistics between two datasets for each question.
-
-        Args:
-            data1 (pd.DataFrame): the first dataset.
-            data2 (pd.DataFrame): the second dataset.
-        """
-        data1 = data1.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
-        data2 = data2.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
-
-        question_names = data1.columns.values.tolist()
-        for question in question_names:
-            print("=================================")
-            print("Question: ", question)
-            print("=================================")
-            question_scores = [data1[question].to_list(), data2[question].to_list()]
-
-            for index, s in enumerate(question_scores):
-                shapiro = stats.shapiro(s)
-                if shapiro.pvalue > 0.05:
-                    print(f"Dataset {index} is normally distributed: ", shapiro)
-
-            bartlett = stats.bartlett(*question_scores)
-            kruskal = stats.kruskal(*question_scores)
-            f_oneway = stats.f_oneway(*question_scores)
-
-            if bartlett.pvalue > 0.05:
-                print("Variances are equal: ", bartlett)
-
-            if kruskal.pvalue < 0.05:
-                print("Statistical difference: ", kruskal)
-
-            if f_oneway.pvalue < 0.05:
-                print("Statistical difference: ", f_oneway)
-
-    def print_question_statistics_multiple(*datasets):
-        """Prints all statistics between all passed sample dataset lists for each question."""
-        all_scores = []
-        for dataset in datasets:
-            scores = dataset.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
-            all_scores.append(scores)
-
-        question_names = all_scores[0].columns.values.tolist()
-        for question in question_names:
-            print("=================================")
-            print("Question: ", question)
-            print("=================================")
-            question_scores = list(
-                map(lambda scores: scores[question].to_list(), all_scores)
-            )
-
-            for index, s in enumerate(question_scores):
-                shapiro = stats.shapiro(s)
-                if shapiro.pvalue > 0.05:
-                    print(f"Dataset {index} is normally distributed: ", shapiro)
-
-            bartlett = stats.bartlett(*question_scores)
-            kruskal = stats.kruskal(*question_scores)
-            f_oneway = stats.f_oneway(*question_scores)
-
-            if bartlett.pvalue > 0.05:
-                print("Variances are equal: ", bartlett)
-
-            if kruskal.pvalue < 0.05:
-                print("Statistical difference: ", kruskal)
-
-            if f_oneway.pvalue < 0.05:
-                print("Statistical difference: ", f_oneway)
 
     @staticmethod
     def append_durations(data: pd.DataFrame) -> pd.DataFrame:
@@ -644,6 +636,25 @@ class Analysis:
             )
 
         return pd.DataFrame(plot_data, columns=["Scenario", "Hateful", "Not hateful"])
+
+    @staticmethod
+    def convert_to_question_scores(*datasets):
+        """Converts multiple datasets to a list containing the scores per question.
+
+        It also returns the list of question names for convenience.
+        """
+        data = []
+        for dataset in datasets:
+            questions = dataset.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
+            data.append(questions)
+
+        all_scores = []
+        question_names = data[0].columns.values.tolist()
+        for question in question_names:
+            question_scores = list(map(lambda s: s[question].to_list(), data))
+            all_scores.append(question_scores)
+
+        return all_scores, question_names
 
     @staticmethod
     def __get_value(row, scale, type, index, question):
