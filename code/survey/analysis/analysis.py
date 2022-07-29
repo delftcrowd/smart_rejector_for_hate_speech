@@ -311,7 +311,7 @@ class Analysis:
         """
         all_scores, question_names = cls.convert_to_question_scores(data1, data2)
 
-        for question in question_names:
+        for index, question in enumerate(question_names):
             print("=================================")
             print("Question: ", question)
             print("=================================")
