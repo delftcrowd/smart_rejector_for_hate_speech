@@ -1,10 +1,36 @@
 \chapter{Value-sensitive rejection}
-\todo[inline]{Explain notations used}
+As concluded in the \nameref{sec:related-work}, there is a need for \textit{value-sensitive} metrics for measuring the performance of ML models, especially for social-technical applications such as hate speech detection.
+%
+We also concluded that most automatic hate speech detection methods do not peform well on unseen data.
+%
+Therefore, in this project, we focus on rejecting ML predictions in a value-sensitive manner.
+%
+We want to take the values of TP, TN, FP, FN, and rejected predictions into account in deciding when to accept or reject predictions.
+%
+Correct predictions (TP and TN) result in positive value (gains), while incorrect (FP and FN) and rejected predictions result in negative value (costs).
+%
+In this section we assume that we know these values, however in section \ref{sec:survey}, we will explain how we assess these values.
+%
+In this project, we create a confidence metric that is based on the work of \citet{de2000reject}.
+%
+We create a confidence metric that measures the total value of a ML model for some rejection threshold value based on a set of predictions with their corresponding confidence values and the values of TP, TN, FP, FN, and rejected predictions.
+%
+The idea of rejecting ML predictions with a confidence metric is that we aim to find the optimal rejection threshold between 0 (accepting all predictions) and 1 (rejecting all predictions).
+%
+Suppose the optimal confidence rejection threshold is 0.5, then we accept all ML predictions with a confidence that is greater than or equal to 0.5, and reject all ML predictions with a confidence value that is below 0.5.
+%
+We can determine the optimal rejection threshold by finding the threshold value for which the total value of the ML model with a reject option is maximum.
+%
+This is a form of a \textit{dependent} rejector.
+%
+The main benefit is that we can apply the confidence metric to any existing classification model that outputs a prediction label along with a confidence value without retraining the original model.
+%
+In this section, we explain how we construct our confidence metric and how we will apply it to some of the state-of-the-art hate speech classification models.
 
 \section{Value metric}
 \todo[inline]{Explain and proof our value metric and how we use it to measure the total value of a ML model with a reject option}
 
-\section{State-of-the-art }
+\section{State-of-the-art}
 \subsection{Models}
 \todo[inline]{Explain that we are going to use one traditional ML model (Logistic Regression since in related work we found that this got the best performance), one DL model (CNN because of the same reason), and a transformer model (DistilBERT given the recent popularity of transformer models)}
 
