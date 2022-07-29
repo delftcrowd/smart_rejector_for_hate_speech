@@ -174,13 +174,16 @@ class Analysis:
             pd.DataFrame: dataframe that consists of all normalized
             magnitude estimates.
         """
+        prolific_ids = data.loc[:, "prolificid. "]
         mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
         normalized_mes = cls.normalize(mes).mul(100)
         hatefulness = cls.hatefulness(
             data=data, scale="ME", num_scenarios=num_scenarios
         )
         attention_checks = cls.attention_checks(data)
-        return pd.concat([normalized_mes, hatefulness, attention_checks], axis=1)
+        return pd.concat(
+            [prolific_ids, normalized_mes, hatefulness, attention_checks], axis=1
+        )
 
     @classmethod
     def convert_100_data(
@@ -197,12 +200,13 @@ class Analysis:
             pd.DataFrame: dataframe that consists of all normalized
             100-level scale values.
         """
+        prolific_ids = data.loc[:, "prolificid. "]
         s100 = cls.s100_values(data=data, num_scenarios=num_scenarios)
         hatefulness = cls.hatefulness(
             data=data, scale="S100", num_scenarios=num_scenarios
         )
         attention_checks = cls.attention_checks(data)
-        return pd.concat([s100, hatefulness, attention_checks], axis=1)
+        return pd.concat([prolific_ids, s100, hatefulness, attention_checks], axis=1)
 
     @classmethod
     def print_means(cls, data: pd.DataFrame) -> None:
@@ -297,6 +301,113 @@ class Analysis:
         plt.title("Percentage of (non)hateful rated scenarios")
         plt.show()
 
+    @classmethod
+    def print_question_statistics(cls, data1: pd.DataFrame, data2: pd.DataFrame):
+        """Prints all statistics between two datasets for each question.
+
+        Args:
+            data1 (pd.DataFrame): the first dataset.
+            data2 (pd.DataFrame): the second dataset.
+        """
+        all_scores, question_names = cls.convert_to_question_scores(data1, data2)
+
+        for index, question in enumerate(question_names):
+            print("=================================")
+            print("Question: ", question)
+            print("=================================")
+            question_scores = all_scores[index]
+
+            for index, s in enumerate(question_scores):
+                shapiro = stats.shapiro(s)
+                if shapiro.pvalue > 0.05:
+                    print(f"Dataset {index} is normally distributed: ", shapiro)
+
+            bartlett = stats.bartlett(*question_scores)
+            kruskal = stats.kruskal(*question_scores)
+            f_oneway = stats.f_oneway(*question_scores)
+
+            if bartlett.pvalue > 0.05:
+                print("Variances are equal: ", bartlett)
+
+            if kruskal.pvalue < 0.05:
+                print("Statistical difference: ", kruskal)
+
+            if f_oneway.pvalue < 0.05:
+                print("Statistical difference: ", f_oneway)
+
+    @classmethod
+    def print_question_statistics_multiple(cls, *datasets):
+        """Prints all statistics between all passed sample dataset lists for each question."""
+        all_scores, question_names = cls.convert_to_question_scores(*datasets)
+        for index, question in enumerate(question_names):
+            print("=================================")
+            print("Question: ", question)
+            print("=================================")
+            question_scores = all_scores[index]
+
+            for index, s in enumerate(question_scores):
+                shapiro = stats.shapiro(s)
+                if shapiro.pvalue > 0.05:
+                    print(f"Dataset {index} is normally distributed: ", shapiro)
+
+            bartlett = stats.bartlett(*question_scores)
+            kruskal = stats.kruskal(*question_scores)
+            f_oneway = stats.f_oneway(*question_scores)
+
+            if bartlett.pvalue > 0.05:
+                print("Variances are equal: ", bartlett)
+
+            if kruskal.pvalue < 0.05:
+                print("Statistical difference: ", kruskal)
+
+            if f_oneway.pvalue < 0.05:
+                print("Statistical difference: ", f_oneway)
+
+    @staticmethod
+    def filter_data(
+        demo_data: pd.DataFrame, data: pd.DataFrame, column_name: str, column_value: any
+    ) -> pd.DataFrame:
+        """Filters the survey data on a specific column name and column value.
+
+        Args:
+            demo_data (pd.DataFrame): the demographics data.
+            data (pd.DataFrame): the survey data.
+            column_name (str): the column to filter on.
+            column_value (any): the column value to filter on.
+
+        Returns:
+            pd.DataFrame: the filtered survey data.
+        """
+        demo_data_column = demo_data.groupby([column_name])
+        if column_value in demo_data_column.groups.keys():
+            filtered_demo_data = demo_data_column.get_group(column_value)
+            filtered_ids = filtered_demo_data.loc[:, "Participant id"].tolist()
+            return data.loc[data["prolificid. "].isin(filtered_ids)].reset_index(
+                drop=True
+            )
+        else:
+            return pd.DataFrame()
+
+    @staticmethod
+    def filter_demographics_data(
+        demo_data: pd.DataFrame, data: pd.DataFrame
+    ) -> pd.DataFrame:
+        """Filters the demographic data.
+
+        It filters out all rows with prolific ids that do not occur in the survey data.
+
+        Args:
+            demo_data (pd.DataFrame): the demographics data to filter.
+            data (pd.DataFrame): the survey data.
+
+        Returns:
+            pd.DataFrame: the filtered demographics data.
+        """
+        prolific_ids = data.loc[:, "prolificid. "].tolist()
+        return demo_data.loc[
+            demo_data["Participant id"].isin(prolific_ids)
+        ].reset_index(drop=True)
+
     @staticmethod
     def reliability(data: pd.DataFrame, scale: str, type: str = "") -> float:
         """Calculates Krippendorffs's alpha values for the complete scale data
@@ -322,11 +433,12 @@ class Analysis:
             level_of_measurement = "interval"
 
         data = data.filter(regex=column, axis=1).values.tolist()
-        alpha = krippendorff.alpha(
-            reliability_data=data, level_of_measurement=level_of_measurement
-        )
-
-        return alpha
+        if len(data) > 0:
+            return krippendorff.alpha(
+                reliability_data=data, level_of_measurement=level_of_measurement
+            )
+        else:
+            return None
 
     @staticmethod
     def plot_validity(data_mes: pd.DataFrame, data_s100: pd.DataFrame) -> None:
@@ -350,7 +462,7 @@ class Analysis:
         plt.show()
 
     @staticmethod
-    def print_statistics(data_mes: pd.DataFrame, data_s100: pd.DataFrame):
+    def print_scale_statistics(data_mes: pd.DataFrame, data_s100: pd.DataFrame):
         """Prints all statistics between the 100-level scores
         and the magnitude estimates.
 
@@ -453,8 +565,6 @@ class Analysis:
             mes_values = data_mes[question]
             s100_values = data_s100[question]
 
-            # Important: the magnitude estimates are multiplied by 100 (since they are normalized)
-            # so that the boxplots can more easily be compared between both scale types.
             for value in mes_values:
                 plot_data.append([value, question, "ME"])
 
@@ -526,6 +636,25 @@ class Analysis:
             )
 
         return pd.DataFrame(plot_data, columns=["Scenario", "Hateful", "Not hateful"])
+
+    @staticmethod
+    def convert_to_question_scores(*datasets):
+        """Converts multiple datasets to a list containing the scores per question.
+
+        It also returns the list of question names for convenience.
+        """
+        data = []
+        for dataset in datasets:
+            questions = dataset.filter(regex="^(TP|TN|FP|FN|REJ).*$", axis=1)
+            data.append(questions)
+
+        all_scores = []
+        question_names = data[0].columns.values.tolist()
+        for question in question_names:
+            question_scores = list(map(lambda s: s[question].to_list(), data))
+            all_scores.append(question_scores)
+
+        return all_scores, question_names
 
     @staticmethod
     def __get_value(row, scale, type, index, question):

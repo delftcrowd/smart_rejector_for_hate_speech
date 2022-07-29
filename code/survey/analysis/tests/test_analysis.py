@@ -429,6 +429,98 @@ class TestAnalysis(unittest.TestCase):
 
         self.assertTrue(plot_data.equals(expected))
 
+    def test_filter_demographics_data(self):
+        mes_demo = pd.DataFrame(
+            {
+                "Participant id": ["1", "2", "3", "4"],
+                "Sex": ["Male", "Female", "Male", "Female"],
+            }
+        )
+
+        mes = pd.DataFrame({"prolificid. ": ["1", "2"], "TP1": [1.5, 2.0]})
+
+        demo_data = Analysis.filter_demographics_data(demo_data=mes_demo, data=mes)
+        expected = pd.DataFrame(
+            {"Participant id": ["1", "2"], "Sex": ["Male", "Female"]}
+        )
+
+        self.assertTrue(demo_data.equals(expected))
+
+    def test_filter_data(self):
+        mes_demo = pd.DataFrame(
+            {
+                "Participant id": ["1", "2", "3", "4"],
+                "Sex": ["Male", "Female", "Male", "Female"],
+            }
+        )
+
+        mes = pd.DataFrame(
+            {"prolificid. ": ["1", "2", "3", "4"], "TP1": [1.5, 2.0, 3.5, 6.5]}
+        )
+
+        filtered_data = Analysis.filter_data(
+            demo_data=mes_demo, data=mes, column_name="Sex", column_value="Male"
+        )
+        expected = pd.DataFrame(
+            {
+                "prolificid. ": [
+                    "1",
+                    "3",
+                ],
+                "TP1": [1.5, 3.5],
+            }
+        )
+        self.assertTrue(filtered_data.equals(expected))
+
+        filtered_data = Analysis.filter_data(
+            demo_data=mes_demo, data=mes, column_name="Sex", column_value="Female"
+        )
+        expected = pd.DataFrame(
+            {
+                "prolificid. ": [
+                    "2",
+                    "4",
+                ],
+                "TP1": [2.0, 6.5],
+            }
+        )
+        self.assertTrue(filtered_data.equals(expected))
+
+    def test_convert_to_question_scores(self):
+        group1 = pd.DataFrame(
+            {
+                "TP1": [100.0, 10.0, 1.0],
+                "TN1": [60.0, 6.0, 0.6],
+                "FP1": [10.0, 1.0, 0.1],
+                "FN1": [100.0, 10.0, 1.0],
+                "REJ1": [30.0, 3.0, 0.3],
+            }
+        )
+
+        group2 = pd.DataFrame(
+            {
+                "TP1": [-100.0, -10.0, -1.0],
+                "TN1": [-60.0, -6.0, -0.6],
+                "FP1": [-10.0, -1.0, -0.1],
+                "FN1": [-100.0, -10.0, -1.0],
+                "REJ1": [-30.0, -3.0, -0.3],
+            }
+        )
+
+        tp1 = [[100.0, 10.0, 1.0], [-100.0, -10.0, -1.0]]
+        tn1 = [[60.0, 6.0, 0.6], [-60.0, -6.0, -0.6]]
+        fp1 = [[10.0, 1.0, 0.1], [-10.0, -1.0, -0.1]]
+        fn1 = [[100.0, 10.0, 1], [-100.0, -10.0, -1]]
+        rej1 = [[30.0, 3.0, 0.3], [-30.0, -3.0, -0.3]]
+        expected = [tp1, tn1, fp1, fn1, rej1]
+
+        question_scores, question_names = Analysis.convert_to_question_scores(
+            group1, group2
+        )
+
+        self.assertEqual(expected, question_scores)
+        self.assertEqual(question_names, ["TP1", "TN1", "FP1", "FN1", "REJ1"])
+
 
 if __name__ == "__main__":
     unittest.main()
