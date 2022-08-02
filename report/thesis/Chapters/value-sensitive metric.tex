@@ -7,127 +7,106 @@ Therefore, in this project, we focus on rejecting ML predictions in a value-sens
 %
 We do this by taking the values of TP, TN, FP, FN, and rejected predictions into account.
 %
-Correct predictions (TP and TN) result in positive value (gains), while incorrect (FP and FN) and rejected predictions result in negative value (costs).
+% Correct predictions (TP and TN) result in positive value (gains), while incorrect (FP and FN) and rejected predictions result in negative value (costs).
 %
-In this section, we assume that we know these values.
+Section \ref{sec:survey} will explain how we assess these values.
 %
-However, section \ref{sec:survey} will explain how we assess these values.
+For the remaining part of this chapter, we assume that we know these values.
 %
 
 %
-In this chapter, we explain how we create a dependent rejector by introducing a confidence metric that measures the total value of an ML model with a reject option. In \ref{sec:value-metric}, we explain how we construct the confidence metric, and in \ref{sec:state-of-the-art}, we discuss how we apply the metric to some of the state-of-the-art hate speech classification models.
+In this chapter, we explain how we create a dependent rejector by introducing a confidence metric that measures the total value of an ML model with a reject option.
+%
+In \ref{sec:value-metric}, we explain how we construct the confidence metric, and in \ref{sec:state-of-the-art}, we discuss how we apply the metric to some of the state-of-the-art hate speech classification models.
 
 \section{Value metric}
 \label{sec:value-metric}
-The idea of a rejecting ML predictions using a confidence treshold is that for some treshold value ($\tau$) in the interval $[0, 1]$, we would accept all predictions with confidence values that are greater than or equal to $\tau$ and reject all predictions with confidence values below $\tau$.
+The idea of a rejecting ML predictions using a treshold is that for some treshold value $\tau$ in the range $[0, 1]$, we accept all predictions with confidence values that are greater than or equal to $\tau$ and reject all predictions with confidence values below $\tau$.
 %
 We use a confidence metric to find the optimal rejection threshold.
 %
-Here, we introduce our confidence metric as the value function $V(\tau)$ that measures the total value of some ML model with a reject option.
+Here, we introduce our confidence metric as the value function $V(\tau)$ that measures the total value of some ML model with rejection threshold $\tau$.
 %
-We can determine the optimal rejection threshold by finding the $\tau$ value for which the $V(\tau)$ is maximum.
+We can determine the optimal rejection threshold by finding the $\tau$ value for which $V(\tau)$ is maximum.
 %
-The value of $V(\tau)$ is based on the values of TP, TN, FP, FN, and rejected predictions and is calculated for a set of predictions with their corresponding confidence values.
+The value of $V(\tau)$ depends on the values of TP, TN, FP, FN, and rejected predictions and is calculated for a set of predictions with their corresponding confidence values and actual labels.
 %
-We denote the values of TP, TN, FP, FN, and rejected predictions as $V_t$ where $t \in [tp, tn, fp, fn, r]$.
+We denote the values of TP, TN, FP, FN, and rejected predictions as $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ respectively.
 %
-Note that we consider that $V_{tp}$ and $V_{tn}$ are gains and, therefore, positive values and that $V_{fp}$, $V_{fn}$, and $V_{r}$ are costs and, therefore, negative values.
+From the set of predictions we can derive the subsets of TP, TN, FP, and FN predictions.
 %
-There is one condition that needs to hold: the reduction of total value by means of a rejection should always be smaller in magnitude than the value reduction of an incorrect prediction, otherwise adopting the reject option serves no purpose.
+Note that we consider that $V_{tp}$ and $V_{tn}$ can be expressed as gains and, therefore, non-negative values and that $V_{fp}$, $V_{fn}$, and $V_{r}$ can be expressed costs and, therefore, non-positive values.
 %
-This can be formulated as:
+There is one condition that needs to hold: the reduction of total value by means of a rejection should always be smaller in magnitude than the value reduction of an incorrect prediction.
+%
+Otherwise adopting the reject option serves no purpose.
+%
+This condition can be formulated as:
 % 
 \begin{align}
     \label{for:value-condition}
-    V_R < \frac{V_{FP} + V_{FN}}{2},
+    \frac{V_{FP} + V_{FN}}{2} < V_R,
 \end{align}
 %
-For each $\tau$ value between 0 (accepting all predictions) and 1 (rejecting all predictions), we would like to know whether the model with the reject option is more effective (increased $V(\tau)$) or less effective (decreased $V(\tau_)$ value).
+For each $\tau$ value in $[0, 1]$, we would like to know whether the model with the reject option is more effective (increased $V(\tau)$) or less effective (decreased $V(\tau_)$ value).
 %
-Therefore, the metric needs to take the following conditions into account:
+In general, the metric should take the following conditions into account:
 % 
 \begin{enumerate}
-    \item Correct accepted predictions should increase the value of $V(\tau))$, while incorrect accepted predictions should decrease the value of $V$.
-    \item Correct rejected predictions should decrease the value of $V(\tau)$, while incorrect rejected predictions should increase the value of $V$.
-    \item Rejected predictions have a cost as well and should therefore decrease $V(\tau)$, while accepted predictions saved us the cost of rejections and, therefore, should increase the value of $V(\tau)$, provided that they are correct.
+    \item Correct accepted predictions should increase the value of $V(\tau)$, while incorrect accepted predictions should decrease the value of $V(\tau)$.
+    \item Correct rejected predictions should decrease the value of $V(\tau)$, while incorrect rejected predictions should increase the value of $V(\tau)$.
 \end{enumerate}
 % 
-We can convert these into the following equations:
+We can convert these conditions into the following equations:
 \begin{subequations}
     \label{for:conditions}
     \begin{align}
-        \frac{\partial V}{\partial R_{TP}} + \frac{\partial V}{\partial R_{TN}} > 0 \label{for:condition1},     \\
-        \frac{\partial V}{\partial R_R^{TP}} + \frac{\partial V}{\partial R_R^{TN}} < 0 \label{for:condition2}, \\
-        \frac{\partial V}{\partial R_R^{FP}} + \frac{\partial V}{\partial R_R^{FN}} > 0 \label{for:condition3}, \\
-        \frac{\partial V}{\partial R_{FP}} + \frac{\partial V}{\partial R_{FN}} < 0 \label{for:condition4},
+        \frac{\partial V}{\partial R_{tp}(\tau)} + \frac{\partial V}{\partial R_{tn}(\tau)} > 0, &  &
+        \frac{\partial V}{\partial R^r_{tp}(\tau)} + \frac{\partial V}{\partial R^r_{tn}(\tau)} < 0, \label{for:conditions-tp-tn} \\
+        \frac{\partial V}{\partial R_{fp}(\tau)} + \frac{\partial V}{\partial R_{fn}(\tau)} < 0, &  &
+        \frac{\partial V}{\partial R^r_{fp}(\tau)} + \frac{\partial V}{\partial R^r_{fn}(\tau)} > 0, \label{for:conditions-fp-fn}
     \end{align}
 \end{subequations}
-\iffalse
-    We can verify that $V$ satisfies the conditions in \ref{for:conditions}:
-    \begin{align*}
-        \frac{\partial V}{\partial R_{TP}} + \frac{\partial V}{\partial R_{TP}}     & > 0 \\
-        V_{TP} + V_{TN} + 2V_R                                                      & > 0 \\
-        \\
-        \frac{\partial V}{\partial R_R^{TP}} + \frac{\partial V}{\partial R_R^{TN}} & < 0 \\
-        -V_{TP} - V_{TN} - 2V_R                                                     & < 0 \\
-        \\
-        \frac{\partial V}{\partial R_R^{FP}} + \frac{\partial V}{\partial R_R^{FN}} & > 0 \\
-        V_{FP} + V_{FN} - 2V_R                                                      & > 0 \\
-        \\
-        \frac{\partial V}{\partial R_{FP}} + \frac{\partial V}{\partial R_{FN}}     & < 0 \\
-        2V_R -V_{FP} - V_{FN}                                                       & < 0
-    \end{align*}
-\fi %
-where $R_R = R_R^{TP} + R_R^{TN} + R_R^{FP} + R_R^{FN}$ and $R_R^t$ is the percentage of rejected predictions of type $t$. \Ref{for:condition1} and \ref{for:condition2} are satisfied by default and \ref{for:condition3} and \ref{for:condition4} are satisfied since we know that $2V_R < V_{FP} + V_{FN}$.
-\iffalse
-    We create a linear $V$ function and assume that the values $V_t$ are constants. Subsequently, we can formulate $V$ as:
-    \begin{align}
-        \begin{split}
-            V ={}& V_{TP}R_{TP} + V_{TN}R_{TN} - V_{FP}R_{FP} - V_{FN}R_{FN}\\
-            & - V_{TP}R_R^{TP} - V_{TN}R_R^{TN} + V_{FP}R_R^{FP} + V_{FN}R_R^{FN}\\
-            & - V_R(R_R^{TP} + R_R^{TN} + R_R^{FP} + R_R^{FN})\\
-            & + V_R(R_{TP} + R_{TN} + R_{FP} + R_{FN})
-        \end{split}
-    \end{align}
-\fi % 
-We can rewrite the value equation as:
-\begin{multline}
-    \label{for:initial-V}
-    V = (V_{TP} + V_R)R_{TP} + (V_{TN} + V_R)R_{TN}\\
-    + (V_R - V_{FP})R_{FP} +  (V_R - V_{FN})R_{FN}\\
-    - (V_R + V_{TP})R_R^{TP} - (V_R + V_{TN})R_R^{TN}\\
-    + (V_{FP} - V_R)R_R^{FP} + (V_{FN} - V_R)R_R^{FN}\\
-\end{multline}
+%
+where $R_t(\tau)$ and $R_t^r(\tau)$ are the fractions of accepted and rejected predictions respectively based on the rejection threshold $\tau$ and where $t \in [tp, tn, fp, fn]$.
+%
+We create a linear $V(\tau)$ function and assume that the values $V_t$ are known constants.
+%
+Subsequently, we can formulate $V(\tau)$ as:
+\begin{align}
+    \label{for:V}
+    V(\tau) = \sum_{t} (V_t - V_r)R_t(\tau) + \sum_{t} (V_r - V_t)R^r_{t}(\tau),
+\end{align}
+%
+where $t \in [tp, tn, fp, fn]$.
+%
+Conditions \ref{for:conditions-tp-tn} are satisfied by default since we assume that $V_{tp}$ and $V_{tn}$ are non-negative and $V_r$ is non-positive.
+%
+Conditions \ref{for:conditions-fp-fn} are satisfied under the condition of \ref{for:value-condition} and since we assume that $V_{fp}$, $V_{fn}$, and $V_r$ are negative.
 % 
-We can define the $R_t$ and the $R_R^t$ values by computing the integrals over the probability density functions (PDF) of the confidence values of the predictions with type $t \in [TP, TN, FP, FN]$ \cite{de2000reject}. We can define $R^t_R$ by taking the integral over the interval $[0, \tau]$, where $\tau$ is the rejection threshold, and $R_t$ by taking the integral over the interval $[\tau, 1]$:
+We can define the $R_t$ and the $R_t^r$ values by computing the integrals over the probability density functions (PDF) of the confidence values of the predictions with type $t$.
+%
+We can define $R_t$ by taking the integral over the interval $[\tau, 1]$, and $R_t^r$ by taking the integral over the interval $[0, \tau]$:
 %
 \begin{align}
     \label{for:R}
     \begin{aligned}
-        R_R^{TP}(\tau) & = \int_0^\tau D_{TP}(x)dx & R_R^{TN}(\tau) & = \int_0^\tau D_{TN}(x)dx \\
-        R_R^{FP}(\tau) & = \int_0^\tau D_{FP}(x)dx & R_R^{FN}(\tau) & = \int_0^\tau D_{FN}(x)dx \\
-        R_{TP}(\tau)   & = \int_\tau^1 D_{TP}(x)dx & R_{TN}(\tau)   & = \int_\tau^1 D_{TN}(x)dx \\
-        R_{FP}(\tau)   & = \int_\tau^1 D_{FP}(x)dx & R_{FN}(\tau)   & = \int_\tau^1 D_{FN}(x)dx
+        R_{t}(\tau) = \int_\tau^1 D_{t}(x)dx & \quad & R_{t}^r(\tau) = \int_0^\tau D_{t}(x)dx
     \end{aligned}
 \end{align}
 %
-Therefore, we should define $V$ as a function of the threshold value $\tau$. By inserting the integrals from \ref{for:R} into \ref{for:initial-V}, we get the final value function:
+By inserting the integrals from \ref{for:R} into \ref{for:V}, we get our final value function:
 %
 \begin{align}
     \label{for:final-V}
-    \begin{split}
-        V(\tau) &= (V_{TP} + V_{REJ})\int_\tau^1 D_{TP}(x)dx\\
-        & + (V_{TN} + V_{REJ})\int_\tau^1 D_{TN}(x)dx\\
-        & + (V_{REJ} - V_{FP})\int_\tau^1 D_{FP}(x)dx\\
-        & + (V_{REJ} - V_{FN})\int_\tau^1 D_{FN}(x)dx\\
-        & - (V_{REJ} + V_{TP})\int_0^\tau D_{TP}(x)dx\\
-        & - (V_{REJ} + V_{TN})\int_0^\tau D_{TN}(x)dx\\
-        & + (V_{FP} - V_{REJ})\int_0^\tau D_{FP}(x)dx\\
-        & + (V_{FN} - V_{REJ})\int_0^\tau D_{FN}(x)dx\\
-    \end{split}
+    V(\tau) = \sum_{t} (V_t - V_r)\int_\tau^1 D_{t}(x)dx + \sum_{t} (V_r - V_t)\int_0^\tau D_{t}(x)dx,
 \end{align}
 %
-We can now use \ref{for:final-V} to calculate the total value $m$ with the reject option for all possible threshold ($\tau$) values. The theoretical optimal rejection threshold is equal to the $\tau$ value for which we achieve the maximum value of $V(\tau)$.
+where $t \in [tp, tn, fp, fn]$ and $\tau$ is the rejection threhsold.
+%
+We can now use \ref{for:final-V} to calculate the total value of some ML model for all $\tau \in [0, 1]$ values.
+%
+The theoretical optimal rejection threshold is equal to the $\tau$ value for which we achieve the maximum value of $V(\tau)$.
 
 
 \section{State-of-the-art}
