@@ -75,10 +75,10 @@ We create a linear $V(\tau)$ function and assume that the values $V_t$ are known
 Subsequently, we can formulate $V(\tau)$ as:
 \begin{align}
     \label{for:V}
-    V(\tau) = \sum_{t} (V_t - V_r)R_t(\tau) + \sum_{t} (V_r - V_t)R^r_{t}(\tau),
+    V(\tau) = \sum_{p} (V_p - V_r)R_p(\tau) + \sum_{q} (V_r - V_q)R^r_{q}(\tau),
 \end{align}
 %
-where $t \in [tp, tn, fp, fn]$.
+where $p, q \in [tp, tn, fp, fn]$.
 %
 Conditions \ref{for:conditions-tp-tn} are satisfied by default since we assume that $V_{tp}$ and $V_{tn}$ are non-negative and $V_r$ is non-positive.
 %
@@ -111,8 +111,31 @@ The theoretical optimal rejection threshold is equal to the $\tau$ value for whi
 
 \section{State-of-the-art}
 \label{sec:state-of-the-art}
+In this section, we will explain how we will apply the value-sensitive metric from section \ref{sec:value-metric} to some of the state-of-the-art automatic hate speech detection models so that we convert them into dependent rejectors.
+%
+In this experiment, we aim to find out three things.
+%
+First, we want to find out how the value-sensitive metric behaves on the different models and datasets.
+%
+Second, we want to know wheter rejecting ML predictions can be beneficial in the hate speech detection domain.
+%
+Finally, we will compare our value-sensitive metric to machine metrics such as accuracy and check whether they give different results.
+%
+
 \subsection{Models}
-\todo[inline]{Explain that we are going to use one traditional ML model (Logistic Regression since in related work we found that this got the best performance), one DL model (CNN because of the same reason), and a transformer model (DistilBERT given the recent popularity of transformer models)}
+We will experiment with three different hate speech detection models based on the findings from related work in section \ref{sec:related-work-detection-algorithms}.
+%
+The first model is a traditional ML model.
+%
+We implement the Logistich Regression (LR) model with Character N-gram from \citet{waseem2016hateful} since this model achieved the best performance compared other traditional ML models \citet{davidson2017automated}.
+%
+The second model is DL model based on the work of \citet{agrawal2018deep} and \citet{badjatiya2017deep}.
+%
+We chose a Convolutional Neural Network (CNN) model since both studies found that it performs quite well.
+%
+Finally, our third model is a transformer model given its recent popularity in the NLP domain.
+%
+We selected the DistilBERT model since it's faster and smaller in size compared to BERT models while achieving similar performance \citep{sanh2019distilbert}.
 
 \subsection{Calibration}
 \todo[inline]{Explain what model calibration is and why it's necessary}
