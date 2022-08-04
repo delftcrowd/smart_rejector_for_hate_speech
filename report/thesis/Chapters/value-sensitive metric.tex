@@ -138,7 +138,11 @@ Finally, our third model is a transformer model given its recent popularity in t
 We selected the DistilBERT model since it's faster and smaller in size compared to BERT models while achieving similar performance \citep{sanh2019distilbert}.
 
 \subsection{Calibration}
-\todo[inline]{Explain what model calibration is and why it's necessary}
+The problem of most neural network models used in NLP is that they are often not calibrated \citep{guo2017calibration}.
+%
+We can define calibrated models as models for which the confidence values of their predictions are equal to the probabilities of the prediction label to be correct.
+%
+\citet{guo2017calibration} used the expected calibration error (ECE)
 
 \subsection{Datasets}
 \todo[inline]{Explain that we are going to use the SemEval and Waseem datasets and the concepts of seen and unseen data}
