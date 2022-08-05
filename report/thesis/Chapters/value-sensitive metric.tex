@@ -61,14 +61,16 @@ We can convert these conditions into the following equations:
 \begin{subequations}
     \label{for:conditions}
     \begin{align}
-        \frac{\partial V}{\partial R_{tp}(\tau)} + \frac{\partial V}{\partial R_{tn}(\tau)} > 0, &  &
-        \frac{\partial V}{\partial R^r_{tp}(\tau)} + \frac{\partial V}{\partial R^r_{tn}(\tau)} < 0, \label{for:conditions-tp-tn} \\
-        \frac{\partial V}{\partial R_{fp}(\tau)} + \frac{\partial V}{\partial R_{fn}(\tau)} < 0, &  &
-        \frac{\partial V}{\partial R^r_{fp}(\tau)} + \frac{\partial V}{\partial R^r_{fn}(\tau)} > 0, \label{for:conditions-fp-fn}
+        \frac{\partial V}{\partial R_{tp}(\tau)} + \frac{\partial V}{\partial R_{tn}(\tau)} >= 0, &  &
+        \frac{\partial V}{\partial R^r_{tp}(\tau)} + \frac{\partial V}{\partial R^r_{tn}(\tau)} <= 0, \label{for:conditions-tp-tn} \\
+        \frac{\partial V}{\partial R_{fp}(\tau)} + \frac{\partial V}{\partial R_{fn}(\tau)} <= 0, &  &
+        \frac{\partial V}{\partial R^r_{fp}(\tau)} + \frac{\partial V}{\partial R^r_{fn}(\tau)} >= 0, \label{for:conditions-fp-fn}
     \end{align}
 \end{subequations}
 %
 where $R_t(\tau)$ and $R_t^r(\tau)$ are the fractions of accepted and rejected predictions respectively based on the rejection threshold $\tau$ and where $t \in [tp, tn, fp, fn]$.
+%
+All conditions include greater/smaller than or equal to operators, since we want to allow the values of $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_{r}$ to be equal to zero.
 %
 We create a linear $V(\tau)$ function and assume that the values $V_t$ are known constants.
 %
@@ -91,18 +93,18 @@ We can define $R_t$ by taking the integral over the interval $[\tau, 1]$, and $R
 \begin{align}
     \label{for:R}
     \begin{aligned}
-        R_{t}(\tau) = \int_\tau^1 D_{t}(x)dx & \quad & R_{t}^r(\tau) = \int_0^\tau D_{t}(x)dx
+        R_{t}(\tau) = \int_\tau^1 D_{t}(x)dx & \quad & R_{t}^r(\tau) = \int_0^\tau D_{t}(x)dx,
     \end{aligned}
 \end{align}
+%
+where $D_t$ is the PDF of all predictions of type $t$.
 %
 By inserting the integrals from \ref{for:R} into \ref{for:V}, we get our final value function:
 %
 \begin{align}
     \label{for:final-V}
-    V(\tau) = \sum_{t} (V_t - V_r)\int_\tau^1 D_{t}(x)dx + \sum_{t} (V_r - V_t)\int_0^\tau D_{t}(x)dx,
+    V(\tau) = \sum_{t} (V_t - V_r)\int_\tau^1 D_{t}(x)dx + \sum_{t} (V_r - V_t)\int_0^\tau D_{t}(x)dx
 \end{align}
-%
-where $t \in [tp, tn, fp, fn]$ and $\tau$ is the rejection threhsold.
 %
 We can now use \ref{for:final-V} to calculate the total value of some ML model for all $\tau \in [0, 1]$ values.
 %
@@ -136,6 +138,10 @@ We chose a Convolutional Neural Network (CNN) model since both studies found tha
 Finally, our third model is a transformer model given its recent popularity in the NLP domain.
 %
 We selected the DistilBERT model since it's faster and smaller in size compared to BERT models while achieving similar performance \citep{sanh2019distilbert}.
+%
+We implement all models in Pyhthon.
+%
+We implement the LR model with scikit-learn\footnote{\url{https://scikit-learn.org/}}, the CNN model with TensorFlow\footnote{\url{https://www.tensorflow.org/}}, and the DistilBERT model with a combination of Hugging Face\footnote{\url{https://huggingface.co/}} and PyTorch\footnote{\url{https://pytorch.org/}}.
 
 \subsection{Calibration}
 The problem of most neural network models is that they are often not calibrated \citep{guo2017calibration,sayin2021science}.
@@ -174,13 +180,17 @@ However, it is still valuable to calibrate the models since it also benefits hum
 \subsection{Datasets}
 We train all models on the \citet{waseem2016hateful} dataset consisting of 16K tweets labelled racist, sexist, or neutral.
 %
-We split this dataset into a train and test dataset according to an 80:20 ratio, respectively (80\% for training and 20\% for testing)
+We converted the 'racist' and 'sexist' labels to 'hate' labels to create a binary classification setting.
 %
-We also converted the 'racist' and 'sexist' labels to 'hate' labels to create a binary classification setting.
+We split the dataset into a train and test dataset according to an 80:20 ratio, respectively (80\% for training and 20\% for testing)
 %
 For the CNN and the DistilBERT models, we split the training set up into a training set and a validation set according to a 75:25 ratio, respectively.
 %
 We use this validation set to calibrate the trained models by finding the optimal temperature $T$ value for the temperature scaling method.
+%
+We preprocess the data by tokenizing all URLs, user mentions, and emojis since these do not contain any valuable information.
+% TODO: perhaps add wordsegment library for segmenting the hashtags.
+The remaining parts of the preprocessing, such as removing whitespaces and stop words or the tokenization process, are dedicated to the different frameworks we use per model.
 %
 
 %
@@ -203,3 +213,13 @@ Therefore, we also expect that the output value of our metric for the unseen dat
 \subsection{Calculating the total value}
 \todo[inline]{Explain how we are going to apply our metric to the trained state-of-the-art models to calculate the optimal rejection threshold given the values of TP, TN, FP, FN, and rejection (that we still need estimate)}
 \todo[inline]{Explain that we use Kernel Density Estimation to calculate the PDF functions (or stick to prediction counts as in the paper).}
+We apply our metric from section \ref{sec:value-metric} to calculate the total value of all three models for both the seen and the unseen datasets at all possible rejection thresholds ($\tau$).
+%
+Since our metric uses the PDFs of all TP, TN, FP, and FN predictions, we need to emperically estimate these PDFs since we do not know the actual underlying distributions.
+%
+We use Kernel Density Estimation (KDE) for this.....
+% TODO: continue here
+%
+If $\tau \in [0.0, 0.5]$, then we accept all predictions since the confidence values of all predictions are always above $0.5$ given our binary clasfficastion setting.
+%
+If $\tau = 1.0$, then we reject all predictions.
