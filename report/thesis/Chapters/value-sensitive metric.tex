@@ -172,7 +172,33 @@ However, it is still valuable to calibrate the models since it also benefits hum
 %
 
 \subsection{Datasets}
-\todo[inline]{Explain that we are going to use the SemEval and Waseem datasets and the concepts of seen and unseen data}
+We train all models on the \citet{waseem2016hateful} dataset consisting of 16K tweets labelled racist, sexist, or neutral.
+%
+We split this dataset into a train and test dataset according to an 80:20 ratio, respectively (80\% for training and 20\% for testing)
+%
+We also converted the 'racist' and 'sexist' labels to 'hate' labels to create a binary classification setting.
+%
+For the CNN and the DistilBERT models, we split the training set up into a training set and a validation set according to a 75:25 ratio, respectively.
+%
+We use this validation set to calibrate the trained models by finding the optimal temperature $T$ value for the temperature scaling method.
+%
+
+%
+We apply the metric to two test datasets: the \emph{seen} dataset and the \textit{unseen} dataset.
+%
+The seen dataset is the test set from the \citet{waseem2016hateful} dataset.
+%
+The unseen dataset is a test set from the \citet{basile2019semeval} dataset that consists of 10K English tweets labelled as either hateful (against immigrants or women) or not hateful.
+%
+We use the unseen dataset to simulate how the models would perform in a realist use-case when a model is trained on one dataset and applied to a different dataset.
+%
+We want to analyze the effect of bias and how this affects the results when using our metric for evaluating the models when rejection is adopted.
+%
+We expect that the accuracy of the predictions on the unseen dataset is significantly lower than on the seen dataset, similar to the findings of related studies: \citet{grondahl2018all, arango2019hate}.
+%
+Therefore, we also expect that the output value of our metric for the unseen dataset will be lower and that the optimal rejection threshold will be lower (meaning that we need to reject more predictions).
+%
+
 
 \subsection{Calculating the total value}
 \todo[inline]{Explain how we are going to apply our metric to the trained state-of-the-art models to calculate the optimal rejection threshold given the values of TP, TN, FP, FN, and rejection (that we still need estimate)}
