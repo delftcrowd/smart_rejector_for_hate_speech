@@ -138,11 +138,38 @@ Finally, our third model is a transformer model given its recent popularity in t
 We selected the DistilBERT model since it's faster and smaller in size compared to BERT models while achieving similar performance \citep{sanh2019distilbert}.
 
 \subsection{Calibration}
-The problem of most neural network models used in NLP is that they are often not calibrated \citep{guo2017calibration}.
+The problem of most neural network models is that they are often not calibrated \citep{guo2017calibration,sayin2021science}.
 %
-We can define calibrated models as models for which the confidence values of their predictions are equal to the probabilities of the prediction label to be correct.
+We can define calibrated models as models where the confidence values of the predictions are equal to the probabilities that the predicted labels are correct.
 %
-\citet{guo2017calibration} used the expected calibration error (ECE)
+However, most neural networks tend to be sensitive to producing both low- and high-confident errors \citep{guo2017calibration, sayin2021science}.
+%
+A well-calibrated model that achieves a low accuracy score can still be valuable since we can reject all low-confident incorrect predictions and only accept the high-confident correct predictions \citep{sayin2021science}.
+%
+In our project, we aim to have calibrated models since calculating the optimal rejection threshold depends on the confidence values of the predictions.
+%
+
+%
+\citet{guo2017calibration} experimented with different calibration methods.
+%
+They evaluated the results using the expected calibration error (ECE), which measures the difference between the expected confidence and accuracy \citep{guo2017calibration}.
+%
+They found that the temperature scaling method is the most effective.
+%
+In temperature scaling, we divide the model's output logits with a temperature value $T$ to soften the probabilities of the final softmax function in the model's architecture \citep{guo2017calibration}.
+%
+This $T$ value is initially set to $1$ and optimized by minimizing the negative log-likelihood \citep{guo2017calibration}.
+%
+Please note that temperature scaling does not change the model's accuracy but only rescales the distribution of the confidence values \citep{guo2017calibration}.
+%
+
+%
+As we will experiment with two neural networks (DistilBERT and CNN), we will apply temperature scaling to calibrate both models.
+%
+Unfortunately, it is also possible that once we calibrated these models with temperature scaling, they can still produce high-confident incorrect predictions and low-confident correct predictions.
+%
+However, it is still valuable to calibrate the models since it also benefits human interpretation of the confidence values and, therefore, the optimal rejection threshold.
+%
 
 \subsection{Datasets}
 \todo[inline]{Explain that we are going to use the SemEval and Waseem datasets and the concepts of seen and unseen data}
