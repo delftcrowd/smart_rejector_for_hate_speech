@@ -129,19 +129,23 @@ We will experiment with three different hate speech detection models based on th
 %
 The first model is a traditional ML model.
 %
-We implement the Logistich Regression (LR) model with Character N-gram from \citet{waseem2016hateful} since this model achieved the best performance compared other traditional ML models \citet{davidson2017automated}.
+We implement the Logistich Regression (LR) model with Character N-gram from \citet{waseem2016hateful} since this model achieved the best performance compared to other traditional ML models \citep{davidson2017automated}.
 %
-The second model is DL model based on the work of \citet{agrawal2018deep} and \citet{badjatiya2017deep}.
+We selected the second model, an DL model, based on the findings from \citet{agrawal2018deep, badjatiya2017deep}.
 %
-We chose a Convolutional Neural Network (CNN) model since both studies found that it performs quite well.
+We chose a Convolutional Neural Network (CNN) model initialized with random word embeddings since both studies found that this configuration provides state-of-the-art classification performance.
+%
+We implemented the CNN model based on the work of \citep{agrawal2018deep}.
 %
 Finally, our third model is a transformer model given its recent popularity in the NLP domain.
 %
 We selected the DistilBERT model since it's faster and smaller in size compared to BERT models while achieving similar performance \citep{sanh2019distilbert}.
 %
-We implement all models in Pyhthon.
+We implement all models in Python.
 %
 We implement the LR model with scikit-learn\footnote{\url{https://scikit-learn.org/}}, the CNN model with TensorFlow\footnote{\url{https://www.tensorflow.org/}}, and the DistilBERT model with a combination of Hugging Face\footnote{\url{https://huggingface.co/}} and PyTorch\footnote{\url{https://pytorch.org/}}.
+%
+We use Google Colab\footnote{\url{https://colab.research.google.com/}} to train all models.
 
 \subsection{Calibration}
 The problem of most neural network models is that they are often not calibrated \citep{guo2017calibration,sayin2021science}.
@@ -222,4 +226,13 @@ We use Kernel Density Estimation (KDE) for this.....
 %
 If $\tau \in [0.0, 0.5]$, then we accept all predictions since the confidence values of all predictions are always above $0.5$ given our binary clasfficastion setting.
 %
+For this reason, we calculate the total value of all predictions for the range $\tau \in [0.5, 1.0$.
+%
 If $\tau = 1.0$, then we reject all predictions.
+%
+We determine the optimal rejection threshold ($\tau_O$) using the following formulation:
+%
+\begin{align}
+    \label{for:optimal-threshold}
+    \tau_O = \max \{V(\tau): \tau \in \mathbb{R} \wedge 0.5 \leq \tau \leq 1.0 \}
+\end{align}
