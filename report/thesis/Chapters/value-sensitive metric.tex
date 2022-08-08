@@ -109,7 +109,13 @@ By inserting the integrals from \ref{for:R} into \ref{for:V}, we get our final v
 We can now use \ref{for:final-V} to calculate the total value of some ML model for all $\tau \in [0, 1]$ values.
 %
 The theoretical optimal rejection threshold is equal to the $\tau$ value for which we achieve the maximum value of $V(\tau)$.
-
+%
+We can find the optimal rejection threshold $\tau_O$ using the following formulation:
+%
+\begin{align}
+    \label{for:optimal-threshold}
+    \tau_O \text{ where } V(\tau_O) = \max \{V(\tau): \tau \in \mathbb{R} \wedge 0 \leq \tau \leq 1 \}
+\end{align}
 
 \section{State-of-the-art}
 \label{sec:state-of-the-art}
@@ -181,6 +187,11 @@ Unfortunately, it is also possible that once we calibrated these models with tem
 However, it is still valuable to calibrate the models since it also benefits human interpretation of the confidence values and, therefore, the optimal rejection threshold.
 %
 
+%
+The Logistic Regression model is well-calibrated by default since it optimizes the log-loss function which measures the difference between predicted confidence values and the actual labels.
+%
+Therefore, we do not have to apply temperature scaling to the Logistic Regression model.
+
 \subsection{Datasets}
 We train all models on the \citet{waseem2016hateful} dataset consisting of 16K tweets labelled racist, sexist, or neutral.
 %
@@ -213,26 +224,31 @@ We expect that the accuracy of the predictions on the unseen dataset is signific
 Therefore, we also expect that the output value of our metric for the unseen dataset will be lower and that the optimal rejection threshold will be lower (meaning that we need to reject more predictions).
 %
 
+\subsection{Kernel Density Estimation}
+Since our metric depends on the PDFs of the confidence values of the TP, TN, FP, and FN predictions, we need to emperically estimate these PDFs as we do not know the actual underlying distributions.
+%
+We use the Kernel Density Estimation (KDE) method provided by Statsmodels\footnote{\url{https://www.statsmodels.org/}} for estimating the PDFs.
+%
+With KDE we estimate the PDF by weighing each confidence value from a set of predictions using a kernel function, a gaussian density function in our case since it's the most commonly used, for each value in the range $[0, 1]$.
+%
+If there are many predictions with a confidence value around $0.8$, then the KDE estimate will be higher around that point.
+%
+The kernel fucntion used in the KDE method also depends on a bandwidth (smoothness) value.
+%
+A small bandwidth value results in an estimated PDF with a lot of variance, while a high bandwidth value results in an estimated PDF with a lot of bias.
+%
+We use maximum likelihood cross validation for finding the optimal bandwidth value.
+%
 
 \subsection{Calculating the total value}
-\todo[inline]{Explain how we are going to apply our metric to the trained state-of-the-art models to calculate the optimal rejection threshold given the values of TP, TN, FP, FN, and rejection (that we still need estimate)}
-\todo[inline]{Explain that we use Kernel Density Estimation to calculate the PDF functions (or stick to prediction counts as in the paper).}
 We apply our metric from section \ref{sec:value-metric} to calculate the total value of all three models for both the seen and the unseen datasets at all possible rejection thresholds ($\tau$).
 %
-Since our metric uses the PDFs of all TP, TN, FP, and FN predictions, we need to emperically estimate these PDFs since we do not know the actual underlying distributions.
-%
-We use Kernel Density Estimation (KDE) for this.....
-% TODO: continue here
+We determine the optimal rejection threshold $\tau_O$ using the formulation from \ref{for:optimal-threshold}.
 %
 If $\tau \in [0.0, 0.5]$, then we accept all predictions since the confidence values of all predictions are always above $0.5$ given our binary clasfficastion setting.
 %
-For this reason, we calculate the total value of all predictions for the range $\tau \in [0.5, 1.0$.
+For this reason, we only calculate the total value of all predictions for the range $\tau \in [0.5, 1.0]$.
 %
 If $\tau = 1.0$, then we reject all predictions.
 %
-We determine the optimal rejection threshold ($\tau_O$) using the following formulation:
-%
-\begin{align}
-    \label{for:optimal-threshold}
-    \tau_O = \max \{V(\tau): \tau \in \mathbb{R} \wedge 0.5 \leq \tau \leq 1.0 \}
-\end{align}
+\todo[inline]{Explain how we compare the metric to machine metrics such as accuracy}
