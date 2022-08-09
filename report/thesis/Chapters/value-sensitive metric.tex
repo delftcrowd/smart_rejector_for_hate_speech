@@ -19,7 +19,7 @@ In this chapter, we explain how we create a dependent rejector by introducing a 
 %
 In \ref{sec:value-metric}, we explain how we construct the confidence metric, and in \ref{sec:state-of-the-art}, we discuss how we apply the metric to some of the state-of-the-art hate speech classification models.
 
-\section{Value metric}
+\section{Value-sensitive metric}
 \label{sec:value-metric}
 The idea of a rejecting ML predictions using a treshold is that for some treshold value $\tau$ in the range $[0, 1]$, we accept all predictions with confidence values that are greater than or equal to $\tau$ and reject all predictions with confidence values below $\tau$.
 %
@@ -119,11 +119,11 @@ We can find the optimal rejection threshold $\tau_O$ using the following formula
 
 \section{State-of-the-art}
 \label{sec:state-of-the-art}
-In this section, we will explain how we will apply the value-sensitive metric from section \ref{sec:value-metric} to some of the state-of-the-art automatic hate speech detection models so that we convert them into dependent rejectors.
+In this section, we will explain how we will apply the value-sensitive metric from section \ref{sec:value-metric} to some of the state-of-the-art automatic hate speech detection models to convert them into dependent rejectors.
 %
 In this experiment, we aim to find out three things.
 %
-First, we want to find out how the value-sensitive metric behaves on the different models and datasets.
+First, we want to find out how the value-sensitive metric behaves on different models and datasets.
 %
 Second, we want to know wheter rejecting ML predictions can be beneficial in the hate speech detection domain.
 %
@@ -224,7 +224,7 @@ We expect that the accuracy of the predictions on the unseen dataset is signific
 Therefore, we also expect that the output value of our metric for the unseen dataset will be lower and that the optimal rejection threshold will be lower (meaning that we need to reject more predictions).
 %
 
-\subsection{Kernel Density Estimation}
+\subsection{Probability Density Functions}
 Since our metric depends on the PDFs of the confidence values of the TP, TN, FP, and FN predictions, we need to emperically estimate these PDFs as we do not know the actual underlying distributions.
 %
 We use the Kernel Density Estimation (KDE) method provided by Statsmodels\footnote{\url{https://www.statsmodels.org/}} for estimating the PDFs.
@@ -240,15 +240,29 @@ A small bandwidth value results in an estimated PDF with a lot of variance, whil
 We use maximum likelihood cross validation for finding the optimal bandwidth value.
 %
 
-\subsection{Calculating the total value}
-We apply our metric from section \ref{sec:value-metric} to calculate the total value of all three models for both the seen and the unseen datasets at all possible rejection thresholds ($\tau$).
+\subsection{Application of the metric}
+We apply our metric from section \ref{sec:value-metric} to calculate the total value ($V(\tau)$ from formula \ref{for:final-V}) of all three models for both the seen and the unseen datasets at all possible rejection thresholds ($\tau$).
 %
 We determine the optimal rejection threshold $\tau_O$ using the formulation from \ref{for:optimal-threshold}.
 %
-If $\tau \in [0.0, 0.5]$, then we accept all predictions since the confidence values of all predictions are always above $0.5$ given our binary clasfficastion setting.
+Since we have a binary classification setting (hate or not hate) all confidence values will always be greater than $0.5$.
 %
-For this reason, we only calculate the total value of all predictions for the range $\tau \in [0.5, 1.0]$.
+So if $\tau \in [0.0, 0.5]$, then we accept all predictions and if $\tau = 1.0$, then we reject all predictions.
 %
-If $\tau = 1.0$, then we reject all predictions.
+Therefore, we only calculate the total value of all predictions for the range $\tau \in [0.5, 1.0]$.
 %
-\todo[inline]{Explain how we compare the metric to machine metrics such as accuracy}
+
+%
+The first goal is to check the behaviour of the model on different models and datasets.
+%
+We can analyze this by plotting $V(\tau)$ for the range $\tau \in [0.5, 1.0]$.
+%
+The second goal is to find out whether the reject option can beneficial for hate speech detection.
+%
+If the total value of a model for some optimal rejection threshold ($0.5 < \tau_O < 1.0$) is positive, then we know that the reject option can be beneficial for that specific model.
+%
+The final goal is to compare the metric to machine metrics such as accuracy.
+%
+We will do this by comparing the $V(\tau_O)$ values and the accuracies between all models.
+
+
