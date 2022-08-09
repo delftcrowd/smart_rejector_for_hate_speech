@@ -11,7 +11,7 @@ We do this by taking the values of TP, TN, FP, FN, and rejected predictions into
 %
 Section \ref{sec:survey} will explain how we assess these values.
 %
-For the remaining part of this chapter, we assume that we know these values.
+We assume that we know these values for the remaining part of this chapter.
 %
 
 %
@@ -33,77 +33,79 @@ The value of $V(\tau)$ depends on the values of TP, TN, FP, FN, and rejected pre
 %
 We denote the values of TP, TN, FP, FN, and rejected predictions as $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ respectively.
 %
-From the set of predictions we can derive the subsets of TP, TN, FP, and FN predictions.
+From the set of predictions and their predicted and actual labels we can derive the subsets of TP, TN, FP, and FN predictions.
 %
-Note that we consider that $V_{tp}$ and $V_{tn}$ can be expressed as gains and, therefore, non-negative values and that $V_{fp}$, $V_{fn}$, and $V_{r}$ can be expressed costs and, therefore, non-positive values.
+
 %
-There is one condition that needs to hold: the reduction of total value by means of a rejection should always be smaller in magnitude than the value reduction of an incorrect prediction.
+Before the construction of our metric, we can define several mild conditions.
 %
-Otherwise adopting the reject option serves no purpose.
+By mild, we mean that they do not have to hold since we want to have the freedom of using any value for $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ since we do not know which values will come out of the survey study in chapter \ref{sec:survey}.
 %
-This condition can be formulated as:
-% 
-\begin{align}
-    \label{for:value-condition}
-    \frac{V_{FP} + V_{FN}}{2} < V_R,
-\end{align}
+For the mild conditions, we assume that $V_{tp}$ and $V_{tn}$ are expressed as gains and, therefore, positive values and that $V_{fp}$, $V_{fn}$, and $V_{r}$ as costs and, therefore, negative values.
 %
-For each $\tau$ value in $[0, 1]$, we would like to know whether the model with the reject option is more effective (increased $V(\tau)$) or less effective (decreased $V(\tau_)$ value).
+For each $\tau$ value in $[0, 1]$, we would like to know whether the model with the reject option is more effective (increased $V(\tau)$) or less effective (decreased $V(\tau)$ value).
 %
-In general, the metric should take the following conditions into account:
-% 
+We define the following mild conditions:
 \begin{enumerate}
+    \item The value of incorrect predictions should be lower than the value of rejected predictions. Otherwise adopting the reject option serves no purpose.
     \item Correct accepted predictions should increase the value of $V(\tau)$, while incorrect accepted predictions should decrease the value of $V(\tau)$.
     \item Correct rejected predictions should decrease the value of $V(\tau)$, while incorrect rejected predictions should increase the value of $V(\tau)$.
 \end{enumerate}
+%
+We can formulate the first the condition as follows:
 % 
-We can convert these conditions into the following equations:
+\begin{align}
+    \label{for:value-condition}
+    \frac{V_{fp} + V_{fn}}{2} < V_r,
+\end{align}
+%
+We can convert the latter two conditions into the following equations:
 \begin{subequations}
     \label{for:conditions}
     \begin{align}
-        \frac{\partial V}{\partial R_{tp}(\tau)} + \frac{\partial V}{\partial R_{tn}(\tau)} >= 0, &  &
-        \frac{\partial V}{\partial R^r_{tp}(\tau)} + \frac{\partial V}{\partial R^r_{tn}(\tau)} <= 0, \label{for:conditions-tp-tn} \\
-        \frac{\partial V}{\partial R_{fp}(\tau)} + \frac{\partial V}{\partial R_{fn}(\tau)} <= 0, &  &
-        \frac{\partial V}{\partial R^r_{fp}(\tau)} + \frac{\partial V}{\partial R^r_{fn}(\tau)} >= 0, \label{for:conditions-fp-fn}
+        \frac{\partial V}{\partial F_{tp}} + \frac{\partial V}{\partial F_{tn}} > 0, &  &
+        \frac{\partial V}{\partial F^r_{tp}} + \frac{\partial V}{\partial F^r_{tn}} < 0, \label{for:conditions-tp-tn} \\
+        \frac{\partial V}{\partial F_{fp}} + \frac{\partial V}{\partial F_{fn}} < 0, &  &
+        \frac{\partial V}{\partial F^r_{fp}} + \frac{\partial V}{\partial F^r_{fn}} > 0, \label{for:conditions-fp-fn}
     \end{align}
 \end{subequations}
 %
-where $R_t(\tau)$ and $R_t^r(\tau)$ are the fractions of accepted and rejected predictions respectively based on the rejection threshold $\tau$ and where $t \in [tp, tn, fp, fn]$.
+where $F_p$ and $F_p^r$ are the fractions of accepted and rejected predictions respectively and $p \in [tp, tn, fp, fn]$.
 %
-All conditions include greater/smaller than or equal to operators, since we want to allow the values of $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_{r}$ to be equal to zero.
+% All conditions include greater/smaller than or equal to operators, since we want to allow the values of $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_{r}$ to be equal to zero.
 %
 We create a linear $V(\tau)$ function and assume that the values $V_t$ are known constants.
 %
 Subsequently, we can formulate $V(\tau)$ as:
 \begin{align}
     \label{for:V}
-    V(\tau) = \sum_{p} (V_p - V_r)R_p(\tau) + \sum_{q} (V_r - V_q)R^r_{q}(\tau),
+    V(\tau) = \sum_{p} (V_p - V_r)F_p(\tau) + \sum_{p} (V_r - V_p)F^r_{p}(\tau),
 \end{align}
 %
-where $p, q \in [tp, tn, fp, fn]$.
+where $p \in [tp, tn, fp, fn]$.
 %
-Conditions \ref{for:conditions-tp-tn} are satisfied by default since we assume that $V_{tp}$ and $V_{tn}$ are non-negative and $V_r$ is non-positive.
+Conditions \ref{for:conditions-tp-tn} are satisfied by default since we assume that $V_{tp}$ and $V_{tn}$ are positive and $V_r$ is negative.
 %
 Conditions \ref{for:conditions-fp-fn} are satisfied under the condition of \ref{for:value-condition} and since we assume that $V_{fp}$, $V_{fn}$, and $V_r$ are negative.
 % 
-We can define the $R_t$ and the $R_t^r$ values by computing the integrals over the probability density functions (PDF) of the confidence values of the predictions with type $t$.
+We can define the $R_p$ and the $R_p^r$ values by computing the integrals over the probability density functions (PDF) of the confidence values (denoted as $x$) of the predictions with type $p$.
 %
-We can define $R_t$ by taking the integral over the interval $[\tau, 1]$, and $R_t^r$ by taking the integral over the interval $[0, \tau]$:
+We can define $F_p$ by taking the integral over the interval $[\tau, 1]$, and $F_p^r$ by taking the integral over the interval $[0, \tau]$:
 %
 \begin{align}
     \label{for:R}
     \begin{aligned}
-        R_{t}(\tau) = \int_\tau^1 D_{t}(x)dx & \quad & R_{t}^r(\tau) = \int_0^\tau D_{t}(x)dx,
+        F_{p}(\tau) = \int_\tau^1 D_p(x)dx & \quad & F_p^r(\tau) = \int_0^\tau D_p(x)dx,
     \end{aligned}
 \end{align}
 %
-where $D_t$ is the PDF of all predictions of type $t$.
+where $D_p$ is the PDF of all predictions of type $p$.
 %
 By inserting the integrals from \ref{for:R} into \ref{for:V}, we get our final value function:
 %
 \begin{align}
     \label{for:final-V}
-    V(\tau) = \sum_{t} (V_t - V_r)\int_\tau^1 D_{t}(x)dx + \sum_{t} (V_r - V_t)\int_0^\tau D_{t}(x)dx
+    V(\tau) = \sum_p (V_p - V_r)\int_\tau^1 D_p(x)dx + \sum_p (V_r - V_p)\int_0^\tau D_p(x)dx
 \end{align}
 %
 We can now use \ref{for:final-V} to calculate the total value of some ML model for all $\tau \in [0, 1]$ values.
