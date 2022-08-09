@@ -21,19 +21,19 @@ In \ref{sec:value-metric}, we explain how we construct the confidence metric, an
 
 \section{Value-sensitive metric}
 \label{sec:value-metric}
-The idea of a rejecting ML predictions using a treshold is that for some treshold value $\tau$ in the range $[0, 1]$, we accept all predictions with confidence values greater than or equal to $\tau$ and reject all predictions with confidence values below $\tau$.
+The idea of rejecting ML predictions using a threshold is that for some threshold value $\tau$ in the range $[0, 1]$, we accept all predictions with confidence values greater than or equal to $\tau$ and reject all predictions with confidence values below $\tau$.
 %
 We use a confidence metric to find the optimal rejection threshold.
 %
-Here, we introduce our confidence metric as the value function $V(\tau)$ that measures the total value of some ML model with rejection threshold $\tau$.
+Here, we introduce our confidence metric as the value function $V(\tau)$ that measures the total value of an ML model and rejection threshold $\tau$.
 %
-We can determine the optimal rejection threshold by finding the $\tau$ value for which $V(\tau)$ is maximum.
+We can determine the optimal rejection threshold by finding the $\tau$ value for which $V(\tau)$ is the maximum.
 %
-The value of $V(\tau)$ depends on the values of TP, TN, FP, FN, and rejected predictions and is calculated for a set of predictions with their corresponding confidence values and actual labels.
+The value of $V(\tau)$ depends on the values of TP, TN, FP, FN, and rejected predictions, and we calculate it for a set of predictions with their corresponding confidence values and actual labels.
 %
-We denote the values of TP, TN, FP, FN, and rejected predictions as $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ respectively.
+We denote the values of TP, TN, FP, FN, and rejected predictions as $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$, respectively.
 %
-From the set of predictions and their predicted and actual labels we can derive the subsets of TP, TN, FP, and FN predictions.
+We can derive the subsets of TP, TN, FP, and FN predictions from the complete set of predictions and their predicted and actual labels
 %
 
 %
@@ -41,7 +41,7 @@ Before the construction of our metric, we can define several mild conditions.
 %
 By mild, we mean that they do not have to hold since we want to have the freedom of using any value for $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ since we do not know which values will come out of the survey study in chapter \ref{sec:survey}.
 %
-For the mild conditions, we assume that $V_{tp}$ and $V_{tn}$ are expressed as gains and, therefore, positive values and $V_{fp}$, $V_{fn}$, and $V_{r}$ as costs and, therefore, negative values.
+For the mild conditions, we assume that $V_{tp}$ and $V_{tn}$ are gains and, therefore, positive values and $V_{fp}$, $V_{fn}$, and $V_{r}$ are costs and, therefore, negative values.
 %
 For each $\tau$ value in $[0, 1]$, we would like to know whether the model with the reject option is more effective (increased $V(\tau)$) or less effective (decreased $V(\tau)$ value).
 %
@@ -53,12 +53,12 @@ For each $\tau$ value in $[0, 1]$, we would like to know whether the model with 
     We define the following mild conditions:
 \end{flushleft}
 \begin{enumerate}
-    \item The value of incorrect predictions should be lower than the value of rejected predictions. Otherwise adopting the reject option serves no purpose.
+    \item The value of incorrect predictions should be lower than that of rejected predictions. Otherwise, adopting the reject option serves no purpose.
     \item Correct accepted predictions should increase the value of $V(\tau)$, while incorrect accepted predictions should decrease the value of $V(\tau)$.
     \item Correct rejected predictions should decrease the value of $V(\tau)$, while incorrect rejected predictions should increase the value of $V(\tau)$.
 \end{enumerate}
 %
-We can formulate the first the condition as follows:
+We can formulate the first condition as follows:
 % 
 \begin{align}
     \label{for:value-condition}
@@ -76,7 +76,7 @@ We can convert the latter two conditions into the following equations:
     \end{align}
 \end{subequations}
 %
-where $F_p$ and $F_p^r$ are the fractions of accepted and rejected predictions respectively and $p \in [tp, tn, fp, fn]$.
+where $F_p$ and $F_p^r$ are the fractions of accepted and rejected predictions, respectively and $p \in [tp, tn, fp, fn]$.
 %
 % All conditions include greater/smaller than or equal to operators, since we want to allow the values of $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_{r}$ to be equal to zero.
 %
@@ -92,7 +92,7 @@ where $p \in [tp, tn, fp, fn]$ and where $F_p(\tau)$ and $F_p^r(\tau)$ are the f
 %
 Conditions \ref{for:conditions-tp-tn} are satisfied by default since we assume that $V_{tp}$ and $V_{tn}$ are positive and $V_r$ is negative.
 %
-Conditions \ref{for:conditions-fp-fn} are satisfied under condition \ref{for:value-condition} and since we assume that $V_{fp}$, $V_{fn}$, and $V_r$ are negative.
+Conditions \ref{for:conditions-fp-fn} are satisfied since we assume that $V_{fp}$, $V_{fn}$, and $V_r$ are negative, and when condition \ref{for:value-condition} holds.
 % 
 We can retrieve the $F_p$ and the $F_p^r$ values by computing the integrals over the probability density functions (PDF) of the confidence values (denoted as $x$) of the predictions with type $p$.
 %
@@ -114,7 +114,7 @@ By inserting the integrals from \ref{for:R} into \ref{for:V}, we get our final v
     V(\tau) = \sum_p (V_p - V_r)\int_\tau^1 D_p(x)dx + \sum_p (V_r - V_p)\int_0^\tau D_p(x)dx
 \end{align}
 %
-We can now use \ref{for:final-V} to calculate the total value of some ML model for all thresholds $\tau \in [0, 1]$.
+We can now use \ref{for:final-V} to calculate the total value of an  ML model for all thresholds $\tau \in [0, 1]$.
 %
 The theoretical optimal rejection threshold is equal to the $\tau$ value for which we achieve the maximum value of $V(\tau)$.
 %
@@ -127,13 +127,13 @@ We can find the optimal rejection threshold $\tau_O$ using the following formula
 
 \section{State-of-the-art}
 \label{sec:state-of-the-art}
-In this section, we will explain how we apply the value-sensitive metric from section \ref{sec:value-metric} to some of the state-of-the-art automatic hate speech detection models to convert them into dependent rejectors.
+This section will explain how we apply the value-sensitive metric from section \ref{sec:value-metric} to some of the state-of-the-art automatic hate speech detection models to convert them into dependent rejectors.
 %
 In this experiment, we aim to find out three things.
 %
-First, we want to find out how the value-sensitive metric behaves on different models and datasets.
+First, we want to determine how the value-sensitive metric behaves on different models and datasets.
 %
-Second, we want to know wheter rejecting ML predictions can be beneficial in the hate speech detection domain.
+Second, we want to know whether rejecting ML predictions can benefit hate speech detection.
 %
 Finally, we compare our value-sensitive metric to machine metrics such as accuracy and check whether they give different results.
 %
@@ -145,15 +145,15 @@ The first model is a traditional ML model.
 %
 We implement the Logistich Regression (LR) model with Character N-gram from \citet{waseem2016hateful} since this model achieved the best performance compared to other traditional ML models \citep{davidson2017automated}.
 %
-We select the second model, an DL model, based on the findings from \citet{agrawal2018deep, badjatiya2017deep}.
+We select the second model, a DL model, based on the findings from \citet{agrawal2018deep, badjatiya2017deep}.
 %
 We choose a Convolutional Neural Network (CNN) model initialized with random word embeddings since both studies found that this configuration provides state-of-the-art classification performance.
 %
 We implement the CNN model based on the work of \citep{agrawal2018deep}.
 %
-Finally, our third model is a transformer model given its recent popularity in the NLP domain.
+Finally, our third model is a transformer model, given its recent popularity in the NLP domain.
 %
-We use the DistilBERT model since it's faster to train and smaller in size compared to BERT models while achieving similar performance \citep{sanh2019distilbert}.
+We use the DistilBERT model since it is faster to train and smaller than BERT models while achieving similar performance \citep{sanh2019distilbert}.
 %
 We implement all models in Python.
 %
@@ -162,7 +162,7 @@ We implement the LR model with scikit-learn\footnote{\url{https://scikit-learn.o
 We use Google Colab\footnote{\url{https://colab.research.google.com/}} to train all models.
 
 \subsection{Calibration}
-The problem of most neural network models is that they are often not calibrated \citep{guo2017calibration,sayin2021science}.
+The problem with most neural network models is that they are often not calibrated \citep{guo2017calibration,sayin2021science}.
 %
 We define calibrated models as models where the confidence values of the predictions are equal to the probabilities that the predicted labels are correct.
 %
@@ -180,9 +180,9 @@ They evaluated the results using the expected calibration error (ECE), which mea
 %
 They found that the temperature scaling method is the most effective.
 %
-In temperature scaling, we divide the model's output logits with a temperature value $T$ to soften the probabilities of the final softmax function in the model's architecture \citep{guo2017calibration}.
+In temperature scaling, we divide the model's output logits with a temperature value of $T$ to soften the probabilities of the final softmax function in the model's architecture \citep{guo2017calibration}.
 %
-This $T$ value is initially set to $1$ and optimized by minimizing the negative log-likelihood \citep{guo2017calibration}.
+This $T$ value is initially set to $1$ and optimized by minimizing the negative log likelihood \citep{guo2017calibration}.
 %
 Please note that temperature scaling does not change the model's accuracy but only rescales the distribution of the confidence values \citep{guo2017calibration}.
 %
@@ -198,7 +198,7 @@ Nevertheless, it is still valuable to calibrate the models since it also benefit
 %
 
 %
-The Logistic Regression model is well-calibrated by default since under the hood it optimizes the log-loss function which measures the difference between predicted confidence values and the actual labels.
+The Logistic Regression model is well-calibrated by default since, under the hood, it optimizes the log-loss function, which measures the difference between predicted confidence values and the actual labels.
 %
 Therefore, we do not have to apply temperature scaling to the Logistic Regression model.
 
@@ -207,9 +207,9 @@ We train all models on the \citet{waseem2016hateful} dataset consisting of 16K t
 %
 We converted the 'racist' and 'sexist' labels to 'hate' labels to create a binary classification setting.
 %
-We split the dataset into a train and test dataset according to an 80:20 ratio, respectively.
+Furthermore, we split the dataset into a train and test dataset according to an 80:20 ratio.
 %
-For the CNN and the DistilBERT models, we split the training set up into a training set and a validation set according to a 75:25 ratio, respectively.
+For the CNN and the DistilBERT models, we split the training set up into a training set and a validation set according to a 75:25 ratio.
 %
 We use this validation set to calibrate the trained models by finding the optimal $T$ value for the temperature scaling method.
 %
@@ -218,6 +218,7 @@ We preprocess the data by tokenizing all URLs, user mentions, and emojis since t
 The remaining parts of the preprocessing, such as removing whitespaces and stop words or the tokenization process, are dedicated to the different frameworks we use per model.
 %
 
+%TODO: continue grammar check from here
 %
 We apply the metric to two test datasets: the \emph{seen} dataset and the \textit{unseen} dataset.
 %
