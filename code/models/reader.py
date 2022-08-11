@@ -23,7 +23,7 @@ class Reader:
             tuple[list, list, list, list]: splitted train and test sets.
         """
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, random_state=10, stratify=y, test_size=0.10
+            X, y, random_state=10, stratify=y, test_size=0.2
         )
         return X_train, X_test, y_train, y_test
 
@@ -41,10 +41,10 @@ class Reader:
             tuple[list, list, list, list]: splitted train, validation, and test sets.
         """
         X_train, X_test, y_train, y_test = train_test_split(
-            X, y, random_state=10, stratify=y, test_size=0.10
+            X, y, random_state=10, stratify=y, test_size=0.2
         )
         X_train, X_val, y_train, y_val = train_test_split(
-            X_train, y_train, random_state=10, test_size=0.2
+            X_train, y_train, random_state=10, test_size=0.25
         )
         return X_train, X_val, X_test, y_train, y_val, y_test
 
