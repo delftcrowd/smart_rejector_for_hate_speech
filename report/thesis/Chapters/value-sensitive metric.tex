@@ -218,7 +218,6 @@ We preprocess the data by tokenizing all URLs, user mentions, and emojis since t
 The remaining parts of the preprocessing, such as removing whitespaces and stop words or the tokenization process, are dedicated to the different frameworks we use per model.
 %
 
-%TODO: continue grammar check from here
 %
 We apply the metric to two test datasets: the \emph{seen} dataset and the \textit{unseen} dataset.
 %
@@ -236,44 +235,43 @@ Therefore, we also expect that the output value of our metric for the unseen dat
 %
 
 \subsection{Probability Density Functions}
-Since our metric depends on the PDFs of the confidence values of the TP, TN, FP, and FN predictions, we need to emperically estimate these PDFs as we do not know the actual underlying distributions.
+Since our metric depends on the PDFs of the confidence values of the TP, TN, FP, and FN predictions, we need to empirically estimate these PDFs as we do not know the actual underlying distributions.
 %
 We use the Kernel Density Estimation (KDE) method provided by Statsmodels\footnote{\url{https://www.statsmodels.org/}} for estimating these PDFs.
 %
-With KDE we estimate the PDF by weighing each measured confidence value from a set of predictions using a kernel function, a gaussian density function in our case since it's the most commonly used, for each possible confidence value in the range $[0, 1]$.
+With KDE, we estimate the PDF by weighing each measured confidence value from a set of predictions using a kernel function, a gaussian density function since it is the most commonly used, for each possible confidence value in the range $[0, 1]$.
 %
 If there are many predictions with a confidence value around $0.8$, then the KDE estimate will be higher around that point.
 %
 The kernel function used in the KDE method also depends on a bandwidth (smoothness) value.
 %
-A small bandwidth value results in an estimated PDF with a lot of variance, while a high bandwidth value results in an estimated PDF with a lot of bias.
+A small bandwidth value results in an estimated PDF with much variance, while a high bandwidth value results in an estimated PDF with much bias.
 %
-We use maximum likelihood cross validation for finding the optimal bandwidth value.
-%
+We use maximum likelihood cross-validation to find the optimal bandwidth value.
 
 \subsection{Application of the metric}
 We apply our metric from section \ref{sec:value-metric} to calculate the total value $V(\tau)$ (formula \ref{for:final-V}) of all three models for both the seen and the unseen datasets at all possible rejection thresholds ($\tau$).
 %
 We determine the optimal rejection threshold $\tau_O$ using the formulation from \ref{for:optimal-threshold}.
 %
-Since we have a binary classification setting (hate or not hate) all confidence values will always be greater than or equal to $0.5$.
+Since we have a binary classification setting (hate or not hate), all confidence values will always be greater than or equal to $0.5$.
 %
-So if $\tau \in [0.0, 0.5]$, then we accept all predictions and if $\tau = 1.0$, then we reject all predictions.
+So if $\tau \in [0.0, 0.5]$, we accept all predictions and if $\tau = 1.0$, we reject all predictions.
 %
 Therefore, we only calculate the total value of all predictions for the range $\tau \in [0.5, 1.0]$.
 %
 
 %
-The first goal is to check the behaviour of the model on different models and datasets.
+The first goal is to check the metric's behaviour on different models and datasets.
 %
 We can analyze this by plotting $V(\tau)$ for the range $\tau \in [0.5, 1.0]$.
 %
-The second goal is to find out whether the reject option can beneficial for hate speech detection.
+The second goal is to determine whether the reject option can benefit hate speech detection.
 %
 If the total value of a model for some optimal rejection threshold ($0.5 < \tau_O < 1.0$) is positive, then we know that the reject option can be beneficial for that specific model.
 %
 The final goal is to compare the metric to machine metrics such as accuracy.
 %
-We accomplish this by comparing the $V(\tau_O)$ values and the accuracies between all models.
+We accomplish this by comparing the $V(\tau_O)$ values and the accuracies of all models.
 
 
