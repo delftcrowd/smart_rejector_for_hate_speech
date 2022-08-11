@@ -6,9 +6,10 @@ Then, we give an overview of the state-of-the-art solutions for automatic hate s
 %
 In section \ref{sec:related-work-rejection}, we discuss the different methods of ML with rejection.
 %
-Section \ref{sec:related-work-value-assessment} discusses the main challenges of assessing the values of (in)correct and rejected predictions in the hate speech domain.
+Section \ref{sec:related-work-evaluation-metrics} discusses the shortcomings of standard machine metrics, such as accuracy, to evaluate detection systems and why human-centred metrics such as ours are promising.
 %
-Finally, we discuss the shortcomings of standard machine metrics in section \ref{sec:related-work-evaluation-metrics}, such as accuracy, to evaluate detection systems and why human-centred metrics such as ours are promising.
+Finally, we discuss the main challenges of assessing the values of (in)correct and rejected predictions in the hate speech domain.
+%
 
 \section{Hate speech: definition and challenges}
 \label{sec:related-work-challenges}
@@ -152,13 +153,44 @@ They integrated the reject option in the training phase of a DL classification m
 
 In this work, we apply the dependent way since it allows for applying the reject option to any existing classification model \citep{hendrickx2021machine}.
 %
-The most relevant work is from \citet{de2000reject} since their confidence metric considers the value of (in)correct and rejected predictions.
+As opposed to the integrated way, by following the dependent way, we are free to use any classification model, and we do not have to retrain the underlying model whenever we make modifications to the dependent rejector.
+%
+We believe that the separated way is not optimal either since we still want to decide whether to accept or reject predictions based on the output of the underlying classification model.
+%
+The most relevant work in dependent rejectors is from \citet{de2000reject} since their confidence metric considers the value of (in)correct and rejected predictions.
 %
 While their metric measures only the effectiveness of the reject option and is based on the values of correct, incorrect, and rejected predictions, our metric measures the total value of the ML model with the reject option and is based on the values of TP, TN, FP, FN, and rejected predictions.
 %
 While they experimented with a range of different cost values, we go further by employing a value-sensitive approach, which determines the cost values based on how users feel regarding machine predictions using a survey study with crowd workers.
 %
 Therefore, we obtain a rejection threshold that captures the implications of machine predictions from a human perspective.
+
+\section{Evaluation metrics}
+\label{sec:related-work-evaluation-metrics}
+Most hate speech-related studies evaluate their classification methods using standard \textit{machine} metrics such as accuracy, precision, recall, or F1.
+% 
+Classification models with a reject option are often evaluated by analyzing the model's accuracy and coverage.
+%
+\citet{nadeem2009reject} proposed using accuracy-rejection curves to plot the trade-off between accuracy and coverage so that different classification models with a reject option can be compared.
+%
+\citet{rottger2020hatecheck, casati2021value, olteanu2017limits} recognized the shortcomings of machine metrics such as accuracy and found a gap in the evaluation of hate speech detection systems.
+%
+\citet{rottger2020hatecheck} found it hard to identify the weak points of classification models using machine metrics such as accuracy.
+%
+Therefore, the authors presented a suite that consists of 29 carefully selected functional tests to help identify the model's weaknesses \citep{rottger2020hatecheck}.
+%
+Each test checks criteria, such as coping with spelling variations or detecting neutral content containing slurs \citep{rottger2020hatecheck}.
+%
+Our approach is different since we focus on measuring the value of classification models with a reject option.
+%
+\citet{olteanu2017limits} promote using \textit{human-centred} metrics that measure the human-perceived value of hate speech classification models.
+%
+They found that for the same precision values, the perceived value changes depending on the user characteristics and the type of classification errors (an offensive tweet labelled as hate (low impact) and a neutral tweet labelled as hate (high impact)) \citep{olteanu2017limits}.
+%
+\citet{casati2021value} propose to develop new metrics for evaluating ML models with a reject option that considers domain-specific values.
+%
+Our work aligns with both studies since we create a human-centred metric for evaluating hate speech classification models with a reject option that incorporates human value derived from a survey study.
+
 
 \section{Value assessment}
 \label{sec:related-work-value-assessment}
@@ -194,9 +226,9 @@ We would like to know whether an FN prediction is, for example, two times worse 
 %
 The main challenge is to express all values using a single unit.
 %
-First, we could define the values using an objective measure, such as time or money spent/saved.
+First, we could define the values using a quantitative measure, such as time or money spent/saved.
 %
-Second, we could define the values subjectively, for example, by analyzing people's stance towards the consequence of incorrect predictions in hate speech detection.
+Second, we could define the values using a qualitative measure, for example, by analyzing people's stance towards the consequence of incorrect predictions in hate speech detection.
 %
 
 %
@@ -210,8 +242,8 @@ In this section, we try to assess the values of both stakeholders empirically an
 
 
 
-\subsection{Objective assessment}
-\label{sec:objective-assessment}
+\subsection{Quantitative assessment}
+\label{sec:quantitative-assessment}
 %
 %
 % For example, suppose there is a factory that uses a camera and an ML model to check if a package is damaged or not.
@@ -235,7 +267,7 @@ In this section, we try to assess the values of both stakeholders empirically an
 % In this example, we can express the values of FP, FN, TP, TN, and rejections in time/money spent/saved.
 %
 
-In this section, we explain the difficulties of defining the values of TP, TN, FP, FN, and rejected predictions in hate speech detection using objective measurements.
+In this section, we explain the difficulties of defining the values of TP, TN, FP, FN, and rejected predictions in hate speech detection using quantitative measurements.
 %
 We do this by following the conceptual approach for both stakeholders by looking at some related work to see if the empirical approach is possible.
 %
@@ -304,7 +336,7 @@ Terrorist organizations use free speech to recruit people and call for acts of v
 %
 At the same time, most other hateful posts will never result in actual acts of violence \citep{sunstein2018does}.
 %
-Therefore, value assessment using objective measurements is already tricky for specific cases, let alone in general.
+Therefore, value assessment using quantitative measurements is already tricky for specific cases, let alone in general.
 %
 There is a nonquantifiable risk that acts of violence will happen in the unknown future \citep{sunstein2018does}.
 %
@@ -318,15 +350,15 @@ They conclude their work by saying that there are too many problems to empirical
 %
 
 %
-Therefore, we believe that using objective measurements, such as money, is impossible to assess the values of predictions for both stakeholders in hate speech detection.
+Therefore, we believe that using quantitative measurements, such as money, is impossible to assess the values of predictions for both stakeholders in hate speech detection.
 %
 
-\subsection{Subjective assessment}
-From section \ref{sec:objective-assessment}, we concluded that from related work, it appears that we cannot retrieve the objective values conceptually and empirically.
+\subsection{Qualitative assessment}
+From section \ref{sec:quantitative-assessment}, we concluded that from related work, it appears that we cannot retrieve the quantitative values conceptually and empirically.
 %
-Instead, we will focus on the subjective measurement of values: what is people's stance towards (in)correct and rejected predictions in hate speech detection?
+Instead, we will focus on the qualitative measurement of values: what is people's stance towards (in)correct and rejected predictions in hate speech detection?
 %
-We only consider the social media users as the stakeholder in the subjective assessment since they are the most affected by the consequences of hate speech detection.
+We only consider the social media users as the stakeholder in the qualitative assessment since they are the most affected by the consequences of hate speech detection.
 %
 We will empirically assess social media users' value through a survey.
 %
@@ -453,28 +485,3 @@ In \citet{roitero2018fine}, the authors applied cross-modality analysis between 
 In our work, we follow the approach from \citet{roitero2018fine} as we also validate our findings by checking the correlation between the ME scale and the 100-level scale.
 %
 
-\section{Evaluation metrics}
-\label{sec:related-work-evaluation-metrics}
-Most hate speech-related studies evaluate their classification methods using standard \textit{machine} metrics such as accuracy, precision, recall, or F1.
-% 
-Classification models with a reject option are often evaluated by analyzing the model's accuracy and coverage.
-%
-\citet{nadeem2009reject} proposed using accuracy-rejection curves to plot the trade-off between accuracy and coverage so that different classification models with a reject option can be compared.
-%
-\citet{rottger2020hatecheck, casati2021value, olteanu2017limits} recognized the shortcomings of machine metrics such as accuracy and found a gap in the evaluation of hate speech detection systems.
-%
-\citet{rottger2020hatecheck} found it hard to identify the weak points of classification models using machine metrics such as accuracy.
-%
-Therefore, the authors presented a suite that consists of 29 carefully selected functional tests to help identify the model's weaknesses \citep{rottger2020hatecheck}.
-%
-Each test checks criteria, such as coping with spelling variations or detecting neutral content containing slurs \citep{rottger2020hatecheck}.
-%
-Our approach is different since we focus on measuring the value of classification models with a reject option.
-%
-\citet{olteanu2017limits} promote using \textit{human-centred} metrics that measure the human-perceived value of hate speech classification models.
-%
-They found that for the same precision values, the perceived value changes depending on the user characteristics and the type of classification errors (an offensive tweet labelled as hate (low impact) and a neutral tweet labelled as hate (high impact)) \citep{olteanu2017limits}.
-%
-\citet{casati2021value} propose to develop new metrics for evaluating ML models with a reject option that considers domain-specific values.
-%
-Our work aligns with both studies since we create a human-centred metric for evaluating hate speech classification models with a reject option that incorporates human value derived from a survey study.
