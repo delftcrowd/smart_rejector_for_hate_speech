@@ -1,4 +1,4 @@
-\chapter{Value-sensitive rejection}
+\chapter{Value-sensitive rejector}
 As concluded in the \nameref{sec:related-work}, there is a need for \textit{value-sensitive} metrics for measuring the performance of ML models, especially for social-technical applications such as hate speech detection.
 %
 We also concluded that manual human moderation is the most effective and that most automatic hate speech detection methods do not perform well on unseen data.
@@ -15,9 +15,11 @@ We assume that we know these values for the remaining part of this chapter.
 %
 
 %
-In this chapter, we explain how we create a dependent rejector by introducing a confidence metric that measures the total value of an ML model with a reject option.
+In this chapter, we explain how we create a value-sensitive dependent rejector by introducing a value-sensitive confidence metric that measures the total value of an ML model with a reject option.
 %
-In \ref{sec:value-metric}, we explain how we construct the confidence metric, and in \ref{sec:state-of-the-art}, we discuss how we apply the metric to some of the state-of-the-art hate speech classification models.
+In \ref{sec:value-metric}, we explain how we construct the confidence metric.
+%
+In \ref{sec:overview-rejector}, we provide an overview of how we use the value-sensitive rejector, and in \ref{sec:state-of-the-art}, we discuss how we apply the rejector to some state-of-the-art hate speech classification models.
 
 \section{Value-sensitive metric}
 \label{sec:value-metric}
@@ -125,17 +127,51 @@ We can find the optimal rejection threshold $\tau_O$ using the following formula
     \tau_O \text{ where } V(\tau_O) = \max \{V(\tau): \tau \in \mathbb{R} \wedge 0 \leq \tau \leq 1 \}
 \end{align}
 
+\section{Overview of the value-sensitive rejector}
+\label{sec:overview-rejector}
+This section provides an overview of how we use our value-sensitive rejector.
+%
+We distinguish a training phase and a deployment phase of the rejector.
+%
+In this project, we mainly focus on the training phase since we do not apply the rejector in the wild.
+%
+Figures \ref{fig:training} and \ref{fig:deployment} visualize how we train the rejector and how we can use it in deployment to accept or reject predictions, respectively.
+%
+In figure \ref{fig:training}, we show the training phase of the rejector.
+%
+In this phase, we use our value-sensitive metric from section \ref{sec:value-metric} to calculate the optimal rejection threshold $\tau_O$.
+%
+We use the following inputs in this calculation: the values from the crowdsourced survey and a set of predictions that consist of the confidence values and the predicted and actual labels.
+%
+Figure \ref{fig:deployment} shows how we can apply the trained rejector to unseen data in deployment
+%
+We accept all predictions for which the confidence value $c$ is greater than or equal to the optimal rejection threshold $\tau_O$ and, otherwise, reject them so that a human moderator handles the prediction.
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Figures/training.pdf}
+    \caption{\textbf{Training phase:} flow diagram that visualizes how the value-sensitive rejector calculates the optimal rejection threshold $\tau_O$.}
+    \label{fig:training}
+\end{figure}
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Figures/deployment.pdf}
+    \caption{\textbf{Deployment phase:} flow diagram that visualizes how the value-sensitive rejector uses the optimal rejection threshold $\tau_O$ and the prediction confidence $c$ to determine when to accept or reject a prediction from unseen data in deployment.}
+    \label{fig:deployment}
+\end{figure}
+
 \section{State-of-the-art}
 \label{sec:state-of-the-art}
-This section will explain how we apply the value-sensitive metric from section \ref{sec:value-metric} to some of the state-of-the-art automatic hate speech detection models to convert them into dependent rejectors.
+This section will explain how we apply the value-sensitive rejector to some of the state-of-the-art automatic hate speech detection models.
 %
 In this experiment, we aim to find out three things.
 %
-First, we want to determine how the value-sensitive metric behaves on different models and datasets.
+First, we want to determine how the value-sensitive rejector behaves on different models and datasets.
 %
-Second, we want to know whether rejecting ML predictions can benefit hate speech detection.
+Second, we want to know whether value-sensitive rejection can benefit hate speech detection.
 %
-Finally, we compare our value-sensitive metric to machine metrics such as accuracy and check whether they give different results.
+Finally, we compare the values of our value-sensitive metric to the values of machine metrics such as accuracy and check whether they give different results.
 %
 
 \subsection{Models}
@@ -219,7 +255,7 @@ The remaining parts of the preprocessing, such as removing whitespaces and stop 
 %
 
 %
-We apply the metric to two test datasets: the \emph{seen} dataset and the \textit{unseen} dataset.
+We apply the value-sensitive rejector to two test datasets: the \emph{seen} dataset and the \textit{unseen} dataset.
 %
 The seen dataset is the test set from the \citet{waseem2016hateful} dataset.
 %
@@ -227,15 +263,15 @@ The unseen dataset is a test set from the \citet{basile2019semeval} dataset that
 %
 We use the unseen dataset to simulate how the models would perform in a realistic use-case when a model is trained on one dataset and applied to a different dataset.
 %
-We want to study the effect of bias and how this affects the results when using our metric for evaluating the models with a reject option.
+We want to study the effect of bias and how this affects the results when using our value-sensitive metric for evaluating the models with a reject option.
 %
 We expect that the accuracy of the predictions on the unseen dataset is significantly lower than on the seen dataset, similar to the findings of related studies: \citet{grondahl2018all, arango2019hate}.
 %
-Therefore, we also expect that the output value of our metric for the unseen dataset will be lower and that the optimal rejection threshold will be higher (meaning that we need to reject more predictions).
+Therefore, we also expect that the output value of our value-sensitive metric for the unseen dataset will be lower and that the optimal rejection threshold will be higher (meaning that we need to reject more predictions).
 %
 
 \subsection{Probability Density Functions}
-Since our metric depends on the PDFs of the confidence values of the TP, TN, FP, and FN predictions, we need to empirically estimate these PDFs as we do not know the actual underlying distributions.
+Since our value-sensitive rejector depends on the PDFs of the confidence values of the TP, TN, FP, and FN predictions, we need to empirically estimate these PDFs as we do not know the actual underlying distributions.
 %
 We use the Kernel Density Estimation (KDE) method provided by Statsmodels\footnote{\url{https://www.statsmodels.org/}} for estimating these PDFs.
 %
@@ -249,8 +285,10 @@ A small bandwidth value results in an estimated PDF with much variance, while a 
 %
 We use maximum likelihood cross-validation to find the optimal bandwidth value.
 
-\subsection{Application of the metric}
-We apply our metric from section \ref{sec:value-metric} to calculate the total value $V(\tau)$ (formula \ref{for:final-V}) of all three models for both the seen and the unseen datasets at all possible rejection thresholds ($\tau$).
+\subsection{Application of the value-sensitive rejector}
+We apply the training phase of the value-sensitive rejector (refer to figure \ref{fig:training}) to all three models for both the seen and the unseen datasets.
+%
+Therefore, we use our metric from section \ref{sec:value-metric} to calculate the total value $V(\tau)$ (formula \ref{for:final-V}) at all possible rejection thresholds ($\tau$) for all different setups.
 %
 We determine the optimal rejection threshold $\tau_O$ using the formulation from \ref{for:optimal-threshold}.
 %
@@ -262,15 +300,15 @@ Therefore, we only calculate the total value of all predictions for the range $\
 %
 
 %
-The first goal is to check the metric's behaviour on different models and datasets.
+The first goal is to check the rejector's behaviour on different models and datasets.
 %
-We can analyze this by plotting $V(\tau)$ for the range $\tau \in [0.5, 1.0]$.
+We can analyze this by plotting $V(\tau)$ for the range $\tau \in [0.5, 1.0]$, measuring the rejection rate (RR, percentage of rejected predictions), and measuring the accuracy of the accepted predictions.
 %
-The second goal is to determine whether the reject option can benefit hate speech detection.
+The second goal is determining whether the rejector can enhance hate speech detection.
 %
 If the total value of a model for some optimal rejection threshold ($0.5 < \tau_O < 1.0$) is positive, then we know that the reject option can be beneficial for that specific model.
 %
-The final goal is to compare the metric to machine metrics such as accuracy.
+The final goal is to compare the value-sensitive metric to machine metrics such as accuracy.
 %
 We accomplish this by comparing the $V(\tau_O)$ values and the accuracies of all models.
 
