@@ -18,7 +18,7 @@ The TP and TN scenarios mean that SocialNet successfully detects whether a post 
 %
 The FP scenario means that SocialNet incorrectly predicts a non-hateful post as hateful, and conversely for the FN scenario.
 %
-For example, in the FN scenario, the survey shows a hateful post to the subject and explains that SocialNet did not identify the post as hate speech.
+For example, in the FN scenario, the survey shows a hateful post to the participant and explains that SocialNet did not identify the post as hate speech.
 %
 Then, participants indicate the degree of agreement/disagreement using some scales, and the answers per scenario are aggregated to obtain the relative values.
 %
@@ -42,16 +42,70 @@ Finally, in section \ref{sec:survey-analysis}, we elaborate on the analysis of t
 
 \section{Hypothesis}
 \label{sec:survey-hypothesis}
-% "Describe the (numbered) hypotheses in terms of relationships between your variables. 2. For interaction effects, describe the expected shape of the interactions. 3. If you are manipulating a variable, make predictions for successful check variables or explain why no manipulation check is included. 4. A figure or table may be helpful to describe complex interactions. 5. For original research, add rationales or theoretical frameworks for why a certain hypothesis is tested. 6. If multiple predictions can be made for the same IV-DV combination, describe what outcome would be predicted by which theory"
+Before we conducted the survey experiment, we listed several hypotheses about the value ratios and the ME method:
+\begin{itemize}
+    \item \textbf{We hypothesize that the values of FP and FN are negative and that the value of an FN is lower than an FP}. We believe that both FP and FN predictions have a negative impact on the social media users and, therefore, we think that both values should be negative. We believe that allowing hateful content to be publicly visible has a more negative impact on social media users than filtering out neutral content. Therefore, we think that the value of an FN is smaller than the value of an FP.
+    \item \textbf{We hypothesize that the values of TP and TN are both positive and that the value of an TP is greater than of an TN.} We believe that both TP and TN predictions have a positive impact on the social media users and, therefore, we think that both values should be positive. We believe that correctly predicting hateful content is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think that the value of an TP is greater than the value of an TN.
+    \item \textbf{We hypothesize that the value of a rejection is negative and that it is greater than the average value of an FP and an FN.} The key assumption of using ML models with a reject option is that the negative value of a rejection should always be greater than the negative value of an incorrect decision.
+    \item \textbf{We hypothesize that Magnitude Estimation (ME) is a suitable technique for retrieving the value ratios.} ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \cite{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale when rating the relevance of documents.
+\end{itemize}
 
 \section{Method}
 \label{sec:survey-method}
+In this section, we discuss the complete setup of the survey experiment and how we use both scales.
+
 \subsection{Scales}
+We use ME as the primary scale of our survey experiment.
+%
+Like we concluded in the section \ref{sec:me}, we also need to validate the the ME scale.
+%
+We validate the ME scale through cross-modality validation by comparing the results of the ME scale with another scale as explained in section \ref{sec:me}.
+%
+The secondary scale is a bounded scale that consists of 100 levels, called the 100-level scale  for four reasons.
+%
+First, it is impractical in this project, given the limited budget, to use other ME scales, such as measuring the intensity of the participants' handgrips to express their judgements.
+%
+Second, there does not exist any suitable dataset that we can use for validation that contains human ratings of different scenarios in hate speech detection.
+%
+Third, we concluded in \ref{sec:likert} that Likert scales have limited response freedom.
+%
+Finally, in \cite{roitero2018fine}, the authors concluded that the 100-level scale provides more response freedom than course-grained Likert scales and has several advantages over ME in terms of usability and reliability.
+%
+The 100-level scale is easier to understand than ME, does not require normalization, and provides more flexibility than Likert scales \cite{roitero2018fine}.
+%
+Therefore, we will create two separate surveys with the same scenarios where half of all participants use the 100-level scale and the other half use the ME scale.
+%
+Both scales are bipolar scales since the partici
 
 \subsection{Normalization}
+The ME scale is unbounded and, therefore, provides a lot of response freedom.
+%
+For example, suppose we first show a scenario and the participant provides a value (e.g., 100) to indicate the degree of agreement.
+%
+Suppose we next present a scenario that the participant agrees with more.
+%
+The participant can always provide a higher value (e.g., 125) and not be restricted within a fixed range.
+%
+However, the results need to be normalized as different participants rate the agreement/disagreement degree differently.
+%
+As explained in section \ref{sec:me}, we cannot use common normalization methods such as geometric averaging as we are using bipolar scales with negative values.
+%
+Therefore, we normalize the results by dividing the magnitude estimates of each subject by their maximum estimate.
+%
+We multiply the normalized magnitude estimates by 100 for the sake of clarity.
+%
+This way, all magnitudes estimates are in the range $[-100, 100]$ while maintaining the ratio properties.
 
 \subsection{Design}
+We will list all independent, dependent, confounding, and control variables analyzed in our experiment in this section.
+%
+Important to note is that we do not intend to study the confounding variables 'demographic' and 'age'.
+%
+The main reason for this is that we do not focus on the effects of subject characteristics on the outcomes but only want to study whether the ME technique is suitable for retrieving opinions about hate speech detection predictions. We left the investigation of the effects of subject characteristics on the outcomes to future research. According to \cite{gold2018women}, there is no significant difference in how men and women perceive hate. Therefore, we do not consider gender as a confounding variable.
+
 \subsubsection{Independent variables}
+
+
 \subsubsection{Confounding variables}
 \subsubsection{Control variables}
 \subsubsection{Dependent variables}
@@ -59,9 +113,9 @@ Finally, in section \ref{sec:survey-analysis}, we elaborate on the analysis of t
 \subsection{Planned sample}
 \subsubsection{Sample size}
 
-\subsubsection{Subjects}
-\todo[inline]{Explain subject Inclusion and Exclusion Criteria}
-\todo[inline]{Explain subject Compensation}
+\subsubsection{Participants}
+\todo[inline]{Explain participant Inclusion and Exclusion Criteria}
+\todo[inline]{Explain participant Compensation}
 
 \subsection{Materials}
 \subsubsection{Survey tool}
