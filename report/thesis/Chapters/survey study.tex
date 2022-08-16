@@ -102,18 +102,6 @@ We will list all independent, dependent, confounding, and control variables anal
 \subsubsection{Independent variables}
 Independent variables are the different hate speech detection scenarios we show to the participants (TP, TN, FP, FN, and rejection).
 %
-\begin{itemize}
-    \item \textbf{True Positive} Show a hateful post to the user and explain that SocialNet detected hate and ranked the post lower on people's feeds.
-    \item \textbf{True Negative} Show a non-hateful post to the user and explain that SocialNet did not detect hate and allowed the post.
-    \item \textbf{False Positive} Show a non-hateful post to the user and explain that SocialNet detected hate and ranked the post lower on people's feeds.
-    \item \textbf{False Negative} Show a hateful post to the users and explain that SocialNet did not detect hate and allowed the post.
-    \item \textbf{Rejection}
-          \begin{itemize}
-              \item Show a hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
-              \item Or, show a non-hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
-          \end{itemize}
-\end{itemize}
-%
 We inform the participants in the case of TP and FP scenarios that SocialNet ranks the hateful post lower on their feed.
 %
 The users then need to spend more effort finding the post since they need to scroll longer before it becomes visible.
@@ -125,7 +113,18 @@ We inform participants in the rejection scenarios that a human moderator needs t
 Meanwhile, the post remains visible with its original rank on the user's feed.
 %
 We use 24 hours based on the German NetzDG law, which allows the government to fine social media platforms if they do not remove illegal hate speech within 24 hours \citep{tworek2019analysis}.
-
+%
+\begin{itemize}
+    \item \textbf{True Positive} Show a hateful post to the user and explain that SocialNet detected hate and ranked the post lower on people's feeds.
+    \item \textbf{True Negative} Show a non-hateful post to the user and explain that SocialNet did not detect hate and allowed the post.
+    \item \textbf{False Positive} Show a non-hateful post to the user and explain that SocialNet detected hate and ranked the post lower on people's feeds.
+    \item \textbf{False Negative} Show a hateful post to the users and explain that SocialNet did not detect hate and allowed the post.
+    \item \textbf{Rejection}
+          \begin{itemize}
+              \item Show a hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
+              \item Or, show a non-hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
+          \end{itemize}
+\end{itemize}
 
 \subsubsection{Confounding variables}
 %
@@ -152,7 +151,7 @@ We control the content of the social media posts in two manners.
 %
 First, we present all scenarios for all participants randomly to reduce bias.
 %
-Second, we select the social media posts from existing datasets.
+Second, we sample the social media posts for the survey from existing datasets.
 % 
 We explain the selection procedure in section \ref{sec:materials-data}.
 %
@@ -162,6 +161,14 @@ We explain the selection procedure in section \ref{sec:materials-data}.
 \end{itemize}
 
 \subsubsection{Dependent variables}
+Our dependent variables are reliability, validity and the value ratio of TP, TN, FP, FN, and rejection scenarios.
+%
+\begin{itemize}
+    \item \textbf{Reliability} Measured using Krippendorff's alpha, where values larger than 0.8 indicate reliable conclusions and values larger than 0.6 indicate tentative conclusions \cite{krippendorff2004reliability}.
+    \item \textbf{Validity} Convergent validity, if two different measures measure the same thing \cite{fitzner2007reliability}. Measured by calculating the correlation between the magnitude estimates and the response values from the 100-level scale.
+    \item \textbf{Value ratios of TP, TN, FP, FN, and rejection scenarios} Measured by calculating the median of the normalized magnitude estimates of each scenario question and then calculating the mean over the resulting values to come up with the final value for that scenario type.
+\end{itemize}
+
 
 \subsection{Planned sample}
 \subsubsection{Sample size}
