@@ -75,7 +75,7 @@ The 100-level scale is easier to understand than ME, does not require normalizat
 %
 Therefore, we will create two separate surveys with the same scenarios where half of all participants use the 100-level scale and the other half use the ME scale.
 %
-Both scales are bipolar scales since the partici
+Both scales are bipolar scales since the participants should be able to either disagree or agree with the scenarios.
 
 \subsection{Normalization}
 The ME scale is unbounded and, therefore, provides a lot of response freedom.
@@ -153,7 +153,7 @@ First, we present all scenarios for all participants randomly to reduce bias.
 %
 Second, we sample the social media posts for the survey from existing datasets.
 % 
-We explain the selection procedure in section \ref{sec:materials-data}.
+We explain the selection procedure in section \ref{sec:data}.
 %
 \begin{itemize}
     \item \textbf{Scales} The first group of participants must answer the questions using the ME scale. The second group needs to answer the questions using the 100-level scale.
@@ -216,10 +216,37 @@ We use the following exclusion/rejection criteria:
     \item Participants who do fail the ME training phase, for example by providing random values that do not make any sense.
 \end{itemize}
 
-\subsection{Materials}
-\subsubsection{Survey tool}
-\subsubsection{Data}
-\label{sec:materials-data}
+\subsection{Data}
+\label{sec:data}
+We use 40 different social media posts where 20 are hateful and 20 are not hateful to create 40 different scenarios.
+%
+All subjects judge four scenarios of each type (TP, TN, FP, FN, and rejection) for each scale type (ME and 100-level) since we let each subject use both scales.
+%
+We select the posts from a public dataset \citep{basile2019semeval} that contains 13,000 English tweets.
+%
+Each tweet is annotated with three categories: hate speech (yes/no), target (generic group or an individual), and aggressiveness (yes/no).
+%
+Therefore, we have four different groups of hateful tweets: generic target + aggressive, individual target + aggressive, generic target + non-aggressive, and individual target + aggressive.
+%
+We exclude all tweets that contain replies and mentions since  they have unclear contexts.
+%
+Then we preprocess all tweets by removing the URLs and hashtags.
+%
+Finally, we use clustering analysis to select 40 tweets in our study.
+%
+We perform term frequency-inverse document frequency (TF-IDF), latent semantic analysis (LSA), and k-means clustering on each group of tweets.
+%
+We calculate the silhouette coefficient to determine the optimal cluster size (k value) for the neutral tweets and the four groups of hateful tweets.
+%
+The silhouette analysis indicates to set k as large as possible.
+%
+We select the five nearest data samples to each cluster centroid.
+%
+From this selection, we manually select one tweet per cluster using a majority vote from three members from our group to create the final set of 40 tweets.
+%
+Based on the silhouette coefficient, we use a cluster size of 20 for the neutral tweets and select one tweet per cluster to collect 20 neutral tweets.
+%
+And we use a cluster size of 5 for each group of hateful tweets to collect 20 hateful tweets.
 
 \subsection{Procedure}
 
