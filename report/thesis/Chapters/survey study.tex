@@ -90,7 +90,7 @@ However, the results need to be normalized as different participants rate the ag
 %
 As explained in section \ref{sec:me}, we cannot use common normalization methods such as geometric averaging as we are using bipolar scales with negative values.
 %
-Therefore, we normalize the results by dividing the magnitude estimates of each subject by their maximum estimate.
+Therefore, we normalize the results by dividing the magnitude estimates of each participant by their maximum estimate.
 %
 We multiply the normalized magnitude estimates by 100 for the sake of clarity.
 %
@@ -98,31 +98,19 @@ This way, all magnitudes estimates are in the range $[-100, 100]$ while maintain
 
 \subsection{Design}
 We will list all independent, dependent, confounding, and control variables analyzed in our experiment in this section.
-%
-Important to note is that we do not intend to study the confounding variables 'demographic' and 'age'.
-%
-The main reason for this is that we do not focus on the effects of subject characteristics on the outcomes but only want to study whether the ME technique is suitable for retrieving opinions about hate speech detection predictions. We left the investigation of the effects of subject characteristics on the outcomes to future research. According to \cite{gold2018women}, there is no significant difference in how men and women perceive hate. Therefore, we do not consider gender as a confounding variable.
 
 \subsubsection{Independent variables}
-Independent variables are the different hate speech detection scenarios (TP, TN, FP, FN, and rejection) and the content of the social media posts we show to the participants:
+Independent variables are the different hate speech detection scenarios we show to the participants (TP, TN, FP, FN, and rejection).
+%
 \begin{itemize}
-    \item \textbf{Scenarios}
+    \item \textbf{True Positive} Show a hateful post to the user and explain that SocialNet detected hate and ranked the post lower on people's feeds.
+    \item \textbf{True Negative} Show a non-hateful post to the user and explain that SocialNet did not detect hate and allowed the post.
+    \item \textbf{False Positive} Show a non-hateful post to the user and explain that SocialNet detected hate and ranked the post lower on people's feeds.
+    \item \textbf{False Negative} Show a hateful post to the users and explain that SocialNet did not detect hate and allowed the post.
+    \item \textbf{Rejection}
           \begin{itemize}
-              \item \textbf{True Positive} Show a hateful post to the user and explain that SocialNet detected hate and ranked the post lower on people's feeds.
-              \item \textbf{True Negative} Show a non-hateful post to the user and explain that SocialNet did not detect hate and allowed the post.
-              \item \textbf{False Positive} Show a non-hateful post to the user and explain that SocialNet detected hate and ranked the post lower on people's feeds.
-              \item \textbf{False Negative} Show a hateful post to the users and explain that SocialNet did not detect hate and allowed the post.
-              \item \textbf{Rejection}
-                    \begin{itemize}
-                        \item Show a hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
-                        \item Or, show a non-hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
-                    \end{itemize}
-          \end{itemize}
-
-    \item \textbf{Social media posts}
-          \begin{itemize}
-              \item Neutral content.
-              \item Hateful content.
+              \item Show a hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
+              \item Or, show a non-hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
           \end{itemize}
 \end{itemize}
 %
@@ -140,7 +128,39 @@ We use 24 hours based on the German NetzDG law, which allows the government to f
 
 
 \subsubsection{Confounding variables}
+%
+Confounding variables are demographics, such as gender, education, location, age, etc.
+%
+\begin{itemize}
+    \item \textbf{Nationality} People from different nationalities might have different perceptions and definitions of hate speech and how we should deal with it (tolerating hateful content or removing it).
+    \item \textbf{Age} People of different ages might have different perceptions and definitions of hate speech and how we should deal with it.
+    \item \textbf{Educational level} People with different educational levels might have different perceptions and definitions of hate speech and how we should deal with it.
+    \item \textbf{Gender} According to \cite{gold2018women}, there is no significant difference in how men and women perceive hate. However, we still report gender as a confounding variable since we want to analyze if there are genuinely not any differences.
+\end{itemize}
+
 \subsubsection{Control variables}
+%
+We define two control variables: the measurement scales and the content of the social media posts we show to the participants.
+%
+We control the measurement scale variable by randomly assigning a participant to use either the 100-level or the ME scale to rate the scenarios.
+%
+Regarding the scales, as described before, we choose Magnitude Estimation as our primary scale and use the 100-level scale for validation.
+%
+We leave the study of other scales to future work.
+%
+We control the content of the social media posts in two manners.
+%
+First, we present all scenarios for all participants randomly to reduce bias.
+%
+Second, we select the social media posts from existing datasets.
+% 
+We explain the selection procedure in section \ref{sec:materials-data}.
+%
+\begin{itemize}
+    \item \textbf{Scales} The first group of participants must answer the questions using the ME scale. The second group needs to answer the questions using the 100-level scale.
+    \item \textbf{Content of the posts} We sample all social media posts from existing datasets and present them to the participants in random order.
+\end{itemize}
+
 \subsubsection{Dependent variables}
 
 \subsection{Planned sample}
@@ -153,6 +173,7 @@ We use 24 hours based on the German NetzDG law, which allows the government to f
 \subsection{Materials}
 \subsubsection{Survey tool}
 \subsubsection{Data}
+\label{sec:materials-data}
 
 \subsection{Procedure}
 
