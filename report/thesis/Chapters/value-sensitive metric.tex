@@ -39,11 +39,9 @@ We can derive the subsets of TP, TN, FP, and FN predictions from the complete se
 %
 
 %
-Before the construction of our metric, we can define several mild conditions.
+We should be free to use any value for $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ since we do not know which values will come from the survey study in chapter \ref{sec:survey}.
 %
-By mild, we mean that they do not have to hold since we want to have the freedom of using any value for $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ since we do not know which values will come out of the survey study in chapter \ref{sec:survey}.
-%
-For the mild conditions, we assume that $V_{tp}$ and $V_{tn}$ are gains and, therefore, positive values and $V_{fp}$, $V_{fn}$, and $V_{r}$ are costs and, therefore, negative values.
+However, for constructing our metric, we can define several conditions if we assume that $V_{tp}$ and $V_{tn}$ are gains and, therefore, positive values and $V_{fp}$, $V_{fn}$, and $V_{r}$ are costs and, therefore, negative values.
 %
 For each $\tau$ value in $[0, 1]$, we would like to know whether the model with the reject option is more effective (increased $V(\tau)$) or less effective (decreased $V(\tau)$ value).
 %
@@ -52,7 +50,7 @@ For each $\tau$ value in $[0, 1]$, we would like to know whether the model with 
 
 %
 \begin{flushleft}
-    We define the following mild conditions:
+    We define the following conditions:
 \end{flushleft}
 \begin{enumerate}
     \item The value of incorrect predictions should be lower than that of rejected predictions. Otherwise, adopting the reject option serves no purpose.
@@ -190,7 +188,7 @@ We implement the CNN model based on the work of \citep{agrawal2018deep}.
 Finally, our third model is a transformer model, given its recent popularity in the NLP domain.
 %
 We use the DistilBERT model since it is faster to train and smaller than BERT models while achieving similar performance \citep{sanh2019distilbert}.
-%
+%g
 We implement all models in Python.
 %
 We implement the LR model with scikit-learn\footnote{\url{https://scikit-learn.org/}}, the CNN model with TensorFlow\footnote{\url{https://www.tensorflow.org/}}, and the DistilBERT model with a combination of Hugging Face\footnote{\url{https://huggingface.co/}} and PyTorch\footnote{\url{https://pytorch.org/}}.
