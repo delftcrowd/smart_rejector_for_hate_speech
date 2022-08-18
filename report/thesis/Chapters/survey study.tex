@@ -249,7 +249,29 @@ Based on the silhouette coefficient, we use a cluster size of 20 for the neutral
 And we use a cluster size of 5 for each group of hateful tweets to collect 20 hateful tweets.
 
 \subsection{Procedure}
-This section will explain all steps of the survey. \autoref{sec:appendix} contains all presentation texts, the informed consent, and some scenario examples. In this experiment, we will shuffle and present the TP, TN, FP, FN, and rejection settings to the subjects. We include one additional question in each scenario after showing the social media post in which we ask the subjects whether they think the post is hateful or not. This question is binary and can be answered with yes or no. The results of these questions are purely informative and used to understand the results of the final question about the agreement with SocialNet's decision. There is no limit to the amount of time they spend on each question. All the collected data is completely anonymous. Finally, we will inform the participants not to put personal identifiers in their answers.
+We use LimeSurvey\footnote{\url{https://www.limesurvey.org/}} as our survey tool.
+%
+The survey first presents the informed consent policy and excludes participants that do not agree with it.
+%
+Next, we show introductory texts to the participants to explain what we will expect from them and to explain the structure of the survey.
+%
+Using the ME scale, we first present a warm-up task where the subjects need to estimate different line lengths to get familiar with using the ME scale.
+%
+Then, we randomly present 40 scenarios representing the TP, TN, FP, FN, and rejection scenarios (with eight scenarios per type).
+%
+Each scenario contains several questions with the same structure.
+%
+The first question is whether participants think the post is hateful (yes/no).
+%
+The second question is whether participants agree, disagree, or are neutral with SocialNet's decision.
+%
+In the case of nonneutral, we ask a third question about the degree to which participants agree or disagree with the machine's decisions, using either the ME or 100-level scale, depending on their group.
+%
+There is no time limit for answering the questions, and all data is anonymous.
+%
+Finally, we will inform the participants not to put identifiers in their answers.
+%
+Refer to \autoref{sec:appendix} for all presentation texts, the informed consent, and some scenario examples.
 
 \noindent\customtextbox{
     \begin{itemize}[leftmargin=*, label={}]
