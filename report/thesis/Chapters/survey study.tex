@@ -316,19 +316,54 @@ Second, we analyze the quality of our survey method by looking at two aspects: r
 
 \subsection{Value ratios}
 \label{sec:analysis-values}
-% TODO: continue here
-The goal of the complete experiment is to come up with the value ratios of the TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection. The metric from the first part of our research takes these numerical values as its input to calculate the optimal rejection threshold. We do not need to know the absolute values but only the relative values. For example, if we set all values to 1, we retrieve the same optimal rejection threshold as setting all values to 1000. Therefore, we need to know the ratios between all scenario types. The ME technique provides us with ratio data. We use a bipolar scale for question 3 in the survey since we ask the subjects whether they agree, disagree, or are neutral with the decision of SocialNet (tolerating, removing, or rejecting posts). For both scales, we will convert disagreement values to negative values, neutral values to 0, and agreement values to positive values. Since the data of both scales is skewed, we apply the median to the results of the individual questions first. Then we calculate the mean value over the resulting values to retrieve the final aggregated value ratios. The results should give us an understanding of how the subjects feel towards the different scenarios: TP, TN, FP, FP, and rejection.
-
+The survey study aims to come up with the value ratios of the TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection.
+%
+The metric from section \ref{sec:value-metric} takes these numerical values as its input to calculate the optimal rejection threshold.
+%
+We do not need to know the absolute values but only the relative values.
+%
+For example, if we set all values to 1, we retrieve the same optimal rejection threshold as setting all values to 1000.
+%
+We use a bipolar scale for question 3 in the survey since we ask the subjects the degree to which they agree, disagree, or are neutral with the decision of SocialNet.
+%
+For both scales, we will convert disagreement values to negative values, neutral values to 0, and agreement values to positive values.
+%
+Since the data of both scales are skewed, we apply the median to the results of the individual questions first.
+%
+Then we calculate the mean value over the resulting values to retrieve the final aggregated value ratios.
+%
 For example, to calculate the aggregated $V_{TP}$ values for both scales, we use:
 \begin{align*}
-    V_{TP}^{ME} = \frac{1}{n} \sum_{i=1}^{n} r_i^{ME}   & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of TP scenarios \\and $r_{i, TP}^{ME}$ is the median response value of ME question number $i$.}\\
-    V_{TP}^{100} = \frac{1}{n} \sum_{i=1}^{n} r_i^{100} & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of TP scenarios \\and $r_{i, TP}^{100}$ is the median response value of 100-level question number $i$.}
+    V_{tp}^{ME} = \frac{1}{n} \sum_{i=1}^{n} r_{i, tp}^{ME}   & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of all participants for TP scenarios and $r_{i, tp}^{ME}$ is the  \\median response value of TP question number $i$ rated with the ME scale.}\\
+    V_{tp}^{100} = \frac{1}{n} \sum_{i=1}^{n} r_{i, tp}^{100} & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of all participants for TP scenarios and $r_{i, tp}^{100}$ is the \\median response value of TP question number $i$ rated with the 100-level scale.}
 \end{align*}
-
-We apply the same calculations for the remaining scenario types. We define the values we need for the metric using the aggregated values of the TP, TN, FP, FN, and rejection scenarios rated with the ME scale. We will interpret disagreement values as negative values (costs) and agreement values as positive values (gains). We will not use the results of the 100-level scale in our metric since the 100-level scale does not have ratio properties.
+%
+We apply the same calculations for the remaining scenario types.
+%
+The results should give us an understanding of how the subjects feel towards the different scenarios: TP, TN, FP, FP, and rejection.
+%
+We define the value ratios we need for the metric using the aggregated values of the TP, TN, FP, FN, and rejection scenarios rated with the ME scale since the ME scale provides us with ratio data.
+%
+We will not use the aggregated values of the 100-level scale for our metric since the 100-level scale does not provide ratio data, but we will still present them for clarification.
 
 \subsection{Reliability}
-Reliability is about whether we can trust our results and if we get consistent results \cite{fitzner2007reliability}. We do this by mainly looking at the inter-rater reliability. This means that different subjects should give approximately the same judgements to the same scenarios. We measure the inter-rater reliability using Krippendorff's alpha \cite{maddalena2017crowdsourcing, krippendorff2004reliability}. We calculate the inter-rater reliability value using the mean response values as calculated in \ref{sec:analysis-values}. We will use the inter-rater reliability scores to compare the ME scale with the 100-level scale. We also study the inter-rater reliability values for the different types of scenarios: TP, TN, FN, FP, and rejection. Other types of reliability, such as test-retest reliability, are not considered in this experiment. Guaranteeing test-retest reliability would require us to redo the complete experiment at a different time for the same subjects. This is infeasible for our thesis project, given the limited time and budget.
+Reliability is about whether we can trust our results and if we get consistent results \cite{fitzner2007reliability}.
+%
+We do this by mainly looking at the inter-rater reliability.
+%
+Different subjects should give approximately the same judgements to the same scenarios.
+%
+We measure the inter-rater reliability using Krippendorff's alpha \cite{maddalena2017crowdsourcing, krippendorff2004reliability}.
+%
+We calculate the inter-rater reliability value for the complete survey's data for both scales.
+%
+We use the inter-rater reliability scores to compare the ME scale with the 100-level scale.
+%
+We also separately study the inter-rater reliability values for the different types of scenarios (TP, TN, FN, FP, and rejection).
+%
+This experiment does not consider other types of reliability, such as test-retest reliability.
+%
+Guaranteeing test-retest reliability would require us to redo the complete experiment at a different time for the same subjects, which is infeasible for this project, given the limited time and budget.
 
 \subsection{Validity}
 \label{sec:analysis-validity}
