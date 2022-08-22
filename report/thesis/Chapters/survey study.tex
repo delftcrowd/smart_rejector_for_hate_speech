@@ -355,7 +355,7 @@ Different subjects should give approximately the same judgements to the same sce
 %
 We measure the inter-rater reliability using Krippendorff's alpha \cite{maddalena2017crowdsourcing, krippendorff2004reliability}.
 %
-We calculate the inter-rater reliability value for the complete survey's data for both scales.
+We calculate the inter-rater reliability value for the complete survey's data for the normalized ME and 100-level values.
 %
 We use the inter-rater reliability scores to compare the ME scale with the 100-level scale.
 %
@@ -367,8 +367,51 @@ Guaranteeing test-retest reliability would require us to redo the complete exper
 
 \subsection{Validity}
 \label{sec:analysis-validity}
-Validity is about whether we are measuring the things we want to measure \cite{fitzner2007reliability}. The main goal of this aspect is to validate if we can use the ME technique to measure subjects' opinions about hate speech detection scenarios. There are multiple types of validity, but we focus mainly on convergent validity (part of construct validity), content validity, and face validity \cite{fitzner2007reliability}. Construct validity checks whether there is an agreement between a theory and a measurement device or procedure \cite{fitzner2007reliability}. Convergent validity is about the correlation between different types of measures to see if they measure the same phenomenon \cite{fitzner2007reliability}. Content validity is about letting external experts review the proposed research questions and procedure \cite{fitzner2007reliability}. Face validity is the subjective type of validity, and it is about why we think the questions and proposed procedures are valid \cite{fitzner2007reliability}.
+Validity is about whether we are measuring the things we want to measure \cite{fitzner2007reliability}.
+%
+The main goal of this aspect is to validate if we can use the ME technique to measure subjects' opinions about hate speech detection scenarios.
+%
+There are multiple types of validity, but we focus mainly on convergent validity (part of construct validity), content validity, and face validity \cite{fitzner2007reliability}.
+%
+Construct validity checks whether there is an agreement between a theory and a measurement device or procedure \cite{fitzner2007reliability}.
+%
+Convergent validity is about the correlation between different measures to see if they measure the same phenomenon \cite{fitzner2007reliability}.
+%
+Content validity is about letting experts review the proposed research questions and procedure \cite{fitzner2007reliability}.
+%
+Face validity is a subjective type of validity, and it is about why we think the questions and proposed procedures are valid \cite{fitzner2007reliability}.
+%
 
-We analyze convergent validity by comparing the mean scores from \ref{sec:analysis-values} between the two scales. We can verify that they measure the same phenomenon by analyzing the correlation between the scales. However, we can expect a low correlation since the ME scale is a (normalized) unbounded scale and the 100-level scale is bounded. Nevertheless, we think that both scales will give similar results, meaning that high ME responses should correspond to high 100-level scale responses and low ME responses to low 100-level scale responses. To guarantee content validity, we let external experts (the supervisors of this thesis project) check this pre-registration report. We guarantee face validity by discussing whether the ME technique gives us the expected results. We exclude other forms of validity from this experiment because they either are irrelevant or infeasible. For example, external validity is about the degree to which the findings can be generalized to other settings or groups. We would have to experiment with multiple groups with different demographic and age characteristics to guarantee external validity. We left this for future work to investigate since this is out of scope for our thesis project. Despite that, we think that people of different ages and demographic characteristics perceive hate differently since people have other norms and values in various parts of the world. We believe that if we conduct this experiment using different groups of subjects, then we might retrieve different value ratios. Therefore, we decided not to create too many participant inclusion criteria but take a random sample of global social media users.
+%
+We analyze convergent validity by performing cross-modality validation.
+%
+Following the approach from \citet{roitero2018fine}, we analyze the correlation between the ME scale and the 100-level scale.
+%
+We can verify that they measure the same phenomenon if we find that both scales are positively correlated.
+%
+However, we can also expect a low correlation since the ME scale is a (normalized) unbounded scale and the 100-level scale is bounded.
+%
+Nevertheless, we think both scales will give similar results, meaning that high ME responses should correspond to high 100-level scale responses and low ME responses to low 100-level scale responses.
+%
+To guarantee content validity, we let experts (the supervisors of this thesis project) check the pre-registration report before conducting the experiments.
+%
+We tackled face validity in section \ref{sec:related-work-value-assessment} by arguing why we think the ME technique is suitable for measuring people's opinions about hate speech detection scenarios.
+%
+We exclude other forms of validity from this experiment because they are irrelevant or infeasible.
+%
+For example, external validity is about the degree to which the findings can be generalized to other settings or groups \citep{fitzner2007reliability}.
+%
+We think people with different demographic characteristics perceive hate differently since people have other norms and values in various parts of the world.
+%
+We believe that if we conduct this experiment using different groups of subjects, we might retrieve different value ratios.
+%
+Therefore, we decided not to create too many participant inclusion criteria but take a random sample of global social media users.
+%
+We would have to experiment with multiple groups with different demographic characteristics to guarantee external validity.
+%
+We left this for future work to investigate.
+%
+However, we still try to analyze if we can find any differences between participants with different demographic characteristics in the dataset we retrieve (refer to section \ref{sec:analysis-demographic}).
 
-
+\subsection{Demographic}
+\label{sec:analysis-demographic}
