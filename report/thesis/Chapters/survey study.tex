@@ -47,7 +47,7 @@ Before we conducted the survey experiment, we listed several hypotheses about th
     \item \textbf{We hypothesize that the values of FP and FN are negative and that the value of an FN is lower than an FP}. We believe that both FP and FN predictions have a negative impact on the social media users and, therefore, we think that both values should be negative. We believe that allowing hateful content to be publicly visible has a more negative impact on social media users than filtering out neutral content. Therefore, we think that the value of an FN is smaller than the value of an FP.
     \item \textbf{We hypothesize that the values of TP and TN are both positive and that the value of an TP is greater than of an TN.} We believe that both TP and TN predictions have a positive impact on the social media users and, therefore, we think that both values should be positive. We believe that correctly predicting hateful content is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think that the value of an TP is greater than the value of an TN.
     \item \textbf{We hypothesize that the value of a rejection is negative and that it is greater than the average value of an FP and an FN.} The key assumption of using ML models with a reject option is that the negative value of a rejection should always be greater than the negative value of an incorrect decision.
-    \item \textbf{We hypothesize that Magnitude Estimation (ME) is a suitable technique for retrieving the value ratios.} ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \cite{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale when rating the relevance of documents.
+    \item \textbf{We hypothesize that Magnitude Estimation (ME) is a suitable technique for retrieving the value ratios.} ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \citet{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale when rating the relevance of documents.
 \end{itemize}
 
 \section{Method}
@@ -69,9 +69,9 @@ Second, there does not exist any suitable dataset that we can use for validation
 %
 Third, we concluded in \ref{sec:likert} that Likert scales have limited response freedom.
 %
-Finally, in \cite{roitero2018fine}, the authors concluded that the 100-level scale provides more response freedom than course-grained Likert scales and has several advantages over ME in terms of usability and reliability.
+Finally, in \citet{roitero2018fine}, the authors concluded that the 100-level scale provides more response freedom than course-grained Likert scales and has several advantages over ME in terms of usability and reliability.
 %
-The 100-level scale is easier to understand than ME, does not require normalization, and provides more flexibility than Likert scales \cite{roitero2018fine}.
+The 100-level scale is easier to understand than ME, does not require normalization, and provides more flexibility than Likert scales \citep{roitero2018fine}.
 %
 Therefore, we will create two separate surveys with the same scenarios where half of all participants use the 100-level scale and the other half use the ME scale.
 %
@@ -134,7 +134,7 @@ Confounding variables are demographics, such as gender, education, location, age
     \item \textbf{Nationality} People from different nationalities might have different perceptions and definitions of hate speech and how we should deal with it (tolerating hateful content or removing it).
     \item \textbf{Age} People of different ages might have different perceptions and definitions of hate speech and how we should deal with it.
     \item \textbf{Educational level} People with different educational levels might have different perceptions and definitions of hate speech and how we should deal with it.
-    \item \textbf{Gender} According to \cite{gold2018women}, there is no significant difference in how men and women perceive hate. However, we still report gender as a confounding variable since we want to analyze if there are genuinely not any differences.
+    \item \textbf{Gender} According to \citet{gold2018women}, there is no significant difference in how men and women perceive hate. However, we still report gender as a confounding variable since we want to analyze if there are genuinely not any differences.
 \end{itemize}
 
 \subsubsection{Control variables}
@@ -164,8 +164,8 @@ We explain the selection procedure in section \ref{sec:data}.
 Our dependent variables are reliability, validity and the value ratio of TP, TN, FP, FN, and rejection scenarios.
 %
 \begin{itemize}
-    \item \textbf{Reliability} Measured using Krippendorff's alpha, where values larger than 0.8 indicate reliable conclusions and values larger than 0.6 indicate tentative conclusions \cite{krippendorff2004reliability}.
-    \item \textbf{Validity} Convergent validity, if two different measures measure the same thing \cite{fitzner2007reliability}. Measured by calculating the correlation between the magnitude estimates and the response values from the 100-level scale.
+    \item \textbf{Reliability} Measured using Krippendorff's alpha, where values larger than 0.8 indicate reliable conclusions and values larger than 0.6 indicate tentative conclusions \citep{krippendorff2004reliability}.
+    \item \textbf{Validity} Convergent validity, if two different measures measure the same thing \citep{fitzner2007reliability}. Measured by calculating the correlation between the magnitude estimates and the response values from the 100-level scale.
     \item \textbf{Value ratios of TP, TN, FP, FN, and rejection scenarios} Measured by calculating the median of the normalized magnitude estimates of each scenario question and then calculating the mean over the resulting values to come up with the final value for that scenario type.
 \end{itemize}
 
@@ -177,9 +177,9 @@ There are 4.55 billion active social media users\footnote{\url{https://datarepor
 %
 We choose a 90\% Confidence Interval (CI) and 10\% Margin of Error (MoE) for this study.
 %
-So for 90\% of the time, our observations will fall within a 10\% interval \cite{olson2014ways}.
+So for 90\% of the time, our observations will fall within a 10\% interval \citep{olson2014ways}.
 %
-According to \cite{olson2014ways}, we need a sample size of 68 participants per survey type to reach the desired CI and MoE values.
+According to \citet{olson2014ways}, we need a sample size of 68 participants per survey type to reach the desired CI and MoE values.
 %
 We choose 10\% MoE since we have a limiting budget.
 %
@@ -347,13 +347,13 @@ We define the value ratios we need for the metric using the aggregated values of
 We will not use the aggregated values of the 100-level scale for our metric since the 100-level scale does not provide ratio data, but we will still present them for clarification.
 
 \subsection{Reliability}
-Reliability is about whether we can trust our results and if we get consistent results \cite{fitzner2007reliability}.
+Reliability is about whether we can trust our results and if we get consistent results \citep{fitzner2007reliability}.
 %
 We do this by mainly looking at the inter-rater reliability.
 %
 Different subjects should give approximately the same judgements to the same scenarios.
 %
-We measure the inter-rater reliability using Krippendorff's alpha \cite{maddalena2017crowdsourcing, krippendorff2004reliability}.
+We measure the inter-rater reliability using Krippendorff's alpha \citep{maddalena2017crowdsourcing, krippendorff2004reliability}.
 %
 We calculate the inter-rater reliability value for the complete survey's data for the normalized ME and 100-level values.
 %
@@ -367,19 +367,19 @@ Guaranteeing test-retest reliability would require us to redo the complete exper
 
 \subsection{Validity}
 \label{sec:analysis-validity}
-Validity is about whether we are measuring the things we want to measure \cite{fitzner2007reliability}.
+Validity is about whether we are measuring the things we want to measure \citep{fitzner2007reliability}.
 %
 The main goal of this aspect is to validate if we can use the ME technique to measure subjects' opinions about hate speech detection scenarios.
 %
-There are multiple types of validity, but we focus mainly on convergent validity (part of construct validity), content validity, and face validity \cite{fitzner2007reliability}.
+There are multiple types of validity, but we focus mainly on convergent validity (part of construct validity), content validity, and face validity \citep{fitzner2007reliability}.
 %
-Construct validity checks whether there is an agreement between a theory and a measurement device or procedure \cite{fitzner2007reliability}.
+Construct validity checks whether there is an agreement between a theory and a measurement device or procedure \citep{fitzner2007reliability}.
 %
-Convergent validity is about the correlation between different measures to see if they measure the same phenomenon \cite{fitzner2007reliability}.
+Convergent validity is about the correlation between different measures to see if they measure the same phenomenon \citep{fitzner2007reliability}.
 %
-Content validity is about letting experts review the proposed research questions and procedure \cite{fitzner2007reliability}.
+Content validity is about letting experts review the proposed research questions and procedure \citep{fitzner2007reliability}.
 %
-Face validity is a subjective type of validity, and it is about why we think the questions and proposed procedures are valid \cite{fitzner2007reliability}.
+Face validity is a subjective type of validity, and it is about why we think the questions and proposed procedures are valid \citep{fitzner2007reliability}.
 %
 
 %
@@ -415,12 +415,13 @@ However, we still try to analyze if we can find any differences between particip
 
 \subsection{Demographic differences}
 \label{sec:analysis-demographic}
-As we will conduct the survey study only once for a group of participants among which 50\% are men and 50\% is women, the remaining demographic characteristics can be quite diverse.
+As we conduct the survey study only once for a group of participants among which 50\% are men and 50\% are women, the remaining demographic characteristics can be quite diverse.
 %
-Nevertheless, we still want to find out if we can find any significant statistical differences between groups of people with different demographic characteristics.
+Nevertheless, we still make an attempt in finding any significant statistical differences between groups of participants with different demographic characteristics.
 %
-Therefore, we will apply several statistics to analyze if we can find these differences.
+Therefore, we apply several statistics to analyze if we can find these differences.
 %
+By doing so, we
 We do this if all assumptions of the statistics hold and if the sample sizes of the demographic groups are large enough.
 %
 Prolific provides information about the demographic characteristics of the participants out of which we analyze four variables: nationality, age, student (whether they are still student or not), and gender.
