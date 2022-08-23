@@ -428,7 +428,11 @@ Prolific provides information about the demographic characteristics of the parti
 %
 We have multiple groups (more than two) for the variables nationality and age (different age groups in intervals of 10) and two groups for the variables student and gender.
 %
-We apply either ANOVA (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups and apply an unpaired two-samples t-test (parametric) or the Mann-Whitney U Test (non-parametric).
+We apply either ANOVA (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups and apply an unpaired two-samples t-test (parametric) or the Mann-Whitney U Test (non-parametric) when we have exactly two groups.
 %
 First, we check if we can apply the parametric statistics by checking if their assumptions hold in our dataset.
 %
+If not, then we use the non-parametric tests.
+%
+ANOVA requires three conditions:
+\todo[inline]{Refer to book Statistical Methods for Psychology}
