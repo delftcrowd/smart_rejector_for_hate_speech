@@ -12,7 +12,7 @@ Therefore, this chapter discusses how we apply the ME technique in a crowdsource
 %
 We design a survey study to ask participants the degree to which they agree or disagree with the decisions of a fictional social media platform called SocialNet.
 %
-We show the participants different scenarios representing TP, TN, FP, FN, and rejected predictions
+We show the participants different scenarios representing TP, TN, FP, FN, and rejected predictions.
 %
 The TP and TN scenarios mean that SocialNet successfully detects whether a post is hateful or not, respectively.
 %
@@ -20,7 +20,7 @@ The FP scenario means that SocialNet incorrectly predicts a non-hateful post as 
 %
 For example, in the FN scenario, the survey shows a hateful post to the participant and explains that SocialNet did not identify the post as hate speech.
 %
-Then, participants indicate the degree of agreement/disagreement using a scale, and we aggregate the answers per scenario to obtain the relative values
+Then, participants indicate the degree of agreement/disagreement using a scale, and we aggregate the answers per scenario to obtain the value ratios.
 %
 
 %
@@ -44,9 +44,9 @@ Finally, in section \ref{sec:survey-analysis}, we elaborate on the analysis of t
 \label{sec:survey-hypothesis}
 Before we conducted the survey experiment, we listed several hypotheses about the value ratios and the ME method:
 \begin{itemize}
-    \item \textbf{We hypothesize that the values of FP and FN are negative and that the value of an FN is lower than an FP}. We believe that both FP and FN predictions have a negative impact on the social media users and, therefore, we think that both values should be negative. We believe that allowing hateful content to be publicly visible has a more negative impact on social media users than filtering out neutral content. Therefore, we think that the value of an FN is smaller than the value of an FP.
-    \item \textbf{We hypothesize that the values of TP and TN are both positive and that the value of an TP is greater than of an TN.} We believe that both TP and TN predictions have a positive impact on the social media users and, therefore, we think that both values should be positive. We believe that correctly predicting hateful content is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think that the value of an TP is greater than the value of an TN.
-    \item \textbf{We hypothesize that the value of a rejection is negative and that it is greater than the average value of an FP and an FN.} The key assumption of using ML models with a reject option is that the negative value of a rejection should always be greater than the negative value of an incorrect decision.
+    \item \textbf{We hypothesize that the values of FP and FN are negative and that the value of an FN is lower than an FP}. We believe that both FP and FN predictions harm social media users; therefore, we think both values should be negative. We believe that allowing hateful content to be publicly visible has a more negative impact on social media users than filtering out neutral content. Therefore, we think an FN's value is lower than an FP's.
+    \item \textbf{We hypothesize that the values of TP and TN are both positive and that the value of a TP is greater than a TN.} We believe that both TP and TN predictions positively impact social media users and, therefore, we think that both values should be positive. We believe predicting hateful content correctly is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think a TP's value is greater than a TN's.
+    \item \textbf{We hypothesize that the rejection value is negative and greater than the average value of an FP and an FN.} The critical assumption of using ML models with a reject option is that the negative value of rejection should always be greater than the negative value of an incorrect decision.
     \item \textbf{We hypothesize that Magnitude Estimation (ME) is a suitable technique for retrieving the value ratios.} ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \citet{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale when rating the relevance of documents.
 \end{itemize}
 
@@ -57,15 +57,15 @@ In this section, we discuss the complete setup of the survey experiment and how 
 \subsection{Scales}
 We use ME as the primary scale of our survey experiment.
 %
-Like we concluded in the section \ref{sec:me}, we also need to validate the the ME scale.
+As we concluded in section \ref{sec:me}, we must also validate the ME scale.
 %
-We validate the ME scale through cross-modality validation by comparing the results of the ME scale with another scale as explained in section \ref{sec:me}.
+We validate the ME scale through cross-modality validation by comparing the results of the ME scale with another scale, as explained in section \ref{sec:me}.
 %
-The secondary scale is a bounded scale that consists of 100 levels, called the 100-level scale  for four reasons.
+The secondary scale is a bounded scale of 100 levels, called the 100-level scale, and we use this scale for four reasons.
 %
-First, it is impractical in this project, given the limited budget, to use other ME scales, such as measuring the intensity of the participants' handgrips to express their judgements.
+First, given the limited budget, it is impractical in this project to use other ME scales, such as measuring the intensity of the participants' handgrips to express their judgements.
 %
-Second, there does not exist any suitable dataset that we can use for validation that contains human ratings of different scenarios in hate speech detection.
+Second, there is no suitable dataset we can use for validation that contains human ratings of different scenarios in hate speech detection.
 %
 Third, we concluded in \ref{sec:likert} that Likert scales have limited response freedom.
 %
@@ -84,11 +84,11 @@ For example, suppose we first show a scenario and the participant provides a val
 %
 Suppose we next present a scenario that the participant agrees with more.
 %
-The participant can always provide a higher value (e.g., 125) and not be restricted within a fixed range.
+The participant can always provide a higher value (e.g., 125).
 %
 However, the results need to be normalized as different participants rate the agreement/disagreement degree differently.
 %
-As explained in section \ref{sec:me}, we cannot use common normalization methods such as geometric averaging as we are using bipolar scales with negative values.
+As explained in section \ref{sec:me}, we cannot use standard normalization methods such as geometric averaging as we use bipolar scales with negative values.
 %
 Therefore, we normalize the results by dividing the magnitude estimates of each participant by their maximum estimate.
 %
@@ -121,17 +121,17 @@ We use 24 hours based on the German NetzDG law, which allows the government to f
     \item \textbf{False Negative} Show a hateful post to the users and explain that SocialNet did not detect hate and allowed the post.
     \item \textbf{Rejection}
           \begin{itemize}
-              \item Show a hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
-              \item Or, show a non-hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile the post remains visible.
+              \item Show a hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile, the post remains visible.
+              \item Or show a non-hateful post to the user and explain that SocialNet was uncertain whether the post was hateful or not. An internal moderator will need to check the post within 24 hours. Meanwhile, the post remains visible.
           \end{itemize}
 \end{itemize}
 
 \subsubsection{Confounding variables}
 %
-Confounding variables are demographics, such as gender, education, location, age, etc.
+Confounding variables are the different demographic characteristics:
 %
 \begin{itemize}
-    \item \textbf{Nationality} People from different nationalities might have different perceptions and definitions of hate speech and how we should deal with it (tolerating hateful content or removing it).
+    \item \textbf{Nationality} People from different nationalities might have different perceptions and definitions of hate speech and how we should deal with it.
     \item \textbf{Age} People of different ages might have different perceptions and definitions of hate speech and how we should deal with it.
     \item \textbf{Educational level} People with different educational levels might have different perceptions and definitions of hate speech and how we should deal with it.
     \item \textbf{Gender} According to \citet{gold2018women}, there is no significant difference in how men and women perceive hate. However, we still report gender as a confounding variable since we want to analyze if there are genuinely not any differences.
@@ -185,7 +185,7 @@ We choose 10\% MoE since we have a limiting budget.
 %
 We first conduct a pilot survey for 12 participants per scale to gather feedback and check if we need to improve things before the actual experiment.
 %
-We want to determine the average workload using the pilot survey and decide whether it's possible to reduce the MoE by increasing the number of participants.
+We want to determine the average workload using the pilot survey and decide whether reducing the MoE by increasing the number of participants is possible.
 %
 For the pilot survey, we use 24 participants.
 %
@@ -193,14 +193,14 @@ Therefore, in total we will need $2*12+2*68 = 160$ participants.
 %
 Of the recruited participants, 50\% identified as female.
 %
-Half of the participants are assigned the ME scale and the other half the 100-level scale.
+Half of the participants are assigned the ME scale, and the other half the 100-level scale.
 
 \subsubsection{Participants}
 We will use the \href{https://prolific.co}{Prolific} platform for recruiting online participants for the survey study.
 %
 We will use the following inclusion criteria for our participants:
 \begin{itemize}
-    \item 18 years of age and older since we are showing offensive language in the experiment.
+    \item 18 years of age and older since we show offensive language in the experiment.
     \item Fluent in English.
     \item Approval rating over 90\% on the Prolific platform.
     \item Use one of the following social media platforms regularly (at least once a month): Facebook, Twitter, YouTube, LinkedIn, Pinterest, Google Plus, Tumblr, Instagram, Reddit, VK, Flickr, Vine.co, Meetup, ask.fm, Snapchat, TikTok, Medium.
@@ -212,27 +212,29 @@ We use the following exclusion/rejection criteria:
 \begin{itemize}
     \item Participants who fail the two attention checks. We will include two Instructional Manipulation Checks to check if the user pays attention to the survey\footnote{\url{https://researcher-help.prolific.co/hc/en-gb/articles/360009223553}}.
     \item Participants who do not complete all questions.
-    \item Participants who do not agree with the informed consent before the start of the survey. We are not allowed to collect and process their data if they do not consent.
-    \item Participants who do fail the ME training phase, for example by providing random values that do not make any sense.
+    \item Participants who disagree with the informed consent before the start of the survey. We are not allowed to collect and process their data if they do not consent.
+    \item Participants who do fail the ME training phase. For example, by providing random values that do not make any sense.
 \end{itemize}
+%
+We select a balanced set of participants in Prolific, among which 50\% are men and 50\% are women.
 
 \subsection{Data}
 \label{sec:data}
-We use 40 different social media posts where 20 are hateful and 20 are not hateful to create 40 different scenarios.
+We use 40 social media posts where 20 are hateful, and 20 are not hateful to create 40 different scenarios.
 %
-All subjects judge four scenarios of each type (TP, TN, FP, FN, and rejection) for each scale type (ME and 100-level) since we let each subject use both scales.
+All subjects need to judge eight scenarios of each type (TP, TN, FP, FN, and rejection) using either the ME or the 100-level scale, depending on the survey group we assigned them.
 %
 We select the posts from a public dataset \citep{basile2019semeval} that contains 13,000 English tweets.
 %
 Each tweet is annotated with three categories: hate speech (yes/no), target (generic group or an individual), and aggressiveness (yes/no).
 %
-Therefore, we have four different groups of hateful tweets: generic target + aggressive, individual target + aggressive, generic target + non-aggressive, and individual target + aggressive.
+Therefore, we have four groups of hateful tweets: generic target + aggressive, individual target + aggressive, generic target + non-aggressive, and individual target + aggressive.
 %
 We exclude all tweets that contain replies and mentions since  they have unclear contexts.
 %
 Then we preprocess all tweets by removing the URLs and hashtags.
 %
-Finally, we use clustering analysis to select 40 tweets in our study.
+Finally, we use clustering analysis to select 40 tweets for our study.
 %
 We perform term frequency-inverse document frequency (TF-IDF), latent semantic analysis (LSA), and k-means clustering on each group of tweets.
 %
@@ -242,11 +244,11 @@ The silhouette analysis indicates to set k as large as possible.
 %
 We select the five nearest data samples to each cluster centroid.
 %
-From this selection, we manually select one tweet per cluster using a majority vote from three members from our group to create the final set of 40 tweets.
+From this selection, we manually select one tweet per cluster using a majority vote from three group members to create the final set of 40 tweets.
 %
 Based on the silhouette coefficient, we use a cluster size of 20 for the neutral tweets and select one tweet per cluster to collect 20 neutral tweets.
 %
-And we use a cluster size of 5 for each group of hateful tweets to collect 20 hateful tweets.
+Furthermore, we use a cluster size of 5 for each group of hateful tweets to collect 20 hateful tweets.
 
 \subsection{Procedure}
 We use LimeSurvey\footnote{\url{https://www.limesurvey.org/}} as our survey tool.
@@ -286,7 +288,7 @@ Refer to \autoref{sec:appendix} for all presentation texts, the informed consent
                   \item We split all participants up into two groups.
                   \item The first group first uses the ME scale to rate all scenarios.
                   \item The second group first uses the 100-level scale to rate all scenarios.
-                  \item Provide an explanation in the introduction about the scale.
+                  \item Explanation of the scale.
               \end{itemize}
         \item \textbf{Step 3: two attention checks}
               \begin{itemize}
@@ -316,9 +318,9 @@ Second, we analyze the quality of our survey method by looking at two aspects: r
 
 \subsection{Value ratios}
 \label{sec:analysis-values}
-The survey study aims to come up with the value ratios of the TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection.
+The survey study aims to determine value ratios of the TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection.
 %
-The metric from section \ref{sec:value-metric} takes these numerical values as its input to calculate the optimal rejection threshold.
+The metric from section \ref{sec:value-metric} takes these numerical values as input to calculate the optimal rejection threshold.
 %
 We do not need to know the absolute values but only the relative values.
 %
@@ -328,11 +330,11 @@ We use a bipolar scale for question 3 in the survey since we ask the subjects th
 %
 For both scales, we will convert disagreement values to negative values, neutral values to 0, and agreement values to positive values.
 %
-Since the data of both scales are skewed, we apply the median to the results of the individual questions first.
+Since we found that the data of both scales is skewed after conducting the pilot survey, we first apply the median to the individual questions' results.
 %
 Then we calculate the mean value over the resulting values to retrieve the final aggregated value ratios.
 %
-For example, to calculate the aggregated $V_{TP}$ values for both scales, we use:
+For example, to calculate the aggregated $V_{tp}$ values for both scales, we use:
 \begin{align*}
     V_{tp}^{ME} = \frac{1}{n} \sum_{i=1}^{n} r_{i, tp}^{ME}   & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of all participants for TP scenarios and $r_{i, tp}^{ME}$ is the  \\median response value of TP question number $i$ rated with the ME scale.}\\
     V_{tp}^{100} = \frac{1}{n} \sum_{i=1}^{n} r_{i, tp}^{100} & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of all participants for TP scenarios and $r_{i, tp}^{100}$ is the \\median response value of TP question number $i$ rated with the 100-level scale.}
@@ -344,7 +346,7 @@ The results should give us an understanding of how the subjects feel towards the
 %
 We define the value ratios we need for the metric using the aggregated values of the TP, TN, FP, FN, and rejection scenarios rated with the ME scale since the ME scale provides us with ratio data.
 %
-We will not use the aggregated values of the 100-level scale for our metric since the 100-level scale does not provide ratio data, but we will still present them for clarification.
+We will not use the aggregated values of the 100-level scale for our metric since the 100-level scale does not provide ratio data, but we will still present them.
 
 \subsection{Reliability}
 Reliability is about whether we can trust our results and if we get consistent results \citep{fitzner2007reliability}.
@@ -401,7 +403,7 @@ We exclude other forms of validity from this experiment because they are irrelev
 %
 For example, external validity is about the degree to which the findings can be generalized to other settings or groups \citep{fitzner2007reliability}.
 %
-We think people with different demographic characteristics perceive hate differently since people have other norms and values in various parts of the world.
+We think people with different demographic characteristics perceive hate speech differently since people have other norms and values.
 %
 We believe that if we conduct this experiment using different groups of subjects, we might retrieve different value ratios.
 %
@@ -423,7 +425,7 @@ Therefore, we apply several statistics to the results of each scenario to analyz
 %
 Prolific provides information about the demographic characteristics of the participants, out of which we analyze four variables: nationality, age, student (whether they are still a student or not), and gender.
 %
-We have multiple groups (more than two) for the variables nationality and age (different age groups in intervals of 10) and two groups for the variables student and gender.
+We have multiple groups (more than two) for the variables nationality and age (different age intervals) and two groups for the variables student and gender.
 %
 We apply either analysis of variance (ANOVA) (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups and apply an unpaired two-samples t-test (parametric) or the Mann-Whitney U Test (non-parametric) when we have exactly two groups.
 %
@@ -431,7 +433,7 @@ First, we check if we can apply the parametric statistics by checking if their a
 %
 If not, then we use the non-parametric tests.
 %
-We apply ANOVA and the t-test when the data meets following three conditions: homogeneity of variance (each population has the same variance), normality (normal distribution of the error), and independence (the observations are independent of each other) \citep{howell2012statistical}.
+We apply ANOVA and the t-test when the data meets the following three conditions: homogeneity of variance (each population has the same variance), normality (normal distribution of the error), and independence (the observations are independent of each other) \citep{howell2012statistical}.
 %
 We use Bartlett's test of homogeneity of variances and the Shapiro-Wilk test of normality to check if we can apply ANOVA and the t-test.
 %
