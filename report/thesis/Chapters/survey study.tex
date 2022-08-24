@@ -415,24 +415,26 @@ However, we still try to analyze if we can find any differences between particip
 
 \subsection{Demographic differences}
 \label{sec:analysis-demographic}
-As we conduct the survey study only once for a group of participants among which 50\% are men and 50\% are women, the remaining demographic characteristics can be quite diverse.
+As we conduct the survey study only once for a group of participants, among which 50\% are men and 50\% are women, the remaining demographic characteristics can be quite diverse.
 %
-Nevertheless, we still make an attempt in finding any significant statistical differences between groups of participants with different demographic characteristics.
+Nevertheless, we are still curious if there are any significant statistical differences between groups of participants with different demographic characteristics as we expect that demographic characteristics influence people's perception of hate speech and how we should deal with it.
 %
-Therefore, we apply several statistics to analyze if we can find these differences.
+Therefore, we apply several statistics to the results of each scenario to analyze if we can find differences between different demographic groups.
 %
-By doing so, we
-We do this if all assumptions of the statistics hold and if the sample sizes of the demographic groups are large enough.
-%
-Prolific provides information about the demographic characteristics of the participants out of which we analyze four variables: nationality, age, student (whether they are still student or not), and gender.
+Prolific provides information about the demographic characteristics of the participants, out of which we analyze four variables: nationality, age, student (whether they are still a student or not), and gender.
 %
 We have multiple groups (more than two) for the variables nationality and age (different age groups in intervals of 10) and two groups for the variables student and gender.
 %
-We apply either ANOVA (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups and apply an unpaired two-samples t-test (parametric) or the Mann-Whitney U Test (non-parametric) when we have exactly two groups.
+We apply either analysis of variance (ANOVA) (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups and apply an unpaired two-samples t-test (parametric) or the Mann-Whitney U Test (non-parametric) when we have exactly two groups.
 %
 First, we check if we can apply the parametric statistics by checking if their assumptions hold in our dataset.
 %
 If not, then we use the non-parametric tests.
 %
-ANOVA requires three conditions:
-\todo[inline]{Refer to book Statistical Methods for Psychology}
+We apply ANOVA and the t-test when the data meets following three conditions: homogeneity of variance (each population has the same variance), normality (normal distribution of the error), and independence (the observations are independent of each other) \citep{howell2012statistical}.
+%
+We use Bartlett's test of homogeneity of variances and the Shapiro-Wilk test of normality to check if we can apply ANOVA and the t-test.
+%
+We obey the independence condition since we collect the data of all participants of our survey study Independently.
+%
+Although ANOVA and the t-test can be robust to violations of the homogeneity of variances and the normality assumptions \citep{howell2012statistical}, we decide to use the non-parametric alternatives instead to prevent us from getting unreliable results.

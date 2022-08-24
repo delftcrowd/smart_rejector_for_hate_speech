@@ -323,17 +323,17 @@ class Analysis:
                     print(f"Dataset {index} is normally distributed: ", shapiro)
 
             bartlett = stats.bartlett(*question_scores)
-            kruskal = stats.kruskal(*question_scores)
-            f_oneway = stats.f_oneway(*question_scores)
+            mannwhitneyu = stats.mannwhitneyu(*question_scores)
+            ttest_ind = stats.ttest_ind(*question_scores)
 
             if bartlett.pvalue > 0.05:
                 print("Variances are equal: ", bartlett)
 
-            if kruskal.pvalue < 0.05:
-                print("Statistical difference: ", kruskal)
+            if mannwhitneyu.pvalue < 0.05:
+                print("Statistical difference: ", mannwhitneyu)
 
-            if f_oneway.pvalue < 0.05:
-                print("Statistical difference: ", f_oneway)
+            if ttest_ind.pvalue < 0.05:
+                print("Statistical difference: ", ttest_ind)
 
     @classmethod
     def print_question_statistics_multiple(cls, *datasets):
