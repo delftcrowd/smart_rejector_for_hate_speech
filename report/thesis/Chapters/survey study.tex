@@ -220,17 +220,31 @@ We select a balanced set of participants in Prolific, among which 50\% are men a
 
 \subsection{Data}
 \label{sec:data}
-We use 40 social media posts where 20 are hateful, and 20 are not hateful to create 40 different scenarios.
+Depending on the assigned survey group, all subjects must judge several TP, TN, FP, FN, and rejection scenarios using either the ME or the 100-level scale.
 %
-All subjects need to judge eight scenarios of each type (TP, TN, FP, FN, and rejection) using either the ME or the 100-level scale, depending on the survey group we assigned them.
-%
-We select the posts from a public dataset \citep{basile2019semeval} that contains 13,000 English tweets.
+We select the posts used in the scenarios from a public dataset \citep{basile2019semeval} that contains 13,000 English tweets.
 %
 Each tweet is annotated with three categories: hate speech (yes/no), target (generic group or an individual), and aggressiveness (yes/no).
 %
-Therefore, we have four groups of hateful tweets: generic target + aggressive, individual target + aggressive, generic target + non-aggressive, and individual target + aggressive.
+Therefore, we have one neutral and four groups of hateful tweets: generic target + aggressive, individual target + aggressive, generic target + non-aggressive, and individual target + aggressive.
 %
-We exclude all tweets that contain replies and mentions since  they have unclear contexts.
+For the rejection scenarios, we need both neutral and hateful tweets.
+%
+Therefore, we need at least eight tweets per scenario type (TP, TN, FP, FN, and rejection).
+%
+We need 40 tweets, where 20 are hateful and 20 are not hateful, to create 40 different scenarios.
+%
+We want to select the most representative tweets from the dataset.
+%
+Randomly selecting the tweets from the dataset is insufficient as the dataset might contain sample retrieval bias, as explained in section \ref{sec:related-work-challenges}.
+%
+We might retrieve too many similar tweets about the same topic when randomly selecting the tweets.
+%
+Therefore, we perform content analysis to create a selection of tweets that is as representative and diverse as possible.
+%
+We provide an overview of our selection process in figure \ref{fig:clustering}.
+%
+We exclude all tweets that contain Twitter replies and mentions since  they have unclear contexts.
 %
 Then we preprocess all tweets by removing the URLs and hashtags.
 %
@@ -244,11 +258,18 @@ The silhouette analysis indicates to set k as large as possible.
 %
 We select the five nearest data samples to each cluster centroid.
 %
-From this selection, we manually select one tweet per cluster using a majority vote from three group members to create the final set of 40 tweets.
+From this selection, we manually choose one tweet per cluster using a majority vote from three group members to create the final set of 40 tweets.
 %
 Based on the silhouette coefficient, we use a cluster size of 20 for the neutral tweets and select one tweet per cluster to collect 20 neutral tweets.
 %
 Furthermore, we use a cluster size of 5 for each group of hateful tweets to collect 20 hateful tweets.
+%
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{Figures/clustering.pdf}
+    \caption{Flow diagram that visualizes how we perform content analysis for clustering and selecting the tweets for our survey study.}
+    \label{fig:clustering}
+\end{figure}
 
 \subsection{Procedure}
 We use LimeSurvey\footnote{\url{https://www.limesurvey.org/}} as our survey tool.
@@ -257,7 +278,7 @@ The survey first presents the informed consent policy and excludes participants 
 %
 Next, we show introductory texts to the participants to explain what we will expect from them and to explain the structure of the survey.
 %
-Using the ME scale, we first present a warm-up task where the subjects need to estimate different line lengths to get familiar with using the ME scale.
+Using the ME scale, we first present a warm-up task where the participants need to estimate different line lengths to get familiar with using the ME scale.
 %
 Then, we randomly present 40 scenarios representing the TP, TN, FP, FN, and rejection scenarios (with eight scenarios per type).
 %
@@ -284,7 +305,7 @@ Refer to \autoref{sec:appendix} for all presentation texts, the informed consent
               \end{itemize}
         \item \textbf{Step 2: introduction}
               \begin{itemize}
-                  \item Show introductory text about what is expected from the subject.
+                  \item Show introductory text about what is expected from the participant.
                   \item We split all participants up into two groups.
                   \item The first group first uses the ME scale to rate all scenarios.
                   \item The second group first uses the 100-level scale to rate all scenarios.
@@ -292,12 +313,12 @@ Refer to \autoref{sec:appendix} for all presentation texts, the informed consent
               \end{itemize}
         \item \textbf{Step 3: two attention checks}
               \begin{itemize}
-                  \item Two simple attention checks where we ask the subject to select one option (shuffled through all scenarios).
+                  \item Two simple attention checks where we ask the participant to select one option (shuffled through all scenarios).
               \end{itemize}
         \item \textbf{Step 4a: ME practice phase (when ME is used)}
               \begin{itemize}
-                  \item To let subjects learn how to use ME, we first run a practice phase where we shuffle and present 5 different line lengths.
-                  \item Each subject needs to estimate the line length using any positive value.
+                  \item To let participants learn how to use ME, we first run a practice phase where we shuffle and present 5 different line lengths.
+                  \item Each participant needs to estimate the line length using any positive value.
               \end{itemize}
         \item \textbf{Step 4b: all scenarios using the scale (ME or 100-level)}
               \begin{itemize}
@@ -326,7 +347,7 @@ We do not need to know the absolute values but only the relative values.
 %
 For example, if we set all values to 1, we retrieve the same optimal rejection threshold as setting all values to 1000.
 %
-We use a bipolar scale for question 3 in the survey since we ask the subjects the degree to which they agree, disagree, or are neutral with the decision of SocialNet.
+We use a bipolar scale for question 3 in the survey since we ask the participants the degree to which they agree, disagree, or are neutral with the decision of SocialNet.
 %
 For both scales, we will convert disagreement values to negative values, neutral values to 0, and agreement values to positive values.
 %
@@ -342,7 +363,7 @@ For example, to calculate the aggregated $V_{tp}$ values for both scales, we use
 %
 We apply the same calculations for the remaining scenario types.
 %
-The results should give us an understanding of how the subjects feel towards the different scenarios: TP, TN, FP, FP, and rejection.
+The results should give us an understanding of how the participants feel towards the different scenarios: TP, TN, FP, FP, and rejection.
 %
 We define the value ratios we need for the metric using the aggregated values of the TP, TN, FP, FN, and rejection scenarios rated with the ME scale since the ME scale provides us with ratio data.
 %
@@ -353,7 +374,7 @@ Reliability is about whether we can trust our results and if we get consistent r
 %
 We do this by mainly looking at the inter-rater reliability.
 %
-Different subjects should give approximately the same judgements to the same scenarios.
+Different participants should give approximately the same judgements to the same scenarios.
 %
 We measure the inter-rater reliability using Krippendorff's alpha \citep{maddalena2017crowdsourcing, krippendorff2004reliability}.
 %
@@ -365,13 +386,13 @@ We also separately study the inter-rater reliability values for the different ty
 %
 This experiment does not consider other types of reliability, such as test-retest reliability.
 %
-Guaranteeing test-retest reliability would require us to redo the complete experiment at a different time for the same subjects, which is infeasible for this project, given the limited time and budget.
+Guaranteeing test-retest reliability would require us to redo the complete experiment at a different time for the same participants, which is infeasible for this project, given the limited time and budget.
 
 \subsection{Validity}
 \label{sec:analysis-validity}
 Validity is about whether we are measuring the things we want to measure \citep{fitzner2007reliability}.
 %
-The main goal of this aspect is to validate if we can use the ME technique to measure subjects' opinions about hate speech detection scenarios.
+The main goal of this aspect is to validate if we can use the ME technique to measure participants' opinions about hate speech detection scenarios.
 %
 There are multiple types of validity, but we focus mainly on convergent validity (part of construct validity), content validity, and face validity \citep{fitzner2007reliability}.
 %
@@ -405,7 +426,7 @@ For example, external validity is about the degree to which the findings can be 
 %
 We think people with different demographic characteristics perceive hate speech differently since people have other norms and values.
 %
-We believe that if we conduct this experiment using different groups of subjects, we might retrieve different value ratios.
+We believe that if we conduct this experiment using different groups of participants, we might retrieve different value ratios.
 %
 Therefore, we decided not to create too many participant inclusion criteria but take a random sample of global social media users.
 %
