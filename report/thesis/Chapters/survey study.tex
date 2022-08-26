@@ -250,7 +250,19 @@ Then we preprocess all tweets by removing the URLs and hashtags.
 %
 Finally, we use clustering analysis to select 40 tweets for our study.
 %
-We perform term frequency-inverse document frequency (TF-IDF), latent semantic analysis (LSA), and k-means clustering on each group of tweets.
+We perform latent semantic analysis (LSA) and k-means clustering on each group of tweets.
+%
+We use term frequency-inverse document frequency (TF-IDF) to represent all documents and their words, also known as terms, in a matrix where the term frequencies indicate how important that term is to the document \citep{aggarwal2012survey}.
+%
+The term frequencies are multiplied with the inverse document frequency so that terms that often occur in all documents, such as stop words, will end up with a lower value in the matrix \citep{aggarwal2012survey}.
+%
+Then, we use singular value decomposition (SVD) for dimensionality reduction to transform the output matrix of the TF-IDF step.
+%
+The transformed matrix is more suitable for text clustering techniques since documents with similar terms are now grouped \citep{aggarwal2012survey}.
+%
+The combination of TF-IDF and SVD is also known as LSA and is suitable for clustering purposes \citep{aggarwal2012survey}.
+%
+Finally, we apply the unsupervised learning technique k-means to the output of the LSA method to cluster all tweets into k clusters.
 %
 We calculate the silhouette coefficient to determine the optimal cluster size (k value) for the neutral tweets and the four groups of hateful tweets.
 %
@@ -267,7 +279,7 @@ Furthermore, we use a cluster size of 5 for each group of hateful tweets to coll
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{Figures/clustering.pdf}
-    \caption{Flow diagram that visualizes how we perform content analysis for clustering and selecting the tweets for our survey study.}
+    \caption{Flow diagram that visualizes how we perform content analysis to cluster and select the tweets for our survey study.}
     \label{fig:clustering}
 \end{figure}
 
