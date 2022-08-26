@@ -37,3 +37,4 @@ dependencies:
       - datasets==2.3.2
       - tweet-preprocessor==0.6.0
       - tensorflow_probability
+      - wordsegment==1.3.1
