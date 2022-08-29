@@ -1,4 +1,5 @@
 \chapter{Value-sensitive rejector}
+
 As concluded in the \nameref{sec:related-work}, there is a need for \textit{value-sensitive} metrics for measuring the performance of ML models, especially for social-technical applications such as hate speech detection.
 %
 We also concluded that manual human moderation is the most effective and that most automatic hate speech detection methods do not perform well on unseen data.
@@ -9,7 +10,7 @@ We do this by taking the values of TP, TN, FP, FN, and rejected predictions into
 %
 % Correct predictions (TP and TN) result in positive value (gains), while incorrect (FP and FN) and rejected predictions result in negative value (costs).
 %
-Section \ref{sec:survey} will explain how we assess these values.
+Chapter \ref{ch:survey} will explain how we assess these values.
 %
 We assume that we know these values for the remaining part of this chapter.
 %
@@ -39,7 +40,7 @@ We can derive the subsets of TP, TN, FP, and FN predictions from the complete se
 %
 
 %
-We should be free to use any value for $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ since we do not know which values will come from the survey study in chapter \ref{sec:survey}.
+We should be free to use any value for $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ since we do not know which values will come from the survey study in chapter \ref{ch:survey}.
 %
 However, for constructing our metric, we can define several conditions if we assume that $V_{tp}$ and $V_{tn}$ are gains and, therefore, positive values and $V_{fp}$, $V_{fn}$, and $V_{r}$ are costs and, therefore, negative values.
 %

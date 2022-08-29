@@ -1,10 +1,44 @@
 \chapter{Results}
+This chapter includes all the results of the survey study (chapter \ref{ch:survey}) and the value-sensitive rejector (chapter \ref{ch:rejector}).
+%
+We first present the results of the survey study as the experiments with the value-sensitive rejector depend on the outcomes of the survey study.
 
 \section{Survey study}
 \label{sec:results-survey-study}
+This section presents the value ratios in section \ref{sec:results-value-ratios}, the reliability analysis in section \ref{sec:results-reliability}, the validity analysis in section \ref{sec:results-validity}, and the demographic analysis in section \ref{sec:results-demographics}.
+%
+
 
 \subsection{Value ratios}
-\todo[inline]{Explain that the metric conditions still hold if we set $V_{tp}$ and $V_{tn}$ to 0}
+\label{sec:results-value-ratios}
+As explained in section \ref{sec:analysis-values}, we first calculate the median of all responses for each question.
+%
+We use the median since we found in the pilot survey that the data from both scales are highly skewed with outliers.
+%
+Then, we calculate the mean of all values with the same scenario type (TP, TN, FP, FN, or rejection).
+%
+We show the resulting value ratios in table \ref{tab:values-reliability}.
+
+\begin{table}[t]
+    \centering
+    \begin{tabular}{lcccc}
+        \toprule
+                           & \multicolumn{2}{c}{\textbf{Magnitude Estimation}} & \multicolumn{2}{c}{\textbf{100-level}}                                        \\
+        \cmidrule(l){2-3} \cmidrule(l){4-5}
+                           & $\boldsymbol{\alpha}$                             & $\textbf{v}$                           & $\boldsymbol{\alpha}$ & $\textbf{v}$ \\
+        \midrule
+        \textbf{TP}        & 0.07                                              & 18.15                                  & 0.04                  & 77.00        \\
+        \textbf{TN}        & 0.10                                              & 36.32                                  & 0.11                  & 86.31        \\
+        \textbf{FP}        & 0.39                                              & -16.69                                 & 0.07                  & -51.00       \\
+        \textbf{FN}        & 0.92                                              & -28.08                                 & 0.14                  & -62.43       \\
+        \textbf{Rejection} & -0.31                                             & -4.82                                  & 0.07                  & -16.37       \\
+        \midrule
+        \textbf{All}       & 0.78                                              & ---                                    & 0.44                  & ---          \\
+        \bottomrule
+    \end{tabular}
+    \caption{Krippendorff's alpha ($\alpha$) and the scenario values ($v$) for TP, TN, FP, FN, and rejection scenarios.}
+    \label{tab:values-reliability}
+\end{table}
 
 \subsection{Reliability}
 
@@ -13,3 +47,4 @@
 \subsection{Demographics}
 
 \section{Value-sensitive rejection}
+\todo[inline]{Explain that the metric conditions still hold if we set $V_{tp}$ and $V_{tn}$ to 0}
