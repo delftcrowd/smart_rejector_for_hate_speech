@@ -1,7 +1,14 @@
 \chapter{Results}
 This chapter includes all the results of the survey study (chapter \ref{ch:survey}) and the value-sensitive rejector (chapter \ref{ch:rejector}).
 %
-We first present the results of the survey study as the experiments with the value-sensitive rejector depend on the outcomes of the survey study.
+We first present the results of the survey study as the experiments with the value-sensitive rejector depended on the outcomes of the survey study.
+%
+The goal of the survey study was to retrieve the value ratios of TP, TN, FP, FN, and rejected predictions in hate speech detection from the user's perspective.
+%
+We retrieved the value ratios using a scale called Magnitude Estimation (ME) and validated the ME scale by conducting a separate survey that uses a bounded scale that consists of 100 levels, called the 100-level scale.
+%
+The goal of the experiments with out value-sensitive rejector ....
+% TODO: continue here
 
 \section{Survey study}
 \label{sec:results-survey-study}
@@ -18,25 +25,27 @@ We use the median since we found in the pilot survey that the data from both sca
 Then, we calculate the mean of all values with the same scenario type (TP, TN, FP, FN, or rejection).
 %
 We show the resulting value ratios in table \ref{tab:values-reliability}.
+%
+We
 
 \begin{table}[t]
     \centering
     \begin{tabular}{lcccc}
         \toprule
-                           & \multicolumn{2}{c}{\textbf{Magnitude Estimation}} & \multicolumn{2}{c}{\textbf{100-level}}                                        \\
+                           & \multicolumn{2}{c}{\textbf{ME}} & \multicolumn{2}{c}{\textbf{100-level}}                                        \\
         \cmidrule(l){2-3} \cmidrule(l){4-5}
-                           & $\boldsymbol{\alpha}$                             & $\textbf{v}$                           & $\boldsymbol{\alpha}$ & $\textbf{v}$ \\
+                           & $\boldsymbol{\alpha}$           & $\textbf{v}$                           & $\boldsymbol{\alpha}$ & $\textbf{v}$ \\
         \midrule
-        \textbf{TP}        & 0.07                                              & 18.15                                  & 0.04                  & 77.00        \\
-        \textbf{TN}        & 0.10                                              & 36.32                                  & 0.11                  & 86.31        \\
-        \textbf{FP}        & 0.39                                              & -16.69                                 & 0.07                  & -51.00       \\
-        \textbf{FN}        & 0.92                                              & -28.08                                 & 0.14                  & -62.43       \\
-        \textbf{Rejection} & -0.31                                             & -4.82                                  & 0.07                  & -16.37       \\
+        \textbf{TP}        & 0.07                            & 18.15                                  & 0.04                  & 77.00        \\
+        \textbf{TN}        & 0.10                            & 36.32                                  & 0.11                  & 86.31        \\
+        \textbf{FP}        & 0.39                            & -16.69                                 & 0.07                  & -51.00       \\
+        \textbf{FN}        & 0.92                            & -28.08                                 & 0.14                  & -62.43       \\
+        \textbf{Rejection} & -0.31                           & -4.82                                  & 0.07                  & -16.37       \\
         \midrule
-        \textbf{All}       & 0.78                                              & ---                                    & 0.44                  & ---          \\
+        \textbf{All}       & 0.78                            & ---                                    & 0.44                  & ---          \\
         \bottomrule
     \end{tabular}
-    \caption{Krippendorff's alpha ($\alpha$) and the scenario values ($v$) for TP, TN, FP, FN, and rejection scenarios.}
+    \caption{Krippendorff's alpha ($\alpha$) and the scenario values ($v$) for TP, TN, FP, FN, and rejection scenarios for both scales: the Magnitude Estimation (ME) and 100-level scale.}
     \label{tab:values-reliability}
 \end{table}
 
