@@ -15,7 +15,6 @@ from keras.regularizers import l2
 from keras.models import Model
 import keras
 
-
 class CNN:
     """Convolutional Neural Network."""
 
@@ -27,6 +26,7 @@ class CNN:
         batch_size: int,
         epochs: int,
         embed_size: int,
+        learning_rate: int,
         loss_type: str = "softmax",
         checkpoint_path: str = "results/cp.ckpt",
         save_path: str = "results/model.tf",
@@ -64,6 +64,7 @@ class CNN:
         self.text_vectorizer = text_vectorizer
         self.cnn = None
         self.embedding_matrix = embedding_matrix
+        self.learning_rate = learning_rate
 
     def fit(self, X: list, y: list) -> Model:
         """Fits the CNN model with the list of data samples X
@@ -196,16 +197,19 @@ class CNN:
         x = Concatenate(axis=1)([x1, x2, x3])
         x = GlobalMaxPooling1D()(x)
         x = Dropout(0.5)(x)
+        adam = tf.keras.optimizers.Adam(learning_rate=self.learning_rate)
         if self.loss_type == "logits":
             custom_loss = CategoricalCrossentropy(from_logits=True)
             model = Dense(self.num_classes)(x)
             model = Model(_input, model)
-            model.compile(loss=custom_loss, optimizer="adam", metrics=["accuracy"])
+            model.compile(loss=custom_loss, optimizer=adam, metrics=["accuracy"])
         if self.loss_type == "softmax":
             model = Dense(self.num_classes, activation="softmax")(x)
             model = Model(_input, model)
             model.compile(
-                loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"]
+                loss="categorical_crossentropy", optimizer=adam, metrics=["accuracy"]
             )
 
         return model
+
+   

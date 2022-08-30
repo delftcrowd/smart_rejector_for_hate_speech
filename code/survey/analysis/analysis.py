@@ -1,3 +1,4 @@
+from pydoc import doc
 import numpy as np
 import pandas as pd
 import krippendorff
@@ -253,11 +254,12 @@ class Analysis:
             data_mes=data_mes, data_s100=data_s100, show_individual=show_individual
         )
         sns.boxplot(x="Scenario", y="(Dis)agreement", hue="Scale", data=plot_data)
-        plt.title("Boxplots of all questions")
+        plt.title("Boxplots of all scenarios")
         sns.despine(offset=10, trim=True)
         plt.xlabel("Scenario")
         plt.ylabel("(Dis)Agreement")
         plt.xticks(rotation=90)
+        plt.savefig("dual-boxplots.pdf", format="pdf", bbox_inches="tight")
         plt.show()
 
     @classmethod
@@ -271,16 +273,24 @@ class Analysis:
             scale (str, optional): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
             show_individual (bool, optional): Whether to show one boxplot per scenario or not. Defaults to True.
         """
+        if show_individual:
+            indv_title = "INDV"
+        else:
+            indv_title = "GRP"
+
         plot_data = cls.convert_to_boxplot_data(
             data=data, show_individual=show_individual
         )
         sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data)
-        plt.title(f"Boxplots of all questions for the {scale_title} scale")
+        plt.title(f"Boxplots of all scenarios for the {scale_title} scale")
 
         sns.despine(offset=10, trim=True)
         plt.xlabel("Scenario")
         plt.ylabel("(Dis)Agreement")
         plt.xticks(rotation=90)
+        plt.savefig(
+            f"boxplots-{scale_title}-{indv_title}.pdf", format="pdf", bbox_inches="tight"
+        )
         plt.show()
 
     @classmethod
@@ -299,6 +309,7 @@ class Analysis:
         plt.xlabel("Scenario")
         plt.ylabel("Percentage")
         plt.title("Percentage of (non)hateful rated scenarios")
+        plt.savefig("hatefulness.pdf", format="pdf", bbox_inches="tight")
         plt.show()
 
     @classmethod
