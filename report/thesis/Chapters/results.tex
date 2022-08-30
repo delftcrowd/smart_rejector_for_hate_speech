@@ -7,8 +7,11 @@ The goal of the survey study was to retrieve the value ratios of TP, TN, FP, FN,
 %
 We retrieved the value ratios using a scale called Magnitude Estimation (ME) and validated the ME scale by conducting a separate survey that uses a bounded scale that consists of 100 levels, called the 100-level scale.
 %
-The goal of the experiments with out value-sensitive rejector ....
-% TODO: continue here
+The goals of the experiments with the value-sensistive rejector are finding out how the rejector behaves on different models and datasets, if rejection is beneficial for hate speech detection, and comparing the value-sensitive metric against machine metrics such as accuracy.
+%
+
+%
+In section \ref{sec:results-survey-study}, we present the results of the complete  survey study that we gathered after conducting the pilot survey and in section \ref{sec:results-rejector}, we present the results of the experiments with the value-sensitive rejector.
 
 \section{Survey study}
 \label{sec:results-survey-study}
@@ -18,7 +21,7 @@ This section presents the value ratios in section \ref{sec:results-value-ratios}
 
 \subsection{Value ratios}
 \label{sec:results-value-ratios}
-As explained in section \ref{sec:analysis-values}, we first calculate the median of all responses for each question.
+As explained in section \ref{sec:analysis-values}, we first calculated the median of all responses for each question.
 %
 We use the median since we found in the pilot survey that the data from both scales are highly skewed with outliers.
 %
@@ -56,4 +59,5 @@ We
 \subsection{Demographics}
 
 \section{Value-sensitive rejection}
+\label{sec:results-rejector}
 \todo[inline]{Explain that the metric conditions still hold if we set $V_{tp}$ and $V_{tn}$ to 0}
