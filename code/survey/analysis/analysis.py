@@ -1,4 +1,3 @@
-from pydoc import doc
 import numpy as np
 import pandas as pd
 import krippendorff
@@ -254,7 +253,7 @@ class Analysis:
             data_mes=data_mes, data_s100=data_s100, show_individual=show_individual
         )
         sns.boxplot(x="Scenario", y="(Dis)agreement", hue="Scale", data=plot_data)
-        plt.title("Boxplots of all scenarios")
+        # plt.title("Boxplots of all scenarios")
         sns.despine(offset=10, trim=True)
         plt.xlabel("Scenario")
         plt.ylabel("(Dis)Agreement")
@@ -281,8 +280,8 @@ class Analysis:
         plot_data = cls.convert_to_boxplot_data(
             data=data, show_individual=show_individual
         )
-        sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data)
-        plt.title(f"Boxplots of all scenarios for the {scale_title} scale")
+        sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data, color="b")
+        # plt.title(f"Boxplots of all scenarios for the {scale_title} scale")
 
         sns.despine(offset=10, trim=True)
         plt.xlabel("Scenario")
@@ -308,7 +307,7 @@ class Analysis:
 
         plt.xlabel("Scenario")
         plt.ylabel("Percentage")
-        plt.title("Percentage of (non)hateful rated scenarios")
+        # plt.title("Percentage of (non)hateful rated scenarios")
         plt.savefig("hatefulness.pdf", format="pdf", bbox_inches="tight")
         plt.show()
 
