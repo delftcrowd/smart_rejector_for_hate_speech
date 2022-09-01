@@ -474,3 +474,5 @@ We use Bartlett's test of homogeneity of variances and the Shapiro-Wilk test of 
 We obey the independence condition since we collect the data of all participants of our survey study Independently.
 %
 Although ANOVA and the t-test can be robust to violations of the homogeneity of variances and the normality assumptions \citep{howell2012statistical}, we decide to use the non-parametric alternatives instead to prevent us from getting unreliable results.
+%
+\todo[inline]{explain pairwise analysis. We use pairwise parametric tests (t-test) or pairwise non-parametric tets (mann-whitney u test) to test if there any differences between the different groups when ANOVA or Kruskal-Wallis is used. However, is this results into many extra statistical tests, there is a chance of introducting Type I errors, meaning that we incorrectly reject the null hypothesis for some of the tests. This would indicate that we find significant differences between the groups while there aren't any. Therefore, we perform the post-hoc Benjamini-Hochberg} procedure for correcting the p-values to control the Type I errors.}

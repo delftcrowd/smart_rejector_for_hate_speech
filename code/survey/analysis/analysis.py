@@ -427,7 +427,7 @@ class Analysis:
         (_, pvalues_corrected, _, _) = multipletests(pvalues, method="fdr_bh")
 
         for index, (dataset1_index, dataset2_index) in enumerate(pairs):
-            pvalue = pvalues_corrected[index]
+            pvalue = pvalues[index]
             if pvalue < 0.05:
                 print(
                     f"Statistical difference (independent t-test) between dataset {dataset1_index} and {dataset2_index}: ",
