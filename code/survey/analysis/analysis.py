@@ -1,13 +1,16 @@
+from typing import List
 import numpy as np
 import pandas as pd
 import krippendorff
 import seaborn as sns
 import matplotlib.pyplot as plt
+from statsmodels.stats.multitest import multipletests
 from scipy import stats
 from datetime import datetime
 import matplotlib.ticker as mtick
 from string import digits
 import math
+import itertools
 
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
 SCALES = ["ME", "S100"]
@@ -288,7 +291,9 @@ class Analysis:
         plt.ylabel("(Dis)Agreement")
         plt.xticks(rotation=90)
         plt.savefig(
-            f"boxplots-{scale_title}-{indv_title}.pdf", format="pdf", bbox_inches="tight"
+            f"boxplots-{scale_title}-{indv_title}.pdf",
+            format="pdf",
+            bbox_inches="tight",
         )
         plt.show()
 
@@ -329,14 +334,14 @@ class Analysis:
 
             for index, s in enumerate(question_scores):
                 shapiro = stats.shapiro(s)
-                if shapiro.pvalue > 0.05:
+                if shapiro.pvalue >= 0.05:
                     print(f"Dataset {index} is normally distributed: ", shapiro)
 
             bartlett = stats.bartlett(*question_scores)
             mannwhitneyu = stats.mannwhitneyu(*question_scores)
             ttest_ind = stats.ttest_ind(*question_scores)
 
-            if bartlett.pvalue > 0.05:
+            if bartlett.pvalue >= 0.05:
                 print("Variances are equal: ", bartlett)
 
             if mannwhitneyu.pvalue < 0.05:
@@ -357,21 +362,77 @@ class Analysis:
 
             for index, s in enumerate(question_scores):
                 shapiro = stats.shapiro(s)
-                if shapiro.pvalue > 0.05:
+                if shapiro.pvalue >= 0.05:
                     print(f"Dataset {index} is normally distributed: ", shapiro)
 
             bartlett = stats.bartlett(*question_scores)
             kruskal = stats.kruskal(*question_scores)
             f_oneway = stats.f_oneway(*question_scores)
 
-            if bartlett.pvalue > 0.05:
+            if bartlett.pvalue >= 0.05:
                 print("Variances are equal: ", bartlett)
 
             if kruskal.pvalue < 0.05:
                 print("Statistical difference: ", kruskal)
+                cls.nonparametric_pair_tests(question_scores)
 
             if f_oneway.pvalue < 0.05:
                 print("Statistical difference: ", f_oneway)
+                cls.parametric_pair_tests(question_scores)
+
+    @staticmethod
+    def nonparametric_pair_tests(question_scores: List[List[float]]):
+        """Conducts non-parametric tests between all pairs of groups.
+
+        Args:
+            question_scores (List[List[float]]): list of lists containing
+            the scores of all participants per demographic group.
+        """
+        pvalues = []
+        pairs = []
+        for (index1, data1), (index2, data2) in itertools.product(
+            enumerate(question_scores), repeat=2
+        ):
+            mannwhitneyu = stats.mannwhitneyu(data1, data2)
+            pvalues.append(mannwhitneyu.pvalue)
+            pairs.append((index1, index2))
+
+        (_, pvalues_corrected, _, _) = multipletests(pvalues, method="fdr_bh")
+
+        for index, (dataset1_index, dataset2_index) in enumerate(pairs):
+            pvalue = pvalues_corrected[index]
+            if pvalue < 0.05:
+                print(
+                    f"Statistical difference (Mann-Whitney U) between dataset {dataset1_index} and {dataset2_index}: ",
+                    pvalue,
+                )
+
+    @staticmethod
+    def parametric_pair_tests(question_scores: List[List[float]]):
+        """Conducts parametric tests between all pairs of groups.
+
+        Args:
+            question_scores (List[List[float]]): list of lists containing
+            the scores of all participants per demographic group.
+        """
+        pvalues = []
+        pairs = []
+        for (index1, data1), (index2, data2) in itertools.product(
+            enumerate(question_scores), repeat=2
+        ):
+            ttest_ind = stats.ttest_ind(data1, data2)
+            pvalues.append(ttest_ind.pvalue)
+            pairs.append((index1, index2))
+
+        (_, pvalues_corrected, _, _) = multipletests(pvalues, method="fdr_bh")
+
+        for index, (dataset1_index, dataset2_index) in enumerate(pairs):
+            pvalue = pvalues_corrected[index]
+            if pvalue < 0.05:
+                print(
+                    f"Statistical difference (independent t-test) between dataset {dataset1_index} and {dataset2_index}: ",
+                    pvalue,
+                )
 
     @staticmethod
     def filter_data(
