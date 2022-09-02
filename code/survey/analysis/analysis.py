@@ -14,6 +14,7 @@ import itertools
 
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
 SCALES = ["ME", "S100"]
+PROLIFIC_COLUMN = "prolificid. "
 
 
 class Analysis:
@@ -177,7 +178,7 @@ class Analysis:
             pd.DataFrame: dataframe that consists of all normalized
             magnitude estimates.
         """
-        prolific_ids = data.loc[:, "prolificid. "]
+        prolific_ids = data.loc[:, PROLIFIC_COLUMN]
         mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
         normalized_mes = cls.normalize(mes).mul(100)
         hatefulness = cls.hatefulness(
@@ -203,7 +204,7 @@ class Analysis:
             pd.DataFrame: dataframe that consists of all normalized
             100-level scale values.
         """
-        prolific_ids = data.loc[:, "prolificid. "]
+        prolific_ids = data.loc[:, PROLIFIC_COLUMN]
         s100 = cls.s100_values(data=data, num_scenarios=num_scenarios)
         hatefulness = cls.hatefulness(
             data=data, scale="S100", num_scenarios=num_scenarios
@@ -453,7 +454,7 @@ class Analysis:
         if column_value in demo_data_column.groups.keys():
             filtered_demo_data = demo_data_column.get_group(column_value)
             filtered_ids = filtered_demo_data.loc[:, "Participant id"].tolist()
-            return data.loc[data["prolificid. "].isin(filtered_ids)].reset_index(
+            return data.loc[data[PROLIFIC_COLUMN].isin(filtered_ids)].reset_index(
                 drop=True
             )
         else:
@@ -474,7 +475,7 @@ class Analysis:
         Returns:
             pd.DataFrame: the filtered demographics data.
         """
-        prolific_ids = data.loc[:, "prolificid. "].tolist()
+        prolific_ids = data.loc[:, PROLIFIC_COLUMN].tolist()
         return demo_data.loc[
             demo_data["Participant id"].isin(prolific_ids)
         ].reset_index(drop=True)
@@ -726,6 +727,26 @@ class Analysis:
             all_scores.append(question_scores)
 
         return all_scores, question_names
+
+    @staticmethod
+    def group_scenario_scores(data: pd.DataFrame) -> pd.DataFrame:
+        """Groups the scores to the individual scenarios of each participant
+        to mean group scores (so mean values of TP, TN, FP, FN, and rejected predictions).
+
+        Args:
+            data (pd.DataFrame): the original data with scores to individual scenarios.
+
+        Returns:
+            pd.DataFrame: the converted data where the scores are aggregated per scenario type.
+        """
+        prolific_ids = data[PROLIFIC_COLUMN]
+        grouped_data = {PROLIFIC_COLUMN: prolific_ids}
+        for type in TYPES:
+            type_data = data.filter(regex=f"^{type}.*$", axis=1)
+            type_means = type_data.mean(axis=1).tolist()
+            grouped_data[type] = type_means
+
+        return pd.DataFrame(grouped_data)
 
     @staticmethod
     def __get_value(row, scale, type, index, question):
