@@ -90,56 +90,57 @@ We
 \label{sec:results-demographics}
 \begin{table}
     \small
-    \begin{tabularx}{\textwidth}{ c YYYYYYYYYYYY}
+    \begin{tabularx}{\textwidth}{ c YYYYYY}
         \toprule
-                      & \multicolumn{2}{c}{\textbf{Sex}} & \multicolumn{2}{c}{\textbf{Student}} & \multicolumn{2}{c}{\textbf{Continent}} & \multicolumn{2}{c}{\textbf{Nationality}} & \multicolumn{2}{c}{\textbf{Language}} & \multicolumn{2}{c}{\textbf{Ethnicity}}                                                                                                                                                                            \\
-        \cmidrule(lr){2-3} \cmidrule(l){4-5} \cmidrule(l){6-7} \cmidrule(l){8-9} \cmidrule(l){10-11} \cmidrule(l){12-13}
-                      & \textbf{NP}                      & \textbf{P}                           & \textbf{NP}                            & \textbf{P}                               & \textbf{NP}                           & \textbf{P}                             & \textbf{NP}               & \textbf{P}                 & \textbf{NP}               & \textbf{P}                 & \textbf{NP}               & \textbf{P}                 \\
+                      & \multicolumn{1}{c}{\textbf{Sex}} & \multicolumn{1}{c}{\textbf{Student}} & \multicolumn{1}{c}{\textbf{Continent}} & \multicolumn{1}{c}{\textbf{Nationality}} & \multicolumn{1}{c}{\textbf{Language}} & \multicolumn{1}{c}{\textbf{Ethnicity}} \\
         \midrule
-
-        \textbf{TP1} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{TP2} &  & * &  &  &  &  &  & * &  & * &  & * \\
-        \textbf{TP3} &  & * &  &  &  & * &  & * & D & * &  & * \\
-        \textbf{TP4} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{TP5} &  &  & D & D &  &  &  &  &  & * &  & * \\
-        \textbf{TP6} &  & * &  & * &  & * & D & D* & D & D &  & * \\
-        \textbf{TP7} &  & * &  & * &  &  &  & * &  & * &  & * \\
-        \textbf{TP8} &  & * & D & D* &  & * &  & * &  & * &  & * \\
-        \textbf{TN1} &  & * &  & * &  & * &  &  &  &  &  & * \\
-        \textbf{TN2} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{TN3} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{TN4} &  &  &  & * &  & D &  &  &  & * &  &  \\
-        \textbf{TN5} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{TN6} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{TN7} &  & * &  & * & D & D* &  & * &  & * &  & * \\
-        \textbf{TN8} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{FP1} &  & * &  & * &  & D* &  & * &  & * &  & * \\
-        \textbf{FP2} &  & * &  & D* &  & * & D & D* &  & * &  & * \\
-        \textbf{FP3} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{FP4} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{FP5} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{FP6} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{FP7} &  & * &  & * & D & D* & D & D* & D & D* & D & D* \\
-        \textbf{FP8} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{FN1} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{FN2} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{FN3} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{FN4} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{FN5} &  & * &  &  &  &  & D & D & D & D* &  &  \\
-        \textbf{FN6} &  & * &  & * &  & * & D & D* &  & * &  & * \\
-        \textbf{FN7} &  & * &  & * &  & * &  & * & D & * &  & * \\
-        \textbf{FN8} &  & * & D & D* &  & * &  & * &  & * &  & * \\
-        \textbf{REJ1} &  & * &  & * &  & * & D & * & D & * &  & * \\
-        \textbf{REJ2} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{REJ3} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{REJ4} &  & * &  & * & D & D* & D & D* & D & * & D & D* \\
-        \textbf{REJ5} &  & * &  & * &  & * &  & * & D & D* &  & * \\
-        \textbf{REJ6} &  & * &  & * &  & * &  & * &  & * &  & * \\
-        \textbf{REJ7} &  & * &  & * &  & * &  & * &  & * & D & D* \\
-        \textbf{REJ8} &  & * &  & * &  & * &  & * &  & * &  & * \\
-
+        \textbf{TP1}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TP2}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TP3}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \cmark                                & \xmark                                 \\
+        \textbf{TP4}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TP5}  & \xmark                           & \cmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TP6}  & \xmark                           & \xmark                               & \xmark                                 & \cmark                                   & \cmark                                & \xmark                                 \\
+        \textbf{TP7}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TP8}  & \xmark                           & \cmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \midrule
+        \textbf{TN1}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TN2}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TN3}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TN4}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TN5}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TN6}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TN7}  & \xmark                           & \xmark                               & \cmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{TN8}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \midrule
+        \textbf{FP1}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FP2}  & \xmark                           & \xmark                               & \xmark                                 & \cmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FP3}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FP4}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FP5}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FP6}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FP7}  & \xmark                           & \xmark                               & \cmark                                 & \cmark                                   & \cmark                                & \cmark                                 \\
+        \textbf{FP8}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \midrule
+        \textbf{FN1}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FN2}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FN3}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FN4}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FN5}  & \xmark                           & \xmark                               & \xmark                                 & \cmark                                   & \cmark                                & \xmark                                 \\
+        \textbf{FN6}  & \xmark                           & \xmark                               & \xmark                                 & \cmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{FN7}  & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \cmark                                & \xmark                                 \\
+        \textbf{FN8}  & \xmark                           & \cmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \midrule
+        \textbf{REJ1} & \xmark                           & \xmark                               & \xmark                                 & \cmark                                   & \cmark                                & \xmark                                 \\
+        \textbf{REJ2} & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{REJ3} & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{REJ4} & \xmark                           & \xmark                               & \cmark                                 & \cmark                                   & \cmark                                & \cmark                                 \\
+        \textbf{REJ5} & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \cmark                                & \xmark                                 \\
+        \textbf{REJ6} & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
+        \textbf{REJ7} & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \cmark                                 \\
+        \textbf{REJ8} & \xmark                           & \xmark                               & \xmark                                 & \xmark                                   & \xmark                                & \xmark                                 \\
         \bottomrule
     \end{tabularx}
+    \caption{Overview of the statistically significant differences between different groups of participants for each scenario in the ME survey. A check or cross indicates that we found significant or no significant differences between the groups, respectively. We use the non-parametric Mann-Whitney U test for the \emph{sex} and \emph{student} features and the non-parametric Kruskal-Wallis test for the \emph{continent}, \emph{nationality}, \emph{language}, and \emph{ethnicity} features.}
 \end{table}
 
 \section{Value-sensitive rejection}
