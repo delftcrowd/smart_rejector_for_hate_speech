@@ -318,14 +318,21 @@ class Analysis:
         plt.show()
 
     @classmethod
-    def print_question_statistics(cls, data1: pd.DataFrame, data2: pd.DataFrame):
+    def print_question_statistics(
+        cls, data1: pd.DataFrame, data2: pd.DataFrame
+    ) -> pd.DataFrame:
         """Prints all statistics between two datasets for each question.
 
         Args:
             data1 (pd.DataFrame): the first dataset.
             data2 (pd.DataFrame): the second dataset.
+
+        Returns:
+            pd.DataFrame: dataframe containing the p values of the question statistics.
         """
         all_scores, question_names = cls.convert_to_question_scores(data1, data2)
+
+        df = pd.DataFrame(columns=["Scenario", "Mann-Whitney U", "T-test"])
 
         for index, question in enumerate(question_names):
             print("=================================")
@@ -346,15 +353,33 @@ class Analysis:
                 print("Variances are equal: ", bartlett)
 
             if mannwhitneyu.pvalue < 0.05:
-                print("Statistical difference: ", mannwhitneyu)
+                print("Significant difference: ", mannwhitneyu)
+            else:
+                print("No significant difference: ", mannwhitneyu)
 
             if ttest_ind.pvalue < 0.05:
-                print("Statistical difference: ", ttest_ind)
+                print("Significant difference: ", ttest_ind)
+            else:
+                print("No significant difference: ", ttest_ind)
+
+            df = df.append(
+                {
+                    "Scenario": question,
+                    "Mann-Whitney U": mannwhitneyu.pvalue,
+                    "T-test": ttest_ind.pvalue,
+                },
+                ignore_index=True,
+            )
+
+        return df
 
     @classmethod
     def print_question_statistics_multiple(cls, *datasets):
         """Prints all statistics between all passed sample dataset lists for each question."""
         all_scores, question_names = cls.convert_to_question_scores(*datasets)
+
+        df = pd.DataFrame(columns=["Scenario", "Kruskal-Wallis", "One-way ANOVA"])
+
         for index, question in enumerate(question_names):
             print("=================================")
             print("Question: ", question)
@@ -374,12 +399,29 @@ class Analysis:
                 print("Variances are equal: ", bartlett)
 
             if kruskal.pvalue < 0.05:
-                print("Statistical difference: ", kruskal)
+                print("Significant difference between groups: ", kruskal)
+                cls.nonparametric_pair_tests(question_scores)
+            else:
+                print("Groups are equal: ", kruskal)
                 cls.nonparametric_pair_tests(question_scores)
 
             if f_oneway.pvalue < 0.05:
-                print("Statistical difference: ", f_oneway)
+                print("Significant difference between groups: ", f_oneway)
                 cls.parametric_pair_tests(question_scores)
+            else:
+                print("Groups are equal: ", f_oneway)
+                cls.parametric_pair_tests(question_scores)
+
+            df = df.append(
+                {
+                    "Scenario": question,
+                    "Kruskal-Wallis": kruskal.pvalue,
+                    "One-way ANOVA": f_oneway.pvalue,
+                },
+                ignore_index=True,
+            )
+
+        return df
 
     @staticmethod
     def nonparametric_pair_tests(question_scores: List[List[float]]):
@@ -404,7 +446,12 @@ class Analysis:
             pvalue = pvalues_corrected[index]
             if pvalue < 0.05:
                 print(
-                    f"Statistical difference (Mann-Whitney U) between dataset {dataset1_index} and {dataset2_index}: ",
+                    f"Significant difference (Mann-Whitney U) between dataset {dataset1_index} and {dataset2_index}: ",
+                    pvalue,
+                )
+            else:
+                print(
+                    f"Groups are equal (Mann-Whitney U) between dataset {dataset1_index} and {dataset2_index}: ",
                     pvalue,
                 )
 
@@ -432,6 +479,11 @@ class Analysis:
             if pvalue < 0.05:
                 print(
                     f"Statistical difference (independent t-test) between dataset {dataset1_index} and {dataset2_index}: ",
+                    pvalue,
+                )
+            else:
+                print(
+                    f"Groups are equal (independent t-test) between dataset {dataset1_index} and {dataset2_index}: ",
                     pvalue,
                 )
 
