@@ -407,10 +407,10 @@ class Analysis:
 
             if f_oneway.pvalue < 0.05:
                 print("Significant difference between groups: ", f_oneway)
-                cls.parametric_pair_tests(question_scores)
+                matrix = cls.parametric_pair_tests(question_scores)
+                pd.DataFrame(matrix).to_csv(f"{question}.csv")
             else:
                 print("Groups are equal: ", f_oneway)
-                cls.parametric_pair_tests(question_scores)
 
             df = df.append(
                 {
@@ -424,15 +424,22 @@ class Analysis:
         return df
 
     @staticmethod
-    def nonparametric_pair_tests(question_scores: List[List[float]]):
+    def nonparametric_pair_tests(
+        question_scores: List[List[float]],
+    ) -> List[List[float]]:
         """Conducts non-parametric tests between all pairs of groups.
 
         Args:
             question_scores (List[List[float]]): list of lists containing
             the scores of all participants per demographic group.
+
+        Returns:
+            List[List[float]]: pairwise corrected p-values.
         """
         pvalues = []
         pairs = []
+        matrix = np.empty([len(question_scores), len(question_scores)])
+
         for (index1, data1), (index2, data2) in itertools.product(
             enumerate(question_scores), repeat=2
         ):
@@ -444,6 +451,7 @@ class Analysis:
 
         for index, (dataset1_index, dataset2_index) in enumerate(pairs):
             pvalue = pvalues_corrected[index]
+            matrix[dataset1_index][dataset2_index] = pvalue
             if pvalue < 0.05:
                 print(
                     f"Significant difference (Mann-Whitney U) between dataset {dataset1_index} and {dataset2_index}: ",
@@ -455,6 +463,8 @@ class Analysis:
                     pvalue,
                 )
 
+        return matrix
+
     @staticmethod
     def parametric_pair_tests(question_scores: List[List[float]]):
         """Conducts parametric tests between all pairs of groups.
@@ -462,9 +472,14 @@ class Analysis:
         Args:
             question_scores (List[List[float]]): list of lists containing
             the scores of all participants per demographic group.
+
+        Returns:
+            List[List[float]]: pairwise corrected p-values.
         """
         pvalues = []
         pairs = []
+        matrix = np.empty([len(question_scores), len(question_scores)])
+
         for (index1, data1), (index2, data2) in itertools.product(
             enumerate(question_scores), repeat=2
         ):
@@ -475,7 +490,8 @@ class Analysis:
         (_, pvalues_corrected, _, _) = multipletests(pvalues, method="fdr_bh")
 
         for index, (dataset1_index, dataset2_index) in enumerate(pairs):
-            pvalue = pvalues[index]
+            pvalue = pvalues_corrected[index]
+            matrix[dataset1_index][dataset2_index] = pvalue
             if pvalue < 0.05:
                 print(
                     f"Statistical difference (independent t-test) between dataset {dataset1_index} and {dataset2_index}: ",
@@ -486,6 +502,8 @@ class Analysis:
                     f"Groups are equal (independent t-test) between dataset {dataset1_index} and {dataset2_index}: ",
                     pvalue,
                 )
+
+        return matrix
 
     @staticmethod
     def filter_data(
