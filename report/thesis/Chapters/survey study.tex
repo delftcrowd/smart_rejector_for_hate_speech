@@ -453,13 +453,17 @@ However, we still try to analyze if we can find any differences between particip
 \label{sec:analysis-demographic}
 As we conduct the survey study only once for a group of participants, among which 50\% are men and 50\% are women, the remaining demographic characteristics can be quite diverse.
 %
-Nevertheless, we are still curious if there are any significant statistical differences between groups of participants with different demographic characteristics as we expect that demographic characteristics influence people's perception of hate speech and how we should deal with it.
+Nevertheless, we verify whether there are any significant statistical differences between groups of participants with different demographic characteristics as we expect that demographic characteristics influence people's perception of hate speech and how we should deal with it.
 %
 Therefore, we apply several statistics to the results of each scenario to analyze if we can find differences between different demographic groups.
 %
-Prolific provides information about the demographic characteristics of the participants, out of which we analyze four variables: nationality, age, student (whether they are still a student or not), and gender.
+Prolific provides information about the demographic characteristics of the participants, out of which we analyze six variables based on what Prolific provides us in the survey results: sex, student (whether they are still a student or not), continent, nationality, language, and ethnicity.
 %
-We have multiple groups (more than two) for the variables nationality and age (different age intervals) and two groups for the variables student and gender.
+We manually add the continent variable based on the values of the nationality variable.
+%
+We exclude age as almost all participants' ages fall between 20 and 30 years old.
+%
+We have multiple groups (more than two) for nationality, ethnicity, and  (different age intervals) and two groups for the variables student and gender.
 %
 We apply either analysis of variance (ANOVA) (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups and apply an unpaired two-samples t-test (parametric) or the Mann-Whitney U Test (non-parametric) when we have exactly two groups.
 %
@@ -471,10 +475,18 @@ We apply ANOVA and the t-test when the data meets the following three conditions
 %
 We use Bartlett's test of homogeneity of variances and the Shapiro-Wilk test of normality to check if we can apply ANOVA and the t-test.
 %
-We obey the independence condition since we collect the data of all participants of our survey study Independently.
+We obey the independence condition since we collect the data of all survey study participants independently.
 %
 ANOVA and the t-test can be robust to violations of the homogeneity of variances and the normality assumptions \citep{howell2012statistical}.
 %
 However, if one of the assumptions is violated then it is important to keep the sample sizes as equal as possible \citep{howell2012statistical}.
 %
-\todo[inline]{explain pairwise analysis. We use pairwise parametric tests (t-test) or pairwise non-parametric tets (mann-whitney u test) to test if there any differences between the different groups when ANOVA or Kruskal-Wallis is used. However, is this results into many extra statistical tests, there is a chance of introducting Type I errors, meaning that we incorrectly reject the null hypothesis for some of the tests. This would indicate that we find significant differences between the groups while there aren't any. Therefore, we perform the post-hoc Benjamini-Hochberg procedure for correcting the p-values to control the Type I errors.}
+Finally, for the multi-group variables (nationality, language, and ethnicity), we apply pairwise statistical tests (Mann-Whitney U or t-test) between all groups.
+%
+We only do this for the scenarios where we find significant differences between the groups through ANOVA/Kruskal-Wallis.
+%
+However, we now may introduce Type I errors as we perform many pairwise statistical tests between all groups.
+%
+As a result, we might incorrectly reject the null hypothesis for some of the pairwise tests, meaning that we find significant differences between some of the groups while there are not actually.
+%
+Therefore, we perform the post hoc Benjamini-Hochberg procedure to correct the p-values of the pairwise test results to control the Type I errors.
