@@ -166,7 +166,7 @@ We
 \begin{table}
     \scriptsize
     \centering
-    \setlength\tabcolsep{1.5pt}
+    \setlength\tabcolsep{2pt}
     \begin{subtable}{.44\textwidth}
         \centering
         \begin{tabular}{lcccc}
@@ -274,8 +274,8 @@ We
 \begin{table}
     \scriptsize
     \centering
-    \setlength\tabcolsep{1.5pt}
-    \begin{subtable}{.4\textwidth}
+    \setlength\tabcolsep{2pt}
+    \begin{subtable}{.405\textwidth}
         \centering
         \begin{tabular}{lcccc}
             \toprule
@@ -289,7 +289,7 @@ We
         \end{tabular}
         \caption{TP3}
     \end{subtable}%
-    \begin{subtable}{.4\textwidth}
+    \begin{subtable}{.405\textwidth}
         \centering
         \begin{tabular}{cccc}
             \toprule
@@ -304,7 +304,7 @@ We
         \caption{TP6}
     \end{subtable}
     \vskip\baselineskip
-    \begin{subtable}{.4\textwidth}
+    \begin{subtable}{.405\textwidth}
         \centering
         \begin{tabular}{lcccc}
             \toprule
@@ -318,7 +318,7 @@ We
         \end{tabular}
         \caption{FP7}
     \end{subtable}%
-    \begin{subtable}{.4\textwidth}
+    \begin{subtable}{.405\textwidth}
         \centering
         \begin{tabular}{cccc}
             \toprule
@@ -333,7 +333,7 @@ We
         \caption{FN5}
     \end{subtable}
     \vskip\baselineskip
-    \begin{subtable}{.4\textwidth}
+    \begin{subtable}{.405\textwidth}
         \centering
         \begin{tabular}{lcccc}
             \toprule
@@ -347,7 +347,7 @@ We
         \end{tabular}
         \caption{FN7}
     \end{subtable}%
-    \begin{subtable}{.4\textwidth}
+    \begin{subtable}{.405\textwidth}
         \centering
         \begin{tabular}{cccc}
             \toprule
@@ -362,7 +362,7 @@ We
         \caption{REJ1}
     \end{subtable}
     \vskip\baselineskip
-    \begin{subtable}{.4\textwidth}
+    \begin{subtable}{.405\textwidth}
         \centering
         \begin{tabular}{lcccc}
             \toprule
@@ -376,7 +376,7 @@ We
         \end{tabular}
         \caption{REJ4}
     \end{subtable}%
-    \begin{subtable}{.4\textwidth}
+    \begin{subtable}{.405\textwidth}
         \centering
         \begin{tabular}{cccc}
             \toprule
@@ -391,6 +391,52 @@ We
         \caption{REJ5}
     \end{subtable}
     \caption{Language}
+\end{table}
+
+\begin{table}
+    \scriptsize
+    \centering
+    \setlength\tabcolsep{2pt}
+    \begin{subtable}{.275\textwidth}
+        \centering
+        \begin{tabular}{lccc}
+            \toprule
+                           & \textbf{White}                         & \textbf{Mixed}                         & \textbf{Black} \\
+            \midrule
+            \textbf{White} & 1.000                                  &                                        &                \\
+            \textbf{Mixed} & 0.552                                  & 1.000                                  &                \\
+            \textbf{Black} & \cellcolor[HTML]{EFEFEF}\textbf{0.028} & \cellcolor[HTML]{EFEFEF}\textbf{0.028} & 1.000          \\
+            \bottomrule
+        \end{tabular}
+        \caption{FP7}
+    \end{subtable}%
+    \begin{subtable}{.21\textwidth}
+        \centering
+        \begin{tabular}{ccc}
+            \toprule
+            \multicolumn{1}{l}{\textbf{White}}     & \textbf{Mixed}                                             & \textbf{Black}            \\
+            \midrule
+            1.000                                  &                                                            &                           \\
+            0.776                                  & \multicolumn{1}{r}{1.000}                                  &                           \\
+            \cellcolor[HTML]{EFEFEF}\textbf{0.002} & \multicolumn{1}{r}{\cellcolor[HTML]{EFEFEF}\textbf{0.776}} & \multicolumn{1}{r}{1.000} \\
+            \bottomrule
+        \end{tabular}
+        \caption{REJ4}
+    \end{subtable}%
+    \begin{subtable}{.21\textwidth}
+        \centering
+        \begin{tabular}{ccc}
+            \toprule
+            \multicolumn{1}{l}{\textbf{White}}     & \textbf{Mixed}            & \textbf{Black}            \\
+            \midrule
+            1.000                                  &                           &                           \\
+            \cellcolor[HTML]{EFEFEF}\textbf{0.016} & \multicolumn{1}{r}{1.000} &                           \\
+            1.000                                  & \multicolumn{1}{r}{0.112} & \multicolumn{1}{r}{1.000} \\
+            \bottomrule
+        \end{tabular}
+        \caption{REJ7}
+    \end{subtable}
+    \caption{Ethnicity}
 \end{table}
 
 \section{Value-sensitive rejection}
