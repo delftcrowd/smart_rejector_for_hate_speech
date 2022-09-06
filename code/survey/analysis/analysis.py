@@ -400,15 +400,15 @@ class Analysis:
 
             if kruskal.pvalue < 0.05:
                 print("Significant difference between groups: ", kruskal)
-                cls.nonparametric_pair_tests(question_scores)
+                matrix = cls.nonparametric_pair_tests(question_scores)
+                pd.DataFrame(matrix).to_csv(f"{question}_nonparametric.csv")
             else:
                 print("Groups are equal: ", kruskal)
-                cls.nonparametric_pair_tests(question_scores)
 
             if f_oneway.pvalue < 0.05:
                 print("Significant difference between groups: ", f_oneway)
                 matrix = cls.parametric_pair_tests(question_scores)
-                pd.DataFrame(matrix).to_csv(f"{question}.csv")
+                pd.DataFrame(matrix).to_csv(f"{question}_parametric.csv")
             else:
                 print("Groups are equal: ", f_oneway)
 
