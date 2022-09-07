@@ -34,14 +34,13 @@ For both scales, participants disagreed the most with FN3 and FN7 and agreed the
 FN4 was an exception, as for both scales, there were some particpants that agreed with the scenario.
 \begin{figure}
     \centering
-    \begin{subfigure}[b]{.9\textwidth}
+    \begin{subfigure}[b]{.8\textwidth}
         \centering
         \includegraphics[width=\linewidth]{Figures/boxplots-ME.pdf}
         \caption{Scenarios rated with the ME scale.}
         \label{fig:boxplots-me}
     \end{subfigure}
-    \\
-    \begin{subfigure}[b]{.9\textwidth}
+    \begin{subfigure}[b]{.8\textwidth}
         \centering
         \includegraphics[width=\linewidth]{Figures/boxplots-100-level.pdf}
         \caption{Scenarios rated with the 100-level scale.}
@@ -57,6 +56,8 @@ We calculated the value ratios following the approach from section \ref{sec:anal
 %
 Table \ref{tab:values-reliability} shows the final values ($v$) for both the ME and the 100-level survey.
 %
+Positive and negative values indicate agreement and disagreement, respectively.
+%
 For both scales, participants disagreed the most with the FN scenarios and agreed the most with the TN scenarios.
 %
 The final values of both scales follow the same order: $V_{fn} < V_{fp} < V_{r} < V_{tp} < V_{tn}$.
@@ -65,7 +66,7 @@ Participants give the highest absolute response values to the TN scenarios.
 %
 We also observed that by participants give greater absolute response values to the TP and TN scenarios than to the FP and FN scenarios, respectively.
 %
-\begin{table}[t]
+\begin{table}
     \small
     \centering
     \begin{tabular}{lcccc}
@@ -107,6 +108,24 @@ For the 100-level scale, we see that participants have low agreement on all scen
 
 \subsection{Validity}
 \label{sec:results-validity}
+We analyzed the validity of the ME method by performing cross-modality validation between the ME and the 100-level scale (refer to section \ref{sec:analysis-validity}).
+%
+Figure \ref{fig:correlation} shows the correlation between the ME scale and the 100-level scale.
+%
+The Shapiro Wilk test of normality, showed that both the median (normalized) ME scores and the median 100-level scores do not follow a normal distribution ($p < 0.05$).
+%
+Therefore, we calculated the Spearman and the Kendall correlation statistics as these are non-parametric.
+%
+Spearman returned a 0.98 and Kendall a 0.89 correlation between the ME and the 100-level scales (p < 0.05), indicating that both scales are highly correlated.
+%
+Finally, a Mann-Whitney U test between the ME and 100level scales gives a large p-value, indicating no statistically significant difference between the two scales.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\linewidth]{Figures/correlation.pdf}
+    \caption{Correlation plot between the median normalized magnitude estimates and the median 100-level scores per question.}
+    \label{fig:correlation}
+\end{figure}
 
 \subsection{Demographics}
 \label{sec:results-demographics}
