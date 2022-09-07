@@ -141,12 +141,29 @@ Second, we found that for most features, except sex, the sample sizes of the fea
 %
 We used Mann-Whitney U to verify if there is a significant difference between two groups and we used Kruskal-Wallis for more than two groups.
 %
-Table \ref{tab:results-differences-ind} shows the resulting p values for all features.
+Table \ref{tab:results-differences-ind} shows the resulting p values for all scenarios and all features.
 %
 We found that there are no differences between men and woman.
 %
 For both the student and continent features, we found that there are only three scenarios where there differences between the groups.
 %
+Tha nationality and the language features contain the most scenarios where there is a significant difference between the groups.
+%
+We observed that there exist 5 scenarios with non-hateful posts and 10 scenarios with hateful posts where there is at least one feature with significant differences between the groups.
+%
+Scenarios FP4 and REJ4 have the most features (4) with significant differences between the groups.
+%
+Scenarios TP6, FN5, and REJ1 have the second most feaures (2) with significant differences between the groups.
+%
+Table \ref{tab:results-differences-grp} shows the p values of the statistical tests for the aggregated scenarios (TP, TN, FP, FN, and rejection) and all features.
+%
+We aggregated the scores per question type by calculating the mean response value to all scenarios of the same type, e.g. TP, for each participant.
+%
+Then we applied the Mann Whitney U test to aggregated scores to find out whether there is a significant difference between the groups of some feature for that scenario type.
+%
+We found the most significant differences between different demographic groups for the aggregated scores of all FP scenarios.
+%
+% TODO: continue with pairwise comparisong
 
 \begin{table}
     \small
