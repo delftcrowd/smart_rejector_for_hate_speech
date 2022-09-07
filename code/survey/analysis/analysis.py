@@ -284,7 +284,7 @@ class Analysis:
         plot_data = cls.convert_to_boxplot_data(
             data=data, show_individual=show_individual
         )
-        sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data, color="b")
+        sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data, color="#8c8c8c")
         # plt.title(f"Boxplots of all scenarios for the {scale_title} scale")
 
         sns.despine(offset=10, trim=True)
