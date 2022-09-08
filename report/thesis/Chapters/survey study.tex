@@ -458,13 +458,13 @@ Nevertheless, we verify whether there are any significant statistical difference
 %
 Therefore, we apply several statistics to the results of each scenario to analyze if we can find differences between different demographic groups.
 %
-Prolific provides information about the demographic characteristics of the participants, out of which we analyze six variables based on what Prolific provides us in the survey results: sex, student (whether they are still a student or not), continent, nationality, language, and ethnicity.
+Prolific provides information about the demographic characteristics of the participants, out of which we analyze six features based on what Prolific provides us in the survey results: sex, student (whether they are still a student or not), continent, nationality, language, and ethnicity.
 %
-We manually add the continent variable based on the values of the nationality variable.
+We manually add the continent feature based on the values of the nationality feature.
 %
 We exclude age as almost all participants' ages fall between 20 and 30 years old.
 %
-We have multiple groups (more than two) for nationality, ethnicity, and  (different age intervals) and two groups for the variables student and gender.
+We have multiple groups (more than two) for nationality, ethnicity, and  (different age intervals) and two groups for the features student and gender.
 %
 We apply either analysis of variance (ANOVA) (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups and apply an unpaired two-samples t-test (parametric) or the Mann-Whitney U Test (non-parametric) when we have exactly two groups.
 %
@@ -482,7 +482,7 @@ ANOVA and the t-test can be robust to violations of the homogeneity of variances
 %
 However, if one of the assumptions is violated then it is important to keep the sample sizes as equal as possible \citep{howell2012statistical}.
 %
-Finally, for the multi-group variables (nationality, language, and ethnicity), we apply pairwise statistical tests (Mann-Whitney U or t-test) between all groups.
+Finally, for the multi-group features (nationality, language, and ethnicity), we apply pairwise statistical tests (Mann-Whitney U or t-test) between all groups.
 %
 We only do this for the scenarios where we find significant differences between the groups through ANOVA/Kruskal-Wallis.
 %
