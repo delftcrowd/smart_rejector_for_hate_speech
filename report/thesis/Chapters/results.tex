@@ -161,10 +161,16 @@ We aggregated the scores per question type by calculating the mean response valu
 %
 Then we applied the Mann Whitney U test to aggregated scores to find out whether there is a significant difference between the groups of some feature for that scenario type.
 %
-We found the most significant differences between different demographic groups for the aggregated scores of all FP scenarios.
+We found the most significant differences between different demographic groups for the aggregated scores of the FP scenarios.
 %
-
-
+Finally, we conducted pairwise Mann-Whitney U tests to check if there are any differences between pairs of groups for the multi-group features: nationality, langauge, and ethnicity.
+%
+Tables \ref{tab:results-pairwise-nationality}, \ref{tab:results-pairwise-language}, and \ref{tab:results-pairwise-ethnicity} present the resulting p values of the pairwise Mann-Whitney U tests for the features nationality, language, and ethnicity, respectively.
+%
+We observed that for most scenarios, we do not find any significant statistical differences between the pairs of groups for all three features.
+%
+We found the most differences, four out of the six pairs, for scenario FN5 when looking at the nationality feature.
+%
 \begin{table}
     \small
     \centering
@@ -346,6 +352,7 @@ We found the most significant differences between different demographic groups f
         \caption{REJ4}
     \end{subtable}
     \caption{\textbf{Nationality}: an overview of all pairwise Mann-Whitney U tests between the different nationalities for all scenarios where we found significant differences between all nationalities using the Kruskal-Wallis test. Each cell contains the p value of the Mann-Whitney U test between two groups of different nationalities. We corrected all p values with the Benjamini-Hochberg procedure. The grey cells with bold text indicate significant statistical differences between the two nationalities.}
+    \label{tab:results-pairwise-nationality}
 \end{table}
 
 \begin{table}
@@ -468,6 +475,7 @@ We found the most significant differences between different demographic groups f
         \caption{REJ5}
     \end{subtable}
     \caption{\textbf{Language}: an overview of all pairwise Mann-Whitney U tests between the different spoken languages for all scenarios where we found significant differences between all spoken languages using the Kruskal-Wallis test. Each cell contains the p value of the Mann-Whitney U test between two groups of languages. We corrected all p values with the Benjamini-Hochberg procedure. The grey cells with bold text indicate significant statistical differences between the two languages.}
+    \label{tab:results-pairwise-language}
 \end{table}
 
 \begin{table}
@@ -514,6 +522,7 @@ We found the most significant differences between different demographic groups f
         \caption{REJ7}
     \end{subtable}
     \caption{\textbf{Ethnicity}: an overview of all pairwise Mann-Whitney U tests between the different ethnicities for all scenarios where we found significant differences between all ethnicities using the Kruskal-Wallis test. Each cell contains the p value of the Mann-Whitney U test between two groups of ethnicities. We corrected all p values with the Benjamini-Hochberg procedure. The grey cells with bold text indicate significant statistical differences between the two ethnicities.}
+    \label{tab:results-pairwise-ethnicity}
 \end{table}
 
 \section{Value-sensitive rejection}
