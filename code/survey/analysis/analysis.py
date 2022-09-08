@@ -600,6 +600,8 @@ class Analysis:
         plt.xlabel("Magnitude Estimation")
         plt.ylabel("100-level")
         plt.tight_layout()
+        plt.ylim(-110, 110)
+        plt.xlim(-110, 110)
         plt.savefig("correlation.pdf", format="pdf", bbox_inches="tight")
         plt.show()
 
