@@ -17,6 +17,42 @@ In section \ref{sec:results-survey-study}, we present the results of the complet
 
 \section{Survey study}
 \label{sec:results-survey-study}
+We collected the responses of all participants to all scenarios for both surveys: one where participants use the ME scale and the other where they use the 100-level scale to judge the scenarios.
+%
+All participants had to answer two/three questions per scenario, dependent on the choice of the second question.
+%
+
+%
+The first question asked whether the participant found the content of the social media post hateful or not.
+%
+Figure \ref{fig:hatefulness} presents the results of the first question by showing the percentages of participants who find the content hateful or not hateful for each scenario.
+%
+We summed the ME and the 100-level survey responses since this question was the same for both surveys.
+%
+Most participants agreed with the ground truth label of the social media posts.
+%
+Please note that according to the ground truth label, REJ1, REJ2, REJ5, and REJ6 are hateful, and REJ3, REJ4, REJ7, and REJ8 are not hateful.
+%
+So most participants found the posts used in the TP and FN scenarios hateful and those used in TN and FP scenarios not hateful.
+%
+Moreover, most found the posts of REJ1, REJ2, and REJ6 hateful and REJ3, REJ4, and REJ8 not hateful.
+%
+We found three exceptions: FN5, REJ5, and REJ7, where less than or equal to 60\% of all participants did not agree with the ground truth label of the social media post.
+%
+
+%
+The second and third questions asked whether the participant agreed/disagreed or was neutral about SocialNet's decision and to what degree.
+%
+Figure \ref{fig:boxplots} shows the response values to the second and third questions of all scenarios for both scales.
+%
+Participants generally agreed with the TP and TN scenarios and disagreed with the FP, FN, and rejection scenarios.
+%
+For both scales, participants disagreed the most with scenarios FN3 and FN7 and agreed the most with scenarios TN3 and TN6.
+%
+Scenario FN4 was an exception, as some participants agreed with the scenario for both scales.
+%
+
+%
 This section presents the results of the survey study.
 %
 Section \ref{sec:results-value-ratios} presents the value ratios required for our value-sensitive rejector, section \ref{sec:results-reliability} presents the reliability analysis, and section \ref{sec:results-validity} the validity analysis.
@@ -24,19 +60,14 @@ Section \ref{sec:results-value-ratios} presents the value ratios required for ou
 Finally, section \ref{sec:results-demographics} shows the results of the demographic analysis.
 %
 
-
-\subsection{Value ratios}
-\label{sec:results-value-ratios}
-We collected the responses of all participants to all scenarios for both surveys: one where participants use the ME scale and the other where they use the 100-level scale to judge the scenarios.
 %
-Figure \ref{fig:boxplots} shows the response values to all scenarios for both scales.
-%
-Participants generally agreed with the TP and TN scenarios and disagreed with the FP, FN, and rejection scenarios.
-%
-For both scales, participants disagreed the most with scenarios FN3 and FN7 and agreed the most with scenarios TN3 and TN6.
-%
-Scenario FN4 was an exception, as some participants agreed with the scenario for both scales.
-\begin{figure}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.8\textwidth]{Figures/hatefulness.pdf}
+    \caption{Stacked bar charts that show the percentages of participants who find the content of the social media post used in the scenarios hateful or not hateful. Each bar is a summation of the responses to both surveys, as this question was the same for both.}
+    \label{fig:hatefulness}
+\end{figure}
+\begin{figure}[h]
     \centering
     \begin{subfigure}[b]{.8\textwidth}
         \centering
@@ -53,9 +84,9 @@ Scenario FN4 was an exception, as some participants agreed with the scenario for
     \caption{Boxplots of the responses of all participants to all scenarios for both scales.}
     \label{fig:boxplots}
 \end{figure}
-%
 
-%
+\subsection{Value ratios}
+\label{sec:results-value-ratios}
 We calculated the value ratios following the approach from section \ref{sec:analysis-values}.
 %
 Table \ref{tab:values-reliability} shows the final values ($v$) for the ME and the 100-level survey.
@@ -70,7 +101,7 @@ Participants give the highest absolute response values to the TN scenarios.
 %
 We also observed that participants provided greater absolute response values to the TP and TN scenarios than to the FP and FN scenarios.
 %
-\begin{table}
+\begin{table}[h]
     \small
     \centering
     \begin{tabular}{lcccc}
