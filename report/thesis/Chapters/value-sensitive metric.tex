@@ -195,6 +195,7 @@ We implement all models in Python.
 We implement the LR model with scikit-learn\footnote{\url{https://scikit-learn.org/}}, the CNN model with TensorFlow\footnote{\url{https://www.tensorflow.org/}}, and the DistilBERT model with a combination of Hugging Face\footnote{\url{https://huggingface.co/}} and PyTorch\footnote{\url{https://pytorch.org/}}.
 %
 We use Google Colab\footnote{\url{https://colab.research.google.com/}} to train all models.
+\todo[inline]{Explain hyperparam optimization}
 
 \subsection{Calibration}
 The problem with most neural network models is that they are often not calibrated \citep{guo2017calibration,sayin2021science}.
@@ -249,7 +250,7 @@ For the CNN and the DistilBERT models, we split the training set up into a train
 We use this validation set to calibrate the trained models by finding the optimal $T$ value for the temperature scaling method.
 %
 We preprocess the data by tokenizing all URLs, user mentions, and emojis since these do not contain any valuable information.
-% TODO: perhaps add wordsegment library for segmenting the hashtags.
+\todo[inline]{Explain preprocessing step with wordsegment library}
 The remaining parts of the preprocessing, such as removing whitespaces and stop words or the tokenization process, are dedicated to the different frameworks we use per model.
 %
 
