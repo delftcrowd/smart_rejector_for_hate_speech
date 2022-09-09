@@ -257,78 +257,36 @@ class Metric:
     @classmethod
     def plot_multiple_confidence_densities(
         cls,
-        metrics: List[Tuple[str, Metric]],
+        metrics: List[Metric],
         filename: str,
-        show_yaxis_title: bool,
+        type: str,
         bw_adjust: float,
     ):
         colors = sns.color_palette("colorblind")
-        fig, ax = pyplot.subplots(2, 2)
 
-        for index, (label, metric) in enumerate(metrics):
-            tps = Prediction.set_of_tps(metric.predictions)
-            tns = Prediction.set_of_tns(metric.predictions)
-            fps = Prediction.set_of_fps(metric.predictions)
-            fns = Prediction.set_of_fns(metric.predictions)
-            tps_conf = list(map(lambda p: p.predicted_value, tps))
-            tns_conf = list(map(lambda p: p.predicted_value, tns))
-            fps_conf = list(map(lambda p: p.predicted_value, fps))
-            fns_conf = list(map(lambda p: p.predicted_value, fns))
+        for index, metric in enumerate(metrics):
+            if type == "TP":
+                predictions = Prediction.set_of_tps(metric.predictions)
+            elif type == "TN":
+                predictions = Prediction.set_of_tns(metric.predictions)
+            elif type == "FP":
+                predictions = Prediction.set_of_fps(metric.predictions)
+            elif type == "FN":
+                predictions = Prediction.set_of_fns(metric.predictions)
+
+            conf = list(map(lambda p: p.predicted_value, predictions))
+
             sns.kdeplot(
-                tps_conf,
+                conf,
                 color=colors[index],
-                label=f"{label}",
                 zorder=1,
                 linewidth=3,
-                ax=ax[0, 0],
                 bw_adjust=bw_adjust,
             )
-            sns.kdeplot(
-                tns_conf,
-                color=colors[index],
-                label=f"{label}",
-                zorder=1,
-                linewidth=3,
-                ax=ax[0, 1],
-                bw_adjust=bw_adjust,
-            )
-            sns.kdeplot(
-                fps_conf,
-                color=colors[index],
-                label=f"{label}",
-                zorder=1,
-                linewidth=3,
-                ax=ax[1, 0],
-                bw_adjust=bw_adjust,
-            )
-            sns.kdeplot(
-                fns_conf,
-                color=colors[index],
-                label=f"{label}",
-                zorder=1,
-                linewidth=3,
-                ax=ax[1, 1],
-                bw_adjust=bw_adjust,
-            )
-            ax[0, 1].legend(loc="upper left")
 
-            ax[0, 0].set_title("TP")
-            ax[0, 1].set_title("TN")
-            ax[1, 0].set_title("FP")
-            ax[1, 1].set_title("FN")
-
-            ax[0, 0].set_xlabel("Confidence value")
-            ax[0, 1].set_xlabel("Confidence value")
-            ax[1, 0].set_xlabel("Confidence value")
-            ax[1, 1].set_xlabel("Confidence value")
-
-            ax[0, 0].set_xlim(0.4, 1.1)
-            ax[0, 1].set_xlim(0.4, 1.1)
-            ax[1, 0].set_xlim(0.4, 1.1)
-            ax[1, 1].set_xlim(0.4, 1.1)
-
-        if show_yaxis_title:
-            pyplot.ylabel("Density")
+        pyplot.ylabel("Density")
+        pyplot.xlabel("Confidence value")
+        pyplot.xlim(0.4, 1.1)
         pyplot.tight_layout()
         pyplot.savefig(filename, format="pdf", bbox_inches="tight")
         pyplot.show()
