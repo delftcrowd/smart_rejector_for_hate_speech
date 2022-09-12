@@ -61,7 +61,7 @@ Finally, section \ref{sec:results-demographics} shows the results of the demogra
 %
 
 %
-\begin{figure}[h]
+\begin{figure}[t]
     \centering
     \includegraphics[scale=.4]{Figures/hatefulness.pdf}
     \caption{Stacked bar charts that show the percentages of participants who find the content of the social media post used in the scenarios hateful or not hateful. Each bar is a summation of the responses to both surveys, as this question was the same for both.}
@@ -101,7 +101,7 @@ Participants give the highest absolute response values to the TN scenarios.
 %
 We also observed that participants provided greater absolute response values to the TP and TN scenarios than to the FP and FN scenarios.
 %
-\begin{table}[h]
+\begin{table}[t]
     \small
     \centering
     \begin{tabular}{lcccc}
@@ -565,3 +565,71 @@ Scenario FN5 contains the most significant pairwise differences (four out of the
 \section{Value-sensitive rejection}
 \label{sec:results-rejector}
 \todo[inline]{Explain that the metric conditions still hold if we set $V_{tp}$ and $V_{tn}$ to 0}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/metric-all-values-seen-data.pdf}
+        \caption{evaluated on \emph{seen} data}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/metric-all-values-unseen-data.pdf}
+        \caption{evaluated on \emph{unseen} data}
+    \end{subfigure}
+    \caption{$V(\tau)$ curves of all models with $V_{tp} = 18.15$, $V_{tn} = 36.32$, $V_{fp} = 16.69$, $V_{fn} = 28.08$, $V_r = 4.82$.}
+    \label{fig:metric-plots-all-values}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/metric-tptn0-seen-data.pdf}
+        \caption{evaluated on \emph{seen} data}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/metric-tptn0-unseen-data.pdf}
+        \caption{evaluated on \emph{unseen} data}
+    \end{subfigure}
+    \caption{$V(\tau)$ curves of all models with $V_{tp} = 0.0$, $V_{tn} = 0.0$, $V_{fp} = 16.69$, $V_{fn} = 28.08$, $V_r = 4.82$.}
+    \label{fig:metric-plots-tptn0}
+\end{figure}
+
+\begin{table*}[t]
+    \scriptsize
+    \centering
+    \begin{tabular}{lcccccccccc}
+        \toprule
+                                                 & \multicolumn{3}{c}{\textbf{LR}} & \multicolumn{3}{c}{\textbf{DistilBERT}} & \multicolumn{3}{c}{\textbf{CNN}}                                                                                                       \\
+        \cmidrule(l){2-4} \cmidrule(l){5-7} \cmidrule(l){8-10}
+                                                 & $\boldsymbol{\tau}$             & \textbf{Acc}                            & \textbf{RR}                      & $\boldsymbol{\tau}$ & \textbf{Acc} & \textbf{RR} & $\boldsymbol{\tau}$ & \textbf{Acc} & \textbf{RR} \\
+        \midrule
+        \textbf{Seen data}                       &                                 &                                         &                                  &                     &              &             &                     &              &             \\
+        \textbf{Unseen data}                     &                                 &                                         &                                  &                     &              &             &                     &              &             \\
+        \midrule
+        \textbf{Seen data $(V_{TP}=V_{TN}=0)$}   &                                 &                                         &                                  &                     &              &             &                     &              &             \\
+        \textbf{Unseen data $(V_{TP}=V_{TN}=0)$} &                                 &                                         &                                  &                     &              &             &                     &              &             \\
+        \bottomrule
+    \end{tabular}
+    \caption{The optimal rejection thresholds ($\tau$), accuracy of the accepted predictions (Acc), and rejection rates (RR) of all models for both datasets using the values from the survey.}
+    \label{tab:metric}
+\end{table*}
+
+\begin{table*}[t]
+    \scriptsize
+    \centering
+    \begin{tabular}{lccccccc}
+        \toprule
+                                                 & \multicolumn{2}{c}{\textbf{LR}} & \multicolumn{2}{c}{\textbf{DistilBERT}} & \multicolumn{2}{c}{\textbf{CNN}}                                                          \\
+        \cmidrule(l){2-3} \cmidrule(l){4-5} \cmidrule(l){6-7}
+                                                 & $\boldsymbol{V(\tau_O)}$        & \textbf{Acc}                            & $\boldsymbol{V(\tau_O)}$         & \textbf{Acc} & $\boldsymbol{V(\tau_O)}$ & \textbf{Acc} \\
+        \midrule
+        \textbf{Seen data}                       &                                 &                                         &                                  &              &                          &              \\
+        \textbf{Unseen data}                     &                                 &                                         &                                  &              &                          &              \\
+        \midrule
+        \textbf{Seen data ($V_{TP}=V_{TN}=0)$}   &                                 &                                         &                                  &              &                          &              \\
+        \textbf{Unseen data ($V_{TP}=V_{TN}=0)$} &                                 &                                         &                                  &              &                          &              \\
+        \bottomrule
+    \end{tabular}
+    \caption{The total values $V(\tau_O)$ and the accuracies (Acc) of all models. Here, $\tau_O$ is the optimal rejection threshold.}
+    \label{tab:metric2}
+\end{table*}
