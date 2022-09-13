@@ -599,15 +599,15 @@ Scenario FN5 contains the most significant pairwise differences (four out of the
     \centering
     \begin{tabular}{lcccccccccc}
         \toprule
-                                                 & \multicolumn{3}{c}{\textbf{LR}} & \multicolumn{3}{c}{\textbf{DistilBERT}} & \multicolumn{3}{c}{\textbf{CNN}}                                                                                                       \\
+                                                 & \multicolumn{3}{c}{\textbf{LR}} & \multicolumn{3}{c}{\textbf{DistilBERT}} & \multicolumn{3}{c}{\textbf{CNN}}                                                                                                           \\
         \cmidrule(l){2-4} \cmidrule(l){5-7} \cmidrule(l){8-10}
-                                                 & $\boldsymbol{\tau_O}$             & \textbf{Acc}                            & \textbf{RR}                      & $\boldsymbol{\tau_O}$ & \textbf{Acc} & \textbf{RR} & $\boldsymbol{\tau_O}$ & \textbf{Acc} & \textbf{RR} \\
+                                                 & $\boldsymbol{\tau_O}$           & \textbf{Acc}                            & \textbf{RR}                      & $\boldsymbol{\tau_O}$ & \textbf{Acc} & \textbf{RR} & $\boldsymbol{\tau_O}$ & \textbf{Acc} & \textbf{RR} \\
         \midrule
-        \textbf{Seen data}                       & 0.580                           & 0.850                                   & 0.007                            & 0.504               & 0.850        & 0.001       & 0.500               & 0.835        & 0.000       \\
-        \textbf{Unseen data}                     & 0.500                           & 0.640                                   & 0.000                            & 0.500               & 0.640        & 0.000       & 0.500               & 0.629        & 0.000       \\
+        \textbf{Seen data}                       & 0.580                           & 0.850                                   & 0.007                            & 0.504                 & 0.850        & 0.001       & 0.500                 & 0.835        & 0.000       \\
+        \textbf{Unseen data}                     & 0.500                           & 0.640                                   & 0.000                            & 0.500                 & 0.640        & 0.000       & 0.500                 & 0.629        & 0.000       \\
         \midrule
-        \textbf{Seen data $(V_{tp}=V_{tn}=0)$}   & 0.780                           & 0.910                                   & 0.246                            & 0.879               & 0.926        & 0.254       & 0.761               & 0.900        & 0.286       \\
-        \textbf{Unseen data $(V_{tp}=V_{tn}=0)$} & 0.995                           & 0.785                                   & 0.967                            & 0.949               & 0.916        & 0.936       & 0.995               & 1.000        & 0.999       \\
+        \textbf{Seen data $(V_{tp}=V_{tn}=0)$}   & 0.780                           & 0.910                                   & 0.246                            & 0.879                 & 0.926        & 0.254       & 0.761                 & 0.900        & 0.286       \\
+        \textbf{Unseen data $(V_{tp}=V_{tn}=0)$} & 0.995                           & 0.785                                   & 0.967                            & 0.949                 & 0.916        & 0.936       & 0.995                 & 1.000        & 0.999       \\
         \bottomrule
     \end{tabular}
     \caption{The optimal rejection thresholds ($\tau_O$), accuracy of the accepted predictions (Acc), and rejection rates (RR) of all models for both datasets using the values from the survey.}

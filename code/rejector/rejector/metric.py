@@ -264,14 +264,14 @@ class Metric:
     @classmethod
     def plot_multiple_confidence_densities(
         cls,
-        metrics: List[Metric],
+        metrics: List[Tuple[str, Metric]],
         filename: str,
         type: str,
         bw_adjust: float,
     ):
         colors = sns.color_palette("colorblind")
 
-        for index, metric in enumerate(metrics):
+        for index, (label, metric) in enumerate(metrics):
             if type == "TP":
                 predictions = Prediction.set_of_tps(metric.predictions)
             elif type == "TN":
@@ -289,12 +289,14 @@ class Metric:
                 zorder=1,
                 linewidth=3,
                 bw_adjust=bw_adjust,
+                label=f"{label}",
             )
 
         pyplot.ylabel("Density")
         pyplot.xlabel("Confidence value")
         pyplot.xlim(0.4, 1.1)
         pyplot.tight_layout()
+        pyplot.legend()
         pyplot.savefig(filename, format="pdf", bbox_inches="tight")
         pyplot.show()
 
