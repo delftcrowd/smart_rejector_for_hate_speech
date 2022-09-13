@@ -156,12 +156,16 @@ class Metric:
         )
         pyplot.show()
 
-    def print_optimal_threshold_stats(self) -> None:
-        """Prints the statistics for the optimal rejection threshold."""
+    def print_optimal_threshold_stats(self, use_pdf=False) -> None:
+        """Prints the statistics for the optimal rejection threshold.
+
+        Args:
+            use_pdf (bool, optional): Whether to use the PDF or prediction counts. Defaults to False.
+        """
         thresholds = np.arange(0.5, 1.0, 0.001)
 
         effectiveness_values = list(
-            map(lambda t: self.calculate_effectiveness(t, use_pdf=False), thresholds)
+            map(lambda t: self.calculate_effectiveness(t, use_pdf=use_pdf), thresholds)
         )
 
         (index, max_effectiveness) = self.maximum_effectiveness(effectiveness_values)
@@ -185,7 +189,10 @@ class Metric:
         print(
             "Accuracy original model: ", len(correct_original) / len(self.predictions)
         )
-        print("Accuracy accepted: ", len(correct_accepted) / len(accepted))
+        if len(accepted) > 0:
+            print("Accuracy accepted: ", len(correct_accepted) / len(accepted))
+        else:
+            print("Accuracy accepted: -")
         print("Num rejected: ", len(rejected))
         RR = len(rejected) / len(self.predictions)
         print("Percentage rejected: ", RR)
