@@ -286,6 +286,7 @@ A small bandwidth value results in an estimated PDF with much variance, while a 
 We use maximum likelihood cross-validation to find the optimal bandwidth value.
 
 \subsection{Application of the value-sensitive rejector}
+\label{sec:rejector-application}
 We apply the training phase of the value-sensitive rejector (refer to figure \ref{fig:training}) to all three models for both the seen and the unseen datasets.
 %
 Therefore, we use our metric from section \ref{sec:value-metric} to calculate the total value $V(\tau)$ (formula \ref{for:final-V}) at all possible rejection thresholds ($\tau$) for all different setups.

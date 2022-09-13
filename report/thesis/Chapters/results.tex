@@ -565,6 +565,15 @@ Scenario FN5 contains the most significant pairwise differences (four out of the
 \section{Value-sensitive rejection}
 \label{sec:results-rejector}
 \todo[inline]{Explain that the metric conditions still hold if we set $V_{tp}$ and $V_{tn}$ to 0}
+We experimented with our value-sensitive rejector by following the approach as described in section \ref{sec:rejector-application}.
+%
+We used the values from table \ref{tab:values-reliability} and applied the metric to the predictions of all three models (LR, DistilBERT, and CNN) to both the \emph{seen} and \emph{unseen} datasets.
+%
+Figure \ref{fig:metric-plots-all-values} presents the total value ($V(\tau)$) of all three models for both datasets and all possible rejection thresholds $\tau \in [0.5, 1.0]$.
+%
+The diamond-shaped markers indicate the optimal rejection threshold ($\tau_O$) for which the model achieves the highest total value ($V(\tau_O)$).
+%
+
 
 \begin{figure}[t]
     \centering
