@@ -564,16 +564,119 @@ Scenario FN5 contains the most significant pairwise differences (four out of the
 
 \section{Value-sensitive rejection}
 \label{sec:results-rejector}
-\todo[inline]{Explain that the metric conditions still hold if we set $V_{tp}$ and $V_{tn}$ to 0}
-We experimented with our value-sensitive rejector by following the approach as described in section \ref{sec:rejector-application}.
+We experimented with our value-sensitive rejector following the approach from section \ref{sec:rejector-application}.
 %
-We used the values from table \ref{tab:values-reliability} and applied the metric to the predictions of all three models (LR, DistilBERT, and CNN) to both the \emph{seen} and \emph{unseen} datasets.
+First, we produced the predictions for several experimental setups.
 %
-Figure \ref{fig:metric-plots-all-values} presents the total value ($V(\tau)$) of all three models for both datasets and all possible rejection thresholds $\tau \in [0.5, 1.0]$.
+Then, we applied our value-sensitive rejector to all experimental setups and analyzed the results.
+%
+
+%
+We created the predictions with all three models (LR, DistilBERT, and CNN) to both the \emph{seen} and \emph{unseen} datasets.
+%
+This resulted into six different sets of predictions.
+%
+Then, for each set of predictions, we created the PDF curves using KDE for all predictions of the same type (TP, TN, FP, and FN) by comparing the predicted label with the actual label.
+%
+The PDF curves were necessary for the calculation of the total value of the models with the reject option.
+%
+Figures \ref{fig:pdfs-seen} and \ref{fig:pdfs-unseen} show all PDF curves for the \emph{seen} and \emph{unseen} datasets, respectively.
+%
+We observed that all three models were more confident in their correct predictions (TP and TN) than their incorrect predictions (FP and FN) for both the \emph{seen} and \emph{unseen} datasets.
+%
+All three models were also more confident in their correct predictions for the \emph{seen} dataset than the \emph{unseen} dataset.
+%
+The CNN and LR models have similar PDF curves and seem well-calibrated since the PDF curves of the correct predictions are skewed towards $1.0$ while the curves of the incorrect predictions are more uniformly distributed.
+%
+The DistilBERT model was less calibrated than the other two model.
+%
+We recognize this in the PDF curves of the DistilBERT model for the incorrect predictions in figures \ref{fig:pdfs-seen} and \ref{fig:pdfs-unseen} by looking at the large density values around the high confidence values.
+%
+
+%
+We applied the value-sensitive metric from section \ref{sec:value-metric} to the three models and both datasets using the PDF curves and the ME values ($V_{tp}, V_{tn}, V_{fp}, V_{fn}, \text{ and } V_r$) from the survey.
+%
+Figure \ref{fig:metric-plots-all-values} presents the total value with the reject option ($V(\tau)$) of all three models for both datasets and all possible rejection thresholds $\tau \in [0.5, 1.0]$ using the ME values from table \ref{tab:values-reliability}.
 %
 The diamond-shaped markers indicate the optimal rejection threshold ($\tau_O$) for which the model achieves the highest total value ($V(\tau_O)$).
 %
+For all models we got $\tau_O = 0.5$, meaning that all models achieve the highest total value when all predictions are accepted.
+%
+In figure \ref{fig:metric-plots-all-values}, we can see that $V(\tau_O)$ of all models is greater for the \emph{seen} data compared to $V(\tau_O)$ for the \emph{unseen} data.
+%
 
+%
+To further examine how $V(\tau)$ behaves when we only consider punishing incorrect predictions instead of rewarding correct predictions, we decided to apply the metric again but this time setting $V_{tp}$ and $V_{tn}$ equal to zero.
+%
+The metric's conditions \ref{for:conditions-fp-fn} and \ref{for:conditions-tp-tn} are still satisfied when we do this.
+%
+Figure \ref{fig:metric-plots-tptn0} presents the total value ($V(\tau)$) again for the updated values $V_{tp}=0$ and $V_{tn}=0$.
+%
+We found that $\tau_O$ of all models moved towards towards $1.0$, meaning that rejecting predictions is now more beneficial.
+%
+All models achieve the highest $V(\tau)$ value when $\tau \in [0.7, 0.9]$ for \emph{seen} data and when $\tau \in [0.9, 1.0]$ for \emph{unseen data}.
+%
+
+%
+Table \ref{tab:metric} shows the specific values of $\tau_O$, the accuracies of the accepted predictions, and the rejection rates (percentage of rejected predictions).
+%
+The first two rows indicate that the accuracies of all models dropped significantly when we apply the models to \emph{unseen} data.q
+%
+The last two rows (where $V_{tp}=0$ and $V_{tn}=0$) show that we achieve higher accuracies of accepted predictions for increased optimal rejection thresholds ($\tau_O$).
+%
+For all models, we reject less than 30\% of all predictions for the \emph{seen} data and reject a large fraction of all predictions for the \emph{unseen} data.
+%
+
+%
+Table \ref{tab:metric2} compares the results of our value-sensitive metric with the results of machine metrics like accuracy.
+%
+It presents the total value of all models for the optimal rejection thresholds ($V(\tau_O)$) and the accuracies of all models when all predictions are accepted.
+%
+
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/confidence-densities-seen-tp.pdf}
+        \caption{TP}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/confidence-densities-seen-tn.pdf}
+        \caption{TN}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/confidence-densities-seen-fp.pdf}
+        \caption{FP}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/confidence-densities-seen-fn.pdf}
+        \caption{FN}
+    \end{subfigure}
+    \caption{\textbf{Seen data}: Probability Density Functions of the confidence values of all predictions for the \emph{seen data} estimated with Kernel Density Estimation.}
+    \label{fig:pdfs-seen}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-tp.pdf}
+        \caption{TP}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-tn.pdf}
+        \caption{TN}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-fp.pdf}
+        \caption{FP}
+    \end{subfigure}
+    \begin{subfigure}{.49\textwidth}
+        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-fn.pdf}
+        \caption{FN}
+    \end{subfigure}
+    \caption{\textbf{Unseen data}: Probability Density Functions of the confidence values of all predictions for the \emph{unseen data} estimated with Kernel Density Estimation.}
+    \label{fig:pdfs-unseen}
+\end{figure}
 
 \begin{figure}[t]
     \centering
@@ -603,7 +706,7 @@ The diamond-shaped markers indicate the optimal rejection threshold ($\tau_O$) f
     \label{fig:metric-plots-tptn0}
 \end{figure}
 
-\begin{table*}[t]
+\begin{table*}
     \scriptsize
     \centering
     \begin{tabular}{lcccccccccc}
@@ -623,7 +726,7 @@ The diamond-shaped markers indicate the optimal rejection threshold ($\tau_O$) f
     \label{tab:metric}
 \end{table*}
 
-\begin{table*}[t]
+\begin{table*}
     \scriptsize
     \centering
     \begin{tabular}{lccccccc}
@@ -642,47 +745,3 @@ The diamond-shaped markers indicate the optimal rejection threshold ($\tau_O$) f
     \caption{The total values $V(\tau_O)$ and the accuracies (Acc) of all models. Here, $\tau_O$ is the optimal rejection threshold.}
     \label{tab:metric2}
 \end{table*}
-
-\begin{figure}[t]
-    \centering
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-seen-tp.pdf}
-        \caption{TP}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-seen-tn.pdf}
-        \caption{TN}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-seen-fp.pdf}
-        \caption{FP}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-seen-fn.pdf}
-        \caption{FN}
-    \end{subfigure}
-    \caption{\textbf{Seen data}: Probability Density Functions of the confidence values of all predictions for the \emph{seen data} estimated with Kernel Density Estimation.}
-    \label{fig:pdfs}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-tp.pdf}
-        \caption{TP}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-tn.pdf}
-        \caption{TN}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-fp.pdf}
-        \caption{FP}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-fn.pdf}
-        \caption{FN}
-    \end{subfigure}
-    \caption{\textbf{Unseen data}: Probability Density Functions of the confidence values of all predictions for the \emph{unseen data} estimated with Kernel Density Estimation.}
-    \label{fig:pdfs-unseen}
-\end{figure}

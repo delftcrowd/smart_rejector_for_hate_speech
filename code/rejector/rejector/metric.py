@@ -168,6 +168,8 @@ class Metric:
             map(lambda t: self.calculate_effectiveness(t, use_pdf=use_pdf), thresholds)
         )
 
+        v0 = self.calculate_effectiveness(0.5, use_pdf=use_pdf)
+
         (index, max_effectiveness) = self.maximum_effectiveness(effectiveness_values)
         correct_original = list(
             filter(lambda p: p.predicted_class == p.actual_class, self.predictions)
@@ -184,7 +186,7 @@ class Metric:
         )
         print("Optimal threshold: ", optimal_threshold)
         print("Optimal V(threshold): ", max_effectiveness)
-        print("Total value: ", max_effectiveness)
+        print("V(0): ", v0)
         print("Num accepted: ", len(accepted))
         print(
             "Accuracy original model: ", len(correct_original) / len(self.predictions)
@@ -330,7 +332,7 @@ class Metric:
             optimal_t_rr = round(len(rejected) / len(metric.predictions), 2)
 
             for x in X:
-                n = int(x * 100)
+                n = int(x * len(sorted_predictions))
                 accepted = sorted_predictions[n:]
                 correct_accepted = list(
                     filter(lambda p: p.predicted_class == p.actual_class, accepted)
