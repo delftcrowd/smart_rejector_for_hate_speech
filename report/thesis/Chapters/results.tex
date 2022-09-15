@@ -170,6 +170,8 @@ We followed the approach from section \ref{sec:analysis-demographic} to analyze 
 %
 We focused on six features: sex, student, continent, nationality, language, and ethnicity.
 %
+
+%
 We used non-parametric statistical tests only to analyze demographic differences for two reasons.
 %
 First, we found that the assumptions of normality and homogeneity of variances were violated in our dataset when looking at the different groups for all features.
@@ -177,6 +179,8 @@ First, we found that the assumptions of normality and homogeneity of variances w
 Second, we found that for most features, except sex, the sample sizes of the feature groups were not equal.
 %
 We used Mann-Whitney U to verify a significant difference between the two groups, and we used Kruskal-Wallis for more than two groups.
+%
+
 %
 Table \ref{tab:results-differences-ind} shows the resulting p values for all scenarios and all features.
 %
@@ -192,6 +196,8 @@ Scenarios FP4 and REJ4 have the most features (4) with significant differences.
 %
 Scenarios TP6, FN5, and REJ1 have the second most features (2) with significant differences.
 %
+
+%
 Table \ref{tab:results-differences-grp} shows the p values of the statistical tests for the aggregated scenarios (TP, TN, FP, FN, and rejection) and all features.
 %
 We aggregated the scores by calculating the mean response value to all scenarios of the same type, e.g. TP, for each participant.
@@ -199,6 +205,8 @@ We aggregated the scores by calculating the mean response value to all scenarios
 Then we applied the Mann-Whitney U test to the aggregated scores.
 %
 We found the most significant differences for the aggregated scores of the FP scenarios.
+%
+
 %
 Finally, we conducted pairwise Mann-Whitney U tests to check if there are any significant differences between pairs of groups for the multi-group features: nationality, language, and ethnicity.
 %
@@ -263,305 +271,6 @@ Scenario FN5 contains the most significant pairwise differences (four out of the
     \label{tab:results-differences-ind}
 \end{table}
 
-\begin{table}
-    \small
-    \centering
-    \begin{tabular}{lccc|ccc}
-        \toprule
-                     & \multicolumn{3}{c}{\textbf{Two groups}} & \multicolumn{3}{c}{\textbf{More than two groups}}                                                                                                                                                                       \\
-        \midrule
-                     & \multicolumn{1}{c}{\textbf{Sex}}        & \multicolumn{1}{c}{\textbf{Student}}              & \multicolumn{1}{c}{\textbf{Continent}} & \multicolumn{1}{c}{\textbf{Nationality}} & \multicolumn{1}{c}{\textbf{Language}}  & \multicolumn{1}{c}{\textbf{Ethnicity}} \\
-        \midrule
-        \textbf{TP}  & 0.302                                   & \cellcolor[HTML]{EFEFEF}\textbf{0.032}            & 0.286                                  & 0.218                                    & 0.109                                  & 0.242                                  \\
-        \textbf{TN}  & 0.726                                   & 0.379                                             & 0.204                                  & 0.190                                    & 0.216                                  & 0.281                                  \\
-        \textbf{FP}  & 0.699                                   & 0.933                                             & 0.073                                  & \cellcolor[HTML]{EFEFEF}\textbf{0.020}   & \cellcolor[HTML]{EFEFEF}\textbf{0.040} & \cellcolor[HTML]{EFEFEF}\textbf{0.037} \\
-        \textbf{FN}  & 0.961                                   & 0.150                                             & 0.847                                  & 0.478                                    & 0.438                                  & 0.584                                  \\
-        \textbf{REJ} & 0.835                                   & 0.625                                             & 0.496                                  & 0.271                                    & 0.103                                  & 0.068                                  \\
-        \bottomrule
-    \end{tabular}
-    \caption{\textbf{Aggregated}: an overview of the statistical differences between different groups of participants for various demographic characteristics for each aggregated scenario type in the ME survey. Each cell contains the p value of either the Mann-Whitney U test for two groups or the Kruskal-Wallis test for more than two groups. The grey cells with bold text indicate significant statistical differences between the groups for that feature and scenario type.}
-    \label{tab:results-differences-grp}
-\end{table}
-
-\begin{table}
-    \scriptsize
-    \centering
-    \setlength\tabcolsep{2pt}
-    \begin{subtable}{.44\textwidth}
-        \centering
-        \begin{tabular}{lcccc}
-            \toprule
-                                  & \textbf{South Africa} & \textbf{Poland}                        & \textbf{Portugal} & \textbf{Spain} \\
-            \midrule
-            \textbf{South Africa} & 1.000                 &                                        &                   &                \\
-            \textbf{Poland}       & 0.077                 & 1.000                                  &                   &                \\
-            \textbf{Portugal}     & 0.077                 & \cellcolor[HTML]{EFEFEF}\textbf{0.009} & 1.000             &                \\
-            \textbf{Spain}        & 0.119                 & 0.083                                  & 0.613             & 1.000          \\
-            \bottomrule
-        \end{tabular}
-        \caption{TP6}
-    \end{subtable}%
-    \begin{subtable}{.44\textwidth}
-        \centering
-        \begin{tabular}{cccc}
-            \toprule
-            \textbf{South Africa}                  & \textbf{Poland}                        & \textbf{Portugal}                      & \textbf{Spain} \\
-            \midrule
-            1.000                                  &                                        &                                        &                \\
-            0.755                                  & 1.000                                  &                                        &                \\
-            0.261                                  & 0.261                                  & 1.000                                  &                \\
-            \cellcolor[HTML]{EFEFEF}\textbf{0.026} & \cellcolor[HTML]{EFEFEF}\textbf{0.038} & \cellcolor[HTML]{EFEFEF}\textbf{0.050} & 1.000          \\
-            \bottomrule
-        \end{tabular}
-        \caption{FP2}
-    \end{subtable}
-    \vskip\baselineskip
-    \begin{subtable}{.44\textwidth}
-        \centering
-        \begin{tabular}{lcccc}
-            \toprule
-                                  & \textbf{South Africa}                  & \textbf{Poland} & \textbf{Portugal} & \textbf{Spain} \\
-            \midrule
-            \textbf{South Africa} & 1.000                                  &                 &                   &                \\
-            \textbf{Poland}       & 0.342                                  & 1.000           &                   &                \\
-            \textbf{Portugal}     & 0.304                                  & 1.000           & 1.000             &                \\
-            \textbf{Spain}        & \cellcolor[HTML]{EFEFEF}\textbf{0.043} & 0.304           & 0.220             & 1.000          \\
-            \bottomrule
-        \end{tabular}
-        \caption{FP7}
-    \end{subtable}%
-    \begin{subtable}{.44\textwidth}
-        \centering
-        \begin{tabular}{cccc}
-            \toprule
-            \textbf{South Africa}                  & \textbf{Poland}                        & \textbf{Portugal} & \textbf{Spain} \\
-            \midrule
-            1.000                                  &                                        &                   &                \\
-            \cellcolor[HTML]{EFEFEF}\textbf{0.034} & 1.000                                  &                   &                \\
-            0.150                                  & \cellcolor[HTML]{EFEFEF}\textbf{0.011} & 1.000             &                \\
-            \cellcolor[HTML]{EFEFEF}\textbf{0.045} & \cellcolor[HTML]{EFEFEF}\textbf{0.011} & 0.679             & 1.000          \\
-            \bottomrule
-        \end{tabular}
-        \caption{FN5}
-    \end{subtable}
-    \vskip\baselineskip
-    \begin{subtable}{.44\textwidth}
-        \centering
-        \begin{tabular}{lcccc}
-            \toprule
-                                  & \textbf{South Africa} & \textbf{Poland} & \textbf{Portugal} & \textbf{Spain} \\
-            \midrule
-            \textbf{South Africa} & 1.000                 &                 &                   &                \\
-            \textbf{Poland}       & 0.095                 & 1.000           &                   &                \\
-            \textbf{Portugal}     & 0.622                 & 0.095           & 1.000             &                \\
-            \textbf{Spain}        & 0.104                 & 0.095           & 0.104             & 1.000          \\
-            \bottomrule
-        \end{tabular}
-        \caption{FN6}
-    \end{subtable} %
-    \begin{subtable}{.44\textwidth}
-        \centering
-        \begin{tabular}{cccc}
-            \toprule
-            \textbf{South Africa} & \textbf{Poland} & \textbf{Portugal} & \textbf{Spain} \\
-            \midrule
-            1.000                 &                 &                   &                \\
-            0.088                 & 1.000           &                   &                \\
-            0.227                 & 0.088           & 1.000             &                \\
-            1.000                 & 0.227           & 0.388             & 1.000          \\
-            \bottomrule
-        \end{tabular}
-        \caption{REJ1}
-    \end{subtable}%
-    \vskip\baselineskip
-    \begin{subtable}{.44\textwidth}
-        \centering
-        \begin{tabular}{lcccc}
-            \toprule
-                                  & \textbf{South Africa} & \textbf{Poland} & \textbf{Portugal} & \textbf{Spanish} \\
-            \midrule
-            \textbf{South Africa} & 1.000                 &                 &                   &                  \\
-            \textbf{Poland}       & 0.098                 & 1.000           &                   &                  \\
-            \textbf{Portugal}     & 0.098                 & 1.000           & 1.000             &                  \\
-            \textbf{Spain}        & 0.098                 & 0.422           & 0.422             & 1.000            \\
-            \bottomrule
-        \end{tabular}
-        \caption{REJ4}
-    \end{subtable}
-    \caption{\textbf{Nationality}: an overview of all pairwise Mann-Whitney U tests between the different nationalities for all scenarios where we found significant differences between all nationalities using the Kruskal-Wallis test. Each cell contains the p value of the Mann-Whitney U test between two groups of different nationalities. We corrected all p values with the Benjamini-Hochberg procedure. The grey cells with bold text indicate significant statistical differences between the two nationalities.}
-    \label{tab:results-pairwise-nationality}
-\end{table}
-
-\begin{table}
-    \scriptsize
-    \centering
-    \setlength\tabcolsep{2pt}
-    \begin{subtable}{.405\textwidth}
-        \centering
-        \begin{tabular}{lcccc}
-            \toprule
-                               & \textbf{English} & \textbf{Polish} & \textbf{Portugese} & \textbf{Spanish} \\
-            \midrule
-            \textbf{English}   & 1.000            &                 &                    &                  \\
-            \textbf{Polish}    & 0.561            & 1.000           &                    &                  \\
-            \textbf{Portugese} & 0.352            & 0.283           & 1.000              &                  \\
-            \textbf{Spanish}   & 0.176            & 0.258           & 0.142              & 1.000            \\
-            \bottomrule
-        \end{tabular}
-        \caption{TP3}
-    \end{subtable}%
-    \begin{subtable}{.405\textwidth}
-        \centering
-        \begin{tabular}{cccc}
-            \toprule
-            \multicolumn{1}{c}{\textbf{English}} & \multicolumn{1}{c}{\textbf{Polish}}    & \textbf{Portugese} & \textbf{Spanish} \\
-            \midrule
-            1.000                                & \multicolumn{1}{c}{}                   &                    &                  \\
-            0.089                                & 1.000                                  &                    &                  \\
-            0.119                                & \cellcolor[HTML]{EFEFEF}\textbf{0.007} & 1.000              &                  \\
-            0.522                                & 0.089                                  & 1.000              & 1.000            \\
-            \bottomrule
-        \end{tabular}
-        \caption{TP6}
-    \end{subtable}
-    \vskip\baselineskip
-    \begin{subtable}{.405\textwidth}
-        \centering
-        \begin{tabular}{lcccc}
-            \toprule
-                               & \textbf{English}                       & \textbf{Polish} & \textbf{Portugese} & \textbf{Spanish} \\
-            \midrule
-            \textbf{English}   & 1.000                                  &                 &                    &                  \\
-            \textbf{Polish}    & 0.321                                  & 1.000           &                    &                  \\
-            \textbf{Portugese} & 0.321                                  & 1.000           & 1.000              &                  \\
-            \textbf{Spanish}   & \cellcolor[HTML]{EFEFEF}\textbf{0.019} & 0.444           & 0.321              & 1.000            \\
-            \bottomrule
-        \end{tabular}
-        \caption{FP7}
-    \end{subtable}%
-    \begin{subtable}{.405\textwidth}
-        \centering
-        \begin{tabular}{cccc}
-            \toprule
-            \textbf{English} & \textbf{Polish}                        & \textbf{Portugese} & \textbf{Spanish} \\
-            \midrule
-            1.000            &                                        &                    &                  \\
-            0.070            & 1.000                                  &                    &                  \\
-            0.209            & \cellcolor[HTML]{EFEFEF}\textbf{0.011} & 1.000              &                  \\
-            0.647            & 0.164                                  & 0.838              & 1.000            \\
-            \bottomrule
-        \end{tabular}
-        \caption{FN5}
-    \end{subtable}
-    \vskip\baselineskip
-    \begin{subtable}{.405\textwidth}
-        \centering
-        \begin{tabular}{lcccc}
-            \toprule
-                               & \textbf{English}                       & \textbf{Polish} & \textbf{Portugese} & \textbf{Spanish} \\
-            \midrule
-            \textbf{English}   & 1.000                                  &                 &                    &                  \\
-            \textbf{Polish}    & 0.895                                  & 1.000           &                    &                  \\
-            \textbf{Portugese} & 0.439                                  & 0.721           & 1.000              &                  \\
-            \textbf{Spanish}   & \cellcolor[HTML]{EFEFEF}\textbf{0.049} & 0.309           & 0.548              & 1.000            \\
-            \bottomrule
-        \end{tabular}
-        \caption{FN7}
-    \end{subtable}%
-    \begin{subtable}{.405\textwidth}
-        \centering
-        \begin{tabular}{cccc}
-            \toprule
-            \textbf{English} & \textbf{Polish} & \textbf{Portugese} & \textbf{Spanish} \\
-            \midrule
-            1.000            &                 &                    &                  \\
-            0.076            & 1.000           &                    &                  \\
-            0.387            & 0.076           & 1.000              &                  \\
-            0.149            & 0.711           & 0.096              & 1.000            \\
-            \bottomrule
-        \end{tabular}
-        \caption{REJ1}
-    \end{subtable}
-    \vskip\baselineskip
-    \begin{subtable}{.405\textwidth}
-        \centering
-        \begin{tabular}{lcccc}
-            \toprule
-                               & \textbf{English} & \textbf{Polish} & \textbf{Portugese} & \textbf{Spanish} \\
-            \midrule
-            \textbf{English}   & 1.000            &                 &                    &                  \\
-            \textbf{Polish}    & 0.063            & 1.000           &                    &                  \\
-            \textbf{Portugese} & 0.063            & 1.000           & 1.000              &                  \\
-            \textbf{Spanish}   & 0.599            & 1.000           & 1.000              & 1.000            \\
-            \bottomrule
-        \end{tabular}
-        \caption{REJ4}
-    \end{subtable}%
-    \begin{subtable}{.405\textwidth}
-        \centering
-        \begin{tabular}{cccc}
-            \toprule
-            \textbf{English} & \textbf{Polish} & \textbf{Portugese} & \textbf{Spanish} \\
-            \midrule
-            1.000            &                 &                    &                  \\
-            1.000            & 1.000           &                    &                  \\
-            0.489            & 0.452           & 1.000              &                  \\
-            0.105            & 0.152           & 0.105              & 1.000            \\
-            \bottomrule
-        \end{tabular}
-        \caption{REJ5}
-    \end{subtable}
-    \caption{\textbf{Language}: an overview of all pairwise Mann-Whitney U tests between the different spoken languages for all scenarios where we found significant differences between all spoken languages using the Kruskal-Wallis test. Each cell contains the p value of the Mann-Whitney U test between two groups of languages. We corrected all p values with the Benjamini-Hochberg procedure. The grey cells with bold text indicate significant statistical differences between the two languages.}
-    \label{tab:results-pairwise-language}
-\end{table}
-
-\begin{table}
-    \scriptsize
-    \centering
-    \setlength\tabcolsep{2pt}
-    \begin{subtable}{.275\textwidth}
-        \centering
-        \begin{tabular}{lccc}
-            \toprule
-                           & \textbf{White}                         & \textbf{Mixed}                         & \textbf{Black} \\
-            \midrule
-            \textbf{White} & 1.000                                  &                                        &                \\
-            \textbf{Mixed} & 0.552                                  & 1.000                                  &                \\
-            \textbf{Black} & \cellcolor[HTML]{EFEFEF}\textbf{0.028} & \cellcolor[HTML]{EFEFEF}\textbf{0.028} & 1.000          \\
-            \bottomrule
-        \end{tabular}
-        \caption{FP7}
-    \end{subtable}%
-    \begin{subtable}{.21\textwidth}
-        \centering
-        \begin{tabular}{ccc}
-            \toprule
-            \multicolumn{1}{l}{\textbf{White}}     & \textbf{Mixed}                                             & \textbf{Black}            \\
-            \midrule
-            1.000                                  &                                                            &                           \\
-            0.776                                  & \multicolumn{1}{r}{1.000}                                  &                           \\
-            \cellcolor[HTML]{EFEFEF}\textbf{0.002} & \multicolumn{1}{r}{\cellcolor[HTML]{EFEFEF}\textbf{0.776}} & \multicolumn{1}{r}{1.000} \\
-            \bottomrule
-        \end{tabular}
-        \caption{REJ4}
-    \end{subtable}%
-    \begin{subtable}{.21\textwidth}
-        \centering
-        \begin{tabular}{ccc}
-            \toprule
-            \multicolumn{1}{l}{\textbf{White}}     & \textbf{Mixed}            & \textbf{Black}            \\
-            \midrule
-            1.000                                  &                           &                           \\
-            \cellcolor[HTML]{EFEFEF}\textbf{0.016} & \multicolumn{1}{r}{1.000} &                           \\
-            1.000                                  & \multicolumn{1}{r}{0.112} & \multicolumn{1}{r}{1.000} \\
-            \bottomrule
-        \end{tabular}
-        \caption{REJ7}
-    \end{subtable}
-    \caption{\textbf{Ethnicity}: an overview of all pairwise Mann-Whitney U tests between the different ethnicities for all scenarios where we found significant differences between all ethnicities using the Kruskal-Wallis test. Each cell contains the p value of the Mann-Whitney U test between two groups of ethnicities. We corrected all p values with the Benjamini-Hochberg procedure. The grey cells with bold text indicate significant statistical differences between the two ethnicities.}
-    \label{tab:results-pairwise-ethnicity}
-\end{table}
-
 \section{Value-sensitive rejection}
 \label{sec:results-rejector}
 We experimented with our value-sensitive rejector following the approach from section \ref{sec:rejector-application}.
@@ -600,85 +309,68 @@ Figure \ref{fig:metric-plots-all-values} presents the total value with the rejec
 %
 The diamond-shaped markers indicate the optimal rejection threshold ($\tau_O$) for which the model achieves the highest total value ($V(\tau_O)$).
 %
+Positive $V(\tau)$ indicate that the model for rejection threshold $\tau$ is valuable, while negative values indicate that the costs of incorrect accepted and rejected predictions exceed the gains of correct accepted and rejected predictions.
+%
 For all models we got $\tau_O = 0.5$, meaning that all models achieve the highest total value when all predictions are accepted.
 %
-In figure \ref{fig:metric-plots-all-values}, we can see that $V(\tau_O)$ of all models is greater for the \emph{seen} data compared to $V(\tau_O)$ for the \emph{unseen} data.
+In figure \ref{fig:metric-plots-all-values}, we can see that $V(\tau_O)$ of all models is greater for the \emph{seen} data than for \emph{unseen} data.
+%
+The total value of all models decreases for increasing values of the rejection threshold.
 %
 
 %
 To further examine how $V(\tau)$ behaves when we only consider punishing incorrect predictions instead of rewarding correct predictions, we decided to apply the metric again but this time setting $V_{tp}$ and $V_{tn}$ equal to zero.
 %
-The metric's conditions \ref{for:conditions-fp-fn} and \ref{for:conditions-tp-tn} are still satisfied when we do this.
+The metric's conditions \ref{for:conditions-fp-fn} and \ref{for:conditions-tp-tn} were still satisfied when we did this.
 %
 Figure \ref{fig:metric-plots-tptn0} presents the total value ($V(\tau)$) again for the updated values $V_{tp}=0$ and $V_{tn}=0$.
 %
-We found that $\tau_O$ of all models moved towards towards $1.0$, meaning that rejecting predictions is now more beneficial.
+We found that $\tau_O$ of all models moved towards towards $1.0$, meaning that rejecting predictions is now more beneficial for the total value of the models.
 %
 All models achieve the highest $V(\tau)$ value when $\tau \in [0.7, 0.9]$ for \emph{seen} data and when $\tau \in [0.9, 1.0]$ for \emph{unseen data}.
 %
 
 %
-Table \ref{tab:metric} shows the specific values of $\tau_O$, the accuracies of the accepted predictions, and the rejection rates (percentage of rejected predictions).
+Table \ref{tab:metric} shows the specific values of $\tau_O$, the accuracies of the accepted predictions, and the rejection rates (fraction of rejected predictions).
 %
-The first two rows indicate that the accuracies of all models dropped significantly when we apply the models to \emph{unseen} data.q
+The first two rows show that the accuracies of all models dropped significantly when we applied the models to \emph{unseen} data.
 %
-The last two rows (where $V_{tp}=0$ and $V_{tn}=0$) show that we achieve higher accuracies of accepted predictions for increased optimal rejection thresholds ($\tau_O$).
+The last two rows (where $V_{tp}=0$ and $V_{tn}=0$) show that we achieved higher accuracies of accepted predictions for increased optimal rejection thresholds.
 %
-For all models, we reject less than 30\% of all predictions for the \emph{seen} data and reject a large fraction of all predictions for the \emph{unseen} data.
+For all models, we rejected less than 30\% of all predictions for the \emph{seen} data and rejected a large fraction of all predictions for the \emph{unseen} data.
 %
+The DistilBERT model achieved the highest accuracies of accepted predictions for all configurations.
+%
+For the \emph{seen} data, it achieved an accuracy of accepted predictions of $92.6\%$ while rejecting only $25.2\%$ of all predictions.
+%
+For the \emph{unseen} data, it rejects the least amount of predictions ($92.3\%$) and achieved the highest accuracy of accepted predictions ($88.1\%$).
+%
+The CNN model performs the worst for all configurations in terms of accuracy of accepted predictions, and for the \emph{unseen} data the highest total value is achieved when all predictions are rejected.
 
 %
 Table \ref{tab:metric2} compares the results of our value-sensitive metric with the results of machine metrics like accuracy.
 %
-It presents the total value of all models for the optimal rejection thresholds ($V(\tau_O)$) and the accuracies of all models when all predictions are accepted.
+It presents the total value of all models for the optimal rejection thresholds ($V(\tau_O)$), the total value when all predictions are accepted ($V(0)$), and the accuracies of all models when all predictions are accepted.
+%
+First, we compared the accuracy of the original model with $V(0)$ as in both cases all predictions are accepted.
+%
+In the first two rows, both the accuracy and $V(0)$ indicate that the DistilBERT model performs the best for both the \emph{seen} and \emph{unseen} datasets.
+%
+In the last two rows (where $V_{tp}=0$ and $V_{tn}=0$), both metrics indicate that the DistilBERT model performs the best for the \emph{seen} dataset, while the metrics give different results for the \emph{unseen} dataset.
+%
+The DistilBERT model performed the best when we use accuracy as the metric, while the CNN model performed the best when we use $V(0)$ as the metric.
+%
+All $V(0)$ values in the last row show that all models are not valuable for \emph{unseen} data when we accept all predictions.
 %
 
+%
+When we look at the $V(\tau_O)$ values in table \ref{tab:metric2}, we see that all models are valuable for the optimal rejection threshold.
+%
+The DistilBERT model achieved the highest $V(\tau_O)$ values in all configurations except for \emph{unseen} data with $V_{tp}=0$ and $V_{tn}=0$ as the LR model achieved a higher total value.
+%
+When we look at the lost row, we can see that all models become valuable when the optimal rejection threshold is adopted.
 
-\begin{figure}[t]
-    \centering
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-seen-tp.pdf}
-        \caption{TP}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-seen-tn.pdf}
-        \caption{TN}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-seen-fp.pdf}
-        \caption{FP}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-seen-fn.pdf}
-        \caption{FN}
-    \end{subfigure}
-    \caption{\textbf{Seen data}: Probability Density Functions of the confidence values of all predictions for the \emph{seen data} estimated with Kernel Density Estimation.}
-    \label{fig:pdfs-seen}
-\end{figure}
-
-\begin{figure}[t]
-    \centering
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-tp.pdf}
-        \caption{TP}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-tn.pdf}
-        \caption{TN}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-fp.pdf}
-        \caption{FP}
-    \end{subfigure}
-    \begin{subfigure}{.49\textwidth}
-        \includegraphics[scale=.4]{Figures/confidence-densities-unseen-fn.pdf}
-        \caption{FN}
-    \end{subfigure}
-    \caption{\textbf{Unseen data}: Probability Density Functions of the confidence values of all predictions for the \emph{unseen data} estimated with Kernel Density Estimation.}
-    \label{fig:pdfs-unseen}
-\end{figure}
-
-\begin{figure}[t]
+\begin{figure}
     \centering
     \begin{subfigure}{.49\textwidth}
         \includegraphics[scale=.4]{Figures/metric-all-values-seen-data.pdf}
@@ -692,7 +384,7 @@ It presents the total value of all models for the optimal rejection thresholds (
     \label{fig:metric-plots-all-values}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}
     \centering
     \begin{subfigure}{.49\textwidth}
         \includegraphics[scale=.4]{Figures/metric-tptn0-seen-data.pdf}
@@ -706,9 +398,10 @@ It presents the total value of all models for the optimal rejection thresholds (
     \label{fig:metric-plots-tptn0}
 \end{figure}
 
-\begin{table*}
+\begin{table}
     \scriptsize
     \centering
+    \setlength\tabcolsep{5pt}
     \begin{tabular}{lcccccccccc}
         \toprule
                                                  & \multicolumn{3}{c}{\textbf{LR}} & \multicolumn{3}{c}{\textbf{DistilBERT}} & \multicolumn{3}{c}{\textbf{CNN}}                                                                                                           \\
@@ -724,14 +417,15 @@ It presents the total value of all models for the optimal rejection thresholds (
     \end{tabular}
     \caption{The optimal rejection thresholds ($\tau_O$), accuracy of the accepted predictions (Acc), and rejection rates (RR) of all models for both datasets using the values from the survey.}
     \label{tab:metric}
-\end{table*}
+\end{table}
 
-\begin{table*}
+\begin{table}
     \scriptsize
     \centering
+    \setlength\tabcolsep{5pt}
     \begin{tabular}{lcccccccccc}
         \toprule
-                                                 & \multicolumn{3}{l}{\textbf{LR}} & \multicolumn{3}{l}{\textbf{DistilBERT}} & \multicolumn{3}{l}{\textbf{CNN}}                                                                                                                                 \\
+                                                 & \multicolumn{3}{c}{\textbf{LR}} & \multicolumn{3}{c}{\textbf{DistilBERT}} & \multicolumn{3}{c}{\textbf{CNN}}                                                                                                                                 \\
         \cmidrule(l){2-4} \cmidrule(l){5-7} \cmidrule(l){8-10}
                                                  & $\boldsymbol{V(\tau_O)}$        & $\boldsymbol{V(0)}$                     & \textbf{Acc}                     & $\boldsymbol{V(\tau_O)}$ & $\boldsymbol{V(0)}$ & \textbf{Acc} & $\boldsymbol{V(\tau_O)}$ & $\boldsymbol{V(0)}$ & \textbf{Acc} \\
         \midrule
@@ -744,4 +438,4 @@ It presents the total value of all models for the optimal rejection thresholds (
     \end{tabular}
     \caption{The maximum total values of the models for the optimal rejection threshold ($V(\tau_O)$), the total value of the models when all predictions are accepted ($V(0)$), and the accuracies (Acc) of all models.}
     \label{tab:metric2}
-\end{table*}
+\end{table}
