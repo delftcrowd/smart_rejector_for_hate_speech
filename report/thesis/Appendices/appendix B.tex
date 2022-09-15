@@ -3,6 +3,11 @@
 This appendix contains the remaining results of the demographic analysis on the survey's results from section \ref{sec:results-demographics} and the experiments with the value-sensitive rejector from section \ref{sec:results-rejector}.
 
 \section{Demographic analysis}
+This section contain presents some additonal tables about the demographic analysis.
+%
+Table \ref{tab:results-differences-grp} shows the group differences for the aggregated scenario types (TP, TN, FP, FN, and REJ).
+%
+Tables \ref{tab:results-pairwise-nationality}, \ref{tab:results-pairwise-language}, and \ref{tab:results-pairwise-ethnicity} show the pairwise group differences for the nationality, language, and ethnicity features, respectively.
 
 \begin{table}[H]
     \small
@@ -304,22 +309,30 @@ This appendix contains the remaining results of the demographic analysis on the 
 \end{table}
 
 \section{Probability Density Functions}
+This section contains the Probability density functions of the predictions of all models to both the \emph{seen} (figure \ref{fig:pdfs-seen}) and the \emph{unseen} (figure \ref{fig:pdfs-unseen}) datasets.
+%
+They help us to understand the results of value-sensitive metric in figures \ref{fig:metric-plots-all-values} and \ref{fig:metric-plots-tptn0}.
+
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{.45\textwidth}
-        \includegraphics[scale=.35]{Figures/confidence-densities-seen-tp.pdf}
+    \begin{subfigure}{.35\textwidth}
+        \centering
+        \includegraphics[scale=.40]{Figures/confidence-densities-seen-tp.pdf}
         \caption{TP}
     \end{subfigure}
-    \begin{subfigure}{.45\textwidth}
-        \includegraphics[scale=.35]{Figures/confidence-densities-seen-tn.pdf}
+    \begin{subfigure}{.35\textwidth}
+        \centering
+        \includegraphics[scale=.40]{Figures/confidence-densities-seen-tn.pdf}
         \caption{TN}
     \end{subfigure}
-    \begin{subfigure}{.45\textwidth}
-        \includegraphics[scale=.35]{Figures/confidence-densities-seen-fp.pdf}
+    \begin{subfigure}{.35\textwidth}
+        \centering
+        \includegraphics[scale=.40]{Figures/confidence-densities-seen-fp.pdf}
         \caption{FP}
     \end{subfigure}
-    \begin{subfigure}{.45\textwidth}
-        \includegraphics[scale=.35]{Figures/confidence-densities-seen-fn.pdf}
+    \begin{subfigure}{.35\textwidth}
+        \centering
+        \includegraphics[scale=.40]{Figures/confidence-densities-seen-fn.pdf}
         \caption{FN}
     \end{subfigure}
     \caption{\textbf{Seen data}: Probability Density Functions of the confidence values of all predictions for the \emph{seen data} estimated with Kernel Density Estimation.}
@@ -328,20 +341,24 @@ This appendix contains the remaining results of the demographic analysis on the 
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{.45\textwidth}
-        \includegraphics[scale=.35]{Figures/confidence-densities-unseen-tp.pdf}
+    \begin{subfigure}{.35\textwidth}
+        \centering
+        \includegraphics[scale=.40]{Figures/confidence-densities-unseen-tp.pdf}
         \caption{TP}
     \end{subfigure}
-    \begin{subfigure}{.45\textwidth}
-        \includegraphics[scale=.35]{Figures/confidence-densities-unseen-tn.pdf}
+    \begin{subfigure}{.35\textwidth}
+        \centering
+        \includegraphics[scale=.40]{Figures/confidence-densities-unseen-tn.pdf}
         \caption{TN}
     \end{subfigure}
-    \begin{subfigure}{.45\textwidth}
-        \includegraphics[scale=.35]{Figures/confidence-densities-unseen-fp.pdf}
+    \begin{subfigure}{.35\textwidth}
+        \centering
+        \includegraphics[scale=.40]{Figures/confidence-densities-unseen-fp.pdf}
         \caption{FP}
     \end{subfigure}
-    \begin{subfigure}{.45\textwidth}
-        \includegraphics[scale=.35]{Figures/confidence-densities-unseen-fn.pdf}
+    \begin{subfigure}{.35\textwidth}
+        \centering
+        \includegraphics[scale=.40]{Figures/confidence-densities-unseen-fn.pdf}
         \caption{FN}
     \end{subfigure}
     \caption{\textbf{Unseen data}: Probability Density Functions of the confidence values of all predictions for the \emph{unseen data} estimated with Kernel Density Estimation.}
