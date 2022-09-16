@@ -1,11 +1,11 @@
 \chapter{Results}
-This chapter includes the results of the survey study (chapter \ref{ch:survey}) and the experiments with the value-sensitive rejector (chapter \ref{ch:rejector}).
+This chapter presents the results of the survey study (chapter \ref{ch:survey}) and the experiments with the value-sensitive rejector (chapter \ref{ch:rejector}).
 %
 We first present the results of the survey study as the experiments with the value-sensitive rejector depend on the outcomes of the survey study.
 %
 
 %
-The goal of the survey study was to retrieve the value ratios of TP, TN, FP, FN, and rejected predictions in hate speech detection from the user's perspective.
+The goal of the survey study was to retrieve the value ratios of TP, TN, FP, FN, and rejected predictions in hate speech detection from the perspective of the social media user.
 %
 We retrieved the value ratios using a scale called Magnitude Estimation (ME) and validated the ME scale by conducting a separate survey that uses a bounded scale consisting of 100 levels, called the 100-level scale.
 %
@@ -13,11 +13,11 @@ The goals of the experiments with the value-sensitive rejector were finding out 
 %
 
 %
-In section \ref{sec:results-survey-study}, we present the results of the complete survey study that we collected after conducting the pilot survey, and in section \ref{sec:results-rejector}, we present the results of the experiments with the value-sensitive rejector.
+Section \ref{sec:results-survey-study} covers the results of the complete survey study that we collected after conducting the pilot survey, and section \ref{sec:results-rejector} covers the results of the experiments with the value-sensitive rejector.
 
 \section{Survey study}
 \label{sec:results-survey-study}
-We collected the responses of all participants to all scenarios for both surveys: one where participants use the ME scale and the other where they use the 100-level scale to judge the scenarios.
+We collected the responses of all participants to all scenarios for both surveys: one group that uses the ME scale and another that uses the 100-level scale.
 %
 All participants had to answer two/three questions per scenario, dependent on the choice of the second question.
 %
@@ -35,9 +35,9 @@ Please note that according to the ground truth label, REJ1, REJ2, REJ5, and REJ6
 %
 So most participants found the posts used in the TP and FN scenarios hateful and those used in TN and FP scenarios not hateful.
 %
-Moreover, most found the posts of REJ1, REJ2, and REJ6 hateful and REJ3, REJ4, and REJ8 not hateful.
+For the rejection scenarios, most found the posts of REJ1, REJ2, and REJ6 hateful and REJ3, REJ4, and REJ8 not hateful.
 %
-We found three exceptions: FN5, REJ5, and REJ7, where less than or equal to 60\% of all participants did not agree with the ground truth label of the social media post.
+However, we found three posts where a significant number of participants tended to disagree with the ground truth label (more than or equal to 40\%): FN5, REJ5, and REJ7.
 %
 
 %
@@ -53,9 +53,7 @@ Scenario FN4 was an exception, as some participants agreed with the scenario for
 %
 
 %
-This section presents the results of the survey study.
-%
-Section \ref{sec:results-value-ratios} presents the value ratios required for our value-sensitive rejector, section \ref{sec:results-reliability} presents the reliability analysis, and section \ref{sec:results-validity} the validity analysis.
+The next sections tackle the different parts of the analysis of the survey: section \ref{sec:results-value-ratios} presents the value ratios required for our value-sensitive rejector, section \ref{sec:results-reliability} presents the reliability analysis, and section \ref{sec:results-validity} the validity analysis.
 %
 Finally, section \ref{sec:results-demographics} shows the results of the demographic analysis.
 %
@@ -89,7 +87,7 @@ Finally, section \ref{sec:results-demographics} shows the results of the demogra
 \label{sec:results-value-ratios}
 We calculated the value ratios following the approach from section \ref{sec:analysis-values}.
 %
-Table \ref{tab:values-reliability} shows the final values ($v$) for the ME and the 100-level survey.
+Table \ref{tab:values-reliability} shows the final values ($v$) of the ME and the 100-level surveys.
 %
 Positive and negative values indicate agreement and disagreement, respectively.
 %
@@ -127,15 +125,17 @@ We also observed that participants provided greater absolute response values to 
 \label{sec:results-reliability}
 As explained in section \ref{sec:reliability}, we measured the interrater reliability between the participants using Krippendorff's alpha.
 %
-Table \ref{tab:values-reliability} shows Krippendorff's alpha ($\alpha$) values for both scales
+Table \ref{tab:values-reliability} shows Krippendorff's alpha ($\alpha$) values for both scales.
 %
 In the last row of the table, we computed the $\alpha$ values over the responses to all scenarios.
-%
-In the middle rows, we computed the $\alpha$ values for each group of scenarios of the same type (TP, TN, FP, FN, or rejection).
 %
 The ME scale seemed to be more reliable than the 100-level scale.
 %
 According to \citet{krippendorff2004reliability}, the results of the ME scale are reliable, while the results of the 100-level scale are likely to be unreliable.
+%
+
+%
+We also computed the $\alpha$ values for each group of scenarios of the same type (TP, TN, FP, FN, or rejection).
 %
 Participants using the ME scale tended to agree with each other on the FP and FN scenarios, while they tended to disagree on the rejection scenarios.
 %
@@ -154,8 +154,6 @@ We calculated the median because when we look at figure \ref{fig:boxplots}, we c
 We calculated the Spearman and the Kendall correlation statistics as these are non-parametric and, therefore, do not require the normality assumption.
 %
 Spearman returned a 0.98 and Kendall a 0.89 correlation between the ME and the 100-level scales (p < 0.05), indicating that both scales are highly correlated.
-%
-Finally, a Mann-Whitney U test between the ME and 100-level scales returns a large p-value, indicating no statistically significant difference between the two scales.
 
 \begin{figure}
     \centering
@@ -172,7 +170,7 @@ We focused on six features: sex, student, continent, nationality, language, and 
 %
 
 %
-We used non-parametric statistical tests only to analyze demographic differences for two reasons.
+We only used non-parametric statistical tests to analyze the demographic differences for two reasons.
 %
 First, we found that the assumptions of normality and homogeneity of variances were violated in our dataset when looking at the different groups for all features.
 %
@@ -184,15 +182,15 @@ We used Mann-Whitney U to verify a significant difference between the two groups
 %
 Table \ref{tab:results-differences-ind} shows the resulting p values for all scenarios and all features.
 %
-We found that there are no significant differences between men and women
+We found that there are no significant differences between men and women.
 %
 For both the student and continent features, we found only three scenarios with significant differences.
 %
-We found the most significant differences in nationality and language features.
+We found the most significant differences when looking at nationality and language.
 %
 We observed five scenarios with non-hateful posts and ten scenarios with hateful posts where there is at least one feature with significant differences between the groups.
 %
-Scenarios FP4 and REJ4 have the most features (4) with significant differences.
+Scenarios FP7 and REJ4 have the most features (4) with significant differences.
 %
 Scenarios TP6, FN5, and REJ1 have the second most features (2) with significant differences.
 %
@@ -202,7 +200,7 @@ Table \ref{tab:results-differences-grp} shows the p values of the statistical te
 %
 We aggregated the scores by calculating the mean response value to all scenarios of the same type, e.g. TP, for each participant.
 %
-Then we applied the Mann-Whitney U test to the aggregated scores.
+Then we applied the statistical tests to the aggregated scores.
 %
 We found the most significant differences for the aggregated scores of the FP scenarios.
 %
@@ -212,9 +210,9 @@ Finally, we conducted pairwise Mann-Whitney U tests to check if there are any si
 %
 Tables \ref{tab:results-pairwise-nationality}, \ref{tab:results-pairwise-language}, and \ref{tab:results-pairwise-ethnicity} present the resulting p values of the pairwise Mann-Whitney U tests for the features of nationality, language, and ethnicity, respectively.
 %
-We observed that we do not find many pairwise significant differences for most of these scenarios and all three features.
+We did not find many pairwise significant differences for most of these scenarios and the three features.
 %
-Scenario FN5 contains the most significant pairwise differences (four out of the six pairs) when looking at the nationality feature.
+We found the most pairwise differences (four out of the siz pairs) for scenario FN5 and the nationality feature.
 %
 \begin{table}
     \small
