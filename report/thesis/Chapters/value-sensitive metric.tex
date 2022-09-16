@@ -195,7 +195,18 @@ We implement all models in Python.
 We implement the LR model with scikit-learn\footnote{\url{https://scikit-learn.org/}}, the CNN model with TensorFlow\footnote{\url{https://www.tensorflow.org/}}, and the DistilBERT model with a combination of Hugging Face\footnote{\url{https://huggingface.co/}} and PyTorch\footnote{\url{https://pytorch.org/}}.
 %
 We use Google Colab\footnote{\url{https://colab.research.google.com/}} to train all models.
-\todo[inline]{Explain hyperparam optimization}
+%
+
+%
+We perform hyperparameter optimization on all three models.
+%
+For the CNN model, we apply random search to optimize the values of the learning rate, batch size, and the number of epochs.
+%
+For the DistilBERT model, we apply Population Based Training (PBT) \citep{jaderberg2017population} implemented in Tune \citep{liaw2018tune}, to optimize the values of the batch size, learning rate, and the number of epochs since Tune.
+%
+PBT combines random search and hand tuning by discovering potentially optimal hyperparameter values along the way to reduce optimization time \citep{jaderberg2017population}.
+%
+For the LR model, we use the LogisticRegressionCV model from scikit-learn that automatically optimizes the C value (inverse of regularization strength) of the LR model.
 
 \subsection{Calibration}
 The problem with most neural network models is that they are often not calibrated \citep{guo2017calibration,sayin2021science}.
@@ -250,7 +261,9 @@ For the CNN and the DistilBERT models, we split the training set up into a train
 We use this validation set to calibrate the trained models by finding the optimal $T$ value for the temperature scaling method.
 %
 We preprocess the data by tokenizing all URLs, user mentions, and emojis since these do not contain any valuable information.
-\todo[inline]{Explain preprocessing step with wordsegment library}
+%
+We split all hashtags up into separate words using the WordSegment\footnote{\url{https://pypi.org/project/wordsegment/}} library.
+%
 The remaining parts of the preprocessing, such as removing whitespaces and stop words or the tokenization process, are dedicated to the different frameworks we use per model.
 %
 
@@ -262,6 +275,8 @@ The seen dataset is the test set from the \citet{waseem2016hateful} dataset.
 The unseen dataset is a test set from the \citet{basile2019semeval} dataset that consists of 10K English tweets labelled as either hateful (against immigrants or women) or not hateful.
 %
 We use the unseen dataset to simulate how the models would perform in a realistic use-case when a model is trained on one dataset and applied to a different dataset.
+%
+
 %
 We want to study the effect of bias and how this affects the results when using our value-sensitive metric for evaluating the models with a reject option.
 %

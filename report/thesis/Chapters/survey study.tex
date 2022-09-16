@@ -235,6 +235,8 @@ Therefore, we need at least eight tweets per scenario type (TP, TN, FP, FN, and 
 %
 We need 40 tweets, where 20 are hateful and 20 are not hateful, to create 40 different scenarios.
 %
+
+%
 We want to select the most representative tweets from the dataset.
 %
 Randomly selecting the tweets from the dataset is insufficient as the dataset might contain sample retrieval bias, as explained in section \ref{sec:related-work-challenges}.
@@ -245,6 +247,8 @@ Therefore, we perform content analysis to create a selection of tweets that is a
 %
 We provide an overview of our selection process in figure \ref{fig:clustering}.
 %
+
+%
 We exclude all tweets that contain Twitter replies and mentions since  they have unclear contexts.
 %
 Then we preprocess all tweets by removing the URLs and hashtags.
@@ -253,9 +257,13 @@ Finally, we use clustering analysis to select 40 tweets for our study.
 %
 We perform latent semantic analysis (LSA) and k-means clustering on each group of tweets.
 %
+
+%
 We use term frequency-inverse document frequency (TF-IDF) to represent all documents and their words, also known as terms, in a matrix where the term frequencies indicate how important that term is to the document \citep{aggarwal2012survey}.
 %
 The term frequencies are multiplied with the inverse document frequency so that terms that often occur in all documents, such as stop words, will end up with a lower value in the matrix \citep{aggarwal2012survey}.
+%
+
 %
 Then, we use singular value decomposition (SVD) for dimensionality reduction to transform the output matrix of the TF-IDF step.
 %
@@ -263,11 +271,15 @@ The transformed matrix is more suitable for text clustering techniques since doc
 %
 The combination of TF-IDF and SVD is also known as LSA and is suitable for clustering purposes \citep{aggarwal2012survey}.
 %
+
+%
 Finally, we apply the unsupervised learning technique k-means to the output of the LSA method to cluster all tweets into k clusters.
 %
 We calculate the silhouette coefficient to determine the optimal cluster size (k value) for the neutral tweets and the four groups of hateful tweets.
 %
 The silhouette analysis indicates to set k as large as possible.
+%
+
 %
 We select the five nearest data samples to each cluster centroid.
 %
@@ -277,6 +289,11 @@ Based on the silhouette coefficient, we use a cluster size of 20 for the neutral
 %
 Furthermore, we use a cluster size of 5 for each group of hateful tweets to collect 20 hateful tweets.
 %
+
+%
+Refer to appendix \ref{sec:appendix-scenarios} for the resulting list of all scenarios.
+%
+
 \begin{figure}
     \centering
     \includegraphics[scale=.7]{Figures/clustering.pdf}
@@ -307,7 +324,7 @@ There is no time limit for answering the questions, and all data is anonymous.
 %
 Finally, we will inform the participants not to put identifiers in their answers.
 %
-Refer to \autoref{sec:appendix} for all presentation texts, the informed consent, and some scenario examples.
+Refer to appendix \ref{sec:appendix} for all presentation texts, the informed consent, and some scenario examples.
 
 \noindent\customtextbox{
     \begin{itemize}[leftmargin=*, label={}]
