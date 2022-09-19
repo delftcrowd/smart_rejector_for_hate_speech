@@ -273,43 +273,42 @@ We found the most pairwise differences (four out of the siz pairs) for scenario 
 \label{sec:results-rejector}
 We experimented with our value-sensitive rejector following the approach from section \ref{sec:rejector-application}.
 %
-First, we produced the predictions for several experimental setups.
-%
-Then, we applied our value-sensitive rejector to all experimental setups and analyzed the results.
+First, we produced a set of predictions for each experimental setup, then we applied our value-sensitive rejector to each setup, and collected the results for analysis.
 %
 
 %
-We created the predictions with all three models (LR, DistilBERT, and CNN) to both the \emph{seen} and \emph{unseen} datasets.
+We used all three models (LR, DistilBERT, and CNN) to produce predictions for both the \emph{seen} and \emph{unseen} datasets.
 %
 This resulted into six different sets of predictions.
 %
-Then, for each set of predictions, we created the PDF curves using KDE for all predictions of the same type (TP, TN, FP, and FN) by comparing the predicted label with the actual label.
+Then, for each set of predictions, we created the PDFs for all predictions of the same type (TP, TN, FP, and FN).
 %
-The PDF curves were necessary for the calculation of the total value of the models with the reject option.
+The PDFs were necessary for the calculation of the total value of the models with the reject option.
 %
-Figures \ref{fig:pdfs-seen} and \ref{fig:pdfs-unseen} show all PDF curves for the \emph{seen} and \emph{unseen} datasets, respectively.
+Figures \ref{fig:pdfs-seen} and \ref{fig:pdfs-unseen} show all PDFs for the \emph{seen} and \emph{unseen} datasets, respectively.
 %
 We observed that all three models were more confident in their correct predictions (TP and TN) than their incorrect predictions (FP and FN) for both the \emph{seen} and \emph{unseen} datasets.
 %
 All three models were also more confident in their correct predictions for the \emph{seen} dataset than the \emph{unseen} dataset.
 %
-The CNN and LR models have similar PDF curves and seem well-calibrated since the PDF curves of the correct predictions are skewed towards $1.0$ while the curves of the incorrect predictions are more uniformly distributed.
+The CNN and LR models have similar PDFs and seem more calibrated since the PDFs of the correct predictions are skewed towards $1.0$ while the functions of the incorrect predictions are more uniformly distributed.
 %
-The DistilBERT model was less calibrated than the other two model.
+The DistilBERT model is less calibrated than the other two models.
 %
-We recognize this in the PDF curves of the DistilBERT model for the incorrect predictions in figures \ref{fig:pdfs-seen} and \ref{fig:pdfs-unseen} by looking at the large density values around the high confidence values.
+We recognize this in the PDFs of the incorrect predictions in figures \ref{fig:pdfs-seen} and \ref{fig:pdfs-unseen} of the DistilBERT model by looking at the large density values around the high confidence values.
 %
 
+% Continu
 %
-We applied the value-sensitive metric from section \ref{sec:value-metric} to the three models and both datasets using the PDF curves and the ME values ($V_{tp}, V_{tn}, V_{fp}, V_{fn}, \text{ and } V_r$) from the survey.
+We applied the value-sensitive metric from section \ref{sec:value-metric} to the three models and both datasets using the PDFs and the ME values ($V_{tp}, V_{tn}, V_{fp}, V_{fn}, \text{ and } V_r$) from the survey.
 %
-Figure \ref{fig:metric-plots-all-values} presents the total value with the reject option ($V(\tau)$) of all three models for both datasets and all possible rejection thresholds $\tau \in [0.5, 1.0]$ using the ME values from table \ref{tab:values-reliability}.
+Figure \ref{fig:metric-plots-all-values} presents the total value of all models with the reject option ($V(\tau)$) for all possible rejection thresholds ($\tau \in [0.5, 1.0]$) and the ME values from table \ref{tab:values-reliability}.
 %
 The diamond-shaped markers indicate the optimal rejection threshold ($\tau_O$) for which the model achieves the highest total value ($V(\tau_O)$).
 %
-Positive $V(\tau)$ indicate that the model for rejection threshold $\tau$ is valuable, while negative values indicate that the costs of incorrect accepted and rejected predictions exceed the gains of correct accepted and rejected predictions.
+Positive $V(\tau)$ values indicate that the model for rejection threshold $\tau$ is valuable, while negative values indicate that the costs of incorrect accepted and rejected predictions exceed the gains of correct accepted and rejected predictions.
 %
-For all models we got $\tau_O = 0.5$, meaning that all models achieve the highest total value when all predictions are accepted.
+For all models we got $\tau_O \approx 0.5$, meaning that all models achieve the highest total value when all predictions are accepted.
 %
 In figure \ref{fig:metric-plots-all-values}, we can see that $V(\tau_O)$ of all models is greater for the \emph{seen} data than for \emph{unseen} data.
 %
@@ -333,7 +332,7 @@ Table \ref{tab:metric} shows the specific values of $\tau_O$, the accuracies of 
 %
 The first two rows show that the accuracies of all models dropped significantly when we applied the models to \emph{unseen} data.
 %
-The last two rows (where $V_{tp}=0$ and $V_{tn}=0$) show that we achieved higher accuracies of accepted predictions for increased optimal rejection thresholds.
+The last two rows (where $V_{tp}=0$ and $V_{tn}=0$) show that we achieved higher accuracies of accepted predictions for increasing optimal rejection thresholds.
 %
 For all models, we rejected less than 30\% of all predictions for the \emph{seen} data and rejected a large fraction of all predictions for the \emph{unseen} data.
 %
@@ -341,30 +340,32 @@ The DistilBERT model achieved the highest accuracies of accepted predictions for
 %
 For the \emph{seen} data, it achieved an accuracy of accepted predictions of $92.6\%$ while rejecting only $25.2\%$ of all predictions.
 %
-For the \emph{unseen} data, it rejects the least amount of predictions ($92.3\%$) and achieved the highest accuracy of accepted predictions ($88.1\%$).
+For the \emph{unseen} data, it rejected the least amount of predictions ($92.3\%$) and achieved the highest accuracy of accepted predictions ($88.1\%$).
 %
-The CNN model performs the worst for all configurations in terms of accuracy of accepted predictions, and for the \emph{unseen} data the highest total value is achieved when all predictions are rejected.
+The CNN model performs the worst for all configurations in terms of accuracy of accepted predictions.
+%
+The model achieved the highest value for the \emph{unseen} data when all predictions are rejected, indicating that it is not valuable to use the model.
 
 %
 Table \ref{tab:metric2} compares the results of our value-sensitive metric with the results of machine metrics like accuracy.
 %
-It presents the total value of all models for the optimal rejection thresholds ($V(\tau_O)$), the total value when all predictions are accepted ($V(0)$), and the accuracies of all models when all predictions are accepted.
+For all models, it presents the total value for the optimal rejection thresholds ($V(\tau_O)$), the total value when all predictions are accepted ($V(0)$), and the accuracies when all predictions are accepted.
 %
 First, we compared the accuracy of the original model with $V(0)$ as in both cases all predictions are accepted.
 %
-In the first two rows, both the accuracy and $V(0)$ indicate that the DistilBERT model performs the best for both the \emph{seen} and \emph{unseen} datasets.
+In the first two rows, both the accuracy and $V(0)$ indicate that the DistilBERT model performed the best for both the \emph{seen} and \emph{unseen} datasets.
 %
-In the last two rows (where $V_{tp}=0$ and $V_{tn}=0$), both metrics indicate that the DistilBERT model performs the best for the \emph{seen} dataset, while the metrics give different results for the \emph{unseen} dataset.
+In the last two rows (where $V_{tp}=0$ and $V_{tn}=0$), both metrics indicate that the DistilBERT model performed the best for the \emph{seen} dataset, but show different results for the \emph{unseen} dataset.
 %
-The DistilBERT model performed the best when we use accuracy as the metric, while the CNN model performed the best when we use $V(0)$ as the metric.
+Then, the DistilBERT model performed the best when we use accuracy as the metric, while the CNN model performed the best when we use $V(0)$ as the metric.
 %
-All $V(0)$ values in the last row show that all models are not valuable for \emph{unseen} data when we accept all predictions.
+All $V(0)$ values in the last row show that none of the models is valuable for \emph{unseen} data when we accept all predictions.
 %
 
 %
 When we look at the $V(\tau_O)$ values in table \ref{tab:metric2}, we see that all models are valuable for the optimal rejection threshold.
 %
-The DistilBERT model achieved the highest $V(\tau_O)$ values in all configurations except for \emph{unseen} data with $V_{tp}=0$ and $V_{tn}=0$ as the LR model achieved a higher total value.
+The DistilBERT model achieved the highest $V(\tau_O)$ values in all configurations except for the \emph{unseen} data with $V_{tp}=0$ and $V_{tn}=0$ as the LR model achieved a higher total value.
 %
 When we look at the lost row, we can see that all models become valuable when the optimal rejection threshold is adopted.
 
@@ -380,7 +381,7 @@ When we look at the lost row, we can see that all models become valuable when th
         \includegraphics[scale=.4]{Figures/metric-all-values-unseen-data.pdf}
         \caption{evaluated on \emph{unseen} data}
     \end{subfigure}
-    \caption{$V(\tau)$ curves of all models with $V_{tp} = 18.15$, $V_{tn} = 36.32$, $V_{fp} = 16.69$, $V_{fn} = 28.08$, $V_r = 4.82$.}
+    \caption{$V(\tau)$ functions of all models with $V_{tp} = 18.15$, $V_{tn} = 36.32$, $V_{fp} = 16.69$, $V_{fn} = 28.08$, $V_r = 4.82$.}
     \label{fig:metric-plots-all-values}
 \end{figure}
 
@@ -396,7 +397,7 @@ When we look at the lost row, we can see that all models become valuable when th
         \includegraphics[scale=.4]{Figures/metric-tptn0-unseen-data.pdf}
         \caption{evaluated on \emph{unseen} data}
     \end{subfigure}
-    \caption{$V(\tau)$ curves of all models with $V_{tp} = 0.0$, $V_{tn} = 0.0$, $V_{fp} = 16.69$, $V_{fn} = 28.08$, $V_r = 4.82$.}
+    \caption{$V(\tau)$ functions of all models with $V_{tp} = 0.0$, $V_{tn} = 0.0$, $V_{fp} = 16.69$, $V_{fn} = 28.08$, $V_r = 4.82$.}
     \label{fig:metric-plots-tptn0}
 \end{figure}
 
@@ -434,8 +435,8 @@ When we look at the lost row, we can see that all models become valuable when th
         \textbf{Seen data}                       & 27.707                          & 27.707                                  & 0.847                            & 28.001                   & 27.996              & 0.850        & 27.291                   & 27.291              & 0.835        \\
         \textbf{Unseen data}                     & 15.689                          & 15.689                                  & 0.640                            & 15.823                   & 15.823              & 0.640        & 14.868                   & 14.868              & 0.629        \\
         \midrule
-        \textbf{Seen data ($V_{tp}=V_{tn}=0)$}   & 2.688                           & 1.158                                   & 0.847                            & 3.041                    & 1.448               & 0.850        & 2.490                    & 0.901               & 0.835        \\
-        \textbf{Unseen data ($V_{tp}=V_{tn}=0)$} & 3.668                           & -3.605                                  & 0.640                            & 3.606                    & -3.489              & 0.640        & 3.365                    & -3.322              & 0.629        \\
+        \textbf{Seen data $(V_{tp}=V_{tn}=0)$}   & 2.688                           & 1.158                                   & 0.847                            & 3.041                    & 1.448               & 0.850        & 2.490                    & 0.901               & 0.835        \\
+        \textbf{Unseen data $(V_{tp}=V_{tn}=0)$} & 3.668                           & -3.605                                  & 0.640                            & 3.606                    & -3.489              & 0.640        & 3.365                    & -3.322              & 0.629        \\
         \bottomrule
     \end{tabular}
     \caption{The maximum total values of the models for the optimal rejection threshold ($V(\tau_O)$), the total value of the models when all predictions are accepted ($V(0)$), and the accuracies (Acc) of all models.}

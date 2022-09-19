@@ -95,9 +95,9 @@ They found that using pre-trained word embeddings such as GloVe does not result 
 
 Most studies use supervised learning techniques that range from traditional ML to deep learning (DL) classification models, and a few use unsupervised learning techniques to cluster social media posts.
 %
-Support Vector Machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and Logistic Regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
+Support-vector machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and logistic regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
 %
-\citet{davidson2017automated} found that SVM and LR perform significantly better than other traditional ML techniques such as Naive Bayes, Decision Trees, and Random Forests.
+\citet{davidson2017automated} found that SVM and LR perform significantly better than other traditional ML techniques such as naive Bayes, decision trees, and random forests.
 %
 \citet{badjatiya2017deep} experimented with various configurations of word embeddings and two DL models: a convolutional neural network (CNN) and a long short-term memory (LSTM) model.
 %
@@ -105,7 +105,7 @@ They found that CNN performs better than LSTM.
 %
 Given the recent popularity of Bidirectional Encoder Representations from Transformers (BERT) models \citep{devlin2018bert} in the NLP field, studies such as \citet{alatawi2021detecting} found that BERT models achieve slightly better classification performance than DL models.
 %
-\citet{rodriguez2019automatic} use the unsupervised learning method, K-means clustering, to cluster social media posts for identifying topics that potentially promote hate speech.
+\citet{rodriguez2019automatic} use the unsupervised learning method, k-means clustering, to cluster social media posts for identifying topics that potentially promote hate speech.
 %
 Based on the findings of these studies, we will experiment with three models in our project: LR, CNN, and DistilBERT (a lightweight version of BERT \citep{sanh2019distilbert}).
 
