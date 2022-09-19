@@ -7,7 +7,9 @@ We first present the results of the survey study as the experiments with the val
 %
 The goal of the survey study was to retrieve the value ratios of TP, TN, FP, FN, and rejected predictions in hate speech detection from the perspective of the social media user.
 %
-We retrieved the value ratios using a scale called Magnitude Estimation (ME) and validated the ME scale by conducting a separate survey that uses a bounded scale consisting of 100 levels, called the 100-level scale.
+We retrieved the value ratios using a scale called Magnitude Estimation (ME).
+%
+We validated the ME scale by conducting a separate survey using a bounded scale of 100 levels, called the 100-level scale.
 %
 The goals of the experiments with the value-sensitive rejector were finding out how the rejector behaves on different models and datasets, if ML with a reject option is beneficial for hate speech detection, and comparing the value-sensitive metric against machine metrics such as accuracy.
 %
@@ -53,7 +55,7 @@ Scenario FN4 was an exception, as some participants agreed with the scenario for
 %
 
 %
-The next sections tackle the different parts of the analysis of the survey: section \ref{sec:results-value-ratios} presents the value ratios required for our value-sensitive rejector, section \ref{sec:results-reliability} presents the reliability analysis, and section \ref{sec:results-validity} the validity analysis.
+The following sections tackle the different parts of the survey analysis: section \ref{sec:results-value-ratios} presents the value ratios required for our value-sensitive rejector, section \ref{sec:results-reliability} presents the reliability analysis, and section \ref{sec:results-validity} the validity analysis.
 %
 Finally, section \ref{sec:results-demographics} shows the results of the demographic analysis.
 %
@@ -87,7 +89,7 @@ Finally, section \ref{sec:results-demographics} shows the results of the demogra
 \label{sec:results-value-ratios}
 We calculated the value ratios following the approach from section \ref{sec:analysis-values}.
 %
-Table \ref{tab:values-reliability} shows the final values ($v$) of the ME and the 100-level surveys.
+Table \ref{tab:values-reliability} shows the resulting values ($v$) from the ME and the 100-level surveys.
 %
 Positive and negative values indicate agreement and disagreement, respectively.
 %
@@ -129,7 +131,7 @@ Table \ref{tab:values-reliability} shows Krippendorff's alpha ($\alpha$) values 
 %
 In the last row of the table, we computed the $\alpha$ values over the responses to all scenarios.
 %
-The ME scale seemed to be more reliable than the 100-level scale.
+The ME scale seemed more reliable than the 100-level scale.
 %
 According to \citet{krippendorff2004reliability}, the results of the ME scale are reliable, while the results of the 100-level scale are likely to be unreliable.
 %
@@ -184,7 +186,7 @@ Table \ref{tab:results-differences-ind} shows the resulting p values for all sce
 %
 We found that there are no significant differences between men and women.
 %
-For both the student and continent features, we found only three scenarios with significant differences.
+We found only three scenarios with significant differences for the student and continent features.
 %
 We found the most significant differences when looking at nationality and language.
 %
@@ -202,7 +204,7 @@ We aggregated the scores by calculating the mean response value to all scenarios
 %
 Then we applied the statistical tests to the aggregated scores.
 %
-We found the most significant differences for the aggregated scores of the FP scenarios.
+We found the most significant differences in the aggregated scores of the FP scenarios.
 %
 
 %
@@ -212,7 +214,7 @@ Tables \ref{tab:results-pairwise-nationality}, \ref{tab:results-pairwise-languag
 %
 We did not find many pairwise significant differences for most of these scenarios and the three features.
 %
-We found the most pairwise differences (four out of the siz pairs) for scenario FN5 and the nationality feature.
+We found the most pairwise differences (four out of the six pairs) for scenario FN5 and the nationality feature.
 %
 \begin{table}
     \small
@@ -273,17 +275,17 @@ We found the most pairwise differences (four out of the siz pairs) for scenario 
 \label{sec:results-rejector}
 We experimented with our value-sensitive rejector following the approach from section \ref{sec:rejector-application}.
 %
-First, we produced a set of predictions for each experimental setup, then we applied our value-sensitive rejector to each setup, and collected the results for analysis.
+We produced a set of predictions for each experimental setup, applied our value-sensitive rejector to each setup, and collected the results for analysis.
 %
 
 %
 We used all three models (LR, DistilBERT, and CNN) to produce predictions for both the \emph{seen} and \emph{unseen} datasets.
 %
-This resulted into six different sets of predictions.
+Therefore, we ended up with six different sets of predictions.
 %
 Then, for each set of predictions, we created the PDFs for all predictions of the same type (TP, TN, FP, and FN).
 %
-The PDFs were necessary for the calculation of the total value of the models with the reject option.
+The PDFs were necessary for calculating the total value of the models with the reject option.
 %
 Figures \ref{fig:pdfs-seen} and \ref{fig:pdfs-unseen} show all PDFs for the \emph{seen} and \emph{unseen} datasets, respectively.
 %
@@ -291,7 +293,9 @@ We observed that all three models were more confident in their correct predictio
 %
 All three models were also more confident in their correct predictions for the \emph{seen} dataset than the \emph{unseen} dataset.
 %
-The CNN and LR models have similar PDFs and seem more calibrated since the PDFs of the correct predictions are skewed towards $1.0$ while the functions of the incorrect predictions are more uniformly distributed.
+The CNN and LR models have similar PDFs and seem more calibrated since the PDFs of the correct predictions are skewed towards $1.0$.
+%
+In contrast, the PDFs of the incorrect predictions follow a more uniform distribution.
 %
 The DistilBERT model is less calibrated than the other two models.
 %
@@ -300,29 +304,29 @@ We recognize this in the PDFs of the incorrect predictions in figures \ref{fig:p
 
 % Continu
 %
-We applied the value-sensitive metric from section \ref{sec:value-metric} to the three models and both datasets using the PDFs and the ME values ($V_{tp}, V_{tn}, V_{fp}, V_{fn}, \text{ and } V_r$) from the survey.
+We applied the value-sensitive metric from section \ref{sec:value-metric} to the three models and the two datasets using the PDFs and the ME values ($V_{tp}, V_{tn}, V_{fp}, V_{fn}, \text{ and } V_r$) from the survey.
 %
 Figure \ref{fig:metric-plots-all-values} presents the total value of all models with the reject option ($V(\tau)$) for all possible rejection thresholds ($\tau \in [0.5, 1.0]$) and the ME values from table \ref{tab:values-reliability}.
 %
 The diamond-shaped markers indicate the optimal rejection threshold ($\tau_O$) for which the model achieves the highest total value ($V(\tau_O)$).
 %
-Positive $V(\tau)$ values indicate that the model for rejection threshold $\tau$ is valuable, while negative values indicate that the costs of incorrect accepted and rejected predictions exceed the gains of correct accepted and rejected predictions.
+Positive $V(\tau)$ values indicate that the model for rejection threshold $\tau$ is valuable, and negative values indicate that the costs of incorrect accepted and rejected predictions exceed the gains of correct accepted and rejected predictions.
 %
-For all models we got $\tau_O \approx 0.5$, meaning that all models achieve the highest total value when all predictions are accepted.
+For all models, we got $\tau_O \approx 0.5$, meaning that all models achieve the highest total value when all predictions are accepted.
 %
-In figure \ref{fig:metric-plots-all-values}, we can see that $V(\tau_O)$ of all models is greater for the \emph{seen} data than for \emph{unseen} data.
+Figure \ref{fig:metric-plots-all-values} shows that all models' $V(\tau_O)$ is greater for the \emph{seen} data than for \emph{unseen} data.
 %
 The total value of all models decreases for increasing values of the rejection threshold.
 %
 
 %
-To further examine how $V(\tau)$ behaves when we only consider punishing incorrect predictions instead of rewarding correct predictions, we decided to apply the metric again but this time setting $V_{tp}$ and $V_{tn}$ equal to zero.
+To further examine how $V(\tau)$ behaves when we only consider punishing incorrect predictions instead of rewarding correct predictions, we decided to apply the metric again, setting $V_{tp}$ and $V_{tn}$ equal to zero.
 %
 The metric's conditions \ref{for:conditions-fp-fn} and \ref{for:conditions-tp-tn} were still satisfied when we did this.
 %
 Figure \ref{fig:metric-plots-tptn0} presents the total value ($V(\tau)$) again for the updated values $V_{tp}=0$ and $V_{tn}=0$.
 %
-We found that $\tau_O$ of all models moved towards towards $1.0$, meaning that rejecting predictions is now more beneficial for the total value of the models.
+We found that $\tau_O$ of all models moved towards $1.0$, meaning that rejecting predictions is now more beneficial for the total value of the models.
 %
 All models achieve the highest $V(\tau)$ value when $\tau \in [0.7, 0.9]$ for \emph{seen} data and when $\tau \in [0.9, 1.0]$ for \emph{unseen data}.
 %
@@ -330,11 +334,11 @@ All models achieve the highest $V(\tau)$ value when $\tau \in [0.7, 0.9]$ for \e
 %
 Table \ref{tab:metric} shows the specific values of $\tau_O$, the accuracies of the accepted predictions, and the rejection rates (fraction of rejected predictions).
 %
-The first two rows show that the accuracies of all models dropped significantly when we applied the models to \emph{unseen} data.
+The first two rows show that the accuracies of all models dropped when we applied the models to \emph{unseen} data.
 %
 The last two rows (where $V_{tp}=0$ and $V_{tn}=0$) show that we achieved higher accuracies of accepted predictions for increasing optimal rejection thresholds.
 %
-For all models, we rejected less than 30\% of all predictions for the \emph{seen} data and rejected a large fraction of all predictions for the \emph{unseen} data.
+For all models, we rejected less than 30\% of all predictions for the \emph{seen} data and a large fraction for the \emph{unseen} data.
 %
 The DistilBERT model achieved the highest accuracies of accepted predictions for all configurations.
 %
@@ -342,22 +346,22 @@ For the \emph{seen} data, it achieved an accuracy of accepted predictions of $92
 %
 For the \emph{unseen} data, it rejected the least amount of predictions ($92.3\%$) and achieved the highest accuracy of accepted predictions ($88.1\%$).
 %
-The CNN model performs the worst for all configurations in terms of accuracy of accepted predictions.
+The CNN model performs the worst for all configurations regarding the accuracy of accepted predictions.
 %
-The model achieved the highest value for the \emph{unseen} data when all predictions are rejected, indicating that it is not valuable to use the model.
+The model achieved the highest value for the \emph{unseen} data when all predictions were rejected, indicating that it is not valuable to use the model.
 
 %
-Table \ref{tab:metric2} compares the results of our value-sensitive metric with the results of machine metrics like accuracy.
+Table \ref{tab:metric2} compares the results of our value-sensitive metric with machine metrics like accuracy.
 %
 For all models, it presents the total value for the optimal rejection thresholds ($V(\tau_O)$), the total value when all predictions are accepted ($V(0)$), and the accuracies when all predictions are accepted.
 %
-First, we compared the accuracy of the original model with $V(0)$ as in both cases all predictions are accepted.
+First, we compared the accuracy of the original model with $V(0)$, as in both cases, all predictions were accepted.
 %
 In the first two rows, both the accuracy and $V(0)$ indicate that the DistilBERT model performed the best for both the \emph{seen} and \emph{unseen} datasets.
 %
-In the last two rows (where $V_{tp}=0$ and $V_{tn}=0$), both metrics indicate that the DistilBERT model performed the best for the \emph{seen} dataset, but show different results for the \emph{unseen} dataset.
+In the last two rows (where $V_{tp}=0$ and $V_{tn}=0$), both metrics indicate that the DistilBERT model performed the best for the \emph{seen} dataset but got different results for the \emph{unseen} dataset.
 %
-Then, the DistilBERT model performed the best when we use accuracy as the metric, while the CNN model performed the best when we use $V(0)$ as the metric.
+Then, according to the accuracy, the DistilBERT model performed the best, while the CNN model performed the best according to $V(0)$.
 %
 All $V(0)$ values in the last row show that none of the models is valuable for \emph{unseen} data when we accept all predictions.
 %
@@ -365,9 +369,9 @@ All $V(0)$ values in the last row show that none of the models is valuable for \
 %
 When we look at the $V(\tau_O)$ values in table \ref{tab:metric2}, we see that all models are valuable for the optimal rejection threshold.
 %
-The DistilBERT model achieved the highest $V(\tau_O)$ values in all configurations except for the \emph{unseen} data with $V_{tp}=0$ and $V_{tn}=0$ as the LR model achieved a higher total value.
+The DistilBERT model achieved the highest $V(\tau_O)$ values in all configurations except for the \emph{unseen} data with $V_{tp}=0$ and $V_{tn}=0$, as the LR model achieved a higher total value.
 %
-When we look at the lost row, we can see that all models become valuable when the optimal rejection threshold is adopted.
+When we look at the lost row, we can see that all models become valuable when we adopt the optimal rejection threshold.
 
 \begin{figure}
     \centering
@@ -418,7 +422,7 @@ When we look at the lost row, we can see that all models become valuable when th
         \textbf{Unseen data $(V_{tp}=V_{tn}=0)$} & 0.994                           & 0.752                                   & 0.958                            & 0.948                 & 0.881        & 0.923       & 0.999                 & -            & 1.0         \\
         \bottomrule
     \end{tabular}
-    \caption{The optimal rejection thresholds ($\tau_O$), accuracy of the accepted predictions (Acc), and rejection rates (RR) of all models for both datasets using the values from the survey.}
+    \caption{The optimal rejection thresholds ($\tau_O$), the accuracy of the accepted predictions (Acc), and the rejection rates (RR) of all models for both datasets.}
     \label{tab:metric}
 \end{table}
 
