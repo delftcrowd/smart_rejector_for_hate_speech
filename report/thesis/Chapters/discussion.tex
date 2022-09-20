@@ -1,9 +1,41 @@
 \chapter{Discussion}
-\todo[inline]{Answer research questions}
+In this thesis project, we worked on a hybrid human-AI solution for detecting hate speech.
+%
+The main problem is that manual moderation is the most reliable but infeasible, and that automatic moderation through detection algorithms is the most performant but sometimes unreliable.
+%
+We focused on rejecting predictions of ML models for hate speech detection.
+%
+However, determing when to accept or reject predictions depends on the context and, more specifically, the implications of accepting/rejecting correct or incorrect predictions.
+%
+We denoted these implications as values of TP, TN, FP, FN, and rejected predictions.
+%
+Our main goal was finding out how we can reject ML predictions in a value-sensitive manner for hate speech detection.
+%
+We split this up into two parts.
+%
+First, we wanted to find out how we can measure the total value of ML models with a reject option.
+%
+By maximizing the total value, we know when we need to accept or reject predictions.
+%
+We tackled this by introducing a value-sensitive metric that we use for calculating the optimal rejection threshold.
+%
+Second, we wanted to determine the value ratios between TP, TN, FP, FN, and rejected predictions.
+%
+We determined these value ratios by conducting a large survey study in which we presented participants with different hate speech detection scenarios in which they had to provide their judgements using the ME scale.
+%
 
-\todo[inline]{Discuss future work}
+%
+This chapter analyzes the results from chapter \ref{ch:results}.
+%
+First, we discuss the main findings of the survey study in section \ref{sec:discussion-survey} and the main findings of our value-sensitive rejector in section \ref{sec:discussion-rejection}.
+%
+Then, we answer the our research questions in section \ref{sec:discussion-research}.
+%
+Finally, we highlight some limitations of our approach in section \ref{sec:discussion-limitations} and give some recommendations in section \ref{sec:discussion-recommendations}.
+
 
 \section{Survey study}
+\label{sec:discussion-survey}
 \todo[inline]{Discuss value ratios}
 \todo[inline]{Discuss reliability values and why the values are low when looking at the scenario types only}
 \todo[inline]{Discuss why TN3 and TN7 have highest agreement scores}
@@ -21,9 +53,14 @@
 \todo[inline]{Therefore, we can conclude that the significant differences between groups for a scenario depends highly on the content of the social media post.}
 
 \section{Value-sensitive rejection}
-
+\label{sec:discussion-rejection}
 \section{Implications}
 \todo[inline]{Explain that \cite{olteanu2017limits} claims that we need more human-centred metrics instead of abstract metrics such as precision and we agree with that by introducing our own human-centred metric}
+
+\section{Research questions}
+\label{sec:discussion-research}
+
+\todo[inline]{Answer research questions}
 
 \section{Limitations}
 \todo[inline]{Hate speech is difficult domain as there tend to be a lot of disagreement between people about what is considered hate speech and what not. \citet{ross2017measuring} found low Krippendorff alpha values in a hate speech survey. So our findings are in line with theirs.}
