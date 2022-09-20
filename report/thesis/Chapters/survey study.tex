@@ -1,5 +1,5 @@
 \chapter{Survey study}
-\label{sec:survey}
+\label{ch:survey}
 The second part of this research is to find out how we can determine the value ratios between TP, TN, FP, FN, and rejected predictions.
 %
 We conducted a literature study in section \ref{sec:related-work-value-assessment} and concluded that we want to empirically  estimate the value ratios from the perspective of the social media user.
@@ -161,12 +161,13 @@ We explain the selection procedure in section \ref{sec:data}.
 \end{itemize}
 
 \subsubsection{Dependent variables}
-Our dependent variables are reliability, validity and the value ratio of TP, TN, FP, FN, and rejection scenarios.
+Our dependent variables are the response values, reliability, validity and the value ratio of TP, TN, FP, FN, and rejection scenarios.
 %
 \begin{itemize}
+    \item \textbf{Response values} All response values the participants give to the different scenarios with either the ME or the 100-level scale.
     \item \textbf{Reliability} Measured using Krippendorff's alpha, where values larger than 0.8 indicate reliable conclusions and values larger than 0.6 indicate tentative conclusions \citep{krippendorff2004reliability}.
     \item \textbf{Validity} Convergent validity, if two different measures measure the same thing \citep{fitzner2007reliability}. Measured by calculating the correlation between the magnitude estimates and the response values from the 100-level scale.
-    \item \textbf{Value ratios of TP, TN, FP, FN, and rejection scenarios} Measured by calculating the median of the normalized magnitude estimates of each scenario question and then calculating the mean over the resulting values to come up with the final value for that scenario type.
+    \item \textbf{Value ratios of TP, TN, FP, FN, and rejection scenarios} Measured by calculating the median of the normalized magnitude estimate response values of each scenario question and then calculating the mean over the resulting values to come up with the final value for that scenario type.
 \end{itemize}
 
 \subsection{Planned sample}
@@ -234,6 +235,8 @@ Therefore, we need at least eight tweets per scenario type (TP, TN, FP, FN, and 
 %
 We need 40 tweets, where 20 are hateful and 20 are not hateful, to create 40 different scenarios.
 %
+
+%
 We want to select the most representative tweets from the dataset.
 %
 Randomly selecting the tweets from the dataset is insufficient as the dataset might contain sample retrieval bias, as explained in section \ref{sec:related-work-challenges}.
@@ -244,6 +247,8 @@ Therefore, we perform content analysis to create a selection of tweets that is a
 %
 We provide an overview of our selection process in figure \ref{fig:clustering}.
 %
+
+%
 We exclude all tweets that contain Twitter replies and mentions since  they have unclear contexts.
 %
 Then we preprocess all tweets by removing the URLs and hashtags.
@@ -252,9 +257,13 @@ Finally, we use clustering analysis to select 40 tweets for our study.
 %
 We perform latent semantic analysis (LSA) and k-means clustering on each group of tweets.
 %
+
+%
 We use term frequency-inverse document frequency (TF-IDF) to represent all documents and their words, also known as terms, in a matrix where the term frequencies indicate how important that term is to the document \citep{aggarwal2012survey}.
 %
 The term frequencies are multiplied with the inverse document frequency so that terms that often occur in all documents, such as stop words, will end up with a lower value in the matrix \citep{aggarwal2012survey}.
+%
+
 %
 Then, we use singular value decomposition (SVD) for dimensionality reduction to transform the output matrix of the TF-IDF step.
 %
@@ -262,11 +271,15 @@ The transformed matrix is more suitable for text clustering techniques since doc
 %
 The combination of TF-IDF and SVD is also known as LSA and is suitable for clustering purposes \citep{aggarwal2012survey}.
 %
+
+%
 Finally, we apply the unsupervised learning technique k-means to the output of the LSA method to cluster all tweets into k clusters.
 %
 We calculate the silhouette coefficient to determine the optimal cluster size (k value) for the neutral tweets and the four groups of hateful tweets.
 %
 The silhouette analysis indicates to set k as large as possible.
+%
+
 %
 We select the five nearest data samples to each cluster centroid.
 %
@@ -276,9 +289,14 @@ Based on the silhouette coefficient, we use a cluster size of 20 for the neutral
 %
 Furthermore, we use a cluster size of 5 for each group of hateful tweets to collect 20 hateful tweets.
 %
+
+%
+Refer to appendix \ref{sec:appendix-scenarios} for the resulting list of all scenarios.
+%
+
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{Figures/clustering.pdf}
+    \includegraphics[scale=.7]{Figures/clustering.pdf}
     \caption{Flow diagram that visualizes how we perform content analysis to cluster and select the tweets for our survey study.}
     \label{fig:clustering}
 \end{figure}
@@ -306,7 +324,7 @@ There is no time limit for answering the questions, and all data is anonymous.
 %
 Finally, we will inform the participants not to put identifiers in their answers.
 %
-Refer to \autoref{sec:appendix} for all presentation texts, the informed consent, and some scenario examples.
+Refer to appendix \ref{sec:appendix} for all presentation texts, the informed consent, and some scenario examples.
 
 \noindent\customtextbox{
     \begin{itemize}[leftmargin=*, label={}]
@@ -382,6 +400,7 @@ We define the value ratios we need for the metric using the aggregated values of
 We will not use the aggregated values of the 100-level scale for our metric since the 100-level scale does not provide ratio data, but we will still present them.
 
 \subsection{Reliability}
+\label{sec:reliability}
 Reliability is about whether we can trust our results and if we get consistent results \citep{fitzner2007reliability}.
 %
 We do this by mainly looking at the inter-rater reliability.
@@ -452,13 +471,17 @@ However, we still try to analyze if we can find any differences between particip
 \label{sec:analysis-demographic}
 As we conduct the survey study only once for a group of participants, among which 50\% are men and 50\% are women, the remaining demographic characteristics can be quite diverse.
 %
-Nevertheless, we are still curious if there are any significant statistical differences between groups of participants with different demographic characteristics as we expect that demographic characteristics influence people's perception of hate speech and how we should deal with it.
+Nevertheless, we verify whether there are any significant statistical differences between groups of participants with different demographic characteristics as we expect that demographic characteristics influence people's perception of hate speech and how we should deal with it.
 %
 Therefore, we apply several statistics to the results of each scenario to analyze if we can find differences between different demographic groups.
 %
-Prolific provides information about the demographic characteristics of the participants, out of which we analyze four variables: nationality, age, student (whether they are still a student or not), and gender.
+Prolific provides information about the demographic characteristics of the participants, out of which we analyze six features based on what Prolific provides us in the survey results: sex, student (whether they are still a student or not), continent, nationality, language, and ethnicity.
 %
-We have multiple groups (more than two) for the variables nationality and age (different age intervals) and two groups for the variables student and gender.
+We manually add the continent feature based on the values of the nationality feature.
+%
+We exclude age as almost all participants' ages fall between 20 and 30 years old.
+%
+We have multiple groups (more than two) for nationality, ethnicity, and  (different age intervals) and two groups for the features student and gender.
 %
 We apply either analysis of variance (ANOVA) (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups and apply an unpaired two-samples t-test (parametric) or the Mann-Whitney U Test (non-parametric) when we have exactly two groups.
 %
@@ -470,6 +493,18 @@ We apply ANOVA and the t-test when the data meets the following three conditions
 %
 We use Bartlett's test of homogeneity of variances and the Shapiro-Wilk test of normality to check if we can apply ANOVA and the t-test.
 %
-We obey the independence condition since we collect the data of all participants of our survey study Independently.
+We obey the independence condition since we collect the data of all survey study participants independently.
 %
-Although ANOVA and the t-test can be robust to violations of the homogeneity of variances and the normality assumptions \citep{howell2012statistical}, we decide to use the non-parametric alternatives instead to prevent us from getting unreliable results.
+ANOVA and the t-test can be robust to violations of the homogeneity of variances and the normality assumptions \citep{howell2012statistical}.
+%
+However, if one of the assumptions is violated then it is important to keep the sample sizes as equal as possible \citep{howell2012statistical}.
+%
+Finally, for the multi-group features (nationality, language, and ethnicity), we apply pairwise statistical tests (Mann-Whitney U or t-test) between all groups.
+%
+We only do this for the scenarios where we find significant differences between the groups through ANOVA/Kruskal-Wallis.
+%
+However, we now may introduce Type I errors as we perform many pairwise statistical tests between all groups.
+%
+As a result, we might incorrectly reject the null hypothesis for some of the pairwise tests, meaning that we find significant differences between some of the groups while there are not actually.
+%
+Therefore, we perform the post hoc Benjamini-Hochberg procedure to correct the p-values of the pairwise test results to control the Type I errors.

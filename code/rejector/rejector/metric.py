@@ -156,13 +156,19 @@ class Metric:
         )
         pyplot.show()
 
-    def print_optimal_threshold_stats(self) -> None:
-        """Prints the statistics for the optimal rejection threshold."""
+    def print_optimal_threshold_stats(self, use_pdf=False) -> None:
+        """Prints the statistics for the optimal rejection threshold.
+
+        Args:
+            use_pdf (bool, optional): Whether to use the PDF or prediction counts. Defaults to False.
+        """
         thresholds = np.arange(0.5, 1.0, 0.001)
 
         effectiveness_values = list(
-            map(lambda t: self.calculate_effectiveness(t, use_pdf=False), thresholds)
+            map(lambda t: self.calculate_effectiveness(t, use_pdf=use_pdf), thresholds)
         )
+
+        v0 = self.calculate_effectiveness(0.5, use_pdf=use_pdf)
 
         (index, max_effectiveness) = self.maximum_effectiveness(effectiveness_values)
         correct_original = list(
@@ -180,12 +186,15 @@ class Metric:
         )
         print("Optimal threshold: ", optimal_threshold)
         print("Optimal V(threshold): ", max_effectiveness)
-        print("Total value: ", max_effectiveness)
+        print("V(0): ", v0)
         print("Num accepted: ", len(accepted))
         print(
             "Accuracy original model: ", len(correct_original) / len(self.predictions)
         )
-        print("Accuracy accepted: ", len(correct_accepted) / len(accepted))
+        if len(accepted) > 0:
+            print("Accuracy accepted: ", len(correct_accepted) / len(accepted))
+        else:
+            print("Accuracy accepted: -")
         print("Num rejected: ", len(rejected))
         RR = len(rejected) / len(self.predictions)
         print("Percentage rejected: ", RR)
@@ -259,77 +268,37 @@ class Metric:
         cls,
         metrics: List[Tuple[str, Metric]],
         filename: str,
-        show_yaxis_title: bool,
+        type: str,
         bw_adjust: float,
     ):
         colors = sns.color_palette("colorblind")
-        fig, ax = pyplot.subplots(2, 2)
 
         for index, (label, metric) in enumerate(metrics):
-            tps = Prediction.set_of_tps(metric.predictions)
-            tns = Prediction.set_of_tns(metric.predictions)
-            fps = Prediction.set_of_fps(metric.predictions)
-            fns = Prediction.set_of_fns(metric.predictions)
-            tps_conf = list(map(lambda p: p.predicted_value, tps))
-            tns_conf = list(map(lambda p: p.predicted_value, tns))
-            fps_conf = list(map(lambda p: p.predicted_value, fps))
-            fns_conf = list(map(lambda p: p.predicted_value, fns))
+            if type == "TP":
+                predictions = Prediction.set_of_tps(metric.predictions)
+            elif type == "TN":
+                predictions = Prediction.set_of_tns(metric.predictions)
+            elif type == "FP":
+                predictions = Prediction.set_of_fps(metric.predictions)
+            elif type == "FN":
+                predictions = Prediction.set_of_fns(metric.predictions)
+
+            conf = list(map(lambda p: p.predicted_value, predictions))
+
             sns.kdeplot(
-                tps_conf,
+                conf,
                 color=colors[index],
-                label=f"{label}",
                 zorder=1,
                 linewidth=3,
-                ax=ax[0, 0],
                 bw_adjust=bw_adjust,
-            )
-            sns.kdeplot(
-                tns_conf,
-                color=colors[index],
                 label=f"{label}",
-                zorder=1,
-                linewidth=3,
-                ax=ax[0, 1],
-                bw_adjust=bw_adjust,
             )
-            sns.kdeplot(
-                fps_conf,
-                color=colors[index],
-                label=f"{label}",
-                zorder=1,
-                linewidth=3,
-                ax=ax[1, 0],
-                bw_adjust=bw_adjust,
-            )
-            sns.kdeplot(
-                fns_conf,
-                color=colors[index],
-                label=f"{label}",
-                zorder=1,
-                linewidth=3,
-                ax=ax[1, 1],
-                bw_adjust=bw_adjust,
-            )
-            ax[0, 1].legend(loc="upper left")
 
-            ax[0, 0].set_title("TP")
-            ax[0, 1].set_title("TN")
-            ax[1, 0].set_title("FP")
-            ax[1, 1].set_title("FN")
-
-            ax[0, 0].set_xlabel("Confidence value")
-            ax[0, 1].set_xlabel("Confidence value")
-            ax[1, 0].set_xlabel("Confidence value")
-            ax[1, 1].set_xlabel("Confidence value")
-
-            ax[0, 0].set_xlim(0.4, 1.1)
-            ax[0, 1].set_xlim(0.4, 1.1)
-            ax[1, 0].set_xlim(0.4, 1.1)
-            ax[1, 1].set_xlim(0.4, 1.1)
-
-        if show_yaxis_title:
-            pyplot.ylabel("Density")
+        pyplot.ylabel("Density")
+        pyplot.xlabel("Confidence value")
+        pyplot.xlim(0.4, 1.1)
         pyplot.tight_layout()
+        pyplot.legend()
         pyplot.savefig(filename, format="pdf", bbox_inches="tight")
         pyplot.show()
 
@@ -363,7 +332,7 @@ class Metric:
             optimal_t_rr = round(len(rejected) / len(metric.predictions), 2)
 
             for x in X:
-                n = int(x * 100)
+                n = int(x * len(sorted_predictions))
                 accepted = sorted_predictions[n:]
                 correct_accepted = list(
                     filter(lambda p: p.predicted_class == p.actual_class, accepted)

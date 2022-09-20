@@ -1,4 +1,5 @@
 \chapter{Value-sensitive rejector}
+\label{ch:rejector}
 As concluded in the \nameref{sec:related-work}, there is a need for \textit{value-sensitive} metrics for measuring the performance of ML models, especially for social-technical applications such as hate speech detection.
 %
 We also concluded that manual human moderation is the most effective and that most automatic hate speech detection methods do not perform well on unseen data.
@@ -9,7 +10,7 @@ We do this by taking the values of TP, TN, FP, FN, and rejected predictions into
 %
 % Correct predictions (TP and TN) result in positive value (gains), while incorrect (FP and FN) and rejected predictions result in negative value (costs).
 %
-Section \ref{sec:survey} will explain how we assess these values.
+Chapter \ref{ch:survey} will explain how we assess these values.
 %
 We assume that we know these values for the remaining part of this chapter.
 %
@@ -39,7 +40,7 @@ We can derive the subsets of TP, TN, FP, and FN predictions from the complete se
 %
 
 %
-We should be free to use any value for $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ since we do not know which values will come from the survey study in chapter \ref{sec:survey}.
+We should be free to use any value for $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ since we do not know which values will come from the survey study in chapter \ref{ch:survey}.
 %
 However, for constructing our metric, we can define several conditions if we assume that $V_{tp}$ and $V_{tn}$ are gains and, therefore, positive values and $V_{fp}$, $V_{fn}$, and $V_{r}$ are costs and, therefore, negative values.
 %
@@ -147,14 +148,14 @@ We accept all predictions for which the confidence value $c$ is greater than or 
 %
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{Figures/training.pdf}
+    \includegraphics[scale=.7]{Figures/training.pdf}
     \caption{\textbf{Training phase:} flow diagram that visualizes how the value-sensitive rejector calculates the optimal rejection threshold $\tau_O$.}
     \label{fig:training}
 \end{figure}
 %
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{Figures/deployment.pdf}
+    \includegraphics[scale=.7]{Figures/deployment.pdf}
     \caption{\textbf{Deployment phase:} flow diagram that visualizes how the value-sensitive rejector uses the optimal rejection threshold $\tau_O$ and the prediction confidence $c$ to determine when to accept or reject a prediction from unseen data in deployment.}
     \label{fig:deployment}
 \end{figure}
@@ -194,6 +195,18 @@ We implement all models in Python.
 We implement the LR model with scikit-learn\footnote{\url{https://scikit-learn.org/}}, the CNN model with TensorFlow\footnote{\url{https://www.tensorflow.org/}}, and the DistilBERT model with a combination of Hugging Face\footnote{\url{https://huggingface.co/}} and PyTorch\footnote{\url{https://pytorch.org/}}.
 %
 We use Google Colab\footnote{\url{https://colab.research.google.com/}} to train all models.
+%
+
+\subsection{Hyperparameter optimization}
+We perform hyperparameter optimization on all three models.
+%
+For the CNN model, we apply random search to optimize the values of the learning rate, batch size, and the number of epochs.
+%
+For the DistilBERT model, we apply Population Based Training (PBT) \citep{jaderberg2017population} implemented in Tune \citep{liaw2018tune}, to optimize the values of the batch size, learning rate, and the number of epochs since Tune.
+%
+PBT combines random search and hand tuning by discovering potentially optimal hyperparameter values along the way to reduce optimization time \citep{jaderberg2017population}.
+%
+For the LR model, we use the LogisticRegressionCV model from scikit-learn that automatically optimizes the C value (inverse of regularization strength) of the LR model.
 
 \subsection{Calibration}
 The problem with most neural network models is that they are often not calibrated \citep{guo2017calibration,sayin2021science}.
@@ -248,7 +261,9 @@ For the CNN and the DistilBERT models, we split the training set up into a train
 We use this validation set to calibrate the trained models by finding the optimal $T$ value for the temperature scaling method.
 %
 We preprocess the data by tokenizing all URLs, user mentions, and emojis since these do not contain any valuable information.
-% TODO: perhaps add wordsegment library for segmenting the hashtags.
+%
+We split all hashtags up into separate words using the WordSegment\footnote{\url{https://pypi.org/project/wordsegment/}} library.
+%
 The remaining parts of the preprocessing, such as removing whitespaces and stop words or the tokenization process, are dedicated to the different frameworks we use per model.
 %
 
@@ -260,6 +275,8 @@ The seen dataset is the test set from the \citet{waseem2016hateful} dataset.
 The unseen dataset is a test set from the \citet{basile2019semeval} dataset that consists of 10K English tweets labelled as either hateful (against immigrants or women) or not hateful.
 %
 We use the unseen dataset to simulate how the models would perform in a realistic use-case when a model is trained on one dataset and applied to a different dataset.
+%
+
 %
 We want to study the effect of bias and how this affects the results when using our value-sensitive metric for evaluating the models with a reject option.
 %
@@ -284,6 +301,7 @@ A small bandwidth value results in an estimated PDF with much variance, while a 
 We use maximum likelihood cross-validation to find the optimal bandwidth value.
 
 \subsection{Application of the value-sensitive rejector}
+\label{sec:rejector-application}
 We apply the training phase of the value-sensitive rejector (refer to figure \ref{fig:training}) to all three models for both the seen and the unseen datasets.
 %
 Therefore, we use our metric from section \ref{sec:value-metric} to calculate the total value $V(\tau)$ (formula \ref{for:final-V}) at all possible rejection thresholds ($\tau$) for all different setups.

@@ -1,16 +1,20 @@
+from typing import List
 import numpy as np
 import pandas as pd
 import krippendorff
 import seaborn as sns
 import matplotlib.pyplot as plt
+from statsmodels.stats.multitest import multipletests
 from scipy import stats
 from datetime import datetime
 import matplotlib.ticker as mtick
 from string import digits
 import math
+import itertools
 
 TYPES = ["TP", "TN", "FP", "FN", "REJ"]
 SCALES = ["ME", "S100"]
+PROLIFIC_COLUMN = "prolificid. "
 
 
 class Analysis:
@@ -174,7 +178,7 @@ class Analysis:
             pd.DataFrame: dataframe that consists of all normalized
             magnitude estimates.
         """
-        prolific_ids = data.loc[:, "prolificid. "]
+        prolific_ids = data.loc[:, PROLIFIC_COLUMN]
         mes = cls.magnitude_estimates(data=data, num_scenarios=num_scenarios)
         normalized_mes = cls.normalize(mes).mul(100)
         hatefulness = cls.hatefulness(
@@ -200,7 +204,7 @@ class Analysis:
             pd.DataFrame: dataframe that consists of all normalized
             100-level scale values.
         """
-        prolific_ids = data.loc[:, "prolificid. "]
+        prolific_ids = data.loc[:, PROLIFIC_COLUMN]
         s100 = cls.s100_values(data=data, num_scenarios=num_scenarios)
         hatefulness = cls.hatefulness(
             data=data, scale="S100", num_scenarios=num_scenarios
@@ -253,11 +257,12 @@ class Analysis:
             data_mes=data_mes, data_s100=data_s100, show_individual=show_individual
         )
         sns.boxplot(x="Scenario", y="(Dis)agreement", hue="Scale", data=plot_data)
-        plt.title("Boxplots of all questions")
+        # plt.title("Boxplots of all scenarios")
         sns.despine(offset=10, trim=True)
         plt.xlabel("Scenario")
         plt.ylabel("(Dis)Agreement")
         plt.xticks(rotation=90)
+        plt.savefig("dual-boxplots.pdf", format="pdf", bbox_inches="tight")
         plt.show()
 
     @classmethod
@@ -271,16 +276,26 @@ class Analysis:
             scale (str, optional): 'ME' or 'S100'. If nothing is passed, then both are plotted. Defaults to None.
             show_individual (bool, optional): Whether to show one boxplot per scenario or not. Defaults to True.
         """
+        if show_individual:
+            indv_title = "INDV"
+        else:
+            indv_title = "GRP"
+
         plot_data = cls.convert_to_boxplot_data(
             data=data, show_individual=show_individual
         )
-        sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data)
-        plt.title(f"Boxplots of all questions for the {scale_title} scale")
+        sns.boxplot(x="Scenario", y="(Dis)agreement", data=plot_data, color="b")
+        # plt.title(f"Boxplots of all scenarios for the {scale_title} scale")
 
         sns.despine(offset=10, trim=True)
         plt.xlabel("Scenario")
         plt.ylabel("(Dis)Agreement")
         plt.xticks(rotation=90)
+        plt.savefig(
+            f"boxplots-{scale_title}-{indv_title}.pdf",
+            format="pdf",
+            bbox_inches="tight",
+        )
         plt.show()
 
     @classmethod
@@ -298,18 +313,26 @@ class Analysis:
 
         plt.xlabel("Scenario")
         plt.ylabel("Percentage")
-        plt.title("Percentage of (non)hateful rated scenarios")
+        # plt.title("Percentage of (non)hateful rated scenarios")
+        plt.savefig("hatefulness.pdf", format="pdf", bbox_inches="tight")
         plt.show()
 
     @classmethod
-    def print_question_statistics(cls, data1: pd.DataFrame, data2: pd.DataFrame):
+    def print_question_statistics(
+        cls, data1: pd.DataFrame, data2: pd.DataFrame
+    ) -> pd.DataFrame:
         """Prints all statistics between two datasets for each question.
 
         Args:
             data1 (pd.DataFrame): the first dataset.
             data2 (pd.DataFrame): the second dataset.
+
+        Returns:
+            pd.DataFrame: dataframe containing the p values of the question statistics.
         """
         all_scores, question_names = cls.convert_to_question_scores(data1, data2)
+
+        df = pd.DataFrame(columns=["Scenario", "Mann-Whitney U", "T-test"])
 
         for index, question in enumerate(question_names):
             print("=================================")
@@ -319,26 +342,44 @@ class Analysis:
 
             for index, s in enumerate(question_scores):
                 shapiro = stats.shapiro(s)
-                if shapiro.pvalue > 0.05:
+                if shapiro.pvalue >= 0.05:
                     print(f"Dataset {index} is normally distributed: ", shapiro)
 
             bartlett = stats.bartlett(*question_scores)
             mannwhitneyu = stats.mannwhitneyu(*question_scores)
             ttest_ind = stats.ttest_ind(*question_scores)
 
-            if bartlett.pvalue > 0.05:
+            if bartlett.pvalue >= 0.05:
                 print("Variances are equal: ", bartlett)
 
             if mannwhitneyu.pvalue < 0.05:
-                print("Statistical difference: ", mannwhitneyu)
+                print("Significant difference: ", mannwhitneyu)
+            else:
+                print("No significant difference: ", mannwhitneyu)
 
             if ttest_ind.pvalue < 0.05:
-                print("Statistical difference: ", ttest_ind)
+                print("Significant difference: ", ttest_ind)
+            else:
+                print("No significant difference: ", ttest_ind)
+
+            df = df.append(
+                {
+                    "Scenario": question,
+                    "Mann-Whitney U": mannwhitneyu.pvalue,
+                    "T-test": ttest_ind.pvalue,
+                },
+                ignore_index=True,
+            )
+
+        return df
 
     @classmethod
     def print_question_statistics_multiple(cls, *datasets):
         """Prints all statistics between all passed sample dataset lists for each question."""
         all_scores, question_names = cls.convert_to_question_scores(*datasets)
+
+        df = pd.DataFrame(columns=["Scenario", "Kruskal-Wallis", "One-way ANOVA"])
+
         for index, question in enumerate(question_names):
             print("=================================")
             print("Question: ", question)
@@ -347,21 +388,122 @@ class Analysis:
 
             for index, s in enumerate(question_scores):
                 shapiro = stats.shapiro(s)
-                if shapiro.pvalue > 0.05:
+                if shapiro.pvalue >= 0.05:
                     print(f"Dataset {index} is normally distributed: ", shapiro)
 
             bartlett = stats.bartlett(*question_scores)
             kruskal = stats.kruskal(*question_scores)
             f_oneway = stats.f_oneway(*question_scores)
 
-            if bartlett.pvalue > 0.05:
+            if bartlett.pvalue >= 0.05:
                 print("Variances are equal: ", bartlett)
 
             if kruskal.pvalue < 0.05:
-                print("Statistical difference: ", kruskal)
+                print("Significant difference between groups: ", kruskal)
+                matrix = cls.nonparametric_pair_tests(question_scores)
+                pd.DataFrame(matrix).to_csv(f"{question}_nonparametric.csv")
+            else:
+                print("Groups are equal: ", kruskal)
 
             if f_oneway.pvalue < 0.05:
-                print("Statistical difference: ", f_oneway)
+                print("Significant difference between groups: ", f_oneway)
+                matrix = cls.parametric_pair_tests(question_scores)
+                pd.DataFrame(matrix).to_csv(f"{question}_parametric.csv")
+            else:
+                print("Groups are equal: ", f_oneway)
+
+            df = df.append(
+                {
+                    "Scenario": question,
+                    "Kruskal-Wallis": kruskal.pvalue,
+                    "One-way ANOVA": f_oneway.pvalue,
+                },
+                ignore_index=True,
+            )
+
+        return df
+
+    @staticmethod
+    def nonparametric_pair_tests(
+        question_scores: List[List[float]],
+    ) -> List[List[float]]:
+        """Conducts non-parametric tests between all pairs of groups.
+
+        Args:
+            question_scores (List[List[float]]): list of lists containing
+            the scores of all participants per demographic group.
+
+        Returns:
+            List[List[float]]: pairwise corrected p-values.
+        """
+        pvalues = []
+        pairs = []
+        matrix = np.empty([len(question_scores), len(question_scores)])
+
+        for (index1, data1), (index2, data2) in itertools.product(
+            enumerate(question_scores), repeat=2
+        ):
+            mannwhitneyu = stats.mannwhitneyu(data1, data2)
+            pvalues.append(mannwhitneyu.pvalue)
+            pairs.append((index1, index2))
+
+        (_, pvalues_corrected, _, _) = multipletests(pvalues, method="fdr_bh")
+
+        for index, (dataset1_index, dataset2_index) in enumerate(pairs):
+            pvalue = pvalues_corrected[index]
+            matrix[dataset1_index][dataset2_index] = pvalue
+            if pvalue < 0.05:
+                print(
+                    f"Significant difference (Mann-Whitney U) between dataset {dataset1_index} and {dataset2_index}: ",
+                    pvalue,
+                )
+            else:
+                print(
+                    f"Groups are equal (Mann-Whitney U) between dataset {dataset1_index} and {dataset2_index}: ",
+                    pvalue,
+                )
+
+        return matrix
+
+    @staticmethod
+    def parametric_pair_tests(question_scores: List[List[float]]):
+        """Conducts parametric tests between all pairs of groups.
+
+        Args:
+            question_scores (List[List[float]]): list of lists containing
+            the scores of all participants per demographic group.
+
+        Returns:
+            List[List[float]]: pairwise corrected p-values.
+        """
+        pvalues = []
+        pairs = []
+        matrix = np.empty([len(question_scores), len(question_scores)])
+
+        for (index1, data1), (index2, data2) in itertools.product(
+            enumerate(question_scores), repeat=2
+        ):
+            ttest_ind = stats.ttest_ind(data1, data2)
+            pvalues.append(ttest_ind.pvalue)
+            pairs.append((index1, index2))
+
+        (_, pvalues_corrected, _, _) = multipletests(pvalues, method="fdr_bh")
+
+        for index, (dataset1_index, dataset2_index) in enumerate(pairs):
+            pvalue = pvalues_corrected[index]
+            matrix[dataset1_index][dataset2_index] = pvalue
+            if pvalue < 0.05:
+                print(
+                    f"Statistical difference (independent t-test) between dataset {dataset1_index} and {dataset2_index}: ",
+                    pvalue,
+                )
+            else:
+                print(
+                    f"Groups are equal (independent t-test) between dataset {dataset1_index} and {dataset2_index}: ",
+                    pvalue,
+                )
+
+        return matrix
 
     @staticmethod
     def filter_data(
@@ -382,7 +524,7 @@ class Analysis:
         if column_value in demo_data_column.groups.keys():
             filtered_demo_data = demo_data_column.get_group(column_value)
             filtered_ids = filtered_demo_data.loc[:, "Participant id"].tolist()
-            return data.loc[data["prolificid. "].isin(filtered_ids)].reset_index(
+            return data.loc[data[PROLIFIC_COLUMN].isin(filtered_ids)].reset_index(
                 drop=True
             )
         else:
@@ -403,7 +545,7 @@ class Analysis:
         Returns:
             pd.DataFrame: the filtered demographics data.
         """
-        prolific_ids = data.loc[:, "prolificid. "].tolist()
+        prolific_ids = data.loc[:, PROLIFIC_COLUMN].tolist()
         return demo_data.loc[
             demo_data["Participant id"].isin(prolific_ids)
         ].reset_index(drop=True)
@@ -458,6 +600,8 @@ class Analysis:
         plt.xlabel("Magnitude Estimation")
         plt.ylabel("100-level")
         plt.tight_layout()
+        plt.ylim(-110, 110)
+        plt.xlim(-110, 110)
         plt.savefig("correlation.pdf", format="pdf", bbox_inches="tight")
         plt.show()
 
@@ -655,6 +799,26 @@ class Analysis:
             all_scores.append(question_scores)
 
         return all_scores, question_names
+
+    @staticmethod
+    def group_scenario_scores(data: pd.DataFrame) -> pd.DataFrame:
+        """Groups the scores to the individual scenarios of each participant
+        to mean group scores (so mean values of TP, TN, FP, FN, and rejected predictions).
+
+        Args:
+            data (pd.DataFrame): the original data with scores to individual scenarios.
+
+        Returns:
+            pd.DataFrame: the converted data where the scores are aggregated per scenario type.
+        """
+        prolific_ids = data[PROLIFIC_COLUMN]
+        grouped_data = {PROLIFIC_COLUMN: prolific_ids}
+        for type in TYPES:
+            type_data = data.filter(regex=f"^{type}.*$", axis=1)
+            type_means = type_data.mean(axis=1).tolist()
+            grouped_data[type] = type_means
+
+        return pd.DataFrame(grouped_data)
 
     @staticmethod
     def __get_value(row, scale, type, index, question):

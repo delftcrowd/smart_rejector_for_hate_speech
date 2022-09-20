@@ -95,9 +95,9 @@ They found that using pre-trained word embeddings such as GloVe does not result 
 
 Most studies use supervised learning techniques that range from traditional ML to deep learning (DL) classification models, and a few use unsupervised learning techniques to cluster social media posts.
 %
-Support Vector Machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and Logistic Regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
+Support-vector machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and logistic regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
 %
-\citet{davidson2017automated} found that SVM and LR perform significantly better than other traditional ML techniques such as Naive Bayes, Decision Trees, and Random Forests.
+\citet{davidson2017automated} found that SVM and LR perform significantly better than other traditional ML techniques such as naive Bayes, decision trees, and random forests.
 %
 \citet{badjatiya2017deep} experimented with various configurations of word embeddings and two DL models: a convolutional neural network (CNN) and a long short-term memory (LSTM) model.
 %
@@ -105,7 +105,7 @@ They found that CNN performs better than LSTM.
 %
 Given the recent popularity of Bidirectional Encoder Representations from Transformers (BERT) models \citep{devlin2018bert} in the NLP field, studies such as \citet{alatawi2021detecting} found that BERT models achieve slightly better classification performance than DL models.
 %
-\citet{rodriguez2019automatic} use the unsupervised learning method, K-means clustering, to cluster social media posts for identifying topics that potentially promote hate speech.
+\citet{rodriguez2019automatic} use the unsupervised learning method, k-means clustering, to cluster social media posts for identifying topics that potentially promote hate speech.
 %
 Based on the findings of these studies, we will experiment with three models in our project: LR, CNN, and DistilBERT (a lightweight version of BERT \citep{sanh2019distilbert}).
 
@@ -189,7 +189,7 @@ They found that for the same precision values, the perceived value changes depen
 %
 \citet{casati2021value} propose to develop new metrics for evaluating ML models with a reject option that considers domain-specific values.
 %
-Our work aligns with both studies since we create a human-centred metric for evaluating hate speech classification models with a reject option that incorporates human value derived from a survey study.
+Our work aligns with the latter two studies since we create a human-centred metric for evaluating hate speech classification models with a reject option that incorporates human value derived from a survey study.
 
 
 \section{Value assessment}
@@ -478,7 +478,7 @@ Some papers analyze the correlation between different ME scales for validation, 
 %
 Others compare ME with another validated scale that can be of any type.
 %
-For example, in \cite{maddalena2017crowdsourcing} which is about judging the relevance of documents, the authors compared the ME scale with two validated ordinal scales for the same dataset \citep{maddalena2017crowdsourcing}.
+For example, in \citet{maddalena2017crowdsourcing} which is about judging the relevance of documents, the authors compared the ME scale with two validated ordinal scales for the same dataset \citep{maddalena2017crowdsourcing}.
 %
 In \citet{roitero2018fine}, the authors applied cross-modality analysis between a bounded scale that consists of 100 levels (now known as the 100-level scale) and the ME scale and found that they were positively correlated.
 %

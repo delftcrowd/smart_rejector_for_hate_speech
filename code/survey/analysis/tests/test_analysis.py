@@ -521,6 +521,73 @@ class TestAnalysis(unittest.TestCase):
         self.assertEqual(expected, question_scores)
         self.assertEqual(question_names, ["TP1", "TN1", "FP1", "FN1", "REJ1"])
 
+    def test_convert_to_question_scores_grouped_data(self):
+        group1 = pd.DataFrame(
+            {
+                "TP": [100.0, 10.0, 1.0],
+                "TN": [60.0, 6.0, 0.6],
+                "FP": [10.0, 1.0, 0.1],
+                "FN": [100.0, 10.0, 1.0],
+                "REJ": [30.0, 3.0, 0.3],
+            }
+        )
+
+        group2 = pd.DataFrame(
+            {
+                "TP": [-100.0, -10.0, -1.0],
+                "TN": [-60.0, -6.0, -0.6],
+                "FP": [-10.0, -1.0, -0.1],
+                "FN": [-100.0, -10.0, -1.0],
+                "REJ": [-30.0, -3.0, -0.3],
+            }
+        )
+
+        tp = [[100.0, 10.0, 1.0], [-100.0, -10.0, -1.0]]
+        tn = [[60.0, 6.0, 0.6], [-60.0, -6.0, -0.6]]
+        fp = [[10.0, 1.0, 0.1], [-10.0, -1.0, -0.1]]
+        fn = [[100.0, 10.0, 1], [-100.0, -10.0, -1]]
+        rej = [[30.0, 3.0, 0.3], [-30.0, -3.0, -0.3]]
+        expected = [tp, tn, fp, fn, rej]
+
+        question_scores, question_names = Analysis.convert_to_question_scores(
+            group1, group2
+        )
+
+        self.assertEqual(expected, question_scores)
+        self.assertEqual(question_names, ["TP", "TN", "FP", "FN", "REJ"])
+
+    def test_group_scenario_scores(self):
+        data = pd.DataFrame(
+            {
+                "prolificid. ": [1, 2, 3],
+                "TP1": [100.0, 10.0, 1.0],
+                "TP2": [50.0, 2.0, 3.0],
+                "TN1": [60.0, 6.0, 0.6],
+                "TN2": [10.0, 1.0, 0.1],
+                "FP1": [-10.0, -1.0, -0.1],
+                "FP2": [-5.0, -1.0, -0.1],
+                "FN1": [-100.0, -10.0, -1.0],
+                "FN2": [-200.0, -5.0, -1.0],
+                "REJ1": [30.0, 3.0, 0.3],
+                "REJ2": [0.0, 0.0, 0.0],
+            }
+        )
+
+        expected = pd.DataFrame(
+            {
+                "prolificid. ": [1, 2, 3],
+                "TP": [75.0, 6.0, 2.0],
+                "TN": [35.0, 3.5, 0.35],
+                "FP": [-7.5, -1.0, -0.1],
+                "FN": [-150.0, -7.5, -1.0],
+                "REJ": [15.0, 1.5, 0.15],
+            }
+        )
+
+        grouped_data = Analysis.group_scenario_scores(data)
+
+        self.assertTrue(expected.equals(grouped_data))
+
 
 if __name__ == "__main__":
     unittest.main()

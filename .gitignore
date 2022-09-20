@@ -185,3 +185,6 @@ code/models/tmp_trainer
 
 # Code plots
 code/**/*.pdf
+
+# CSV files
+*.csv

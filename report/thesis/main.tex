@@ -37,7 +37,7 @@ headsepline, % Uncomment to get a line under the header
 %chapterinoneline, % Uncomment to place the chapter title next to the number on one line
 %consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
 ]{MastersDoctoralThesis} % The class file specifying the document structure
-
+\usepackage{xcolor,colortbl}
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 
@@ -52,6 +52,14 @@ headsepline, % Uncomment to get a line under the header
 \usepackage[colorinlistoftodos]{todonotes}
 \usepackage{amsmath}
 \usepackage{enumitem}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{tabularx,booktabs}
+\usepackage{pifont}
+\usepackage{float}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\textcolor{red}{\ding{55}}}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
 %----------------------------------------------------------------------------------------
 %	MARGIN SETTINGS
 %----------------------------------------------------------------------------------------
@@ -240,7 +248,8 @@ headsepline, % Uncomment to get a line under the header
     \textbf{LR} & \textbf{l}ogistic \textbf{r}egression\\
     \textbf{LSTM} & \textbf{l}ong \textbf{s}hort-\textbf{t}erm \textbf{m}emory\\
     \textbf{ML} & \textbf{m}achine \textbf{l}earning\\
-    \textbf{PDF} & \textbf{p}roability \textbf{d}ensity \textbf{f}unction \\
+    \textbf{NLP} & \textbf{n}atural \textbf{l}anguage \textbf{p}rocessing\\
+    \textbf{PDF} & \textbf{p}robability \textbf{d}ensity \textbf{f}unction \\
     \textbf{POS} & \textbf{p}art-\textbf{o}f-\textbf{s}peech \\
     \textbf{RR} & \textbf{r}ejection \textbf{r}ate\\
     \textbf{SVM} & \textbf{s}upport \textbf{v}ector \textbf{m}achine\\
@@ -316,6 +325,7 @@ headsepline, % Uncomment to get a line under the header
 % Uncomment the lines as you write the Appendices
 
 \include{Appendices/appendix A}
+\include{Appendices/appendix B}
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
