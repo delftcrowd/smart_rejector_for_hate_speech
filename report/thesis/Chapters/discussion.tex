@@ -1,41 +1,40 @@
 \chapter{Discussion}
-In this thesis project, we worked on a hybrid human-AI solution for detecting hate speech.
-%
-The main problem is that manual moderation is the most reliable but infeasible, and that automatic moderation through detection algorithms is the most performant but sometimes unreliable.
-%
-We focused on rejecting predictions of ML models for hate speech detection.
-%
-However, determing when to accept or reject predictions depends on the context and, more specifically, the implications of accepting/rejecting correct or incorrect predictions.
-%
-We denoted these implications as values of TP, TN, FP, FN, and rejected predictions.
-%
-Our main goal was finding out how we can reject ML predictions in a value-sensitive manner for hate speech detection.
-%
-We split this up into two parts.
-%
-First, we wanted to find out how we can measure the total value of ML models with a reject option.
-%
-By maximizing the total value, we know when we need to accept or reject predictions.
-%
-We tackled this by introducing a value-sensitive metric that we use for calculating the optimal rejection threshold.
-%
-Second, we wanted to determine the value ratios between TP, TN, FP, FN, and rejected predictions.
-%
-We determined these value ratios by conducting a large survey study in which we presented participants with different hate speech detection scenarios in which they had to provide their judgements using the ME scale.
-%
-
 %
 This chapter analyzes the results from chapter \ref{ch:results}.
 %
-First, we discuss the main findings of the survey study in section \ref{sec:discussion-survey} and the main findings of our value-sensitive rejector in section \ref{sec:discussion-rejection}.
-%
-Then, we answer the our research questions in section \ref{sec:discussion-research}.
+First, we discuss the main findings of the survey study in section \ref{sec:discussion-survey} and our value-sensitive rejector in section \ref{sec:discussion-rejection}.
 %
 Finally, we highlight some limitations of our approach in section \ref{sec:discussion-limitations} and give some recommendations in section \ref{sec:discussion-recommendations}.
 
 
 \section{Survey study}
 \label{sec:discussion-survey}
+Regarding value ratios, most results were in line with our hypotheses and both scales returned the same results in terms of the order of the values ($V_{fn} < V_{fp} < V_{r} < V_{tp} < V_{tn}$).
+%
+As expected, we found that participants disagree with the FP, FN, and rejected predictions, the value of an FN is lower than an FP, and that the average value of an FP and an FN was lower than the rejection value.
+%
+The results show that participants find a hateful post not detected as hate speech worse than a non-hateful post detected as hate speech.
+%
+This is in line with our assumption of allowing hate speech (FN) to have a more negative impact on the social media users than suppressing freedom of speech by forbidding neutral speech (FP).
+%
+The value of rejection was the closest to 0 (neutral), because rejected predictions do not cause any benefit or harm but only reduce the value by the human moderation effort.
+%
+However, there are two things that are somewhat supprising.
+%
+First, participants appreciated correct predictions more than incorrect predictions since participants gave higher absolute values to TP and TN than FP and FN.
+%
+We expect participants to give lower absolute response values to correct predictions since it is expected from the automatic detection algorithms to produce correct predictions.
+%
+However, we look at this from a computer science perspective where we want to prevent incorrect predictions whereas the participants might think that correct predictions are more important.
+%
+Second, we are suprised to see that the value of a TN is greater than of a TP while we expected the opposite to hold.
+%
+One possible reason could be that people slightly disagree more on what is considered hateful among the TP scenarios, as can be seen in figure \ref{fig:hatefulness}.
+%
+
+%
+% TODO: reliability
+
 \todo[inline]{Discuss value ratios}
 \todo[inline]{Discuss reliability values and why the values are low when looking at the scenario types only}
 \todo[inline]{Discuss why TN3 and TN7 have highest agreement scores}
@@ -54,15 +53,15 @@ Finally, we highlight some limitations of our approach in section \ref{sec:discu
 
 \section{Value-sensitive rejection}
 \label{sec:discussion-rejection}
+
 \section{Implications}
 \todo[inline]{Explain that \cite{olteanu2017limits} claims that we need more human-centred metrics instead of abstract metrics such as precision and we agree with that by introducing our own human-centred metric}
 
-\section{Research questions}
-\label{sec:discussion-research}
 
 \todo[inline]{Answer research questions}
 
 \section{Limitations}
+\label{sec:discussion-limitations}
 \todo[inline]{Hate speech is difficult domain as there tend to be a lot of disagreement between people about what is considered hate speech and what not. \citet{ross2017measuring} found low Krippendorff alpha values in a hate speech survey. So our findings are in line with theirs.}
 \todo[inline]{Explain limitations of the metric and the survey study}
 \todo[inline]{Finally, we should point out the limitations of the demographic analysis.}
@@ -73,6 +72,7 @@ Finally, we highlight some limitations of our approach in section \ref{sec:discu
 \todo[inline]{The rejection threshold is calculated using the test set. This test set needs to be as realistic as possible. Furthermore we need to have calibrated models since we rely purely on the confidence values. This is also hard to realize. Temperature scaling can help, but it is still limited.}
 
 \section{Recommendations}
+\label{sec:discussion-recommendations}
 \todo[inline]{Magnitude Estimation seems promising for future research in HCI.}
 \todo[inline]{Personal and demographic characterisitcs might have  a big impact. So further analysis on those aspects seem relevant.}
 \todo[inline]{Perhaps we can train ML models using the values of TP, TN, FP, FN, rejection in an integrated rejector. So we train the ML model and the rejector simultanously using the values from the survey. So then during training, the FN predictions are punished more than FP predictions.}

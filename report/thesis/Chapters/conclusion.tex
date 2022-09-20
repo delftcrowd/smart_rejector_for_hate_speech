@@ -1,1 +1,26 @@
 \chapter{Conclusion}
+In this thesis project, we worked on a hybrid human-AI solution for detecting hate speech.
+%
+The main problem is that manual moderation is the most reliable solution but simply infeasible, and that automatic moderation through detection algorithms is the most performant but sometimes unreliable.
+%
+Therefore, we focused on rejecting predictions of ML models for hate speech detection.
+%
+However, determing when to accept or reject predictions depends on the context and, more specifically, the implications of accepting/rejecting correct or incorrect predictions.
+%
+We denoted these implications as values of TP, TN, FP, FN, and rejected predictions.
+%
+Our main goal was finding out how we can reject ML predictions in a value-sensitive manner for hate speech detection.
+%
+We split this up into two parts.
+%
+First, we wanted to find out how we could measure the total value of ML models with a reject option.
+%
+By maximizing the total value, we know when to accept or reject predictions.
+%
+% We tackled this by introducing a value-sensitive metric that we use for calculating the optimal rejection threshold.
+%
+Second, we wanted to determine the value ratios between TP, TN, FP, FN, and rejected predictions.
+%
+% We determined these value ratios by conducting a large survey study in which we presented participants with different hate speech detection scenarios that they had to judge using the ME scale.
+%
+% By combining the two parts, we presented an intuitive hybrid human-AI solution for detecting hate speech in a value-sensitive manner.

@@ -285,7 +285,7 @@ We expect that the accuracy of the predictions on the unseen dataset is signific
 Therefore, we also expect that the output value of our value-sensitive metric for the unseen dataset will be lower and that the optimal rejection threshold will be higher (meaning that we need to reject more predictions).
 %
 
-\subsection{Probability Density Functions}
+\subsection{Probability density functions}
 Since our value-sensitive rejector depends on the PDFs of the confidence values of the TP, TN, FP, and FN predictions, we need to empirically estimate these PDFs as we do not know the actual underlying distributions.
 %
 We use the Kernel Density Estimation (KDE) method provided by Statsmodels\footnote{\url{https://www.statsmodels.org/}} for estimating these PDFs.
