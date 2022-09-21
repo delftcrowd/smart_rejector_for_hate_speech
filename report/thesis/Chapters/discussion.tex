@@ -1,6 +1,31 @@
 \chapter{Discussion}
+The main goal of this project was to propose a way of rejecting ML model predictions in a value-sensitive manner for hate speech detection.
 %
-This chapter analyzes the results from chapter \ref{ch:results}.
+We split this up into two parts.
+%
+First, we wanted to determine how we could measure the total value of ML models with a reject option.
+%
+We proposed a value-sensitive metric that measures the total value of an ML model for some rejection threshold, where we reject and accept all predictions with a confidence value below and above the threshold, respectively.
+%
+This calculation is based on a set of predictions for some datasets and the value ratios between TP, TN, FP, FN, and rejected predictions.
+%
+By maximizing the total value, we can find the optimal rejection threshold.
+%
+Second, we wanted to develop a method for determining these value ratios necessary for the metric's calculations.
+%
+We proposed to estimate the value ratios in a large survey study using the ME scale.
+%
+The results from chapter \ref{ch:results} showed several key findings:
+\begin{enumerate}
+    \item The results indicated that the ME technique is suitable for retrieving the value ratios as the results passed both the reliability and validity analyses.
+    \item We did not observe significant statistical differences between groups of participants for most scenarios and demographical features.
+    \item The results showed that our value-sensitive rejector could be beneficial for detecting hate speech when we consider punishing incorrect predictions only.
+    \item The experiments with the unseen data demonstrated that hate speech detection models are susceptible to bias, affecting the results of our value-sensitive rejector since we had to reject more predictions when we considered punishing incorrect predictions only.
+\end{enumerate}
+%
+
+%
+This chapter analyzes the results from chapter \ref{ch:results} in greater detail.
 %
 First, we discuss the main findings of the survey study in section \ref{sec:discussion-survey} and our value-sensitive rejector in section \ref{sec:discussion-rejection}.
 %
