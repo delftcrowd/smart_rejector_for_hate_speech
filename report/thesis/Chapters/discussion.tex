@@ -35,7 +35,7 @@ Finally, we highlight some limitations of our approach in section \ref{sec:discu
 \section{Survey study}
 \label{sec:discussion-survey}
 %
-The first question of each scenario in the survey was informative and asked the participants whether they think the social media post is hateful or not.
+In each scenario, we first asked the participant to indicate if they thought the social media post was hateful or not.
 %
 We found three scenarios for which more than 40\% disagreed with the ground truth label (FN5, REJ5, and REJ7).
 %
@@ -43,11 +43,23 @@ We also recognized this in the ME response values since participants generally w
 %
 Scenarios FN5 and REJ5 are annotated as non-aggressive hate speech targeted at a generic group and seem less hateful than the other posts, and the post in REJ7 contains an offensive slur.
 %
-Given the nature of the social media posts used in these scenarios, it might explain the larger disagreement about annotating it as hateful/non-hateful between participants for these scenarios.
+Given the nature of these social media posts used in these scenarios, it might explain the larger disagreement about annotating it as hateful/non-hateful between participants for these scenarios.
 %
 
 %
-We used the second and third questions of each scenario in the survey for determing the value ratios.
+We simulated the TP, TN, FP, FN, or rejection scenarios by asking the second and third questions where the participant had to provide a response value using either the ME or the 100-level scale to express their agreement or disagreement with SocialNet's decision.
+%
+We analyze the resulting response values by looking at three aspects.
+%
+First, we analyze the value ratios from the survey that uses the ME scale in section \ref{sec:discussion-value-ratios}.
+%
+Then we discuss whether the ME technique passes the reliability and validity analyses in sections \ref{sec:discussion-reliability} and \ref{sec:discussion-validity}.
+%
+Finally, we analyze the results of the demographic analysis in section \ref{sec:discussion-demographic}
+
+
+\subsection{Value ratios}
+\label{sec:discussion-value-ratios}
 %
 Regarding value ratios, most results are in line with our hypotheses.
 %
@@ -61,56 +73,61 @@ The results of FN3 and FN7 might suggest that participants disagree the most wit
 %
 As expected, we found that participants disagree with the FP, FN, and rejected predictions, that the value of an FN is lower than an FP, and that the average value of an FP and an FN is lower than the rejection value.
 %
-The results show that participants find a hateful post that is not detected worse than a non-hateful post that is detected as hate speech.
+The results show that participants find a hateful post that is not detected worse than a non-hateful post detected as hate speech.
 %
-This is in line with our assumption of tolerating hate speech (FN) to have a more negative impact on the social media users than forbidding neutral speech (FP).
+This finding is in line with our hypothesis that tolerating hate speech (FN predictions) negatively impacts social media users more than forbidding neutral speech (FP predictions).
 %
-The value of rejection is the closest to 0 (neutral), because rejected predictions do not cause any benefit or harm but only reduce the value by the human moderation effort.
+The value of rejection is the closest to 0 (neutral) because rejected predictions do not cause any benefit or harm but only reduce the value by the human moderation effort.
 %
-However, there are two things that were somewhat supprising.
+However, two things were somewhat surprising.
 %
-First, participants appreciated correct predictions more than incorrect predictions since participants gave higher absolute values to TP and TN than FP and FN.
+First, participants appreciated correct predictions more than incorrect predictions since participants gave higher absolute values to TP and TN scenarios than FP and FN scenarios.
 %
 We expect participants to give lower absolute response values to correct predictions since it is expected from the automatic detection algorithms to produce correct predictions.
 %
-However, we look at this from a computer science perspective where we want to prevent incorrect predictions whereas the participants might think that correct predictions are more important.
+However, we look at this from a computer science perspective, where we want to prevent incorrect predictions, whereas the participants might think producing correct predictions is more critical.
 %
-Second, we were suprised to see that the value of a TN is greater than of a TP while we expected the opposite to hold.
+Second, we were surprised that the TN value was greater than TP, while we expected the opposite to hold.
 %
-One possible reason could be that people disagree more on what is considered hateful among the TP scenarios, as can be seen in figure \ref{fig:hatefulness}.
+One possible reason could be that people disagree more on what is considered hateful among the TP scenarios, as seen in figure \ref{fig:hatefulness}.
 %
-This is in line with the findings of \citet{ross2017measuring} as the authors found low agreement among participants when it comes to labeling social media posts as ahte speech.
+This observation is in line with the findings of \citet{ross2017measuring}, as the authors found low agreement among participants regarding labelling social media posts as hate speech.
 %
 
+\subsection{Reliability analysis}
+\label{sec:discussion-reliability}
 %
 Regarding the reliability analysis, according to the Krippendorff's alpha values ($\alpha$), the results of the ME scale are reliable, indicating that the ME technique is suitable for estimating the value ratios.
 %
-In contrary with our hypothesis, the results indicated that the 100-level scale is less reliable than the ME scale.
+Contrary to our hypothesis, the results indicated that the 100-level scale is less reliable than the ME scale.
 %
 We would expect many participants to give response values of -100, 100, or 0 as the 100-level scale is bounded, and, therefore, we would expect higher alpha values for the 100-level scale compared to the ME scale.
 %
-The results also showed low alpha values when we compute it for each group of scenarios with the same type (TP, TN, FP, FN, and rejection).
+The results also showed low alpha values when we computed it for each group of scenarios with the same type (TP, TN, FP, FN, and rejection).
 %
-Users tend to be more in agreement on incorrect predictions than on the correct predictions, indicating that participants disagree more on what constitutes hate speech in the first place.
+Users tend to agree more on incorrect predictions than on the correct predictions, indicating that participants disagree more on what constitutes hate speech in the first place.
 %
-This is in line with the findings of \citet{ross2017measuring} where the authors also found low Krippendorff's alpha values when asking participants to annotate hate speech.
+This phenomenon is in line with the findings of \citet{ross2017measuring}, where the authors also found low Krippendorff's alpha values when asking participants to annotate hate speech.
 %
-The alpha values for the scenario types are lower compared to when we consider the complete scale.
+The alpha values for the grouped scenarios by type are lower compared to when we consider all scenarios.
 %
 We can explain this phenomenon by looking at the calculation of Krippendorff's alpha.
 %
 In this calculation, we measure the difference between the expected difference and the observed difference.
 %
-When we consider the response values to all scenarios, the values tend to follow the same trend; positive values to correct predictions and negative values to incorrect and rejected predictions.
+When we consider the response values to all scenarios, the values tend to follow the same trend; positive values to correct predictions and negative values for incorrect and rejected predictions.
 %
 When we consider the response values to the scenarios of the same type, e.g. all TP scenarios, the values seem more randomly distributed as each participant uses a different positive response value to the TP scenarios.
 %
-Therefore, when considering the complete scale, the observed difference between the response values is closer to the difference expected by chance, resulting into higher alpha values.
+Therefore, when considering all scenarios, the observed difference between the response values is closer to the difference expected by chance, resulting in higher alpha values.
 %
 
 %
+\subsection{Validity analysis}
+\label{sec:discussion-validity}
 
-
+\subsection{Demographic analysis}
+\label{sec:discussion-demographic}
 \todo[inline]{Discuss why FP7 and REJ4 have most sig. differences among all features. And why TP6, FN5, and REJ1 have the second most differences. Not clear why FP7. But REJ4 is a neutral tweet about a political topic. People could have different opinions about refugees espcially from different nationalities. This might explain the differences.}
 \todo[inline]{Only FN5 has the most pairwise sig. differences, which is also a tweet about the building the wall.}
 \todo[inline]{However, when looking at the other scenarios, we mainly see that there are no differences between groups with different demographic features.}
