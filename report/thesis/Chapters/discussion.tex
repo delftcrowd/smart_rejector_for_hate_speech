@@ -16,12 +16,12 @@ Second, we wanted to develop a method for determining these value ratios necessa
 We proposed to estimate the value ratios in a large survey study using the ME scale.
 %
 The results from chapter \ref{ch:results} showed several key findings:
-\begin{enumerate}
+\begin{itemize}
     \item The results indicated that the ME technique is suitable for retrieving the value ratios as the results passed both the reliability and validity analyses.
     \item We did not observe significant statistical differences between groups of participants for most scenarios and demographical features.
     \item The results showed that our value-sensitive rejector could be beneficial for detecting hate speech when we consider punishing incorrect predictions only.
     \item The experiments with the unseen data demonstrated that hate speech detection models are susceptible to bias, affecting the results of our value-sensitive rejector since we had to reject more predictions when we considered punishing incorrect predictions only.
-\end{enumerate}
+\end{itemize}
 %
 
 %
@@ -34,17 +34,40 @@ Finally, we highlight some limitations of our approach in section \ref{sec:discu
 
 \section{Survey study}
 \label{sec:discussion-survey}
-Regarding value ratios, most results were in line with our hypotheses and both scales returned the same results in terms of the order of the values ($V_{fn} < V_{fp} < V_{r} < V_{tp} < V_{tn}$).
 %
-As expected, we found that participants disagree with the FP, FN, and rejected predictions, the value of an FN is lower than an FP, and that the average value of an FP and an FN was lower than the rejection value.
+The first question of each scenario in the survey was informative and asked the participants whether they think the social media post is hateful or not.
 %
-The results show that participants find a hateful post not detected as hate speech worse than a non-hateful post detected as hate speech.
+We found three scenarios for which more than 40\% disagreed with the ground truth label (FN5, REJ5, and REJ7).
 %
-This is in line with our assumption of allowing hate speech (FN) to have a more negative impact on the social media users than suppressing freedom of speech by forbidding neutral speech (FP).
+We also recognized this in the ME response values since participants generally were neutral about these scenarios.
 %
-The value of rejection was the closest to 0 (neutral), because rejected predictions do not cause any benefit or harm but only reduce the value by the human moderation effort.
+Scenarios FN5 and REJ5 are annotated as non-aggressive hate speech targeted at a generic group and seem less hateful than the other posts, and the post in REJ7 contains an offensive slur.
 %
-However, there are two things that are somewhat supprising.
+Given the nature of the social media posts used in these scenarios, it might explain the larger disagreement about annotating it as hateful/non-hateful between participants for these scenarios.
+%
+
+%
+We used the second and third questions of each scenario in the survey for determing the value ratios.
+%
+Regarding value ratios, most results are in line with our hypotheses.
+%
+The resulting values of both the ME and the 100-level scale follow the same order ($V_{fn} < V_{fp} < V_{r} < V_{tp} < V_{tn}$).
+%
+We noticed that participants disagreed the most with scenarios FN3 and FN7.
+%
+According to the annotations given by \citet{basile2019semeval}, both scenarios are hate speech targeted at an individual and contain aggressive speech.
+%
+The results of FN3 and FN7 might suggest that participants disagree the most with FN predictions for aggressive hate speech target to individuals.
+%
+As expected, we found that participants disagree with the FP, FN, and rejected predictions, that the value of an FN is lower than an FP, and that the average value of an FP and an FN is lower than the rejection value.
+%
+The results show that participants find a hateful post that is not detected worse than a non-hateful post that is detected as hate speech.
+%
+This is in line with our assumption of tolerating hate speech (FN) to have a more negative impact on the social media users than forbidding neutral speech (FP).
+%
+The value of rejection is the closest to 0 (neutral), because rejected predictions do not cause any benefit or harm but only reduce the value by the human moderation effort.
+%
+However, there are two things that were somewhat supprising.
 %
 First, participants appreciated correct predictions more than incorrect predictions since participants gave higher absolute values to TP and TN than FP and FN.
 %
@@ -52,18 +75,42 @@ We expect participants to give lower absolute response values to correct predict
 %
 However, we look at this from a computer science perspective where we want to prevent incorrect predictions whereas the participants might think that correct predictions are more important.
 %
-Second, we are suprised to see that the value of a TN is greater than of a TP while we expected the opposite to hold.
+Second, we were suprised to see that the value of a TN is greater than of a TP while we expected the opposite to hold.
 %
-One possible reason could be that people slightly disagree more on what is considered hateful among the TP scenarios, as can be seen in figure \ref{fig:hatefulness}.
+One possible reason could be that people disagree more on what is considered hateful among the TP scenarios, as can be seen in figure \ref{fig:hatefulness}.
+%
+This is in line with the findings of \citet{ross2017measuring} as the authors found low agreement among participants when it comes to labeling social media posts as ahte speech.
 %
 
 %
-% TODO: reliability
+Regarding the reliability analysis, according to the Krippendorff's alpha values ($\alpha$), the results of the ME scale are reliable, indicating that the ME technique is suitable for estimating the value ratios.
+%
+In contrary with our hypothesis, the results indicated that the 100-level scale is less reliable than the ME scale.
+%
+We would expect many participants to give response values of -100, 100, or 0 as the 100-level scale is bounded, and, therefore, we would expect higher alpha values for the 100-level scale compared to the ME scale.
+%
+The results also showed low alpha values when we compute it for each group of scenarios with the same type (TP, TN, FP, FN, and rejection).
+%
+Users tend to be more in agreement on incorrect predictions than on the correct predictions, indicating that participants disagree more on what constitutes hate speech in the first place.
+%
+This is in line with the findings of \citet{ross2017measuring} where the authors also found low Krippendorff's alpha values when asking participants to annotate hate speech.
+%
+The alpha values for the scenario types are lower compared to when we consider the complete scale.
+%
+We can explain this phenomenon by looking at the calculation of Krippendorff's alpha.
+%
+In this calculation, we measure the difference between the expected difference and the observed difference.
+%
+When we consider the response values to all scenarios, the values tend to follow the same trend; positive values to correct predictions and negative values to incorrect and rejected predictions.
+%
+When we consider the response values to the scenarios of the same type, e.g. all TP scenarios, the values seem more randomly distributed as each participant uses a different positive response value to the TP scenarios.
+%
+Therefore, when considering the complete scale, the observed difference between the response values is closer to the difference expected by chance, resulting into higher alpha values.
+%
 
-\todo[inline]{Discuss value ratios}
-\todo[inline]{Discuss reliability values and why the values are low when looking at the scenario types only}
-\todo[inline]{Discuss why TN3 and TN7 have highest agreement scores}
-\todo[inline]{Discuss why FN3 and FN7 have highest disagreement scores}
+%
+
+
 \todo[inline]{Discuss why FP7 and REJ4 have most sig. differences among all features. And why TP6, FN5, and REJ1 have the second most differences. Not clear why FP7. But REJ4 is a neutral tweet about a political topic. People could have different opinions about refugees espcially from different nationalities. This might explain the differences.}
 \todo[inline]{Only FN5 has the most pairwise sig. differences, which is also a tweet about the building the wall.}
 \todo[inline]{However, when looking at the other scenarios, we mainly see that there are no differences between groups with different demographic features.}
