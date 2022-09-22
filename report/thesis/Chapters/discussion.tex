@@ -135,23 +135,23 @@ Second, the 100-level scores are skewed towards the upper and lower bounds of 10
 
 \subsection{Demographic analysis}
 \label{sec:discussion-demographic}
-We analyzed several demographic features (sex, student, continent, nationality, language, and ethnicity) to see if significant differences exist between groups of participants.
+We analyzed several demographic features (sex, student, continent, nationality, language, and ethnicity) to see if significant differences exist between groups of participants in the response values to all scenarios.
 %
 
 %
-We found no differences between men and women regarding the response values to all scenarios.
+For all scenarios, we found no differences between men and women.
 %
-This finding is in line with the work of \citet{gold2018women}, as the authors did not find any differences in how men and women perceive hate.
+This finding is in line with the work of \citet{gold2018women}, as the authors did not find any differences between men and women and how they perceive hate.
 %
 
 %
-We only find some scenarios for the remaining five features for which we find significant differences between the groups
+For the remaining five features, we found significant differences between groups of participants for only a small number of scenarios.
 %
-Furthermore, for the scenarios and features with more than two groups (nationality, language, and ethnicity) where we find significant differences, we often do not find any significant pairwise differences between the groups.
+Furthermore, for the scenarios and features with more than two groups (nationality, language, and ethnicity) where we found significant differences, we often did not find any significant pairwise differences between the groups.
 %
 These results indicate that for our dataset, people with different demographic characteristics tend to give the same judgements to different hate speech detection scenarios.
 %
-However, the results also show that the nationality, language, or ethnicity features cause more significant group differences than features such as sex or student.
+However, the results do show that people with different nationalities, languages, and ethnicities are more likely to differ in their opinions about hate speech detection scenarios than people with different sex or student status.
 %
 
 % The results of both the Kruskal-Wallis and the pairwise Mann-Whitney U tests are very similar between the nationality and language features.
@@ -160,13 +160,13 @@ However, the results also show that the nationality, language, or ethnicity feat
 % %
 
 %
-Scenarios FP7 and REJ4 have the most significant differences among all features, which is surprising since both scenarios include a neutral social media post.
+We found the most group differences for scenarios FP7 and REJ4 among all features, which is surprising since both scenarios include a neutral social media post.
 %
-It is unclear why FP7 has so many significant differences as the post is neutral and not about any sensitive topic.
+It is unclear why FP7 had so many significant differences as the post is neutral and not about any sensitive topic.
 %
 However, the social media post used in REJ4 is about refugees, which can be a politically sensitive topic.
 %
-People with different demographic characteristics, such as continent, language, nationality, and ethnicity, could have different opinions about this topic.
+People with different demographic characteristics, such as continent, language, nationality, or ethnicity, could have different opinions about this topic.
 %
 There were few pairwise group differences for both scenarios and the features of nationality and language.
 %
@@ -176,17 +176,17 @@ Nevertheless, given these results, there is not enough evidence to explain why s
 %
 
 %
-Also, we see more hateful posts (10 in total) than non-hateful ones (5 in total), indicating that hateful tweets are more sensitive to trigger differences between groups with different demographic characteristics.
+Also, we found that hateful social media posts are more sensitive to cause group differences than non-hateful posts, as the results showthat there are more scenarios with group differences when they contain hateful posts (10 in total) than non-hateful posts (5 in total).
 %
 
 %
-Scenario FN5 has the most pairwise significant differences, containing a tweet about building the wall across the border between the United States and Mexico.
+We observed the most pairwise significant differences for scenario FN5.
+%
+Scenario FN5 contains a hateful social media post about building the wall across the border between the United States and Mexico.
 %
 There are five posts about building the wall, including hateful and non-hateful posts.
 %
-For four out of the five posts, we found at least one feature with significant differences between the groups of participants.
-%
-Therefore, we can conclude that the significant differences between groups for a scenario depend highly on the content of the social media post.
+For four out of the five posts, we found at least one feature with significant differences between the groups of participants, suggesting that group differences depend on the topic of the social media post.
 %
 
 
@@ -209,7 +209,7 @@ Therefore, we can conclude that the significant differences between groups for a
 \todo[inline]{Second, we have to keep in mind that some features where we did find sig. differences might have happened by chance. There may have been participants that did not understood the scenario, either because the lack of english or because they rushed through the survey.}
 \todo[inline]{We represented the scenarios by explaining that we would rank social media posts lower higher on people's feeds. Initially, we explained in the pilot survey that we would remove or keep posts. However, we noticed larger disagreement values in the FP and TP cases since apparantly some might think that we should allow everything on the web even hateful posts. Therefore, we are aware that the decisions of social media platforms on how to deal with detected hateful posts impacts people's opinions about it.}
 \todo[inline]{The rejection threshold is calculated using the test set. This test set needs to be as realistic as possible. Furthermore we need to have calibrated models since we rely purely on the confidence values. This is also hard to realize. Temperature scaling can help, but it is still limited.}
-\todo[inline]{Also, we should keep in mind that because of the clustering analysis, we created a selection of tweets as diverse as possible. So some posts may not result in any differences between groups while others do.}
+\todo[inline]{Also, we should keep in mind that because of the clustering analysis, we created a selection of social media posts as diverse as possible. So some posts may not result in any differences between groups while others do.}
 
 \section{Recommendations}
 \label{sec:discussion-recommendations}
