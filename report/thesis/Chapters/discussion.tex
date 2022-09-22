@@ -151,7 +151,7 @@ Furthermore, for the scenarios and features with more than two groups (nationali
 %
 These results indicate that for our dataset, people with different demographic characteristics tend to give the same judgements to different hate speech detection scenarios.
 %
-However, the results do show that people with different nationalities, languages, and ethnicities are more likely to differ in their opinions about hate speech detection scenarios than people with different sex or student status.
+Nevertheless, the results show that people with different nationalities, languages, and ethnicities are more likely to differ in their opinions about hate speech detection scenarios than people of different sex or student status.
 %
 
 % The results of both the Kruskal-Wallis and the pairwise Mann-Whitney U tests are very similar between the nationality and language features.
@@ -176,7 +176,7 @@ Nevertheless, given these results, there is not enough evidence to explain why s
 %
 
 %
-Also, we found that hateful social media posts are more sensitive to cause group differences than non-hateful posts, as the results showthat there are more scenarios with group differences when they contain hateful posts (10 in total) than non-hateful posts (5 in total).
+Also, we found that hateful social media posts are more likely to cause group differences than non-hateful posts, as we have more scenarios with group differences that contain hateful posts (10 in total) than non-hateful posts (5 in total).
 %
 
 %
@@ -192,7 +192,13 @@ For four out of the five posts, we found at least one feature with significant d
 
 \section{Value-sensitive rejection}
 \label{sec:discussion-rejection}
+- We observed that most models are not well callibrated, meaning that there are many high confident incorrect predictions and low confident correct predictions. This makes it hard to find apply a rejection threshold since we then accept many incorrect predictions and reject many correct predictions. Nevertheless, we still observed that the models are more confident in the correct predictions than the incorrect predictions. Therefore, the value-sensitive rejector is still useful for finding the optimal rejection threshold for which we achieve the maximum total value of accepting correct predictions and rejecting incorrect predictions.
+- When we consider all value ratios, then accepting all predictions seems the most valuable according to the results of the value-sensitive rejector. This result is not surprising as the absolute values of TP and TN ($V_{tp}$ and $V_{tn}$) are greater than the absolute values of the FP and FN ($V_{fp}$ and $V_{fn}$) and there are more TP and TN predictions than FP and FN predictions. Therefore, the gains of accepting all correct predictions outweights the costs of accepting all incorrect predictions for all models and datasets.
+- We believe it is more critical to focus on punishing incorrect predictions, as we want to minimize harm to the social media users. Therefore, In the second part of the experiments with the value-sensitive rejector, we decided to no longer focus on rewarding correct predictions, implying that $V_{tp}=0$ and $V_{tn}=0$. As a result and according to the formulation of the value-sensitive metric (formula \ref{for:final-V}), correct predictions that are accepted increase the total value by the value of a rejection ($V_r$) and correct predictions that are rejected decrease the total value by the value of a rejection.
 
+
+% Continue here...
+% The result in figure 3a shows a steady increase in value before it peaks around 0.8 for each of the three models, eventually falling again and becoming negative as almost all predictions are rejected. Hence, there is a strong incentive to reject some (but not all) predictions for the seen data. At the points where values are maximized, we found an optimal balance between accepting and rejecting predictions. Figure 3b shows that the values continually rise for all three models, only peaking as the rejection threshold approaches 1. This indicates that the model is very uncertain regarding its predictions for the unseen data, which may be expected. Initially at the 0.5 rejection threshold, the value is negative as all predictions are accepted. When the rejection threshold increases, the value rises steadily since too many incorrect predictions are made. This indicates that the model is not performing well at the task (e.g., many high confidence FP and FN), and thus the optimal condition to reject most predictions puts the model’s viability into question. In sum, the results show that by penalizing incorrect predictions without rewarding correct predictions, a significant fraction of the predictions can be accepted from all three models. For unseen data, however, very few predictions from these models can be accepted and the majority are rejected. Such a result confirms the bias in the dataset as also found in previous studies (Arango, P ́ erez, and Poblete 2019; Gr  ̈ ondahl et al. 2018). The results also show the utility of value as a metric in guiding the decision on when to reject machine predictions. Value utility is further confirmed in the results in table 3 from our experiment on optimal model selection: the best model selected by value is different compared to using accuracy as the metric.
 \section{Implications}
 \todo[inline]{Explain that \cite{olteanu2017limits} claims that we need more human-centred metrics instead of abstract metrics such as precision and we agree with that by introducing our own human-centred metric}
 
