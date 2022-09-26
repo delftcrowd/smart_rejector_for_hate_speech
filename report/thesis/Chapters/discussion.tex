@@ -18,7 +18,7 @@ We proposed to estimate the value ratios in a large survey study using the ME sc
 The results from chapter \ref{ch:results} showed several key findings:
 \begin{itemize}
     \item The survey's results indicated that the ME technique is suitable for retrieving the value ratios from human ratings to hate speech detection scenarios, since the results passed both the reliability and validity analyses.
-    \item Social media users appreciate correct predictions more than consequences of incorrect predictions, especially content that is correctly identified as non-hateful and, therefore, not banned from the platform.
+    \item Social media users appreciate correct predictions more than they detest incorrect predictions, especially content that is correctly identified as non-hateful and, therefore, not banned from the platform.
     \item Social media users show higher agreement on rating the negative value of incorrect predictions as opposed to rating the positive value of correct predictions.
     \item We did not observe significant statistical differences for most scenarios between groups of participants with different demographical characteristics.
     \item The experiments with the \emph{seen} data showed that our value-sensitive rejector could be beneficial for detecting hate speech when we consider not rewarding correct predictions.
@@ -111,17 +111,11 @@ We would expect many participants to give response values of -100, 100, or 0 as 
 %
 
 %
-The results also showed low alpha values when we computed it for each group of scenarios with the same type (TP, TN, FP, FN, and rejection).
+In general, the results also showed low alpha values when we computed it for each group of scenarios with the same type (TP, TN, FP, FN, and rejection).
 %
-Users tend to agree more on incorrect predictions than on the correct predictions, indicating that participants disagree more on what constitutes hate speech in the first place.
+Users tend to agree more on incorrect predictions than on the correct predictions, indicating that participants agree more on the harm caused by incorrect predictions.
 %
-This phenomenon is in line with the findings of \citet{ross2017measuring}, where the authors also found low Krippendorff's alpha values when asking participants to annotate hate speech.
-%
-
-%
-The alpha values for the grouped scenarios by type are lower compared to when we consider all scenarios.
-%
-We can explain this phenomenon by looking at the calculation of Krippendorff's alpha.
+We can explain the low reliability values by looking at the calculation of Krippendorff's alpha.
 %
 In this calculation, we measure the difference between the expected difference and the observed difference.
 %
@@ -202,19 +196,21 @@ For four out of the five posts, we found at least one feature with significant d
 
 \section{Value-sensitive rejection}
 \label{sec:discussion-rejection}
-We analyzed three aspects of our value-sensitive rejector.
+We analyze three aspects of our value-sensitive rejector.
 %
-First, we analyzed how the rejector behaves when applied to different hate speech detection models and datasets (the \emph{seen} and \emph{unseen} datasets).
+First, we analyze how the rejector behaves when applied to different hate speech detection models and datasets (the \emph{seen} and \emph{unseen} datasets).
 %
-The \emph{seen} dataset is a test set sampled from the same dataset as the training set, while the \emph{unseen} dataset is a test set sampled from a completely different dataset to simulate how the models perform in deployment on new and unfamiliar data.
+The \emph{seen} dataset is a test set sampled from the same dataset as the training set.
 %
-Second, we studied whether value-sensitive rejection of ML predictions is beneficial for hate speech detection.
+In contrast, the \emph{unseen} dataset is a test set sampled from a completely different dataset to simulate how the models perform on new and unfamiliar data.
 %
-Finally, we compared our value-sensitive metric to machine metrics such as accuracy.
+Second, we study whether value-sensitive rejection of ML predictions is beneficial for hate speech detection.
+%
+Finally, we compare our value-sensitive metric to machine metrics such as accuracy.
 %
 
 %
-We can see in figures \ref{fig:pdfs-seen} and \ref{fig:pdfs-unseen} that the three hate speech detection models are not well callibrated, meaning that there are many high confident incorrect predictions and low confident correct predictions.
+We observed that the three hate speech detection models are not well-calibrated, meaning many high-confident incorrect and low-confident correct predictions exist.
 %
 Therefore, when we apply a rejection threshold, we have the problem of accepting many incorrect predictions or rejecting many correct predictions.
 %
@@ -224,29 +220,29 @@ Nevertheless, we observed that the models are more confident in the correct pred
 %
 The results of our value-sensitive metric were very similar for all three models and both datasets.
 %
-When we consider all value ratios, then accepting all predictions seems the most valuable for both the \emph{seen} data and the \emph{unseen} data.
+When we consider all value ratios, then accepting all predictions seems the most valuable for both the \emph{seen} data and \emph{unseen} data.
 %
-This result is not surprising as the absolute magnitudes of TP and TN are greater than the absolute magnitudes of FP and FN and there are more TP and TN predictions than FP and FN predictions.
+This result is not surprising as the absolute magnitudes of TP and TN are greater than the absolute magnitudes of FP and FN, and there are more TP and TN predictions than FP and FN predictions.
 %
-Therefore, the gains of accepting all correct predictions outweighs the costs of accepting all incorrect predictions for all models and datasets.
+Therefore, the gains of accepting all correct predictions outweigh the costs of accepting all incorrect predictions for all models and datasets.
 %
 
 %
-We believe it is more critical to focus on punishing incorrect predictions, as we want to minimize harm to the social media users.
+We believe it is more critical to focus on punishing incorrect predictions, as we want to minimize harm to social media users.
 %
-Therefore, In the second part of the experiments with the value-sensitive rejector, we decided to no longer focus on rewarding correct predictions, implying that $V_{tp}=0$ and $V_{tn}=0$.
+Therefore, in the second part of the experiments with the value-sensitive rejector, we no longer focused on rewarding correct predictions, implying $V_{tp}=0$ and $V_{tn}=0$.
 %
-As a result and according to the formulation of the value-sensitive metric (formula \ref{for:final-V}), correct predictions that are accepted increase the total value by the value of a rejection ($V_r$) and correct predictions that are rejected decrease the total value by the value of a rejection.
+As a result and according to the formulation of the value-sensitive metric (formula \ref{for:final-V}), accepted predictions increase the total value by the value of rejection ($V_r$) and correct predictions that are rejected decrease the total value by the value of rejection.
 %
 For the \emph{seen} data, the results of the optimal rejection threshold show that by not rewarding correct predictions, a significant fraction of the predictions can be accepted from all three models and a smaller fraction rejected.
 %
-For the \emph{unseen} data, all three models are still valuable but very few predictions can be accepted and the majority are rejected.
+All three models are valuable for the \emph{unseen} data, but very few predictions can be accepted, and the majority are rejected.
 %
 The results of the \emph{unseen} data also demonstrate that hate speech detection models are susceptible to bias, in line with the findings of related studies \citep{arango2019hate,grondahl2018all}.
 %
-When we would accept all predictions, then all three models are valuable for the \emph{seen} data but invaluable for the \emph{unseen} data, putting the viability of all models into question.
+When we accept all predictions, all three models are valuable for the \emph{seen} data but invaluable for the \emph{unseen} data, putting the viability of all models into question.
 %
-Therefore, the results show that our value-sensitive rejector can be beneficial for hate speech detection and help us to determine when to rely on the ML models.
+Therefore, the results show that our value-sensitive rejector can benefit hate speech detection and help us determine when to rely on the ML models.
 %
 
 %
@@ -254,31 +250,81 @@ Finally, we compared the results of our value-sensitive metric with machine metr
 %
 If we accept all predictions, we find that both metrics indicate that the DistilBERT model performed the best.
 %
-However, for the \emph{unseen} data when we consider not rewarding correct predictions, both metrics return different results.
+However, when we consider not rewarding correct predictions for \emph{unseen} data, both metrics return different results.
 %
-In that case, according to our value-sensitive metric, the CNN model is the best model, while accuracy indicates that either the LR or DistilBERT model is the best.
+According to our value-sensitive metric, the CNN model is the best, while accuracy indicates that either the LR or DistilBERT model is the best.
 %
-One reason for this might be that the CNN model produces less FN predictions (which are very costly) than the other two models.
+We think that the CNN model has a higher total value as it produces fewer FN predictions (which are costly) than the other two models.
 %
 
 %
-When we compare accuracy with the value-sensitive metric and look at the values for the optimal rejection thresholds, we see some interesting things.
+We see some interesting things when we compare the value-sensitive metric for the optimal rejection thresholds with the accuracy metric.
 %
-For most configurations both metrics return the same results, namely that the DistilBERT model is the best.
+For most configurations, both metrics return the same results, namely that the DistilBERT model is the best.
 %
-However, when considering not rewarding correct predictions for the \emph{unseen} data, we see that the LR model performs the best and got a slighlty higher total value than the DistilBERT model for the optimal rejection threshold.
+However, when considering not rewarding correct predictions for the unseen data, we see that the LR model performs the best and gets a slightly higher total value than the DistilBERT model for the optimal rejection threshold.
 %
-What makes this finding interesting is that while the accuracies of the original models are the same (64\%), we would expect that the DistilBERT has a higher total value since the accuracy of the accepted predictions is higher and the rejection rate is lower than of the LR model.
+What makes this finding interesting is that while the accuracies of the original models are the same (64\%), we would expect that the DistilBERT has a higher total value because the DistilBERT model has a higher accuracy of the accepted predictions and a lower rejection rate.
 %
-One explanation might be that we found that the LR model achieves a higher total value since it rejects more FN predictions and accepts less FN predictions than the DistilBERT model for the optimal rejection threshold.
+One explanation might be that we found that the LR model achieves a higher total value since it rejects more FN predictions and accepts fewer FN predictions than the DistilBERT model for the optimal rejection threshold.
 %
 
 \section{Implications}
-\todo[inline]{Explain that \cite{olteanu2017limits} claims that we need more human-centred metrics instead of abstract metrics such as precision and we agree with that by introducing our own human-centred metric}
-\todo[inline]{We found that accuracy returns different results than our value-sensitive rejector. The DistilBERT model seems the best for unseen data with not rewarding correct predictions because the rejection rate is lower and the accuracy of accepted predictions is higher than of the LR model. However the LR model has higher value accroding to our value-sensitive rejector because ..... perhaps more FP and FN?}
-\todo[inline]{This is interesting for future work as we should not only focus on accuracy but instead focus on value as well in contexts where values of different scenarios matter such as hate speech detection.}
+Related studies recognized machine metrics' shortcomings, such as accuracy \citep{casati2021value,olteanu2017limits,rottger2020hatecheck}.
+%
+%
+While \citet{rottger2020hatecheck} focused on evaluating hate speech detection models by presenting a suite of automated tests, we focused on improving existing hate speech detection models by adopting a reject option.
+%
+\citet{olteanu2017limits} claim that we need more human-centred metrics that take the perceived cost of incorrect decisions into account instead of using abstract metrics such as precision.
+%
+They state that this perceived cost should depend on the context of the specific problem and the type of incorrect decisions \citep{olteanu2017limits}.
+%
+Our work aligns with theirs as we presented a value-sensitive metric that considers human value and conducted a survey study to retrieve the perceived value of social media users for TP, TN, FP, FN, and rejected predictions in hate speech detection.
+%
+%
+\citet{casati2021value} promoted the use of value-sensitive metrics.
+%
+They recognized the limits of machine metrics such as accuracy as two models could have the same accuracy, but one model could be more valuable than the other \citep{casati2021value}.
+%
+Our experiments demonstrated this difference as we found that the best model according to our value-sensitive metric could be different from the best model according to the accuracy metric.
+%
+We believe these findings can benefit industry and research, as many domains exist where tasks cannot be fully automated and where value-sensitive rejection can increase the utility of human-AI collaboration.
+%
 
-\todo[inline]{BERT models can be beneficial for hate speechd detection which is in line with the trend of BERT for NLP applications \citep{edwards2021best}}
+%
+Regarding the survey study, we got several interesting findings.
+%
+Social media users appreciate correct hate speech predictions more than they detest incorrect predictions.
+%
+However, in terms of inter-rater reliability, they agree more on recognizing the harm caused by incorrect predictions than the gain of correct predictions.
+%
+Overall, the inter-rater reliability values of all scenarios of the same type were low.
+%
+This observation is in line with the findings of \citet{ross2017measuring}, where the authors also found low Krippendorff's alpha values when asking participants to annotate hate speech.
+%
+We did not find many significant differences between groups of different demographical characteristics.
+%
+Like \citet{gold2018women}, we did not find any differences between men and women and how they perceive hate.
+%
+However, we found more differences when looking at other demographical features, such as nationality, language, or ethnicity, implying that these features are more likely to cause group differences.
+%
+
+%
+Regarding the hate speech detection models, we found that BERT models are indeed promising for hate speech detection, given the recent popularity of BERT models for NLP applications \citep{edwards2021best,alatawi2021detecting}.
+%
+The results with all three hate speech detection models also demonstrated the impact of dataset bias since we found significant performance drops in terms of both the value of our value-sensitive metric and the accuracy metric.
+%
+Our results fit the findings of previous studies where the authors found significant performance dropped when they trained models on one dataset and evaluated them on another \citep{grondahl2018all, arango2019hate}.
+%
+
+%
+Regarding the methodology, we believe the ME technique is interesting for social science-related problems where the goal is to retrieve human-perceived value ratios.
+%
+We showed how we could use the value ratios in a value-sensitive metric that measures the total human-perceived value of ML models with a reject option.
+%
+We further demonstrated how we could create a human-machine co-creation solution for hate speech detection by using the value-sensitive metric to calculate the optimal rejection threshold for which the model achieves the highest total value.
+%
+We used the optimal threshold to determine when we could trust machine predictions ($\text{confidence} \geq \tau_O$) and when we needed to pass machine predictions to a human moderator ($\text{confidence} < \tau_O$).
 
 \section{Limitations}
 \label{sec:discussion-limitations}
@@ -297,3 +343,4 @@ One explanation might be that we found that the LR model achieves a higher total
 \todo[inline]{Magnitude Estimation seems promising for future research in HCI.}
 \todo[inline]{Personal and demographic characterisitcs might have  a big impact. So further analysis on those aspects seem relevant.}
 \todo[inline]{Perhaps we can train ML models using the values of TP, TN, FP, FN, rejection in an integrated rejector. So we train the ML model and the rejector simultanously using the values from the survey. So then during training, the FN predictions are punished more than FP predictions.}
+\todo[inline]{This is interesting for future work as we should not only focus on accuracy but instead focus on value as well in contexts where values of different scenarios matter such as hate speech detection.}

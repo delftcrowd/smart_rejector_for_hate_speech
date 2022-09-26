@@ -175,6 +175,8 @@ Classification models with a reject option are often evaluated by analyzing the 
 %
 \citet{rottger2020hatecheck, casati2021value, olteanu2017limits} recognized the shortcomings of machine metrics such as accuracy and found a gap in the evaluation of hate speech detection systems.
 %
+
+%
 \citet{rottger2020hatecheck} found it hard to identify the weak points of classification models using machine metrics such as accuracy.
 %
 Therefore, the authors presented a suite that consists of 29 carefully selected functional tests to help identify the model's weaknesses \citep{rottger2020hatecheck}.
@@ -183,9 +185,13 @@ Each test checks criteria, such as coping with spelling variations or detecting 
 %
 Our approach is different since we focus on measuring the value of classification models with a reject option.
 %
+
+%
 \citet{olteanu2017limits} promote using \textit{human-centred} metrics that measure the human-perceived value of hate speech classification models.
 %
 They found that for the same precision values, the perceived value changes depending on the user characteristics and the type of classification errors (an offensive tweet labelled as hate (low impact) and a neutral tweet labelled as hate (high impact)) \citep{olteanu2017limits}.
+%
+
 %
 \citet{casati2021value} propose to develop new metrics for evaluating ML models with a reject option that considers domain-specific values.
 %
