@@ -324,19 +324,81 @@ We showed how we could use the value ratios in a value-sensitive metric that mea
 %
 We further demonstrated how we could create a human-machine co-creation solution for hate speech detection by using the value-sensitive metric to calculate the optimal rejection threshold for which the model achieves the highest total value.
 %
-We used the optimal threshold to determine when we could trust machine predictions ($\text{confidence} \geq \tau_O$) and when we needed to pass machine predictions to a human moderator ($\text{confidence} < \tau_O$).
+We used the optimal threshold to determine when we could trust machine predictions and when we needed to pass machine predictions to a human moderator.
 
 \section{Limitations}
 \label{sec:discussion-limitations}
-\todo[inline]{Hate speech is difficult domain as there tend to be a lot of disagreement between people about what is considered hate speech and what not. \citet{ross2017measuring} found low Krippendorff alpha values in a hate speech survey. So our findings are in line with theirs.}
-\todo[inline]{Explain limitations of the metric and the survey study}
-\todo[inline]{Finally, we should point out the limitations of the demographic analysis.}
-\todo[inline]{First, the sample sizes of the demographic groups are not representative of the population of those groups.}
-\todo[inline]{For example, for the nationality feature, we had five participants from Spain.}
-\todo[inline]{Second, we have to keep in mind that some features where we did find sig. differences might have happened by chance. There may have been participants that did not understood the scenario, either because the lack of english or because they rushed through the survey.}
-\todo[inline]{We represented the scenarios by explaining that we would rank social media posts lower higher on people's feeds. Initially, we explained in the pilot survey that we would remove or keep posts. However, we noticed larger disagreement values in the FP and TP cases since apparantly some might think that we should allow everything on the web even hateful posts. Therefore, we are aware that the decisions of social media platforms on how to deal with detected hateful posts impacts people's opinions about it.}
-\todo[inline]{The rejection threshold is calculated using the test set. This test set needs to be as realistic as possible. Furthermore we need to have calibrated models since we rely purely on the confidence values. This is also hard to realize. Temperature scaling can help, but it is still limited.}
-\todo[inline]{Also, we should keep in mind that because of the clustering analysis, we created a selection of social media posts as diverse as possible. So some posts may not result in any differences between groups while others do.}
+In this section, we first explain the limitations of our survey study and then list the main drawbacks of our value-sensitive rejector.
+%
+
+%
+Regarding the survey study, first, we had a limited sample size (68 participants per scale) due to a constrained budget.
+%
+The main problem is that people do no agree well in the first place about what is considered hate speech and what not.
+%
+We expect more reliable results when conducting the same experiment at a larger sample size.
+%
+
+%
+Second, we limited the number of scenarios to eight per type (fourty in total) that include both hateful and non-hateful social media posts.
+%
+We expect the results to be more reliable if the same experiment would have been repeated several times with different sets of social media posts.
+%
+Nevertheless, we tried to collect a set of social media posts for creating the scenarios that was as diverse as possible through an extensive content analysis procedure.
+%
+
+%
+Third, we did not apply any demographical constraints when gathering participants for the survey study.
+%
+As a result, participants from one country were more representated in our experiment than from another.
+%
+Although we did not find that people with different demographic characterisitcs have different opinions about hate speech detection scenarios, we would still expect to retrieve different results if the experiment would have been repeated for several groups of participants from different countries.
+%
+
+%
+Fourth, how to deal with hateful content on social media platforms remains a subject of debate even for governmental institutions and social media companies.
+%
+We believe the results would be different when the descriptions of the scenarios would have been different.
+%
+For example, we represented the scenarios by explaining that SocialNet's ranks hateful social media posts lower on people's feeds.
+%
+Initially, we explained in the pilot survey that we would remove hateful posts.
+%
+However, we noticed that people disagreed more with eachother for the FP and TP cases as some participants might believe that we should allow everything, even hateful posts.
+%
+
+%
+Finally, we should point out the limitations of the demographic analysis.
+%
+The sample sizes of the demographic groups are not representative of the population of those groups.
+%
+For example, for the nationality feature, we had five participants from Spain.
+%
+We also have to keep in mind that for some features where we did find significant differences between demographic groups might have happened by chance.
+%
+There may have been participants that did not understood the scenario, perhaps because their lack of english or because they rushed through the survey.
+%
+
+%
+Regarding our value-sensitive rejector, we believe that there are several drawbacks of our approach.
+%
+
+%
+First, the rejection threshold is calculated using a test dataset and we have seen in our results that for different test datasets (the \emph{seen} and \emph{unseen} datasets), we retrieve different results with our value-sensitive rejector.
+%
+Therefore, this test set needs to be as realistic as possible.
+%
+
+Second, we need to have calibrated models since we rely purely on the confidence values.
+%
+Although calibration methods such as temperature scaling can help, but there are still limited.
+%
+Also, we should keep in mind that because of the content analysis, we created a selection of social media posts as diverse as possible.
+%
+So some posts may not result in any differences between groups while others do.
+%
+Continue here.
+
 
 \section{Recommendations}
 \label{sec:discussion-recommendations}
