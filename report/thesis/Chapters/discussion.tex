@@ -328,81 +328,79 @@ We used the optimal threshold to determine when we could trust machine predictio
 
 \section{Limitations}
 \label{sec:discussion-limitations}
-In this section, we first explain the limitations of our survey study and then list the main drawbacks of our value-sensitive rejector.
+In this section, we list the limitations of the survey study and the value-sensitive rejector.
 %
 
 %
-Regarding the survey study, first, we had a limited sample size (68 participants per scale) due to a constrained budget.
+Regarding the survey study, we had a limited sample size of 68 participants per scale due to a constrained budget.
 %
-The main problem is that people do no agree well in the first place about what is considered hate speech and what not.
-%
-We expect more reliable results when conducting the same experiment at a larger sample size.
+We expect more reliable results when experimenting with larger sample size.
 %
 
 %
-Second, we limited the number of scenarios to eight per type (fourty in total) that include both hateful and non-hateful social media posts.
+Second, we limited the number of scenarios to eight per type, each including either a hateful or non-hateful post depending on the scenario type.
 %
-We expect the results to be more reliable if the same experiment would have been repeated several times with different sets of social media posts.
+We expect the results to be more reliable if the experiment had been repeated several times with additional sets of social media posts for multiple groups of participants.
 %
-Nevertheless, we tried to collect a set of social media posts for creating the scenarios that was as diverse as possible through an extensive content analysis procedure.
-%
-
-%
-Third, we did not apply any demographical constraints when gathering participants for the survey study.
-%
-As a result, participants from one country were more representated in our experiment than from another.
-%
-Although we did not find that people with different demographic characterisitcs have different opinions about hate speech detection scenarios, we would still expect to retrieve different results if the experiment would have been repeated for several groups of participants from different countries.
+Nevertheless, we believe the results are still reliable since we performed a content analysis procedure for selecting the most representative social media posts for our experiment.
 %
 
 %
-Fourth, how to deal with hateful content on social media platforms remains a subject of debate even for governmental institutions and social media companies.
+Third, dealing with hateful content on social media platforms remains controversial, even for governmental institutions and social media companies.
 %
-We believe the results would be different when the descriptions of the scenarios would have been different.
+We believe the results will differ when we use different descriptions in the scenarios.
 %
-For example, we represented the scenarios by explaining that SocialNet's ranks hateful social media posts lower on people's feeds.
+Initially, we explained in the pilot survey that SocialNet removes hateful posts.
 %
-Initially, we explained in the pilot survey that we would remove hateful posts.
+After gathering the results, we noticed that participants assigned larger absolute values to the TP and TN scenarios than to the FP and FN scenarios.
 %
-However, we noticed that people disagreed more with eachother for the FP and TP cases as some participants might believe that we should allow everything, even hateful posts.
+Therefore, we decided to update the descriptions to rank posts lower instead of removing posts and explained that it is expected from detection systems to produce correct predictions and that incorrect predictions might cause harm to social media users.
+%
+However, after updating the descriptions, we did not notice any difference as participants still assigned larger absolute values to TP and TN scenarios.
 %
 
 %
 Finally, we should point out the limitations of the demographic analysis.
 %
-The sample sizes of the demographic groups are not representative of the population of those groups.
+We did not apply any demographical constraints when gathering participants for the survey study.
 %
-For example, for the nationality feature, we had five participants from Spain.
+As a result, the demographical characteristics of the participants were entirely random, and the sample sizes were relatively small.
 %
-We also have to keep in mind that for some features where we did find significant differences between demographic groups might have happened by chance.
+For example, most participants in our experiment lived in South Africa or Poland, and we only had five participants from Spain.
 %
-There may have been participants that did not understood the scenario, perhaps because their lack of english or because they rushed through the survey.
+Although the sample sizes were large enough for the statistical tests, they were not large enough to represent the populations of entire countries.
+%
+We did not find enough evidence that people with different demographic characteristics have different opinions about hate speech detection scenarios.
+%
+However, if we repeated the experiment with larger sample sizes, we still expect to find group differences for some demographical features, such as nationality.
+%
+At the same time, we also believe that for the features where we did find significant differences between demographic groups, some of them might have happened by chance.
+%
+Either because participants did not understand the scenario, their lack of English, or because they rushed through the survey.
+%
+
+%
+Regarding our value-sensitive rejector, we believe our approach has several limitations.
 %
 
 %
-Regarding our value-sensitive rejector, we believe that there are several drawbacks of our approach.
+First, the rejection threshold is calculated empirically and depends highly on the choice of the test dataset.
+%
+As we have seen in our experiments, we retrieved different optimal rejection thresholds for different test datasets (the \emph{seen} and \emph{unseen} datasets).
+%
+Therefore, when using the value-sensitive rejector, it is essential to use a test set that is as similar to real-world data as possible.
 %
 
 %
-First, the rejection threshold is calculated using a test dataset and we have seen in our results that for different test datasets (the \emph{seen} and \emph{unseen} datasets), we retrieve different results with our value-sensitive rejector.
+Second, we think using well-calibrated models in the value-sensitive rejector is best.
 %
-Therefore, this test set needs to be as realistic as possible.
+Although calibration methods such as temperature scaling can improve existing classification models, these techniques are limited as we still observed many high confident errors.
 %
-
-Second, we need to have calibrated models since we rely purely on the confidence values.
-%
-Although calibration methods such as temperature scaling can help, but there are still limited.
-%
-Also, we should keep in mind that because of the content analysis, we created a selection of social media posts as diverse as possible.
-%
-So some posts may not result in any differences between groups while others do.
-%
-Continue here.
 
 
 \section{Recommendations}
 \label{sec:discussion-recommendations}
 \todo[inline]{Magnitude Estimation seems promising for future research in HCI.}
-\todo[inline]{Personal and demographic characterisitcs might have  a big impact. So further analysis on those aspects seem relevant.}
+\todo[inline]{Personal and demographic characteristics might have  a big impact. So further analysis on those aspects seem relevant.}
 \todo[inline]{Perhaps we can train ML models using the values of TP, TN, FP, FN, rejection in an integrated rejector. So we train the ML model and the rejector simultanously using the values from the survey. So then during training, the FN predictions are punished more than FP predictions.}
 \todo[inline]{This is interesting for future work as we should not only focus on accuracy but instead focus on value as well in contexts where values of different scenarios matter such as hate speech detection.}
