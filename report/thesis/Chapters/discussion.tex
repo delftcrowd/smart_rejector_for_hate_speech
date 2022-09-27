@@ -400,7 +400,35 @@ Although calibration methods such as temperature scaling can improve existing cl
 
 \section{Recommendations}
 \label{sec:discussion-recommendations}
-\todo[inline]{Magnitude Estimation seems promising for future research in HCI.}
-\todo[inline]{Personal and demographic characteristics might have  a big impact. So further analysis on those aspects seem relevant.}
-\todo[inline]{Perhaps we can train ML models using the values of TP, TN, FP, FN, rejection in an integrated rejector. So we train the ML model and the rejector simultanously using the values from the survey. So then during training, the FN predictions are punished more than FP predictions.}
-\todo[inline]{This is interesting for future work as we should not only focus on accuracy but instead focus on value as well in contexts where values of different scenarios matter such as hate speech detection.}
+We believe that future research on social-science-related problems, such as hate speech detection, should focus more on creating human-AI collaboration solutions and that these solutions should take human value into account.
+%
+We noticed that most research in hate speech detection focuses solely on creating fully-automated classification models with accuracy as its optimization target.
+%
+We think solutions such as ML with rejection are promising to increase the utility of classification models for tasks that cannot be fully automated, such as hate speech detection.
+%
+Furthermore, we showed the limitations of machine metrics, such as accuracy, as they do not consider the context of the problem.
+%
+We found through our survey study that different types of machine errors have different costs according to the social media users.
+%
+Therefore, we think that future work should also focus more on developing value-sensitive or human-centred metrics.
+%
+
+%
+Given the limitations of our survey study, we suggest repeating our experiment with larger sample sizes to increase the reliability of the results.
+%
+Also, we think it would be interesting to study which factors influence the user perception of hate speech detection scenarios.
+%
+We believe that user perception depends on many factors, such as the scenario's description, the post's topic, whether the post is offensive or not, and the post's target(s).
+%
+Finally, we think it would be interesting for future research to study the effects of demographical characteristics in more detail by repeating the experiment for different demographic groups with larger sample sizes.
+%
+
+%
+Given the limitations of our value-sensitive rejector, it would be interesting to create a hybrid solution of our value-sensitive rejector and (un)known unknown detection techniques.
+%
+By (un)known unknowns, we mean the low confident correct and high confident incorrect predictions.
+%
+If the underlying classification model of our value-sensitive rejector is not well-calibrated, then we end up with many (un)known unknowns.
+%
+We suggest that future work combine (un)known unknown detection techniques with our value-sensitive rejector so that less correct and more incorrect predictions are rejected and that more correct and less incorrect predictions are accepted.
+%
