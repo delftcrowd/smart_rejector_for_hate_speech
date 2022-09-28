@@ -1,37 +1,41 @@
 \chapter{Conclusion}
-In this project, we tackled the problems of both automatic and manual proactive moderation.
+This research aimed to tackle the problems of automatic and manual proactive moderation of hate speech on social media platforms.
 %
-We did this by combining the best of worlds by introducing a method for rejecting ML model predictions when the model's confidence is too low.
+We presented a human-AI solution for hate speech detection where we reject machine learning (ML) predictions in a value-sensitive manner.
 %
-We 
+In the first part of this work, we created a value-sensitive metric for measuring the total value of a ML model with a reject option based on the implications of true positive (TP), true negative (TN), false positive (FP), false negative (FN), and rejected predictions.
 %
-Value-sensitive 
-==========================
-In this thesis project, we worked on a hybrid human-AI solution for detecting hate speech.
+We used the value-sensitive metric to determine the optimal confidence threshold for which the model achieves the maximum total value, meaning that all ML predictions with confidence values above the optimal threshold are accepted, and all below the threshold are rejected and passed to a human moderator.
 %
-The main problem is that manual moderation is the most reliable solution but simply infeasible, and that automatic moderation through detection algorithms is the most performant but sometimes unreliable.
+In the second part, we designed a survey study to determine the value ratios between TP, TN, FP, FN, and rejected predictions in the context of hate speech detection from the perspective of the social media users.
 %
-Therefore, we focused on rejecting predictions of ML models for hate speech detection.
+We proposed to use a scale called Mangitude Estimation (ME) for measuring the user perception regarding different hate speech detection scenarios.
 %
-However, determing when to accept or reject predictions depends on the context and, more specifically, the implications of accepting/rejecting correct or incorrect predictions.
+
 %
-We denoted these implications as values of TP, TN, FP, FN, and rejected predictions.
+The survey study uncovered several key findings.
 %
-Our main goal was finding out how we can reject ML predictions in a value-sensitive manner for hate speech detection.
+We showed that ME is a reliable technique for measuring the value ratios and validated the results by showing the correlation with the results from a separate survey study using a 100-level scale.
 %
-We split this up into two parts.
+We found that participants mostly appreciate the correct predictions, while they show a strong consensus over the harm of incorrect predictions.
 %
-First, we wanted to find out how we could measure the total value of ML models with a reject option.
+The results of the demographic analysis showed participants with different demographical characteristics do not differ in their perception of most hate speech detection scenarios.
 %
-By maximizing the total value, we know when to accept or reject predictions.
+However, the results of the demographic analysis are solely indicative due to the small sample sizes of the demographic groups in our data.
 %
-% We tackled this by introducing a value-sensitive metric that we use for calculating the optimal rejection threshold.
+
 %
-Second, we wanted to determine the value ratios between TP, TN, FP, FN, and rejected predictions.
+To demonstrate the utility of our value-sensitive rejector, we experimented with several state-of-the-art hate speech detection models on real-world hate speech datasets.
 %
-We determined these value ratios by conducting a large survey study in which we presented participants with different hate speech detection scenarios that they had to judge using the ME scale.
+We found several interesting things when focusing on minimizing harm, implying that correct predictions are not rewarded.
 %
-By combining the two parts, we presented an intuitive hybrid human-AI solution for detecting hate speech in a value-sensitive manner.
+The results show the utility of our value-sensitive rejector in guiding the decision on when to accept or reject machine predictions.
 %
-We showed that by focusing on value-sensitive metrics, the selected best model can be different than when using machine metrics such as accuracy.
-- The results also show the utility of our value-sensitive rejector in guiding the decision on when to reject machine predictions.
+The results show that the value-sensitive rejector can be beneficial for detecting hate speech in data familiar to the data on which the models were trained since only a small fraction of the predictions were rejected.
+%
+In line with the findings from related research, we found that hate speech detection models are susceptible to bias, resulting in a large fraction of the predictions being rejected when applying the value-sensitive rejector to unfamiliar data.
+%
+Finally, the results demonstrate that by focusing on the value-sensitive metric, the selected best model can be different from using machine metrics such as accuracy.
+%
+
+%
