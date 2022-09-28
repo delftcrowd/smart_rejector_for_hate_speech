@@ -88,11 +88,11 @@ To the best of our knowledge, ML with rejection has not been used in hate speech
 %
 
 %
-In this work, we focus on \textit{value-senstive} rejection.
+In this work, we focus on \textit{value-sensitive} rejection of ML predictions in a binary classification setting.
 %
-There are benefits of accepting correct predictions (positive value), costs of accepting incorrect (negative value), and costs of rejecting predictions.
+There are benefits of correct predictions (positive value), costs of incorrect predictions (negative value), and costs of rejecting predictions.
 %
-More specifically, we should weigh the values for false negative (FN) predictions, labelling something as non-hateful when it is, and false positive (FP) predictions, labelling something as hateful when it is not, according to the task of hate speech detection and incorporate them in the design of the hybrid human-AI system \citep{sayin2021science}.
+More specifically, we should weigh the values for false negative (FN) predictions, labelling something as non-hateful when it is, and false positive (FP) predictions, labelling something as hateful when it is not, according to the task of hate speech detection and incorporate them in the design of the human-AI system \citep{sayin2021science}.
 %
 We mainly focus on integrating the human-centred values from the perspective of the social media users since they are the most affected by the consequences of hate speech.
 %
@@ -100,24 +100,84 @@ We mainly focus on integrating the human-centred values from the perspective of 
 %
 The idea of most ML models with a reject option is that we reject predictions when the model's confidence is too low.
 %
-Therefore, we need a value-sensitive metric that determines when we need to accept or reject predictions by taking the human values into account.
+First, we need a metric that measures the total value of an ML model with a reject option based on the human-centred values.
 %
-Second, we need to find out how we can define the human values in the context of hate speech detection.
+By optimizing the value of this metric, we can retrieve an optimal confidence threshold that we can use to determine when we can accept ML predictions and we need to reject them.
 %
-The goal is to retrieve the value ratios in terms of the user perception in hate speech detection scenarios since it is hard to determine the absolute gain/cost values expressed in other units, such as money.
+Second, we need to find out how we can define the human-centred values in the context of hate speech detection.
+%
+The goal is to retrieve the value ratios in terms of the user perception in hate speech detection scenarios since it is hard to determine the absolute values.
 %
 By value ratios, we mean, for example, the ratio between an FP and an FN prediction.
 %
 Therefore, our research questions are as follows:
 %
+
 \noindent\customtextbox{
 	\textbf{RQ} How can we reject predictions of machine learning models in a value-sensitive manner for hate speech detection?
 	\begin{itemize}
 		\item \textbf{SRQ1} How can we measure the total value of machine learning models with a reject option?
 		\item \textbf{SRQ2} How can we determine the value ratios between rejections and True Positive (TP), True Negative (TN), False Positive (FP), and False Negative (FN) predictions?
 	\end{itemize}
-}
+}\newline
 
-\todo[inline]{Here comes a list of contributions}
+%
+In this thesis, we conducted a survey study where we recruited 160 participants to evaluate their perception of 40 different hate speech detection scenarios.
+%
+Each scenario simulates either a TP, TN, FP, FN, or rejected prediction in the context of hate speech detection.
+%
+We carefully selected 40 social media posts through an extensive content analysis procedure for creating the scenarios.
+%
+We proposed to use a rating scale called Magnitude Estimation (ME) for measuring the user perception of all scenarios.
+%
+We validated the ME scale by conducting a separate survey study with a bounded scale that consists of 100 rating levels, called the 100-level scale.
+%
+The results show that there is a high inter-rater agreement between the participants of the ME survey, indicating that ME is suitable for retrieving the human-centred values.
+%
+We also found that users tend to agree more with correct predictions than the degree of how much they disagree with incorrect predictions, implying that social media users highly appreciate correct predictions made by the social media platform.
+%
+Additionaly, we found that participants agree more with each other for incorrect predictions than for correct predictions, indicating a strong consensus over the harm.
+%
+Finally, analysis on the demographical features showed that for most scenarios, there are no differences in the user perception between different demographic groups.
+%
 
-\todo[inline]{Here comes a short description of the structure of the thesis report}
+%
+We created a value-sensitive metric that measures the total value of an ML model for some confidence threshold based on the value ratios and a set of predictions.
+%
+We can convert any ML model into a value-sensitive rejector by finding the optimal confidence rejection threshold for which the value-sensitive metric achieves the maximum value.
+%
+We used the value ratios from the survey study and applied the value-sensitive rejector to two different datasets and three state-of-the-art hate speech classification models: a traditional, a deep learning, and a BERT-based model \citep{devlin2018bert}.
+%
+We denote the first dataset as the \emph{seen} dataset, which is a test dataset from the same source as the training dataset on which the models were trained.
+%
+We denote the second as the \emph{unseen} dataset, which is a test dataset from a different source to simulate how the models would perform in the real world on new data.
+%
+The results demonstrate that the value-sensitive rejector can be beneficial for hate speech detection and that we can use it to increase the utility of hate speech detection models through the optimization of the model's total value.
+%
+The results with the \emph{unseen} data show that hate speech detection models are susceptible to bias, which confirms the findings from related studies.
+%
+Finally, the results show that when selecting the optimal model, using the value of our value-sensitive metric as the optimization target returns different results compared to using accuracy.
+%
+In summary, we make the following contributions:
+%
+\begin{itemize}
+	\item We introduce the concept of rejecting machine learning predictions into the problem of hate speech detection;
+	\item We introduce the Magnitude Estimation scale for measuring user perception to correct and incorrect machine learning predictions;
+	\item We present a value-sensitive metric for measuring the total value of a machine learning model with a reject option;
+	\item We demonstrate through a survey study that the Magnitude Estimation scale is suitable for retrieving the value ratios of TP, TN, FP, FN, and rejected predictions in the context of hate speech detection;
+	\item We demonstrate that our value-sensitive rejector can guide us in determining when to accept or reject machine learning predictions to obtain optimal model value;
+\end{itemize}
+% \item We propose that solutions to social-science related tasks, such as hate speech detection, need to be optimized by taking human-centred values into account rather than solely optimizing machine metrics such as accuracy;
+% \item We demonstrate that the Magnitude Estimation scale is suitable for retrieving the value ratios by showing a high inter-rater reliability and by validating the results through a separate survey study using a different scale;
+% \item We show that demographic features do not influence user perception to hate speech detection scenarios, although these results are just indicative due to the small participant sample sizes;
+
+%
+In this thesis report, we first discuss the related work in chapter \ref{ch:related-work}.
+%
+Then in chapter \ref{ch:rejector}, we present the design of the value-sensitive rejector.
+%
+Chapter \ref{ch:survey} explains the design of the survey study.
+%
+In chapter \ref{ch:results}, we present the results of the experiments of the survey study and the value-sensitive rejector.
+%
+Finally, chapter \ref{ch:discussion} discusses the results and chapter \ref{ch:conclusion} contains the conclusion and answers to the research questions.
