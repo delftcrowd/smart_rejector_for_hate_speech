@@ -388,6 +388,8 @@ Likert scales are multiple Likert-type questions (items) where subjects can answ
 %
 For example, we could use a bipolar scale with seven response alternatives ranging from `strongly disagree' to `strongly agree', including a `neutral' midpoint.
 %
+Figure \ref{fig:scales-likert} shows an example of a five-point Likert item.
+%
 However, there is a lot of discussion in the literature about how we should analyze these Likert scales \citep{boone2012analyzing, allen2007likert, norman2010likert, murray2013likert}.
 %
 The scale of the questions is ordinal, which means that we know the responses' ranking, but we do not have an exact measurement of the distances between the response items \citep{allen2007likert}.
@@ -405,6 +407,32 @@ For example, we can then verify that the mean value of FN predictions is smaller
 Analyzing Likert scales would at most provide us with interval data (data for which we know the order, and we can measure the distances, but there is no true zero point \citep{allen2007likert}).
 %
 However, we need to have ratio data in this project since we want to know the exact value ratios between the TP, TN, FP, FN, and rejected predictions.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[scale=.80]{Figures/scale-likert.pdf}
+        \caption{Likert}
+        \label{fig:scales-likert}
+    \end{subfigure}
+    \par\bigskip
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[scale=.80]{Figures/scale-100.pdf}
+        \caption{100-level}
+        \label{fig:scales-100}
+    \end{subfigure}
+    \par\bigskip
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[scale=.80]{Figures/scale-me.pdf}
+        \caption{ME}
+        \label{fig:scales-me}
+    \end{subfigure}
+    \caption{Visualizations of all three rating scales: a five-point Likert item, the 100-level scale, and the ME scale.}
+    \label{fig:scales}
+\end{figure}
 
 \subsubsection{Magnitude Estimation}
 \label{sec:me}
@@ -438,6 +466,8 @@ The subject is now limited to the response items in the Likert scale and can onl
 %
 We do not have this problem using ME because the subject is always free to assign a more significant value of disagreement.
 %
+Figure \ref{fig:scales-me} shows an example of a bipolar ME scale where any positive or negative numerical value is allowed, including decimal values.
+%
 However, there are two drawbacks to using ME in our use case.
 %
 First, we need to normalize the results since each subject uses a different range of values.
@@ -460,7 +490,7 @@ Using the algorithmic mean is also not an option since it would destroy the rati
 %
 Therefore, we can normalize the magnitude estimates for bipolar scales by dividing all estimates of each subject by the maximum given value \citep{moskowitz1977magnitude}.
 %
-This way, all magnitudes estimates are in the range [-100, 100] while maintaining the ratio properties.
+This way, all magnitudes estimates are in the range [-1, 1] while maintaining the ratio properties.
 %
 
 %
@@ -490,4 +520,4 @@ In \citet{roitero2018fine}, the authors applied cross-modality analysis between 
 %
 In our work, we follow the approach from \citet{roitero2018fine} as we also validate our findings by checking the correlation between the ME scale and the 100-level scale.
 %
-
+Figure \ref{fig:scales-100} visualizes a bipolar 100-level scale.

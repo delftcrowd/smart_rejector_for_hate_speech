@@ -40,13 +40,16 @@ Section \ref{sec:survey-method} contains all details about the setup of the surv
 %
 Finally, in section \ref{sec:survey-analysis}, we elaborate on the analysis of the survey results.
 
-\section{Hypothesis}
+\section{Hypotheses}
 \label{sec:survey-hypothesis}
-Before we conducted the survey experiment, we listed several hypotheses about the value ratios and the ME method:
+We listed several hypotheses about the value ratios and the ME method before we conducted the survey experiment.
+%
+The goal is to reflect on the hypotheses in the discussion to explain why certain results were expected or unexpected.
 \begin{itemize}
     \item \textbf{We hypothesize that the values of FP and FN are negative and that the value of an FN is lower than an FP}. We believe that both FP and FN predictions harm social media users; therefore, we think both values should be negative. We believe that allowing hateful content to be publicly visible has a more negative impact on social media users than filtering out neutral content. Therefore, we think an FN's value is lower than an FP's.
-    \item \textbf{We hypothesize that the values of TP and TN are both positive and that the value of a TP is greater than a TN.} We believe that both TP and TN predictions positively impact social media users and, therefore, we think that both values should be positive. We believe predicting hateful content correctly is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think a TP's value is greater than a TN's.
+    \item \textbf{We hypothesize that the values of TP and TN are both positive and that the value of a TP is greater than a TN.} We believe that both TP and TN predictions positively impact social media users; therefore, we think both values should be positive. We believe predicting hateful content correctly is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think a TP's value is greater than a TN's.
     \item \textbf{We hypothesize that the rejection value is negative and greater than the average value of an FP and an FN.} The critical assumption of using ML models with a reject option is that the negative value of rejection should always be greater than the negative value of an incorrect decision.
+    \item \textbf{We hypothesize that FP and FN's absolute magnitudes are greater than TP and TN's.} We believe that social media users find the harm of incorrect predictions more critical than the benefits of correct predictions.
     \item \textbf{We hypothesize that ME is a suitable technique for retrieving the value ratios.} ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \citet{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale when rating the relevance of documents.
 \end{itemize}
 
