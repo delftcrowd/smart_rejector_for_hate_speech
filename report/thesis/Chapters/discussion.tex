@@ -315,6 +315,10 @@ Regarding the hate speech detection models, we found that BERT models are indeed
 %
 The results with all three hate speech detection models also demonstrated the impact of dataset bias since we found significant performance drops in terms of both the value of our value-sensitive metric and the accuracy metric.
 %
+The experiments with the \emph{unseen} data resulted in lower total values and accuracies compared to the \emph{seen} data, indicating that hate speech datasets are biased.
+%
+Once we train hate speech detection models on such biased datasets, the models become biased as well.
+%
 Our results fit the findings of previous studies where the authors found significant performance dropped when they trained models on one dataset and evaluated them on another \citep{grondahl2018all, arango2019hate}.
 %
 
@@ -389,6 +393,8 @@ First, the rejection threshold is calculated empirically and depends highly on t
 %
 As we have seen in our experiments, we retrieved different optimal rejection thresholds for different test datasets (the \emph{seen} and \emph{unseen} datasets).
 %
+Factors such as \emph{sample retrieval} or \emph{sample annotation} bias (refer to section \ref{sec:related-work-challenges}) explain why we got different results for the \emph{seen} and \emph{unseen} datasets.
+%
 Therefore, when using the value-sensitive rejector, it is essential to use a test set that is as similar to real-world data as possible.
 %
 
@@ -433,3 +439,8 @@ If the underlying classification model of our value-sensitive rejector is not we
 %
 We suggest that future work combine (un)known unknown detection techniques with our value-sensitive rejector so that less correct and more incorrect predictions are rejected and that more correct and less incorrect predictions are accepted.
 %
+Finally, as the optimal rejection threshold is calculated empirically on a test hate speech dataset, we should prevent ourselves from using biased datasets.
+%
+For example, the datasets we used for the experiments collected their data using specific keywords and annotated the data samples with only three annotators.
+%
+Therefore, we suggest preventing sample retrieval and sample annotation bias as much as possible by collecting data samples that are the most representative and annotating them using a large group of annotators with diverse demographic characteristics.
