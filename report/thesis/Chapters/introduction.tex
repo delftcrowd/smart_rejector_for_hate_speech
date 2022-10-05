@@ -32,6 +32,7 @@ However, one article found in internal communication from Facebook that this per
 %
 Therefore, hate speech detection remains a complex problem that even large institutions have not solved.
 
+\section{Problem statement}
 Currently, people rely on reactive and proactive content moderation methods to detect hate speech \citep{klonick2017new}.
 %
 Reactive moderation is when social media users flag hateful content (also known as reporting) \citep{klonick2017new}.
@@ -66,29 +67,16 @@ Likewise, the authors noticed significant performance drops when the detection a
 %
 
 %
-This thesis research will tackle the problems of proactive moderation by creating a human-AI solution where the advantages of humans (cognitive abilities and ability to make judgements) and machines (automation and performance) are combined \citep{woo2020future}.
-%
-% So humans and machines should work together to detect hate speech.
+Therefore, humans and machines should work together to detect hate speech.
 %
 ML models should detect hateful content automatically, and humans should make the final decisions (\textit{human-in-the-loop}) when the model is not confident enough \citep{woo2020future}.
 %
 % Here come ML models with a reject option in place.
-%
-We apply a reject option to some state-of-the-art automatic hate speech detection models.
+ML models with a reject option offer great potential in hate speech detection.
 %
 The goal of the reject option is to reject an ML prediction when the risk of making an incorrect prediction is too high and to defer the prediction task to a human \citep{hendrickx2021machine}.
 %
-There are several advantages.
-%
-First, the utility of the ML model increases as only the most confident (and possibly the most correct) predictions are accepted.
-%
-Second, less human effort is necessary as the machine handles most of the prediction tasks, and a fraction needs to be checked by a human.
-%
-To the best of our knowledge, ML with rejection has not been used in hate speech detection before.
-%
-
-%
-This work focuses on the value-sensitive rejection of ML predictions in a binary classification setting.
+The challenge is to determine when we can accept ML predictions and when we need to reject them.
 %
 There are benefits of correct predictions (positive value), costs of incorrect predictions (negative value), and costs of rejecting predictions.
 %
@@ -96,7 +84,10 @@ More specifically, we should weigh the values for false negative (FN) prediction
 %
 We mainly focus on integrating human-centred values from the perspective of social media users since they are the most affected by the consequences of hate speech.
 %
+We also focus on hate speech detection as a binary classification problem, where a prediction for some social media post is either positive (hateful) or negative (neutral).
+%
 
+\section{Research questions}
 %
 The idea of most ML models with a reject option is that we reject predictions when the model's confidence is too low.
 %
@@ -104,7 +95,7 @@ First, we need a metric that measures the total value of an ML model with a reje
 %
 By optimizing the value of this metric, we can retrieve an optimal confidence threshold that we can use to determine when we can accept ML predictions or if we need to reject them.
 %
-Second, we need to find out how we can define human-centred values in the context of hate speech detection.
+Second, we need to find out how we can retrieve human-centred values in the context of hate speech detection.
 %
 The goal is to retrieve the value ratios in terms of the user perception in hate speech detection scenarios since it is hard to determine the absolute values.
 %
@@ -113,15 +104,21 @@ By value ratios, we mean, for example, the ratio between an FP and an FN predict
 Therefore, our research questions are as follows:
 %
 
-
-
-\noindent\customtextbox{
+\begin{flushleft}
 	\textbf{RQ} How can we reject predictions of machine learning models in a value-sensitive manner for hate speech detection?
 	\begin{itemize}
 		\item \textbf{SRQ1} How can we measure the total value of machine learning models with a reject option?
 		\item \textbf{SRQ2} How can we determine the value ratios between rejections and true positive (TP), true negative (TN), false positive (FP), and false negative (FN) predictions?
 	\end{itemize}
-}\newline
+\end{flushleft}
+
+\section{Our work}
+This thesis research tackled the problems of proactive moderation by creating a human-AI solution where the advantages of humans (cognitive abilities and ability to make judgements) and machines (automation and performance) are combined \citep{woo2020future}.
+%
+We did this by proposing a value-sensitive rejector for detecting hate speech that rejects ML predictions when the prediction's confidence is too low based on human-centred values.
+%
+To the best of our knowledge, ML with rejection has not been used in hate speech detection before.
+%
 
 %
 In this thesis, we conducted a survey study where we recruited 160 participants to evaluate their perception of 40 different hate speech detection scenarios.
@@ -160,6 +157,8 @@ The results with the \emph{unseen} data show that hate speech detection models a
 %
 Finally, the results show that when selecting the optimal model, using the value of our value-sensitive metric as the optimization target returns different results than using accuracy.
 %
+
+\section{Contributions}
 In summary, we make the following contributions:
 %
 \begin{itemize}
@@ -170,6 +169,7 @@ In summary, we make the following contributions:
 	\item We demonstrate that our value-sensitive rejector can guide us in determining when to accept or reject machine learning predictions to obtain optimal model values;
 \end{itemize}
 
+\section{Thesis outline}
 %
 In this thesis report, we first discuss the related work in chapter \ref{ch:related-work}.
 %
