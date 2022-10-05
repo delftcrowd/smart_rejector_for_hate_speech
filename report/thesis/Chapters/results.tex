@@ -1,4 +1,5 @@
 \chapter{Results}
+\label{ch:results}
 This chapter presents the results of the survey study (chapter \ref{ch:survey}) and the experiments with the value-sensitive rejector (chapter \ref{ch:rejector}).
 %
 We first present the results of the survey study as the experiments with the value-sensitive rejector depend on the outcomes of the survey study.
@@ -7,11 +8,17 @@ We first present the results of the survey study as the experiments with the val
 %
 The goal of the survey study was to retrieve the value ratios of TP, TN, FP, FN, and rejected predictions in hate speech detection from the perspective of the social media user.
 %
-We retrieved the value ratios using a scale called Magnitude Estimation (ME).
+We retrieved the value ratios using the ME scale.
 %
 We validated the ME scale by conducting a separate survey using a bounded scale of 100 levels, called the 100-level scale.
 %
-The goals of the experiments with the value-sensitive rejector were finding out how the rejector behaves on different models and datasets, if ML with a reject option is beneficial for hate speech detection, and comparing the value-sensitive metric against machine metrics such as accuracy.
+We defined three goals of the experiments with the value-sensitive rejector.
+%
+First, we want to analyze how the rejector behaves on different models and datasets.
+%
+Second, we want to find out if rejecting predictions increases the utilities of the ML models in terms of the value of our value-sensitive metric.
+%
+Finally, we want to compare the value-sensitive metric against machine metrics such as accuracy.
 %
 
 %
@@ -87,6 +94,8 @@ Finally, section \ref{sec:results-demographics} shows the results of the demogra
 
 \subsection{Value ratios}
 \label{sec:results-value-ratios}
+We need the value ratios between TP, TN, FP, FN, and rejected predictions in the context of hate speech detection to use our value-sensitive rejector from chapter \ref{ch:rejector} for calculating the optimal rejection threshold.
+%
 We calculated the value ratios following the approach from section \ref{sec:analysis-values}.
 %
 Table \ref{tab:values-reliability} shows the resulting values ($v$) from the ME and the 100-level surveys.
@@ -155,7 +164,7 @@ We calculated the median because when we look at figure \ref{fig:boxplots}, we c
 % 
 We calculated the Spearman and the Kendall correlation statistics as these are non-parametric and, therefore, do not require the normality assumption.
 %
-Spearman returned a 0.98 and Kendall a 0.89 correlation between the ME and the 100-level scales (p < 0.05), indicating that both scales are highly correlated.
+Spearman returned a 0.98 and Kendall a 0.89 correlation between the ME and the 100-level scales ($p < 0.05$), indicating that both scales are highly correlated.
 
 \begin{figure}
     \centering
@@ -314,7 +323,7 @@ Positive $V(\tau)$ values indicate that the model for rejection threshold $\tau$
 %
 For all models, we got $\tau_O \approx 0.5$, meaning that all models achieve the highest total value when all predictions are accepted.
 %
-Figure \ref{fig:metric-plots-all-values} shows that all models' $V(\tau_O)$ is greater for the \emph{seen} data than for \emph{unseen} data.
+Figure \ref{fig:metric-plots-all-values} shows that all models' $V(\tau_O)$ values are greater for the \emph{seen} data than for the \emph{unseen} data.
 %
 The total value of all models decreases for increasing values of the rejection threshold.
 %
@@ -371,7 +380,10 @@ When we look at the $V(\tau_O)$ values in table \ref{tab:metric2}, we see that a
 %
 The DistilBERT model achieved the highest $V(\tau_O)$ values in all configurations except for the \emph{unseen} data with $V_{tp}=0$ and $V_{tn}=0$, as the LR model achieved a higher total value.
 %
-When we look at the lost row, we can see that all models become valuable when we adopt the optimal rejection threshold.
+This result is interesting as we can see from table \ref{tab:metric} that for the DistilBERT model, the accuracy of the accepted predictions is higher, and the rejection rate is lower than for the LR model.
+%
+Looking at the last row, we can see that all models become valuable when we adopt the optimal rejection threshold.
+
 
 \begin{figure}
     \centering

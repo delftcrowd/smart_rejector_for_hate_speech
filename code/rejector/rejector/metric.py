@@ -195,7 +195,16 @@ class Metric:
             print("Accuracy accepted: ", len(correct_accepted) / len(accepted))
         else:
             print("Accuracy accepted: -")
+
         print("Num rejected: ", len(rejected))
+        print("Num TPs rejected", len(Prediction.set_of_tps(rejected)))
+        print("Num TNs rejected", len(Prediction.set_of_tns(rejected)))
+        print("Num FPs rejected", len(Prediction.set_of_fps(rejected)))
+        print("Num FNs rejected", len(Prediction.set_of_fns(rejected)))
+        print("Num TPs accepted", len(Prediction.set_of_tps(accepted)))
+        print("Num TNs accepted", len(Prediction.set_of_tns(accepted)))
+        print("Num FPs accepted", len(Prediction.set_of_fps(accepted)))
+        print("Num FNs accepted", len(Prediction.set_of_fns(accepted)))
         RR = len(rejected) / len(self.predictions)
         print("Percentage rejected: ", RR)
 

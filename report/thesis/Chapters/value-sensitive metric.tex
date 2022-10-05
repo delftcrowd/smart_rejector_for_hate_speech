@@ -1,6 +1,6 @@
 \chapter{Value-sensitive rejector}
 \label{ch:rejector}
-As concluded in the \nameref{sec:related-work}, there is a need for \textit{value-sensitive} metrics for measuring the performance of ML models, especially for social-technical applications such as hate speech detection.
+As concluded in chapter \ref{ch:related-work}, there is a need for \textit{value-sensitive} metrics for measuring the performance of ML models, especially for social-technical applications such as hate speech detection.
 %
 We also concluded that manual human moderation is the most effective and that most automatic hate speech detection methods do not perform well on unseen data.
 %
@@ -148,14 +148,14 @@ We accept all predictions for which the confidence value $c$ is greater than or 
 %
 \begin{figure}
     \centering
-    \includegraphics[scale=.7]{Figures/training.pdf}
+    \includegraphics[scale=.75]{Figures/training.pdf}
     \caption{\textbf{Training phase:} flow diagram that visualizes how the value-sensitive rejector calculates the optimal rejection threshold $\tau_O$.}
     \label{fig:training}
 \end{figure}
 %
 \begin{figure}
     \centering
-    \includegraphics[scale=.7]{Figures/deployment.pdf}
+    \includegraphics[scale=.75]{Figures/deployment.pdf}
     \caption{\textbf{Deployment phase:} flow diagram that visualizes how the value-sensitive rejector uses the optimal rejection threshold $\tau_O$ and the prediction confidence $c$ to determine when to accept or reject a prediction from unseen data in deployment.}
     \label{fig:deployment}
 \end{figure}
@@ -285,10 +285,10 @@ We expect that the accuracy of the predictions on the unseen dataset is signific
 Therefore, we also expect that the output value of our value-sensitive metric for the unseen dataset will be lower and that the optimal rejection threshold will be higher (meaning that we need to reject more predictions).
 %
 
-\subsection{Probability Density Functions}
+\subsection{Probability density functions}
 Since our value-sensitive rejector depends on the PDFs of the confidence values of the TP, TN, FP, and FN predictions, we need to empirically estimate these PDFs as we do not know the actual underlying distributions.
 %
-We use the Kernel Density Estimation (KDE) method provided by Statsmodels\footnote{\url{https://www.statsmodels.org/}} for estimating these PDFs.
+We use the kernel density estimation (KDE) method provided by Statsmodels\footnote{\url{https://www.statsmodels.org/}} for estimating these PDFs.
 %
 With KDE, we estimate the PDF by weighing each measured confidence value from a set of predictions using a kernel function, a gaussian density function since it is the most commonly used, for each possible confidence value in the range $[0, 1]$.
 %

@@ -10,13 +10,63 @@
 	}
 }
 
-The amount of hateful content spread online on social media platforms remains a significant problem. Ignoring its presence can harm people and even result in actual violence and other conflicts \citep{ecri-hate-speech-and-violence, balayn2021automatic}. There are many news articles about events where hate spread on online platforms lead to acts of violence \citep{columbia-facebook-linked-to-violence, mujib-mashal-india, paul-mozur-2018, muller2021fanning}. One research paper found a connection between hateful content on Facebook containing anti-refugee sentiment and hate crimes against refugees by analyzing social media usage in multiple municipalities in Germany \citep{muller2021fanning}. Governmental institutions and social media companies are becoming more aware of these risks and are trying to combat hate speech. For example, the European Union developed a Code of Conduct on countering illegal hate speech in cooperation with large social media companies such as Facebook and Twitter \citep{eu-code-of-conduct}. This Code of Conduct requests companies to prohibit hate speech and report their progress every year \citep{eu-code-of-conduct}. The most recent report from 2021 stated that Twitter only removed 49.5\% of all hateful content on their platform. Facebook is most successful in removing hate speech as they claim to have removed 70.2\% of all hateful content in 2021 \citep{eu-code-of-conduct}. However, one article found in internal communication from Facebook that this percentage is much lower, around 3-5\% \citep{noah2021giansiracusa}. Therefore, hate speech detection remains a hard problem that even large institutions have not solved yet.
+The amount of hateful content spread online on social media remains a significant problem.
+%
+Ignoring its presence can harm people and even result in actual violence and other conflicts \citep{ecri-hate-speech-and-violence, balayn2021automatic}.
+%
+Many news articles exist about events where hate spread on online platforms leads to acts of violence \citep{columbia-facebook-linked-to-violence, mujib-mashal-india, paul-mozur-2018, muller2021fanning}.
+%
+One research paper found a connection between hateful content on Facebook containing anti-refugee sentiment and hate crimes against refugees by analyzing social media usage in multiple municipalities in Germany \citep{muller2021fanning}.
+%
+Governmental institutions and social media companies are becoming more aware of these risks and are trying to combat hate speech.
+%
+For example, the European Union developed a Code of Conduct on countering illegal hate speech in cooperation with large social media companies such as Facebook and Twitter \citep{eu-code-of-conduct}.
+%
+This Code of Conduct requests companies to prohibit hate speech and report yearly progress \citep{eu-code-of-conduct}.
+%
+The most recent report from 2021 stated that Twitter only removed 49.5\% of all hateful content on its platform.
+%
+Facebook is most successful in removing hate speech, claiming to have removed 70.2\% of all hateful content in 2021 \citep{eu-code-of-conduct}.
+%
+However, one article found in internal communication from Facebook that this percentage is much lower, around 3-5\% \citep{noah2021giansiracusa}.
+%
+Therefore, hate speech detection remains a complex problem that even large institutions have not solved.
 
-Currently, people rely on reactive and proactive content moderation methods to detect hate speech \citep{klonick2017new}. Reactive moderation is when social media users are flagging (also known as reporting) hateful content \citep{klonick2017new}. Proactive moderation is either done automatically using detection algorithms or manually by a group of human moderators \citep{klonick2017new}. There exist different methods for automatically detecting hateful content. Most use Machine Learning (ML) algorithms since these tend to be the most promising for their detection performance at a large scale \citep{balayn2021automatic, fortuna2018survey}. These algorithms can range from traditional ML methods such as Support Vector Machine or Decision Tree to Deep Learning algorithms \citep{fortuna2018survey}.
+Currently, people rely on reactive and proactive content moderation methods to detect hate speech \citep{klonick2017new}.
+%
+Reactive moderation is when social media users flag hateful content (also known as reporting) \citep{klonick2017new}.
+%
+Proactive moderation is done automatically using detection algorithms or manually by a group of human moderators \citep{klonick2017new}.
+%
+There exist different methods for automatically detecting hateful content.
+%
+Most use machine learning (ML) algorithms since these tend to be the most promising for their detection performance at a large scale \citep{balayn2021automatic, fortuna2018survey}.
+%
+These algorithms range from traditional ML methods such as Support Vector Machines or Decision Trees to Deep Learning algorithms \citep{fortuna2018survey}.
+%
 
-However, both proactive and reactive moderation methods have their limitations. Proactive manual moderation of hateful content is still the most reliable solution but is simply infeasible due to the large amount of content generated by the many users \citep{balayn2021automatic}. Reactive moderation solves this problem since the users can report hate speech themselves. Although, the problem stays that hateful content is exposed to the users for some time. Proactive automatic moderation using automated detection algorithms allow for large amounts of data to be checked quickly without the involvement of humans. However, these algorithms have shown to be unreliable as they often perform poor on deployment data \citep{balayn2021automatic, grondahl2018all}. One study found that the F1 scores reduce significantly (69\% F1 score drop in the worst case) when training a hate speech detection model on one dataset and evaluating it using another dataset \citep{grondahl2018all}. Furthermore, one paper found that most research in hate speech detection overestimates the performance of the automated detection methods \citep{arango2019hate}. The authors found that the performance drops significantly when the detection algorithms are trained on one dataset and evaluated on another \citep{arango2019hate}.
+%
+However, both proactive and reactive moderation methods have their limitations.
+%
+Proactive manual moderation of hateful content is still the most reliable solution but is simply infeasible due to the large amount of content generated by the many users \citep{balayn2021automatic}.
+%
+Reactive moderation solves this problem since the users can report hate speech themselves.
+%
+Although, the problem stays that users are still exposed to hateful content for some time.
+%
+Proactive automatic moderation using automated detection algorithms allows large amounts of data to be checked quickly without the involvement of humans.
+%
+However, these algorithms are unreliable as they often perform poorly on deployment data \citep{balayn2021automatic, grondahl2018all, arango2019hate}.
+%
+One study found that the F1 scores reduce significantly (69\% F1 score drop in the worst case) when training a hate speech detection model on one dataset and evaluating it using another \citep{grondahl2018all}.
+%
+Furthermore, one paper found that most research in hate speech detection overestimates the performance of the automated detection methods \citep{arango2019hate}.
+%
+Likewise, the authors noticed significant performance drops when the detection algorithms were trained on one dataset and evaluated on another \citep{arango2019hate}.
+%
 
-This thesis research will tackle the problems of proactive moderation by focusing on the concept of \textit{human-machine co-creation} \citep{woo2020future}, where the advantages of humans (cognitive abilities and ability to make judgements) and machines (automation and performance) are combined.
+%
+This thesis research will tackle the problems of proactive moderation by creating a human-AI solution where the advantages of humans (cognitive abilities and ability to make judgements) and machines (automation and performance) are combined \citep{woo2020future}.
 %
 % So humans and machines should work together to detect hate speech.
 %
@@ -26,37 +76,107 @@ ML models should detect hateful content automatically, and humans should make th
 %
 We apply a reject option to some state-of-the-art automatic hate speech detection models.
 %
-The goal of the reject option is to reject an ML prediction when the risk of making an incorrect prediction is too high and to defer the prediction task to a human \citep{hendrickx2021machine}. There are several advantages. First, the utility of the ML model increases as only the most confident (and possibly the most correct) predictions are accepted. Second, less human effort is necessary as the machine handles all prediction tasks, and only a fraction needs to be checked by a human. To the best of our knowledge, ML with rejection has not been used in hate speech detection before.
+The goal of the reject option is to reject an ML prediction when the risk of making an incorrect prediction is too high and to defer the prediction task to a human \citep{hendrickx2021machine}.
+%
+There are several advantages.
+%
+First, the utility of the ML model increases as only the most confident (and possibly the most correct) predictions are accepted.
+%
+Second, less human effort is necessary as the machine handles most of the prediction tasks, and a fraction needs to be checked by a human.
+%
+To the best of our knowledge, ML with rejection has not been used in hate speech detection before.
+%
 
-In this work, we focus on \textit{value-senstive} rejection. There are benefits of accepting correct predictions (positive value) and costs of accepting incorrect or rejecting predictions (negative value). More
-specifically, we should weigh cost values for false negative (FN), labelling something as non-hateful when it is, and false positive (FP) predictions, labelling something as hateful when it is not, according to the task of hate speech detection and incorporate them in the design of the hybrid human-AI system  \citep{sayin2021science}. We will mainly focus on the human values from the perspective of the social media users since they are the most affected by the consequences of hate speech.
+%
+This work focuses on the value-sensitive rejection of ML predictions in a binary classification setting.
+%
+There are benefits of correct predictions (positive value), costs of incorrect predictions (negative value), and costs of rejecting predictions.
+%
+More specifically, we should weigh the values for false negative (FN) predictions, labelling something as non-hateful when it is, and false positive (FP) predictions, labelling something as hateful when it is not, according to the task of hate speech detection and incorporate them in the design of the human-AI system \citep{sayin2021science}.
+%
+We mainly focus on integrating human-centred values from the perspective of social media users since they are the most affected by the consequences of hate speech.
+%
 
-The idea of most ML models with rejection is that we reject predictions when the model's confidence is too low. Therefore, we need a metric that measures the total value of ML models with a reject option. We can use the resulting metric to determine when to reject/accept predictions by maximizing the total value. Second, we need to find out how we can define the user-centred values in the context of hate speech detection. We will attempt to retrieve the value ratios since it is hard to determine the absolute cost values in the hate speech domain. By value ratios, we mean, for example, the ratio between an FP and an FN prediction. Therefore, our research questions are as follows:
+%
+The idea of most ML models with a reject option is that we reject predictions when the model's confidence is too low.
+%
+First, we need a metric that measures the total value of an ML model with a reject option based on human-centred values.
+%
+By optimizing the value of this metric, we can retrieve an optimal confidence threshold that we can use to determine when we can accept ML predictions or if we need to reject them.
+%
+Second, we need to find out how we can define human-centred values in the context of hate speech detection.
+%
+The goal is to retrieve the value ratios in terms of the user perception in hate speech detection scenarios since it is hard to determine the absolute values.
+%
+By value ratios, we mean, for example, the ratio between an FP and an FN prediction.
+%
+Therefore, our research questions are as follows:
+%
 
-This leads to the following research questions:
 
-% \noindent\customtextbox{\textbf{RQ} How can we maximize the value of Machine Learning models in hate speech detection using a reject option?}
-% \noindent\customtextbox{\textbf{RQ} How can we reject predictions of Machine Learning models in hate speech detection in a value-sensitive manner?}
-% \textbf{RQ} How can we maximize the value of Machine Learning models in hate speech detection using a reject option?
 
 \noindent\customtextbox{
-	\textbf{RQ} How can we reject predictions of Machine Learning models in a value-sensitive manner for hate speech detection?
+	\textbf{RQ} How can we reject predictions of machine learning models in a value-sensitive manner for hate speech detection?
 	\begin{itemize}
-		\item \textbf{SRQ1} How can we measure the total value of Machine Learning models with a reject option?
-		\item \textbf{SRQ2} How can we determine the value ratios between rejections and True Positive (TP), True Negative (TN), False Positive (FP), and False Negative (FN) predictions?
+		\item \textbf{SRQ1} How can we measure the total value of machine learning models with a reject option?
+		\item \textbf{SRQ2} How can we determine the value ratios between rejections and true positive (TP), true negative (TN), false positive (FP), and false negative (FN) predictions?
 	\end{itemize}
-}
+}\newline
 
-% The second problem is about detecting the low and high confidence errors. These errors are also called \textit{unknown (un)knowns} \citep{liu2020towards}. When we would only rely on the confidence of the ML model to determine when to reject/accept predictions, then we would accept a subset of incorrect predictions with high confidence, and we would reject a subset of correct predictions with low confidence. We need to find a way to recognize these unknown (un)knowns. Once detected, we can reject the unknown unknowns so that a human moderator makes the final judgement and accept the unknown knowns to save the human moderator extra work. Doing so would further improve the utility of our smart rejector for detecting hate speech. So, our second sub research question is as follows:
+%
+In this thesis, we conducted a survey study where we recruited 160 participants to evaluate their perception of 40 different hate speech detection scenarios.
+%
+Each scenario simulates either a TP, TN, FP, FN, or rejected prediction in the context of hate speech detection.
+%
+We carefully selected 40 social media posts through an extensive content analysis procedure for creating the scenarios.
+%
+We proposed using a rating scale called magnitude estimation (ME) to measure the user perception of all scenarios.
+%
+We validated the ME scale by conducting a separate survey study with a bounded scale comprising 100 rating levels, called the 100-level scale.
+%
+The results show a high inter-rater agreement between the participants of the ME survey, indicating that ME is suitable for retrieving human-centred values.
+%
+We also found that users tend to agree more with correct predictions than the degree of how much they disagree with incorrect predictions, implying that social media users highly appreciate correct predictions made by the social media platform.
+%
+Additionally, we found that participants agree more with each other for incorrect predictions than for correct predictions, indicating a strong consensus over the harm.
+%
+Finally, analysis of the demographical features showed that for most scenarios, there are no differences in the user perception between different demographic groups.
+%
 
-% \todo[inline]{I will address the second sub research question only if there is enough time left.}
+%
+We created a value-sensitive metric that measures the total value of an ML model for some confidence threshold based on the value ratios and a set of predictions.
+%
+We can convert any ML model into a value-sensitive rejector by finding the optimal confidence rejection threshold for which the value-sensitive metric achieves the maximum value.
+%
+We applied the value-sensitive rejector, with the value ratios from the survey study as its input, to two different datasets and three state-of-the-art hate speech classification models: a traditional, a deep learning, and a BERT-based model \citep{devlin2018bert}.
+%
+We denote the first dataset as the \emph{seen} dataset, a test dataset from the same source as the training dataset of the models.
+%
+We denote the second as the \emph{unseen} dataset, a test dataset from a different source, to simulate how the models would perform in the real world on new data.
+%
+The results demonstrate that the value-sensitive rejector can be beneficial for hate speech detection since we show that we maximize the values of several hate speech detection models by rejecting predictions.
+%
+The results with the \emph{unseen} data show that hate speech detection models are susceptible to bias, which confirms the findings from related studies.
+%
+Finally, the results show that when selecting the optimal model, using the value of our value-sensitive metric as the optimization target returns different results than using accuracy.
+%
+In summary, we make the following contributions:
+%
+\begin{itemize}
+	\item We introduce the concept of rejecting machine learning predictions into the problem of hate speech detection;
+	\item We introduce the magnitude estimation scale for measuring user perception to correct and incorrect machine learning predictions;
+	\item We present a value-sensitive metric for measuring the total value of a machine learning model with a reject option;
+	\item We demonstrate through a survey study that the magnitude estimation scale is suitable for retrieving the value ratios of TP, TN, FP, FN, and rejected predictions in the context of hate speech detection;
+	\item We demonstrate that our value-sensitive rejector can guide us in determining when to accept or reject machine learning predictions to obtain optimal model values;
+\end{itemize}
 
-% \customtextbox{\textbf{SRQ2} How can we detect the unknown (un)knowns?}
-
-% Finally, we need to find out how we can combine our findings into one smart rejection system which leads to our final sub research question:
-
-% \customtextbox{\textbf{SRQ3} How can we build the smart rejector?}
-
-\todo[inline]{Here comes a list of contributions}
-
-\todo[inline]{Here comes a short description of the structure of the thesis report}
+%
+In this thesis report, we first discuss the related work in chapter \ref{ch:related-work}.
+%
+Then in chapter \ref{ch:rejector}, we present the design of the value-sensitive rejector.
+%
+Chapter \ref{ch:survey} explains the design of the survey study.
+%
+In chapter \ref{ch:results}, we present the results of the experiments of the survey study and the value-sensitive rejector.
+%
+Finally, chapter \ref{ch:discussion} discusses the results, and chapter \ref{ch:conclusion} contains the conclusion and answers to the research questions.

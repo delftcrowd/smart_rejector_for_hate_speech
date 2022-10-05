@@ -1,5 +1,5 @@
 \chapter{Related work}
-\label{sec:related-work}
+\label{ch:related-work}
 In this chapter, we first define hate speech in section \ref{sec:related-work-challenges} and explain why it is such a challenging topic to tackle, especially from a computer science perspective.
 %
 Then, we give an overview of the state-of-the-art solutions for automatic hate speech detection in section \ref{sec:related-work-detection-algorithms}.
@@ -25,7 +25,7 @@ It differs from other conflictual languages since it focuses on specific target 
 %
 \citet{balayn2021automatic} identified the mismatch between the formalization of hate speech and how people perceive it.
 %
-Many factors influence how people perceive hate speech, such as the content itself and the characteristics of the target group and the observing individual, such as gender, cultural background, or age \citep{balayn2021automatic}.
+Many factors influence how people perceive hate speech, such as the content itself and the characteristics of the target group and the observing individual, such as sex, cultural background, or age \citep{balayn2021automatic}.
 %
 We can identify this mismatch in other related work from which there appears to be low agreement among humans regarding annotating hate speech \citep{fortuna2018survey, ross2017measuring, waseem2016you}.
 %
@@ -110,7 +110,7 @@ Given the recent popularity of Bidirectional Encoder Representations from Transf
 Based on the findings of these studies, we will experiment with three models in our project: LR, CNN, and DistilBERT (a lightweight version of BERT \citep{sanh2019distilbert}).
 
 
-\section{Machine Learning with rejection}
+\section{Machine learning with rejection}
 \label{sec:related-work-rejection}
 Several related studies promoted the concept of rejecting ML predictions when the risk of producing an incorrect prediction is too high so that a human gives the final judgement instead \citep{sayin2021science, hendrickx2021machine, woo2020future}.
 %
@@ -175,6 +175,8 @@ Classification models with a reject option are often evaluated by analyzing the 
 %
 \citet{rottger2020hatecheck, casati2021value, olteanu2017limits} recognized the shortcomings of machine metrics such as accuracy and found a gap in the evaluation of hate speech detection systems.
 %
+
+%
 \citet{rottger2020hatecheck} found it hard to identify the weak points of classification models using machine metrics such as accuracy.
 %
 Therefore, the authors presented a suite that consists of 29 carefully selected functional tests to help identify the model's weaknesses \citep{rottger2020hatecheck}.
@@ -183,9 +185,13 @@ Each test checks criteria, such as coping with spelling variations or detecting 
 %
 Our approach is different since we focus on measuring the value of classification models with a reject option.
 %
+
+%
 \citet{olteanu2017limits} promote using \textit{human-centred} metrics that measure the human-perceived value of hate speech classification models.
 %
 They found that for the same precision values, the perceived value changes depending on the user characteristics and the type of classification errors (an offensive tweet labelled as hate (low impact) and a neutral tweet labelled as hate (high impact)) \citep{olteanu2017limits}.
+%
+
 %
 \citet{casati2021value} propose to develop new metrics for evaluating ML models with a reject option that considers domain-specific values.
 %
@@ -372,7 +378,7 @@ Like \citet{ross2017measuring}, we could use the commonly used Likert scales as 
 %
 However, as we will explain in section \ref{sec:likert}, Likert scales are unsuitable for retrieving ratio values.
 %
-Therefore, in section \ref{sec:me}, we will explain why the Magnitude Estimation technique seems promising for our use case.
+Therefore, in section \ref{sec:me}, we will explain why the magnitude estimation technique seems promising for our use case.
 
 \subsubsection{Likert}
 \label{sec:likert}
@@ -381,6 +387,8 @@ Likert scales are a common choice in academic research for retrieving the opinio
 Likert scales are multiple Likert-type questions (items) where subjects can answer questions with several response alternatives \citep{boone2012analyzing}.
 %
 For example, we could use a bipolar scale with seven response alternatives ranging from `strongly disagree' to `strongly agree', including a `neutral' midpoint.
+%
+Figure \ref{fig:scales-likert} shows an example of a five-point Likert item.
 %
 However, there is a lot of discussion in the literature about how we should analyze these Likert scales \citep{boone2012analyzing, allen2007likert, norman2010likert, murray2013likert}.
 %
@@ -400,11 +408,37 @@ Analyzing Likert scales would at most provide us with interval data (data for wh
 %
 However, we need to have ratio data in this project since we want to know the exact value ratios between the TP, TN, FP, FN, and rejected predictions.
 
-\subsubsection{Magnitude Estimation}
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[scale=.750]{Figures/scale-likert.pdf}
+        \caption{Likert}
+        \label{fig:scales-likert}
+    \end{subfigure}
+    \par\bigskip
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[scale=.750]{Figures/scale-100.pdf}
+        \caption{100-level}
+        \label{fig:scales-100}
+    \end{subfigure}
+    \par\bigskip
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[scale=.750]{Figures/scale-me.pdf}
+        \caption{ME}
+        \label{fig:scales-me}
+    \end{subfigure}
+    \caption{Visualizations of all three rating scales: a five-point Likert item, the 100-level scale, and the ME scale.}
+    \label{fig:scales}
+\end{figure}
+
+\subsubsection{Magnitude estimation}
 \label{sec:me}
 In section \ref{sec:likert}, we concluded that Likert scales are unsuitable since they do not provide ratio data.
 %
-In this research, we want to experiment with the Magnitude Estimation (ME) technique.
+In this research, we want to experiment with the magnitude estimation (ME) technique.
 %
 The ME technique originates from psychophysicists, where human subjects must give quantitative estimations of sensory magnitudes \citep{stevens1956direct}.
 %
@@ -432,6 +466,8 @@ The subject is now limited to the response items in the Likert scale and can onl
 %
 We do not have this problem using ME because the subject is always free to assign a more significant value of disagreement.
 %
+Figure \ref{fig:scales-me} shows an example of a bipolar ME scale where any positive or negative numerical value is allowed, including decimal values.
+%
 However, there are two drawbacks to using ME in our use case.
 %
 First, we need to normalize the results since each subject uses a different range of values.
@@ -454,7 +490,7 @@ Using the algorithmic mean is also not an option since it would destroy the rati
 %
 Therefore, we can normalize the magnitude estimates for bipolar scales by dividing all estimates of each subject by the maximum given value \citep{moskowitz1977magnitude}.
 %
-This way, all magnitudes estimates are in the range [-100, 100] while maintaining the ratio properties.
+This way, all magnitudes estimates are in the range [-1, 1] while maintaining the ratio properties.
 %
 
 %
@@ -484,4 +520,4 @@ In \citet{roitero2018fine}, the authors applied cross-modality analysis between 
 %
 In our work, we follow the approach from \citet{roitero2018fine} as we also validate our findings by checking the correlation between the ME scale and the 100-level scale.
 %
-
+Figure \ref{fig:scales-100} visualizes a bipolar 100-level scale.

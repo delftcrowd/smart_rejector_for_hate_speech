@@ -4,7 +4,7 @@ The second part of this research is to find out how we can determine the value r
 %
 We conducted a literature study in section \ref{sec:related-work-value-assessment} and concluded that we want to empirically  estimate the value ratios from the perspective of the social media user.
 %
-In section \ref{sec:me}, we found that Magnitude Estimation (ME) seems like a promising technique for estimating these value ratios.
+In section \ref{sec:me}, we found that ME seems like a promising technique for estimating these value ratios.
 %
 Therefore, this chapter discusses how we apply the ME technique in a crowdsourced survey study.
 %
@@ -40,14 +40,17 @@ Section \ref{sec:survey-method} contains all details about the setup of the surv
 %
 Finally, in section \ref{sec:survey-analysis}, we elaborate on the analysis of the survey results.
 
-\section{Hypothesis}
+\section{Hypotheses}
 \label{sec:survey-hypothesis}
-Before we conducted the survey experiment, we listed several hypotheses about the value ratios and the ME method:
+We listed several hypotheses about the value ratios and the ME method before we conducted the survey experiment.
+%
+The goal is to reflect on the hypotheses in the discussion to explain why certain results were expected or unexpected.
 \begin{itemize}
     \item \textbf{We hypothesize that the values of FP and FN are negative and that the value of an FN is lower than an FP}. We believe that both FP and FN predictions harm social media users; therefore, we think both values should be negative. We believe that allowing hateful content to be publicly visible has a more negative impact on social media users than filtering out neutral content. Therefore, we think an FN's value is lower than an FP's.
-    \item \textbf{We hypothesize that the values of TP and TN are both positive and that the value of a TP is greater than a TN.} We believe that both TP and TN predictions positively impact social media users and, therefore, we think that both values should be positive. We believe predicting hateful content correctly is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think a TP's value is greater than a TN's.
+    \item \textbf{We hypothesize that the values of TP and TN are both positive and that the value of a TP is greater than a TN.} We believe that both TP and TN predictions positively impact social media users; therefore, we think both values should be positive. We believe predicting hateful content correctly is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think a TP's value is greater than a TN's.
     \item \textbf{We hypothesize that the rejection value is negative and greater than the average value of an FP and an FN.} The critical assumption of using ML models with a reject option is that the negative value of rejection should always be greater than the negative value of an incorrect decision.
-    \item \textbf{We hypothesize that Magnitude Estimation (ME) is a suitable technique for retrieving the value ratios.} ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \citet{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale when rating the relevance of documents.
+    \item \textbf{We hypothesize that FP and FN's absolute magnitudes are greater than TP and TN's.} We believe that social media users find the harm of incorrect predictions more critical than the benefits of correct predictions.
+    \item \textbf{We hypothesize that ME is a suitable technique for retrieving the value ratios.} ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \citet{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale when rating the relevance of documents.
 \end{itemize}
 
 \section{Method}
@@ -106,7 +109,17 @@ We inform the participants in the case of TP and FP scenarios that SocialNet ran
 %
 The users then need to spend more effort finding the post since they need to scroll longer before it becomes visible.
 %
-We decided to explain that the hateful posts are ranked lower since we found significant disagreement among participants after the pilot survey in which we explained that SocialNet removes hateful posts.
+
+%
+Initially, in the pilot survey, we explained that detected hateful posts are removed, which could be controversial.
+%
+Also, we found that participants agreed more with the TP and TN scenarios compared to the degree to which they disagreed with the FP and FN scenarios.
+%
+Therefore, we decided to explain that hateful posts are ranked lower, that it is expected from detection systems to produce correct predictions, and that incorrect predictions might cause harm to social media users.
+%
+We did this to prepare the participants to focus on evaluating harm (instead of giving rewards).
+%
+
 %
 We inform participants in the rejection scenarios that a human moderator needs to check the post (that can be either hateful or not hateful) within 24 hours.
 %
@@ -127,14 +140,16 @@ We use 24 hours based on the German NetzDG law, which allows the government to f
 \end{itemize}
 
 \subsubsection{Confounding variables}
+\label{sec:survey-confounding-variables}
 %
 Confounding variables are the different demographic characteristics:
 %
 \begin{itemize}
     \item \textbf{Nationality} People from different nationalities might have different perceptions and definitions of hate speech and how we should deal with it.
+    \item \textbf{Ethnicity} People from different ethnicities might have different perceptions and definitions of hate speech and how we should deal with it.
     \item \textbf{Age} People of different ages might have different perceptions and definitions of hate speech and how we should deal with it.
     \item \textbf{Educational level} People with different educational levels might have different perceptions and definitions of hate speech and how we should deal with it.
-    \item \textbf{Gender} According to \citet{gold2018women}, there is no significant difference in how men and women perceive hate. However, we still report gender as a confounding variable since we want to analyze if there are genuinely not any differences.
+    \item \textbf{Sex} According to \citet{gold2018women}, there is no significant difference in how men and women perceive hate. However, we still report sex as a confounding variable since we want to analyze if there are genuinely not any differences.
 \end{itemize}
 
 \subsubsection{Control variables}
@@ -143,7 +158,7 @@ We define two control variables: the measurement scales and the content of the s
 %
 We control the measurement scale variable by randomly assigning a participant to use either the 100-level or the ME scale to rate the scenarios.
 %
-Regarding the scales, as described before, we choose Magnitude Estimation as our primary scale and use the 100-level scale for validation.
+Regarding the scales, as described before, we choose ME as our primary scale and use the 100-level scale for validation.
 %
 We leave the study of other scales to future work.
 %
@@ -296,21 +311,23 @@ Refer to appendix \ref{sec:appendix-scenarios} for the resulting list of all sce
 
 \begin{figure}
     \centering
-    \includegraphics[scale=.7]{Figures/clustering.pdf}
+    \includegraphics[scale=.75]{Figures/clustering.pdf}
     \caption{Flow diagram that visualizes how we perform content analysis to cluster and select the tweets for our survey study.}
     \label{fig:clustering}
 \end{figure}
 
 \subsection{Procedure}
+In figure \ref{fig:survey-procedure}, we present the procedure of the two surveys, one where participants use the ME scale and another where participants use the 100-level scale.
+%
 We use LimeSurvey\footnote{\url{https://www.limesurvey.org/}} as our survey tool.
 %
 The survey first presents the informed consent policy and excludes participants that do not agree with it.
 %
 Next, we show introductory texts to the participants to explain what we will expect from them and to explain the structure of the survey.
 %
-Using the ME scale, we first present a warm-up task where the participants need to estimate different line lengths to get familiar with using the ME scale.
+Using the ME scale, we first present a training phase where the participants need to estimate five different line lengths using any positive value to get familiar with using the ME scale.
 %
-Then, we randomly present 40 scenarios representing the TP, TN, FP, FN, and rejection scenarios (with eight scenarios per type).
+Then, we randomly present two attention checks and 40 scenarios representing the TP, TN, FP, FN, and rejection scenarios (with eight scenarios per type).
 %
 Each scenario contains several questions with the same structure.
 %
@@ -326,40 +343,12 @@ Finally, we will inform the participants not to put identifiers in their answers
 %
 Refer to appendix \ref{sec:appendix} for all presentation texts, the informed consent, and some scenario examples.
 
-\noindent\customtextbox{
-    \begin{itemize}[leftmargin=*, label={}]
-        \item \textbf{Step 1: provide informed consent}
-              \begin{itemize}
-                  \item Show the informed consent (with checkboxes for giving consent).
-                  \item Proceed to the next step only for the participants who give consent.
-              \end{itemize}
-        \item \textbf{Step 2: introduction}
-              \begin{itemize}
-                  \item Show introductory text about what is expected from the participant.
-                  \item We split all participants up into two groups.
-                  \item The first group first uses the ME scale to rate all scenarios.
-                  \item The second group first uses the 100-level scale to rate all scenarios.
-                  \item Explanation of the scale.
-              \end{itemize}
-        \item \textbf{Step 3: two attention checks}
-              \begin{itemize}
-                  \item Two simple attention checks where we ask the participant to select one option (shuffled through all scenarios).
-              \end{itemize}
-        \item \textbf{Step 4a: ME practice phase (when ME is used)}
-              \begin{itemize}
-                  \item To let participants learn how to use ME, we first run a practice phase where we shuffle and present 5 different line lengths.
-                  \item Each participant needs to estimate the line length using any positive value.
-              \end{itemize}
-        \item \textbf{Step 4b: all scenarios using the scale (ME or 100-level)}
-              \begin{itemize}
-                  \item Show 40 different scenarios in random order: 8 TP, 8 TN, 8 FP, 8 FN, and 8 rejection.
-              \end{itemize}
-        \item \textbf{Step 5: finish}
-              \begin{itemize}
-                  \item Show a thank you message and redirect the users to Prolific to complete the task.
-              \end{itemize}
-    \end{itemize}
-}
+\begin{figure}
+    \centering
+    \includegraphics[scale=.75]{Figures/survey.pdf}
+    \caption{Flow diagram that visualizes the procedure of the survey study. We assign half of the participants to the ME survey and the other half to the 100-level survey.}
+    \label{fig:survey-procedure}
+\end{figure}
 
 \section{Analysis}
 \label{sec:survey-analysis}
@@ -475,15 +464,23 @@ Nevertheless, we verify whether there are any significant statistical difference
 %
 Therefore, we apply several statistics to the results of each scenario to analyze if we can find differences between different demographic groups.
 %
+
+%
 Prolific provides information about the demographic characteristics of the participants, out of which we analyze six features based on what Prolific provides us in the survey results: sex, student (whether they are still a student or not), continent, nationality, language, and ethnicity.
 %
 We manually add the continent feature based on the values of the nationality feature.
 %
+Most features overlap with our pre-defined confounding variables from section \ref{sec:survey-confounding-variables}, where features such as nationality, continent, and language are highly correlated.
+%
 We exclude age as almost all participants' ages fall between 20 and 30 years old.
 %
-We have multiple groups (more than two) for nationality, ethnicity, and  (different age intervals) and two groups for the features student and gender.
+
+%
+We have multiple groups (more than two) for nationality, ethnicity, and language and two groups for the features student, sex, and continent (since we found only two continents in the demographic data of all participants).
 %
 We apply either analysis of variance (ANOVA) (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups and apply an unpaired two-samples t-test (parametric) or the Mann-Whitney U Test (non-parametric) when we have exactly two groups.
+%
+
 %
 First, we check if we can apply the parametric statistics by checking if their assumptions hold in our dataset.
 %
@@ -495,13 +492,19 @@ We use Bartlett's test of homogeneity of variances and the Shapiro-Wilk test of 
 %
 We obey the independence condition since we collect the data of all survey study participants independently.
 %
+
+%
 ANOVA and the t-test can be robust to violations of the homogeneity of variances and the normality assumptions \citep{howell2012statistical}.
 %
 However, if one of the assumptions is violated then it is important to keep the sample sizes as equal as possible \citep{howell2012statistical}.
 %
+
+%
 Finally, for the multi-group features (nationality, language, and ethnicity), we apply pairwise statistical tests (Mann-Whitney U or t-test) between all groups.
 %
 We only do this for the scenarios where we find significant differences between the groups through ANOVA/Kruskal-Wallis.
+%
+
 %
 However, we now may introduce Type I errors as we perform many pairwise statistical tests between all groups.
 %
