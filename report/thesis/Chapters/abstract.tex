@@ -1,0 +1,21 @@
+Hate speech detection on social media platforms remains a challenging task.
+%
+Manual moderation is the most reliable, but infeasible, and machine learning models for detecting hate speech are scalable, but unreliable as they often perform poorly on unseen data.
+%
+Human-AI collaborative systems for detecting hate speech combine the strengths of humans' reliability and the scalability of machine learning.
+%
+While methods for task handover in human-AI collaboration exist that consider the costs of incorrect predictions, insufficient attention has been paid to estimating these costs.
+%
+In this work, we propose a value-sensitive rejector that automatically rejects machine learning predictions when the prediction's confidence is too low by taking into account the users' perception regarding machine learning predictions.
+%
+We conduct a crowdsourced survey study wih 160 participants to evaluate their perception of correct, incorrect, and rejected predictions in the context of hate speech detection.
+%
+We introduce magnitude estimation, an unbounded scale, as the preferred method for measuring user perception of machine predictions.
+%
+The results show that we can use magnitude estimation reliably for measuring the users' perception.
+%
+We integrate the user-perceived values into the value-sensitive rejector and apply it to several state-of-the-art hate speech detection models.
+%
+The results show that the value-sensitive rejector can help us to determine when to accept or reject predictions to achieve optimal model value.
+%
+Furthermore, the results show that the results of selecting the best when focusing on optimal model value can be different compared to more widely used metrics, such as accuracy.
