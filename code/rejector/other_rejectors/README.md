@@ -1,6 +1,0 @@
-# Rejector types
-- `independent_rejector`: same rejector as in De Stefano (2000) but expanded with costs of TP, TN, FP, FN, and rejection. It's called inpependent, because it's independent of the absolute performance of the classification model, meaning that the effectiveness is calculated by only taking the PDFs into account for the range [0, threshold value]. It does not look at the correct/incorrect accepted data samples. Therefore, the metric always returns 0 effectiveness when all samples are accepted.
-- `original_independent_rejector`: reproduction of the rejector as described in De Stefano (2000).
-- `original_rejector`: our own rejector that measures the absolute performance of the model including the reject option. As opposed to the previous two, this metric can return a positive or negative effectiveness value if all samples are accepted. Therefore, it depends on the performance of the classification model.
-
-Please note that the optimal rejection threshold is the same for all rejector types. The first two are only normalized in the sense that accepting all predictions always returns an effectiveness value of 0.
