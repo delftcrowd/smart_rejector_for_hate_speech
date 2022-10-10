@@ -66,7 +66,9 @@ These results further strengthen our stance that we should not detect hate speec
 %
 This section will list the literature's state-of-the-art Natural Language Processing (NLP) techniques for automatic hate speech detection.
 %
-In this project, we focus on hate speech detection as a binary text classification problem where the goal is to label texts from social media platforms as either hateful or not hateful.
+This project focuses on hate speech detection as a binary text classification problem.
+%
+The goal is to label texts from social media platforms as either hateful or not hateful.
 %
 Several excellent surveys outlined the different detection methods \citep{fortuna2018survey, schmidt2019survey}.
 %
@@ -151,7 +153,7 @@ This threshold is calculated based on a set of predictions with their correspond
 They integrated the reject option in the training phase of a DL classification model by including a selection function in the last layer of the DL model.
 %
 
-In this work, we apply the dependent way since it allows for applying the reject option to any existing classification model \citep{hendrickx2021machine}.
+In this work, we apply the dependent way since it allows for using the reject option in any existing classification model \citep{hendrickx2021machine}.
 %
 As opposed to the integrated way, by following the dependent way, we are free to use any classification model, and we do not have to retrain the underlying model whenever we make modifications to the dependent rejector.
 %
@@ -238,15 +240,8 @@ Second, we could define the values using a qualitative measure, for example, by 
 %
 
 %
-In this section, we try to assess the values of both stakeholders empirically and conceptually and explain why we eventually go for an empirical analysis of the values of the social media users only.
+In this section, we try to assess the values of both stakeholders empirically and conceptually and explain why we eventually go for an empirical analysis of the values of social media users only.
 %
-
-
-% \todo[inline]{Value sensitive Design (VSD) from \citet{umbrello2021mapping} state that we can translate values such as freedom of bias into the design of a system. So example is a tax system that needs to detect fraud. If etniticity bias can be introduced by using postal codes, than we can exclude the postal code variable from the learning algorithm. We for example have the value reliability. The AI is not reliable sometimes, so we use reject option in our design to make the use of AI more reliable/. The authors say that we not only want to optimize the tax algotihm in terms of effectiveness (rate of fraud detection) but also in terms of fairness (presenting non-biased selection of cases. So the same holds in our case, we want to optimize in using the AI as much as possible but also want to take mistakes into account (in the end we still need to invovle humans to check specific cases).}
-
-% \todo[inline]{The Value-design algorithm paper from \citet{zhu2018value} describes 5 steps of algorithm design. We focus our approach on theirs by inspecting the stakeholders. And then assessing the stakeholder values to take this into account in the algoithm design.}
-
-
 
 \subsection{Quantitative assessment}
 \label{sec:quantitative-assessment}
@@ -292,7 +287,7 @@ How can we express the values of FP and FN predictions regarding money or time s
 %
 The main problem is that most social media companies are not transparent about moderate hate speech  \citep{klonick2017new}.
 %
-So it is infeasible to assess the values of the social media companies either conceptually or empirically.
+So it is infeasible to assess the values of social media companies either conceptually or empirically.
 %
 When looking at the consequences of FN predictions, we can also look at governmental fines.
 %
@@ -304,9 +299,9 @@ Defining the value of FP predictions is even more difficult.
 %
 It is unclear how filtering out too much content would affect the company regarding money/time lost.
 %
-Therefore, we abstain from estimating the values from the companies' perspective as the stakeholder.
+Therefore, we abstain from estimating the values from the companies' perspective as stakeholder.
 
-Second, we look at the social media users as the stakeholder.
+Second, we look at the social media users as stakeholder.
 %
 Both FP and FN predictions have negative consequences on the users.
 %
@@ -404,7 +399,7 @@ So, we can calculate mean scores for TP, TN, FP, FN, and rejected predictions an
 %
 For example, we can then verify that the mean value of FN predictions is smaller than the mean value of FP predictions and conclude that FN predictions are worse than FP predictions.
 %
-Analyzing Likert scales would at most provide us with interval data (data for which we know the order, and we can measure the distances, but there is no true zero point \citep{allen2007likert}).
+Analyzing Likert scales would, at most, provide us with interval data (data for which we know the order, and we can measure the distances, but there is no true zero point \citep{allen2007likert}).
 %
 However, we need to have ratio data in this project since we want to know the exact value ratios between the TP, TN, FP, FN, and rejected predictions.
 
@@ -490,7 +485,7 @@ Using the algorithmic mean is also not an option since it would destroy the rati
 %
 Therefore, we can normalize the magnitude estimates for bipolar scales by dividing all estimates of each subject by the maximum given value \citep{moskowitz1977magnitude}.
 %
-This way, all magnitudes estimates are in the range [-1, 1] while maintaining the ratio properties.
+This way, all magnitude estimates are in the range [-1, 1] while maintaining the ratio properties.
 %
 
 %
@@ -514,7 +509,7 @@ Some papers analyze the correlation between different ME scales for validation, 
 %
 Others compare ME with another validated scale that can be of any type.
 %
-For example, in \citet{maddalena2017crowdsourcing} which is about judging the relevance of documents, the authors compared the ME scale with two validated ordinal scales for the same dataset \citep{maddalena2017crowdsourcing}.
+For example, in \citet{maddalena2017crowdsourcing}, which is about judging the relevance of documents, the authors compared the ME scale with two validated ordinal scales for the same dataset \citep{maddalena2017crowdsourcing}.
 %
 In \citet{roitero2018fine}, the authors applied cross-modality analysis between a bounded scale that consists of 100 levels (now known as the 100-level scale) and the ME scale and found that they were positively correlated.
 %
