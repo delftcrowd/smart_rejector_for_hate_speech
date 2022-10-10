@@ -29,7 +29,7 @@ Many factors influence how people perceive hate speech, such as the content itse
 %
 We can identify this mismatch in other related work from which there appears to be low agreement among humans regarding annotating hate speech \citep{fortuna2018survey, ross2017measuring, waseem2016you}.
 %
-\citet{ross2017measuring} found low inter-rater reliability scores (Krippendorff's alpha values of around $0.2-0.3$) in a study where they asked humans about the hatefulness and offensiveness of a selection of tweets.
+\citet{ross2017measuring} reported low inter-rater reliability scores (Krippendorff's alpha values of around $0.2-0.3$) in a study where they asked humans about the hatefulness and offensiveness of a selection of tweets.
 %
 They also found that the inter-rater reliability value does not increase when showing a definition of hate speech to the human annotators beforehand.
 %
@@ -46,7 +46,7 @@ In the hate speech domain, we must be careful with creating biased detection sys
 %
 % Annotating hate speech datasets is challenging because social media data follows a skewed distribution since there are many more neutral social media posts than hateful ones \citep{fortuna2018survey}.
 %
-Hate speech datasets such as \citet{waseem2016hateful} or \citet{basile2019semeval} collected their data using specific keywords that can introduce \textit{sample retrieval} bias and annotated their data using only three independent annotators that might result in \textit{sample annotation} bias \citep{balayn2021automatic}.
+Hate speech datasets such as \citet{waseem2016hateful} or \citet{basile2019semeval} collected their data using specific keywords that can introduce \textit{sample retrieval} bias and annotated their data using only three independent annotators, which might result in \textit{sample annotation} bias \citep{balayn2021automatic}.
 %
 Automated classification models will likely become biased in their predictions if we train them on biased datasets (the \emph{garbage in, garbage out} principle).
 %
@@ -99,7 +99,7 @@ Most studies use supervised learning techniques that range from traditional ML t
 %
 Support-vector machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and logistic regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
 %
-\citet{davidson2017automated} found that SVM and LR perform significantly better than other traditional ML techniques such as naive Bayes, decision trees, and random forests.
+\citet{davidson2017automated} found that SVM and LR perform significantly better than other traditional ML techniques, such as naive Bayes, decision trees, and random forests.
 %
 \citet{badjatiya2017deep} experimented with various configurations of word embeddings and two DL models: a convolutional neural network (CNN) and a long short-term memory (LSTM) model.
 %
@@ -107,7 +107,7 @@ They found that CNN performs better than LSTM.
 %
 Given the recent popularity of Bidirectional Encoder Representations from Transformers (BERT) models \citep{devlin2018bert} in the NLP field, studies such as \citet{alatawi2021detecting} found that BERT models achieve slightly better classification performance than DL models.
 %
-\citet{rodriguez2019automatic} use the unsupervised learning method, k-means clustering, to cluster social media posts for identifying topics that potentially promote hate speech.
+\citet{rodriguez2019automatic} use the unsupervised learning method, k-means clustering, to cluster social media posts to identify topics that potentially promote hate speech.
 %
 Based on the findings of these studies, we will experiment with three models in our project: LR, CNN, and DistilBERT (a lightweight version of BERT \citep{sanh2019distilbert}).
 
@@ -175,11 +175,11 @@ Classification models with a reject option are often evaluated by analyzing the 
 %
 \citet{nadeem2009reject} proposed using accuracy-rejection curves to plot the trade-off between accuracy and coverage so that different classification models with a reject option can be compared.
 %
-\citet{rottger2020hatecheck, casati2021value, olteanu2017limits} recognized the shortcomings of machine metrics such as accuracy and found a gap in the evaluation of hate speech detection systems.
+\citet{rottger2020hatecheck, casati2021value, olteanu2017limits} recognized the shortcomings of machine metrics, such as accuracy and found a gap in the evaluation of hate speech detection systems.
 %
 
 %
-\citet{rottger2020hatecheck} found it hard to identify the weak points of classification models using machine metrics such as accuracy.
+\citet{rottger2020hatecheck} found it hard to identify the weak points of classification models using machine metrics, such as accuracy.
 %
 Therefore, the authors presented a suite that consists of 29 carefully selected functional tests to help identify the model's weaknesses \citep{rottger2020hatecheck}.
 %
@@ -268,7 +268,7 @@ In this section, we try to assess the values of both stakeholders empirically an
 % In this example, we can express the values of FP, FN, TP, TN, and rejections in time/money spent/saved.
 %
 
-In this section, we explain the difficulties of defining the values of TP, TN, FP, FN, and rejected predictions in hate speech detection using quantitative measurements.
+In this section, we explain the difficulties of using quantitative measurements to define the values of TP, TN, FP, FN, and rejected predictions in hate speech detection.
 %
 We do this by following the conceptual approach for both stakeholders by looking at some related work to see if the empirical approach is possible.
 %
@@ -299,9 +299,9 @@ Defining the value of FP predictions is even more difficult.
 %
 It is unclear how filtering out too much content would affect the company regarding money/time lost.
 %
-Therefore, we abstain from estimating the values from the companies' perspective as stakeholder.
+Therefore, we abstain from estimating the values from the companies' perspective as stakeholders.
 
-Second, we look at the social media users as stakeholder.
+Second, we look at the social media users as a stakeholder.
 %
 Both FP and FN predictions have negative consequences on the users.
 %
@@ -323,7 +323,7 @@ There is one paper where they tried to develop an economic model for free politi
 %
 The First Amendment restricts the government from creating laws that could, for example, violate Freedom of Speech \citep{first-amendment-white-house}.
 %
-The authors explained in \citet{posner1986free} that the lack of research in this area is because most economists do not dive into the legal domain regarding free speech, and free speech legal specialists refrain from doing economic analysis \citep{posner1986free}.
+\citet{posner1986free} explained that the lack of research in this area is because most economists do not dive into the legal domain regarding free speech, and free speech legal specialists refrain from doing economic analysis \citep{posner1986free}.
 %
 The proposed economic model from the paper includes the cost of harm and the probability that speech results in violence \citep{posner1986free}.
 %
@@ -345,7 +345,7 @@ However, suppose we know this probability, there are still too many uncertaintie
 %
 To calculate the actual costs of hate speech (the FN predictions), we also need to know the number of lives at risk and how we should quantify the value of each life \citep{sunstein2018does}.
 %
-The authors claim that analyzing the benefits of free speech is even more difficult \citep{sunstein2018does}.
+The authors claim that analyzing the benefits of free speech is even more challenging \citep{sunstein2018does}.
 %
 They conclude their work by saying that there are too many problems to empirically evaluate the costs and benefits of hate speech detection \citep{sunstein2018does}.
 %
@@ -369,7 +369,7 @@ Conceptual analysis is impossible since no related studies have tackled this pro
 %
 The closest work is from \citet{ross2017measuring}, where the authors asked human subjects to rate a selection of tweets on hatefulness using a 6-point Likert scale and to indicate whether they think it should be banned from Twitter or not.
 %
-Like \citet{ross2017measuring}, we could use the commonly used Likert scales as our measurement scale.
+Like \citet{ross2017measuring}, we could use the Likert scale as our measurement scale.
 %
 However, as we will explain in section \ref{sec:likert}, Likert scales are unsuitable for retrieving ratio values.
 %
@@ -385,7 +385,7 @@ For example, we could use a bipolar scale with seven response alternatives rangi
 %
 Figure \ref{fig:scales-likert} shows an example of a five-point Likert item.
 %
-However, there is a lot of discussion in the literature about how we should analyze these Likert scales \citep{boone2012analyzing, allen2007likert, norman2010likert, murray2013likert}.
+However, there is much discussion in the literature about how we should analyze these Likert scales \citep{boone2012analyzing, allen2007likert, norman2010likert, murray2013likert}.
 %
 The scale of the questions is ordinal, which means that we know the responses' ranking, but we do not have an exact measurement of the distances between the response items \citep{allen2007likert}.
 %
@@ -393,13 +393,13 @@ For example, we know that `strongly agree' is higher in rank than `agree', but n
 %
 Therefore, we technically cannot use parametric statistics, such as calculating the mean, when analyzing the data \citep{allen2007likert}.
 %
-Other papers argue that we can treat a Likert scale that consists of multiple Likert items as interval data and, therefore, applying parametric statistics will not affect the conclusions \citep{boone2012analyzing, norman2010likert, murray2013likert}.
+Other papers argue that we can treat a Likert scale consisting of multiple Likert items as interval data; therefore, applying parametric statistics will not affect the conclusions \citep{boone2012analyzing, norman2010likert, murray2013likert}.
 %
 So, we can calculate mean scores for TP, TN, FP, FN, and rejected predictions and compare these with each other.
 %
 For example, we can then verify that the mean value of FN predictions is smaller than the mean value of FP predictions and conclude that FN predictions are worse than FP predictions.
 %
-Analyzing Likert scales would, at most, provide us with interval data (data for which we know the order, and we can measure the distances, but there is no true zero point \citep{allen2007likert}).
+Analyzing Likert scales would, at most, provide us with interval data (data for which we know the order, and we can measure the distances, but there is no actual zero point \citep{allen2007likert}).
 %
 However, we need to have ratio data in this project since we want to know the exact value ratios between the TP, TN, FP, FN, and rejected predictions.
 
@@ -441,7 +441,7 @@ For example, in one experiment, human subjects are asked to assign any number th
 %
 If the human subjects perceive the succeeding sound as twice as loud, they should assign a number to it that is twice as large.
 %
-Researchers applied the ME technique to different types of physical stimuli (e.g. line length, brightness, or duration) and proved that the results are reproducible and that the data has ratio properties \citep{moskowitz1977magnitude}.
+Researchers applied the ME technique to different types of physical stimuli (e.g. line length, brightness, or duration) and showed that the results are reproducible and that the data has ratio properties \citep{moskowitz1977magnitude}.
 %
 Other works have shown that the ME technique is also helpful for rating more abstract types of stimuli, such as judging the relevance of documents \citep{maddalena2017crowdsourcing, roitero2018fine}, the linguistic acceptability of sentences \citep{bard1996magnitude}, the strength of political opinions \citep{lodge1979comparisons, lodge1976calibration}, and the usability of system interfaces \citep{mcgee2004master}.
 %
@@ -513,6 +513,6 @@ For example, in \citet{maddalena2017crowdsourcing}, which is about judging the r
 %
 In \citet{roitero2018fine}, the authors applied cross-modality analysis between a bounded scale that consists of 100 levels (now known as the 100-level scale) and the ME scale and found that they were positively correlated.
 %
-In our work, we follow the approach from \citet{roitero2018fine} as we also validate our findings by checking the correlation between the ME scale and the 100-level scale.
+In our work, we follow the approach from \citet{roitero2018fine}, as we also validate our findings by checking the correlation between the ME scale and the 100-level scale.
 %
 Figure \ref{fig:scales-100} visualizes a bipolar 100-level scale.
