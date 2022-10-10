@@ -1,6 +1,6 @@
 \chapter{Value-sensitive rejector}
 \label{ch:rejector}
-As concluded in chapter \ref{ch:related-work}, there is a need for \textit{value-sensitive} metrics metrics to measure ML models' performance, especially for social-technical applications such as hate speech detection.
+As concluded in chapter \ref{ch:related-work}, there is a need for \textit{value-sensitive} metrics to measure ML models' performance, especially for social-technical applications such as hate speech detection.
 %
 We also concluded that manual human moderation is the most effective and that most automatic hate speech detection methods do not perform well on unseen data.
 %
@@ -142,7 +142,7 @@ In this phase, we use our value-sensitive metric from section \ref{sec:value-met
 %
 We use the following inputs in this calculation: the values from the crowdsourced survey and a set of predictions that consist of the confidence values and the predicted and actual labels.
 %
-Figure \ref{fig:deployment} shows how we can apply the trained rejector to unseen data in deployment
+Figure \ref{fig:deployment} shows how we can apply the trained rejector to unseen data in deployment.
 %
 We accept all predictions for which the confidence value $c$ is greater than or equal to the optimal rejection threshold $\tau_O$ and, otherwise, reject them so that a human moderator handles the prediction.
 %
@@ -268,7 +268,7 @@ The remaining parts of the preprocessing, such as removing whitespaces and stop 
 %
 
 %
-We apply the value-sensitive rejector to two test datasets: the \emph{seen} dataset and the \textit{unseen} dataset.
+We apply the value-sensitive rejector to two test datasets: the \emph{seen} and \textit{unseen} dataset.
 %
 The seen dataset is the test set from the \citet{waseem2016hateful} dataset.
 %
@@ -280,7 +280,7 @@ We use the unseen dataset to simulate how the models would perform in a realisti
 %
 We want to study the effect of bias and how this affects the results when using our value-sensitive metric for evaluating the models with a reject option.
 %
-We expect that the accuracy of the predictions on the unseen dataset is significantly lower than on the seen dataset, similar to the findings of related studies: \citet{grondahl2018all, arango2019hate}.
+We expect that the accuracy of the predictions on the unseen dataset is significantly lower than the accuracy of the predictions on the seen dataset: \citet{grondahl2018all, arango2019hate}.
 %
 Therefore, we also expect that the output value of our value-sensitive metric for the unseen dataset will be lower and that the optimal rejection threshold will be higher (meaning that we need to reject more predictions).
 %
