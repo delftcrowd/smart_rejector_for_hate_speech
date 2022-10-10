@@ -2,9 +2,9 @@
 \label{ch:survey}
 The second part of this research is to find out how we can determine the value ratios between TP, TN, FP, FN, and rejected predictions.
 %
-We conducted a literature study in section \ref{sec:related-work-value-assessment} and concluded that we want to empirically  estimate the value ratios from the perspective of the social media user.
+We conducted a literature study in section \ref{sec:related-work-value-assessment} and concluded that we want to empirically estimate the value ratios from the perspective of the social media user.
 %
-In section \ref{sec:me}, we found that ME seems like a promising technique for estimating these value ratios.
+In section \ref{sec:me}, we found that ME is a promising technique for estimating these value ratios.
 %
 Therefore, this chapter discusses how we apply the ME technique in a crowdsourced survey study.
 %
@@ -16,7 +16,7 @@ We show the participants different scenarios representing TP, TN, FP, FN, and re
 %
 The TP and TN scenarios mean that SocialNet successfully detects whether a post is hateful or not, respectively.
 %
-The FP scenario means that SocialNet incorrectly predicts a non-hateful post as hateful, conversely for the FN scenario.
+The FP scenario means that SocialNet incorrectly predicts a non-hateful post as hateful, while the FN scenario implies that SocialNet incorrectly predicts a hateful post as non-hateful.
 %
 For example, in the FN scenario, the survey shows a hateful post to the participant and explains that SocialNet did not identify the post as hate speech.
 %
@@ -36,7 +36,7 @@ The content of this chapter reflects the final version of the pre-registration p
 %
 In section \ref{sec:survey-hypothesis}, we make a hypothesis about the ME method and the value ratios.
 %
-Section \ref{sec:survey-method} contains all details about the setup of the survey.
+Section \ref{sec:survey-method} contains all details about the survey setup.
 %
 Finally, in section \ref{sec:survey-analysis}, we elaborate on the analysis of the survey results.
 
@@ -55,7 +55,7 @@ The goal is to reflect on the hypotheses in the discussion to explain why certai
 
 \section{Method}
 \label{sec:survey-method}
-In this section, we discuss the complete setup of the survey experiment and how we use both scales.
+This section discusses the complete setup of the survey experiment and how we use both scales.
 
 \subsection{Scales}
 We use ME as the primary scale of our survey experiment.
@@ -83,7 +83,7 @@ Both scales are bipolar scales since the participants should be able to either d
 \subsection{Normalization}
 The ME scale is unbounded and, therefore, provides a lot of response freedom.
 %
-For example, suppose we first show a scenario and the participant provides a value (e.g., 100) to indicate the degree of agreement.
+For example, suppose we first show a scenario, and the participant provides a value (e.g., 100) to indicate the degree of agreement.
 %
 Suppose we next present a scenario that the participant agrees with more.
 %
@@ -97,10 +97,10 @@ Therefore, we normalize the results by dividing the magnitude estimates of each 
 %
 We multiply the normalized magnitude estimates by 100 for the sake of clarity.
 %
-This way, all magnitudes estimates are in the range $[-100, 100]$ while maintaining the ratio properties.
+This way, all magnitude estimates are in the range $[-100, 100]$ while maintaining the ratio properties.
 
 \subsection{Design}
-We will list all independent, dependent, confounding, and control variables analyzed in our experiment in this section.
+This section lists all independent, dependent, confounding, and control variables analyzed in our experiment.
 
 \subsubsection{Independent variables}
 Independent variables are the different hate speech detection scenarios we show to the participants (TP, TN, FP, FN, and rejection).
@@ -201,7 +201,7 @@ We choose 10\% MoE since we have a limiting budget.
 %
 We first conduct a pilot survey for 12 participants per scale to gather feedback and check if we need to improve things before the actual experiment.
 %
-We want to determine the average workload using the pilot survey and decide whether reducing the MoE by increasing the number of participants is possible.
+We want to determine the average workload using the pilot survey and whether reducing the MoE by increasing the number of participants is possible.
 %
 For the pilot survey, we use 24 participants.
 %
@@ -232,7 +232,7 @@ We use the following exclusion/rejection criteria:
     \item Participants who do fail the ME training phase. For example, by providing random values that do not make any sense.
 \end{itemize}
 %
-We select a balanced set of participants in Prolific, among which 50\% are men and 50\% are women.
+We select a balanced set of participants in Prolific, among which 50\% are men, and 50\% are women.
 
 \subsection{Data}
 \label{sec:data}
@@ -248,7 +248,7 @@ For the rejection scenarios, we need both neutral and hateful tweets.
 %
 Therefore, we need at least eight tweets per scenario type (TP, TN, FP, FN, and rejection).
 %
-We need 40 tweets, where 20 are hateful and 20 are not hateful, to create 40 different scenarios.
+We need 40 tweets, where 20 are hateful, and 20 are not hateful, to create 40 different scenarios.
 %
 
 %
@@ -264,7 +264,7 @@ We provide an overview of our selection process in figure \ref{fig:clustering}.
 %
 
 %
-We exclude all tweets that contain Twitter replies and mentions since  they have unclear contexts.
+We exclude all tweets that contain Twitter replies and mentions since they have unclear contexts.
 %
 Then we preprocess all tweets by removing the URLs and hashtags.
 %
@@ -292,7 +292,7 @@ Finally, we apply the unsupervised learning technique k-means to the output of t
 %
 We calculate the silhouette coefficient to determine the optimal cluster size (k value) for the neutral tweets and the four groups of hateful tweets.
 %
-The silhouette analysis indicates to set k as large as possible.
+The silhouette analysis indicates setting k as large as possible.
 %
 
 %
@@ -358,7 +358,7 @@ Second, we analyze the quality of our survey method by looking at two aspects: r
 
 \subsection{Value ratios}
 \label{sec:analysis-values}
-The survey study aims to determine value ratios of the TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection.
+The survey study aims to determine the value ratios of the TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection.
 %
 The metric from section \ref{sec:value-metric} takes these numerical values as input to calculate the optimal rejection threshold.
 %
@@ -392,7 +392,7 @@ We will not use the aggregated values of the 100-level scale for our metric sinc
 \label{sec:reliability}
 Reliability is about whether we can trust our results and if we get consistent results \citep{fitzner2007reliability}.
 %
-We do this by mainly looking at the inter-rater reliability.
+We do this by mainly looking at inter-rater reliability.
 %
 Different participants should give approximately the same judgements to the same scenarios.
 %
@@ -432,7 +432,7 @@ Following the approach from \citet{roitero2018fine}, we analyze the correlation 
 %
 We can verify that they measure the same phenomenon if we find that both scales are positively correlated.
 %
-However, we can also expect a low correlation since the ME scale is a (normalized) unbounded scale and the 100-level scale is bounded.
+However, we can also expect a low correlation since the ME scale is a (normalized) unbounded scale, and the 100-level scale is bounded.
 %
 Nevertheless, we think both scales will give similar results, meaning that high ME responses should correspond to high 100-level scale responses and low ME responses to low 100-level scale responses.
 %
@@ -460,7 +460,9 @@ However, we still try to analyze if we can find any differences between particip
 \label{sec:analysis-demographic}
 As we conduct the survey study only once for a group of participants, among which 50\% are men and 50\% are women, the remaining demographic characteristics can be quite diverse.
 %
-Nevertheless, we verify whether there are any significant statistical differences between groups of participants with different demographic characteristics as we expect that demographic characteristics influence people's perception of hate speech and how we should deal with it.
+Nevertheless, we verify whether there are any significant statistical differences between groups of participants with different demographic characteristics.
+%
+We expect that demographic characteristics influence people's perception of hate speech and how we should deal with it.
 %
 Therefore, we apply several statistics to the results of each scenario to analyze if we can find differences between different demographic groups.
 %
@@ -472,13 +474,15 @@ We manually add the continent feature based on the values of the nationality fea
 %
 Most features overlap with our pre-defined confounding variables from section \ref{sec:survey-confounding-variables}, where features such as nationality, continent, and language are highly correlated.
 %
-We exclude age as almost all participants' ages fall between 20 and 30 years old.
+We exclude age as almost all participants fall between 20 and 30 years old.
 %
 
 %
 We have multiple groups (more than two) for nationality, ethnicity, and language and two groups for the features student, sex, and continent (since we found only two continents in the demographic data of all participants).
 %
-We apply either analysis of variance (ANOVA) (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups and apply an unpaired two-samples t-test (parametric) or the Mann-Whitney U Test (non-parametric) when we have exactly two groups.
+We apply either analysis of variance (ANOVA) (parametric) or Kruskal-Wallis (non-parametric) when we have more than two groups.
+%
+Furthermore, we apply an unpaired two-sample t-test (parametric) or the Mann-Whitney U Test (non-parametric) when we have exactly two groups.
 %
 
 %
@@ -496,7 +500,7 @@ We obey the independence condition since we collect the data of all survey study
 %
 ANOVA and the t-test can be robust to violations of the homogeneity of variances and the normality assumptions \citep{howell2012statistical}.
 %
-However, if one of the assumptions is violated then it is important to keep the sample sizes as equal as possible \citep{howell2012statistical}.
+However, if one of the assumptions is violated, then it is essential to keep the sample sizes as equal as possible \citep{howell2012statistical}.
 %
 
 %
@@ -508,6 +512,6 @@ We only do this for the scenarios where we find significant differences between 
 %
 However, we now may introduce Type I errors as we perform many pairwise statistical tests between all groups.
 %
-As a result, we might incorrectly reject the null hypothesis for some of the pairwise tests, meaning that we find significant differences between some of the groups while there are not actually.
+As a result, we might incorrectly reject the null hypothesis for some pairwise tests, meaning that we find significant differences between some groups while there are none.
 %
 Therefore, we perform the post hoc Benjamini-Hochberg procedure to correct the p-values of the pairwise test results to control the Type I errors.
