@@ -64,7 +64,7 @@ These results further strengthen our stance that we should not detect hate speec
 \label{sec:related-work-detection-algorithms}
 % There is an increasing academic interest in the automatic detection of hate speech since the topic has become more relevant, as explained in the \nameref{ch:introduction}.
 %
-This section will list the literature's state-of-the-art Natural Language Processing (NLP) techniques for automatic hate speech detection.
+This section will list the literature's state-of-the-art natural language processing (NLP) techniques for automatic hate speech detection.
 %
 This project focuses on hate speech detection as a binary text classification problem.
 %
@@ -78,7 +78,7 @@ Then, we will state the most used classification models ranging from supervised 
 %
 
 %
-Commonly used features are bag-of-words (BOW) \citep{greevy2004classifying}, character/word N-grams \citep{waseem2016hateful}, lexicon features \citep{xiang2012detecting},  term frequency-inverse document frequency (TF-IDF) \citep{badjatiya2017deep, davidson2017automated, rodriguez2019automatic}, part-of-speech (POS) \citep{greevy2004classifying}, sentiment analysis \citep{rodriguez2019automatic}, topic modelling (e.g. Latent Dirichlet Allocation (LDA)) \citep{xiang2012detecting}, meta-information (e.g. location) \citep{waseem2016hateful}, or word embeddings \citep{badjatiya2017deep, agrawal2018deep}.
+Commonly used features are bag-of-words (BOW) \citep{greevy2004classifying}, character/word N-grams \citep{waseem2016hateful}, lexicon features \citep{xiang2012detecting},  term frequency-inverse document frequency (TF-IDF) \citep{badjatiya2017deep, davidson2017automated, rodriguez2019automatic}, part-of-speech (POS) \citep{greevy2004classifying}, sentiment analysis \citep{rodriguez2019automatic}, topic modelling (e.g. latent dirichlet allocation (LDA)) \citep{xiang2012detecting}, meta-information (e.g. location) \citep{waseem2016hateful}, or word embeddings \citep{badjatiya2017deep, agrawal2018deep}.
 %
 \citet{greevy2004classifying} found that the classification performance is higher with BOW features than with POS features.
 %
@@ -97,7 +97,7 @@ They found that using pre-trained word embeddings such as GloVe does not result 
 
 Most studies use supervised learning techniques that range from traditional ML to deep learning (DL) classification models, and a few use unsupervised learning techniques to cluster social media posts.
 %
-Support-vector machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and logistic regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
+Support vector machine (SVM) \citep{greevy2004classifying, xiang2012detecting,davidson2017automated} and logistic regression (LR) \citep{waseem2016hateful, davidson2017automated} are the most popular traditional ML techniques for hate speech detection.
 %
 \citet{davidson2017automated} found that SVM and LR perform significantly better than other traditional ML techniques, such as naive Bayes, decision trees, and random forests.
 %
@@ -105,7 +105,7 @@ Support-vector machine (SVM) \citep{greevy2004classifying, xiang2012detecting,da
 %
 They found that CNN performs better than LSTM.
 %
-Given the recent popularity of Bidirectional Encoder Representations from Transformers (BERT) models \citep{devlin2018bert} in the NLP field, studies such as \citet{alatawi2021detecting} found that BERT models achieve slightly better classification performance than DL models.
+Given the recent popularity of bidirectional encoder representations from transformers (BERT) models \citep{devlin2018bert} in the NLP field, studies such as \citet{alatawi2021detecting} found that BERT models achieve slightly better classification performance than DL models.
 %
 \citet{rodriguez2019automatic} use the unsupervised learning method, k-means clustering, to cluster social media posts to identify topics that potentially promote hate speech.
 %
@@ -130,15 +130,15 @@ Several studies have applied the reject option using one of the abovementioned a
 %
 \citet{coenen2020probability} developed a \emph{separated} rejector that rejects data samples before passing them to the classification model.
 %
-They used different outlier detection techniques, such as the one-class Support Vector Machine (SVM), to detect data samples unfamiliar with the training data \citep{coenen2020probability}.
+They used different outlier detection techniques, such as the one-class SVM, to detect data samples unfamiliar with the training data \citep{coenen2020probability}.
 %
 
 %
 \emph{Dependent} rejectors are the most commonly used \citep{Geifman2017Selective, de2000reject, grandvalet2008reject}.
 %
-\citet{grandvalet2008reject} experimented with support vector machines (SVMs) with a reject option.
+\citet{grandvalet2008reject} experimented with SVMs with a reject option.
 %
-\citet{Geifman2017Selective} developed a dependent rejector that rejects data samples based on a predefined maximum risk value and the coverage accuracy of the classification model \citep{Geifman2017Selective}.
+\citet{Geifman2017Selective} developed a dependent rejector that rejects data samples based on a predefined maximum risk value and the coverage accuracy of the classification model.
 %
 \citet{de2000reject} were among the first to develop a dependent rejector for neural networks.
 %
@@ -148,22 +148,22 @@ This threshold is calculated based on a set of predictions with their correspond
 %
 
 %
-\citet{geifman2019reject} developed an \emph{integrated} rejector by extending their work from \citet{Geifman2017Selective}.
+\citet{geifman2019reject} developed an \emph{integrated} rejector by extending the work from \citet{Geifman2017Selective}.
 %
 They integrated the reject option in the training phase of a DL classification model by including a selection function in the last layer of the DL model.
 %
 
-In this work, we apply the dependent way since it allows for using the reject option in any existing classification model \citep{hendrickx2021machine}.
+In this work, we apply the dependent way since it allows for using the reject option in any classification model \citep{hendrickx2021machine}.
 %
 As opposed to the integrated way, by following the dependent way, we are free to use any classification model, and we do not have to retrain the underlying model whenever we make modifications to the dependent rejector.
 %
-We believe that the separated way is not optimal either since we still want to decide whether to accept or reject predictions based on the output of the underlying classification model.
+We believe that the separated way is not optimal either since we still want to decide whether to accept or reject predictions based on the output of the classification model.
 %
 The most relevant work in dependent rejectors is from \citet{de2000reject} since their confidence metric considers the value of (in)correct and rejected predictions.
 %
 While their metric measures only the effectiveness of the reject option and is based on the values of correct, incorrect, and rejected predictions, our metric measures the total value of the ML model with the reject option and is based on the values of TP, TN, FP, FN, and rejected predictions.
 %
-While they experimented with a range of different cost values, we go further by employing a value-sensitive approach, which determines the cost values based on how users feel regarding machine predictions using a survey study with crowd workers.
+While they experimented with a range of different cost values, we go further by employing an emperical approach, which determines the cost values based on how users feel regarding machine predictions using a survey study with crowd workers.
 %
 Therefore, we obtain a rejection threshold that captures the implications of machine predictions from a human perspective.
 
@@ -285,7 +285,7 @@ The problem, however, starts to arise when we look at the FP and the FN predicti
 %
 How can we express the values of FP and FN predictions regarding money or time saved/spent?
 %
-The main problem is that most social media companies are not transparent about moderate hate speech  \citep{klonick2017new}.
+The main problem is that most social media companies are not transparent about moderating hate speech  \citep{klonick2017new}.
 %
 So it is infeasible to assess the values of social media companies either conceptually or empirically.
 %
@@ -299,7 +299,7 @@ Defining the value of FP predictions is even more difficult.
 %
 It is unclear how filtering out too much content would affect the company regarding money/time lost.
 %
-Therefore, we abstain from estimating the values from the companies' perspective as stakeholders.
+Therefore, we abstain from estimating the values where the companies are the main stakeholders.
 
 Second, we look at the social media users as a stakeholder.
 %
@@ -371,9 +371,9 @@ The closest work is from \citet{ross2017measuring}, where the authors asked huma
 %
 Like \citet{ross2017measuring}, we could use the Likert scale as our measurement scale.
 %
-However, as we will explain in section \ref{sec:likert}, Likert scales are unsuitable for retrieving ratio values.
+However, we first explain why Likert scales are unsuitable for retrieving ratio values.
 %
-Therefore, in section \ref{sec:me}, we will explain why the magnitude estimation technique seems promising for our use case.
+Then we explain why the magnitude estimation technique seems promising for our use case.
 
 \subsubsection{Likert}
 \label{sec:likert}
@@ -401,7 +401,7 @@ For example, we can then verify that the mean value of FN predictions is smaller
 %
 Analyzing Likert scales would, at most, provide us with interval data (data for which we know the order, and we can measure the distances, but there is no actual zero point \citep{allen2007likert}).
 %
-However, we need to have ratio data in this project since we want to know the exact value ratios between the TP, TN, FP, FN, and rejected predictions.
+However, we need to have ratio data in this project since we want to know the value ratios between the TP, TN, FP, FN, and rejected predictions.
 
 \begin{figure}
     \centering
@@ -431,7 +431,7 @@ However, we need to have ratio data in this project since we want to know the ex
 
 \subsubsection{Magnitude estimation}
 \label{sec:me}
-In section \ref{sec:likert}, we concluded that Likert scales are unsuitable since they do not provide ratio data.
+We concluded in the previous section that Likert scales are unsuitable since they do not provide ratio data.
 %
 In this research, we want to experiment with the magnitude estimation (ME) technique.
 %
@@ -445,7 +445,7 @@ Researchers applied the ME technique to different types of physical stimuli (e.g
 %
 Other works have shown that the ME technique is also helpful for rating more abstract types of stimuli, such as judging the relevance of documents \citep{maddalena2017crowdsourcing, roitero2018fine}, the linguistic acceptability of sentences \citep{bard1996magnitude}, the strength of political opinions \citep{lodge1979comparisons, lodge1976calibration}, and the usability of system interfaces \citep{mcgee2004master}.
 %
-Therefore, we think that ME is a promising method for judging the value ratios of the different types of predictions in hate speech detection.
+Therefore, we think that ME is a promising method for retrieving the value ratios of the different types of predictions in hate speech detection.
 %
 
 %
@@ -455,7 +455,7 @@ Another advantage is that the scale is unbounded compared to other commonly used
 %
 For example, suppose the subject provides a `strongly disagree' judgment for the first stimulus.
 %
-Suppose we now present an even worse stimulus.
+Suppose we then present an even worse stimulus.
 %
 The subject is now limited to the response items in the Likert scale and can only give the same `strongly disagree' judgement.
 %
@@ -477,7 +477,7 @@ For example, one may give ratings using values of 1, 2, and 10, while another ma
 %
 Geometric averaging is the recommended approach for normalizing magnitude estimates since it preserves the ratio information \citep{moskowitz1977magnitude, mcgee2004master, maddalena2017crowdsourcing}.
 %
-However, as opposed to the unipolar scales (with only positive values) used in \citet{bard1996magnitude, mcgee2004master, maddalena2017crowdsourcing}, we cannot apply geometric averaging to bipolar scales (disagree-agree).
+However, as opposed to the unipolar scales (with only positive values) used by \citet{bard1996magnitude, mcgee2004master} and \citet{maddalena2017crowdsourcing}, we cannot apply geometric averaging to bipolar scales (disagree-agree).
 %
 By including 0 (neutral) and negative values (disagree), we cannot use geometric averaging anymore because it uses log calculations \citep{moskowitz1977magnitude}.
 %
@@ -497,7 +497,7 @@ In the case of estimating line lengths, we can easily vary the line length, for 
 %
 Subjects can then estimate the line length using a number twice as large.
 %
-However, this becomes more difficult in the social science and psychology domains.
+However, this becomes more difficult in the social and psychology domains.
 %
 In hate speech detection and other social science and psychology applications, we do not have an exact measure of the stimulus \citep{bard1996magnitude}.
 %
