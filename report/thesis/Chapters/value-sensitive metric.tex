@@ -286,7 +286,7 @@ Since our value-sensitive rejector depends on the PDFs of the confidence values 
 %
 We use the kernel density estimation (KDE) method provided by Statsmodels\footnote{\url{https://www.statsmodels.org/}} for estimating these PDFs.
 %
-With KDE, we estimate the PDF by weighing each measured confidence value from a set of predictions using a kernel function, a gaussian density function since it is the most commonly used, for each possible confidence value in the range $[0, 1]$.
+With KDE, we estimate the PDF by weighing the confidence values from a set of predictions using a kernel function, a gaussian density function since it is the most commonly used, for each possible confidence value in the range $[0, 1]$.
 %
 If there are many predictions with a confidence value around $0.8$, then the KDE estimate will be higher around that point.
 %
