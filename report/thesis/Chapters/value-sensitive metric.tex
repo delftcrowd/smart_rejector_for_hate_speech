@@ -174,15 +174,15 @@ We experiment with three different hate speech detection models based on the fin
 %
 The first model is a traditional ML model.
 %
-We implement the Logistich Regression (LR) model with Character N-gram from \citet{waseem2016hateful} since this model achieved the best performance compared to other traditional ML models \citep{davidson2017automated}.
+We implement the LR model with character N-gram from \citet{waseem2016hateful} since this model achieved the best performance compared to other traditional ML models \citep{davidson2017automated}.
 %
 We select the second model, a DL model, based on the findings from \citet{agrawal2018deep, badjatiya2017deep}.
 %
-We choose a Convolutional Neural Network (CNN) model initialized with random word embeddings since both studies found that this configuration provides state-of-the-art classification performance.
+We choose a CNN model initialized with random word embeddings since both studies found that this configuration provides state-of-the-art classification performance.
 %
 We implement the CNN model based on the work of \citep{agrawal2018deep}.
 %
-Finally, our third model is a transformer model, given its recent popularity in the NLP domain.
+Finally, our third model is a BERT-based model, given its recent popularity in the NLP domain.
 %
 We use the DistilBERT model since it is faster to train and smaller than BERT models while achieving similar performance \citep{sanh2019distilbert}.
 %g
@@ -198,7 +198,7 @@ We perform hyperparameter optimization on all three models.
 %
 For the CNN model, we apply random search to optimize the values of the learning rate, batch size, and the number of epochs.
 %
-For the DistilBERT model, we apply Population Based Training (PBT) \citep{jaderberg2017population} implemented in Tune \citep{liaw2018tune}, to optimize the values of the batch size, learning rate, and the number of epochs since Tune.
+For the DistilBERT model, we apply population based training (PBT) \citep{jaderberg2017population} implemented in Tune \citep{liaw2018tune}, to optimize the values of the batch size, learning rate, and the number of epochs since Tune.
 %
 PBT combines random search and hand tuning by discovering potentially optimal hyperparameter values along the way to reduce optimization time \citep{jaderberg2017population}.
 %
@@ -276,7 +276,7 @@ We use the unseen dataset to simulate how the models would perform in a realisti
 %
 We want to study the effect of bias and how this affects the results when using our value-sensitive metric for evaluating the models with a reject option.
 %
-We expect that the accuracy of the predictions on the unseen dataset is significantly lower than the accuracy of the predictions on the seen dataset: \citet{grondahl2018all, arango2019hate}.
+We expect that the accuracy of the predictions on the unseen dataset is significantly lower than the accuracy of the predictions on the seen dataset, in line with the findings of related studies by \citet{grondahl2018all, arango2019hate}.
 %
 Therefore, we also expect that the output value of our value-sensitive metric for the unseen dataset will be lower and that the optimal rejection threshold will be higher (meaning that we need to reject more predictions).
 %
