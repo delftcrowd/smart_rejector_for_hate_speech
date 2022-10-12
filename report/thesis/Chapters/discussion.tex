@@ -8,7 +8,7 @@ First, we wanted to determine how we could measure the total value of ML models 
 %
 We proposed a value-sensitive metric that measures the total value of an ML model for some rejection threshold, where we reject and accept all predictions with a confidence value below and above the threshold, respectively.
 %
-This calculation is based on a set of predictions for some datasets and the value ratios between TP, TN, FP, FN, and rejected predictions.
+This calculation is based on a set of predictions and the value ratios between TP, TN, FP, FN, and rejected predictions.
 %
 By maximizing the total value, we can find the optimal rejection threshold.
 %
@@ -44,13 +44,13 @@ We found three scenarios for which more than 40\% disagreed with the ground trut
 %
 We also recognized this in the ME response values since participants generally were neutral about these scenarios.
 %
-Scenarios FN5 and REJ5 are annotated as non-aggressive hate speech targeted at a generic group and seem less hateful than the other posts, and the post in REJ7 contains an offensive slur.
+Scenarios FN5 and REJ5 are annotated as non-aggressive hate speech targeted at a generic group and seem less hateful than the other posts, and the neutral post in REJ7 contains an offensive slur.
 %
-Given the nature of these social media posts used in these scenarios, it might explain the larger disagreement about annotating it as hateful/non-hateful between participants for these scenarios.
+Given the nature of these social media posts used in these scenarios, it might explain the larger disagreement between participants in annotating it as hateful/non-hateful for these scenarios.
 %
 
 %
-We simulated the TP, TN, FP, FN, or rejection scenarios by asking the second and third questions where the participant had to provide a response value using either the ME or the 100-level scale to express their agreement or disagreement with SocialNet's decision.
+We simulated the TP, TN, FP, FN, and rejection scenarios by asking the second and third questions where the participant had to provide a response value using either the ME or the 100-level scale to express their agreement or disagreement with SocialNet's decision.
 %
 We analyze the resulting response values by looking at three aspects.
 %
@@ -72,7 +72,7 @@ We noticed that participants disagreed the most with scenarios FN3 and FN7.
 %
 According to the annotations given by \citet{basile2019semeval}, both scenarios are hate speech targeted at an individual and contain aggressive speech.
 %
-The results of FN3 and FN7 might suggest that participants disagree the most with FN predictions for aggressive hate speech target to individuals.
+The results of FN3 and FN7 might suggest that participants are more likely to disagree with FN predictions for aggressive hate speech targeted at individuals.
 %
 
 %
@@ -80,9 +80,9 @@ As expected, we found that participants disagree with the FP, FN, and rejected p
 %
 The results show that participants find a hateful post that is not detected worse than a non-hateful post detected as hate speech.
 %
-This finding is in line with our hypothesis that tolerating hate speech (FN predictions) negatively impacts social media users more than forbidding neutral speech (FP predictions).
+This finding is in line with our hypothesis that tolerating hate speech (FN predictions) harms social media users more than forbidding neutral speech (FP predictions).
 %
-The value of rejection is the closest to 0 (neutral) because rejected predictions do not cause any benefit or harm but only reduce the value by the human moderation effort.
+The value of rejection is the closest to 0 (neutral) because, according to our formulations in the survey, rejected predictions only reduce the value by the human moderation effort and do not cause much benefit or harm since the human moderator needs to handle the prediction within 24 hours.
 %
 
 %
@@ -120,14 +120,14 @@ We can explain the low reliability values by looking at the calculation of Kripp
 %
 In this calculation, we measure the difference between the expected difference and the observed difference.
 %
-When we consider the response values to all scenarios, the values tend to follow the same trend; positive values to correct predictions and negative values for incorrect and rejected predictions.
+When we consider the response values to all scenarios, the values tend to follow the same trend; positive values for correct predictions and negative values for incorrect and rejected predictions.
 %
 When we consider the response values to the scenarios of the same type, e.g. all TP scenarios, the values seem more randomly distributed as each participant uses a different positive response value to the TP scenarios.
 %
 Therefore, when considering all scenarios, the observed difference between the response values is closer to the difference expected by chance, resulting in higher alpha values.
 %
 
-%
+% CONTINUE HERE
 \subsection{Validity analysis}
 \label{sec:discussion-validity}
 The cross-modality validation between the ME and the 100-level scales showed that the response values to both scales are highly correlated, indicating that we validated the ME technique for measuring people's opinions about different hate speech detection scenarios.
