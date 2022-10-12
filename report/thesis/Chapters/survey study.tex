@@ -2,9 +2,9 @@
 \label{ch:survey}
 The second part of this research is to find out how we can determine the value ratios between TP, TN, FP, FN, and rejected predictions.
 %
-We conducted a literature study in section \ref{sec:related-work-value-assessment} and concluded that we want to empirically estimate the value ratios from the perspective of the social media user.
+We conducted a literature study in section \ref{sec:related-work-value-assessment} and concluded that we want to empirically estimate the social values from the perspective of the social media user.
 %
-In section \ref{sec:me}, we found that ME is a promising technique for estimating these value ratios.
+In section \ref{sec:me}, we found that ME is a promising technique for estimating subjective value ratios.
 %
 Therefore, this chapter discusses how we apply the ME technique in a crowdsourced survey study.
 %
@@ -12,7 +12,7 @@ Therefore, this chapter discusses how we apply the ME technique in a crowdsource
 %
 We design a survey study to ask participants the degree to which they agree or disagree with the decisions of a fictional social media platform called SocialNet.
 %
-We show the participants different scenarios representing TP, TN, FP, FN, and rejected predictions.
+We show the participants different scenarios representing TP, TN, FP, FN, and rejected predictions in the context of hate speech detection.
 %
 The TP and TN scenarios mean that SocialNet successfully detects whether a post is hateful or not, respectively.
 %
@@ -20,13 +20,13 @@ The FP scenario means that SocialNet incorrectly predicts a non-hateful post as 
 %
 For example, in the FN scenario, the survey shows a hateful post to the participant and explains that SocialNet did not identify the post as hate speech.
 %
-Then, participants indicate the degree of agreement/disagreement using a scale, and we aggregate the answers per scenario to obtain the value ratios.
+Then, participants indicate their degree of agreement/disagreement using a scale, and we aggregate the answers per scenario type to obtain the value ratios.
 %
 
 %
 The structure and preparation of our crowdsourced survey study follow the pre-registration plan for social psychology suggested by \citet{van2016pre}.
 %
-In a pre-registration plan, we describe the hypothesis, procedure, and analysis before conducting the crowdsourced survey study to increase scientific credibility and reproducibility and reduce bias \citep{van2016pre}.
+In a pre-registration plan, we describe the hypothesis, procedure, and analysis before conducting the crowdsourced survey study to increase scientific credibility, increase reproducibility and reduce bias \citep{van2016pre}.
 %
 It is essential to select the statistical methods for the analysis part beforehand to prevent ourselves from selecting the statistic that best fits the collected data.
 %
@@ -46,9 +46,9 @@ We listed several hypotheses about the value ratios and the ME method before we 
 %
 The goal is to reflect on the hypotheses in the discussion to explain why specific results were expected or unexpected.
 \begin{itemize}
-    \item \textbf{We hypothesize that the values of FP and FN are negative and that the value of an FN is lower than an FP}. We believe that both FP and FN predictions harm social media users; therefore, we think both values should be negative. We believe that allowing hateful content to be publicly visible has a more negative impact on social media users than filtering out neutral content. Therefore, we think an FN's value is lower than an FP's.
+    \item \textbf{We hypothesize that the values of FP and FN are negative and that the value of an FN is lower than an FP}. We believe that both FP and FN predictions harm social media users; therefore, we think both values should be negative. We believe that allowing hateful content to be publicly visible does more harm to social media users than filtering out neutral content. Therefore, we think an FN's value is lower than an FP's.
     \item \textbf{We hypothesize that the values of TP and TN are both positive and that the value of a TP is greater than a TN.} We believe that both TP and TN predictions positively impact social media users; therefore, we think both values should be positive. We believe predicting hateful content correctly is more valuable to social media users than correctly predicting non-hateful content. Therefore, we think a TP's value is greater than a TN's.
-    \item \textbf{We hypothesize that the rejection value is negative and greater than the average value of an FP and an FN.} The critical assumption of using ML models with a reject option is that the negative value of rejection should always be greater than the negative value of an incorrect decision.
+    \item \textbf{We hypothesize that the rejection value is negative and greater than the average value of an FP and an FN.} The critical assumption of using ML models with a reject option is that the negative value of rejection should always be greater than the negative value of an incorrect decision. Otherwise, rejecting predictions serves no purpose.
     \item \textbf{We hypothesize that FP and FN's absolute magnitudes are greater than TP and TN's.} We believe that social media users find the harm of incorrect predictions more critical than the benefits of correct predictions.
     \item \textbf{We hypothesize that ME is a suitable technique for retrieving the value ratios.} ME seems like a promising technique for retrieving ratio data from judgements about hate speech detection scenarios. We use a 100-level numerical scale for validation. We expect that both scales are correlated and will give similar judgements. Although we also expect the 100-level scale to be suitable for retrieving opinions about the different hate speech detection scenarios, it does not provide the ratio data we need. We also expect that the inter-rater reliability for the 100-level scale will be higher than for the ME scale since the ME scale provides more response freedom. We also expect this since the authors of \citet{roitero2018fine} concluded that the inter-rater reliability of the 100-level scale is higher than the ME scale when rating the relevance of documents.
 \end{itemize}
@@ -72,11 +72,11 @@ Second, there is no suitable dataset we can use for validation that contains hum
 %
 Third, we concluded in \ref{sec:likert} that Likert scales have limited response freedom.
 %
-Finally, in \citet{roitero2018fine}, the authors concluded that the 100-level scale provides more response freedom than course-grained Likert scales and has several advantages over ME in terms of usability and reliability.
+Finally, in \citet{roitero2018fine}, the authors concluded that the 100-level scale has several advantages over ME in terms of usability and reliability.
 %
 The 100-level scale is easier to understand than ME, does not require normalization, and provides more flexibility than a Likert scale \citep{roitero2018fine}.
 %
-Therefore, we will create two separate surveys with the same scenarios where half of all participants use the 100-level scale and the other half use the ME scale.
+Therefore, we create two separate surveys with the same scenarios where half of all participants use the 100-level scale and the other half use the ME scale.
 %
 Both scales are bipolar scales since the participants should be able to either disagree or agree with the scenarios.
 
@@ -145,10 +145,10 @@ We use 24 hours based on the German NetzDG law, which allows the government to f
 Confounding variables are the different demographic characteristics:
 %
 \begin{itemize}
-    \item \textbf{Nationality} People from different nationalities might have different perceptions and definitions of hate speech and how we should deal with it.
-    \item \textbf{Ethnicity} People from different ethnicities might have different perceptions and definitions of hate speech and how we should deal with it.
-    \item \textbf{Age} People of different ages might have different perceptions and definitions of hate speech and how we should deal with it.
-    \item \textbf{Educational level} People with different educational levels might have different perceptions and definitions of hate speech and how we should deal with it.
+    \item \textbf{Nationality} People from different nationalities might have different perceptions and definitions of hate speech and opinions about how we should deal with it.
+    \item \textbf{Ethnicity} People from different ethnicities might have different perceptions and definitions of hate speech and opinions about how we should deal with it.
+    \item \textbf{Age} People of different ages might have different perceptions and definitions of hate speech and opinions about how we should deal with it.
+    \item \textbf{Education} People with different educational statuses might have different perceptions and definitions of hate speech and opinions about how we should deal with it.
     \item \textbf{Sex} According to \citet{gold2018women}, there is no significant difference in how men and women perceive hate. However, we still report sex as a confounding variable since we want to analyze if there are genuinely not any differences.
 \end{itemize}
 
@@ -178,43 +178,45 @@ We explain the selection procedure in section \ref{sec:data}.
 \subsubsection{Dependent variables}
 Our dependent variables are the response values, reliability, validity and the value ratio of TP, TN, FP, FN, and rejection scenarios.
 %
+Refer to section \ref{sec:survey-analysis} for the reasoning and calculation of the following dependent variables.
+%
 \begin{itemize}
     \item \textbf{Response values} All response values the participants give to the different scenarios with either the ME or the 100-level scale.
-    \item \textbf{Reliability} Measured using Krippendorff's alpha, where values larger than 0.8 indicate reliable conclusions, and values larger than 0.6 indicate tentative conclusions \citep{krippendorff2004reliability}.
+    \item \textbf{Reliability} The inter-rater reliability measured using Krippendorff's alpha, where values larger than 0.8 indicate reliable conclusions, and values larger than 0.6 indicate tentative conclusions \citep{krippendorff2004reliability}.
     \item \textbf{Validity} Convergent validity, if two different measures measure the same thing \citep{fitzner2007reliability}. Measured by calculating the correlation between the magnitude estimates and the response values from the 100-level scale.
     \item \textbf{Value ratios of TP, TN, FP, FN, and rejection scenarios} Measured by calculating the median of the normalized magnitude estimate response values of each scenario question and then calculating the mean over the resulting values to come up with the final value for that scenario type.
 \end{itemize}
 
 \subsection{Planned sample}
-This section discusses how we pick the sample size, recruit the participants, and explains which stopping and exclusion rules we apply.
+This section discusses how we pick the sample size and recruit the participants, and this section explains which stopping and exclusion rules we apply.
 
 \subsubsection{Sample size}
 There are 4.55 billion active social media users\footnote{\url{https://datareportal.com/reports/digital-2021-october-global-statshot}}.
 %
-We choose a 90\% Confidence Interval (CI) and 10\% Margin of Error (MoE) for this study.
+We choose a 90\% confidence interval and 10\% margin of error (MOE) for this study.
 %
 So 90\% of the time, our observations will fall within a 10\% interval \citep{olson2014ways}.
 %
-According to \citet{olson2014ways}, we need a sample size of 68 participants per survey type to reach the desired CI and MoE values.
+According to \citet{olson2014ways}, we need a sample size of 68 participants per survey type to reach the desired confidence interval and MOE values.
 %
-We choose 10\% MoE since we have a limited budget.
+We choose 10\% MOE since we have a limited budget.
 %
 We first conduct a pilot survey for 12 participants per scale to gather feedback and check if we need to improve things before the actual experiment.
 %
-We want to determine the average workload using the pilot survey and whether reducing the MoE by increasing the number of participants is possible.
+We want to determine the average workload using the pilot survey and whether reducing the MOE by increasing the number of participants is possible.
 %
 For the pilot survey, we use 24 participants.
 %
-Therefore, in total we will need $2*12+2*68 = 160$ participants.
+Therefore, in total we need $2*12+2*68 = 160$ participants.
 %
 Of the recruited participants, 50\% identified as female.
 %
 Half of the participants are assigned the ME scale, and the other half the 100-level scale.
 
 \subsubsection{Participants}
-We will use the \href{https://prolific.co}{Prolific} platform for recruiting online participants for the survey study.
+We use the \href{https://prolific.co}{Prolific} platform for recruiting online participants for the survey study.
 %
-We will use the following inclusion criteria for our participants:
+We use the following inclusion criteria for our participants:
 \begin{itemize}
     \item 18 years of age and older since we show offensive language in the experiment.
     \item Fluent in English.
@@ -222,14 +224,13 @@ We will use the following inclusion criteria for our participants:
     \item Use one of the following social media platforms regularly (at least once a month): Facebook, Twitter, YouTube, LinkedIn, Pinterest, Google Plus, Tumblr, Instagram, Reddit, VK, Flickr, Vine.co, Meetup, ask.fm, Snapchat, TikTok, Medium.
 \end{itemize}
 %
-Every participant will be paid based on the hourly wage of 9.0 GBP (about 10,67 Euro), indicated as good pay by the platform\footnote{\url{https://prolific.co/pricing}}.
+Every participant is paid based on the hourly wage of 9.0 GBP (about 10,67 Euro), indicated as good pay by the platform\footnote{\url{https://prolific.co/pricing}}.
 %
 We use the following exclusion/rejection criteria:
 \begin{itemize}
-    \item Participants who fail the two attention checks. We will include two Instructional Manipulation Checks to check if the user pays attention to the survey\footnote{\url{https://researcher-help.prolific.co/hc/en-gb/articles/360009223553}}.
+    \item Participants who fail the two attention checks. We include two instructional manipulation checks to check if the user pays attention to the survey\footnote{\url{https://researcher-help.prolific.co/hc/en-gb/articles/360009223553}}.
     \item Participants who do not complete all questions.
     \item Participants who disagree with the informed consent before the start of the survey. We are not allowed to collect and process their data if they do not consent.
-    \item Participants who disagree with the informed consent before the survey start. We are not allowed to collect and process their data if they do not consent.
 \end{itemize}
 %
 We select a balanced set of participants in Prolific, among which 50\% are men and 50\% are women.
@@ -323,7 +324,7 @@ We use LimeSurvey\footnote{\url{https://www.limesurvey.org/}} as our survey tool
 %
 The survey first presents the informed consent policy and excludes participants that do not agree with it.
 %
-Next, we show introductory texts to the participants to explain what we will expect from them and to explain the structure of the survey.
+Next, we show introductory texts to the participants to explain what we expect from them and to explain the structure of the survey.
 %
 Using the ME scale, we first present a training phase where the participants need to estimate five different line lengths using any positive value to get familiar with using the ME scale.
 %
@@ -339,7 +340,7 @@ In the case of nonneutral, we ask a third question about the degree to which par
 %
 There is no time limit for answering the questions, and all data is anonymous.
 %
-Finally, we will inform the participants not to put identifiers in their answers.
+Finally, we inform the participants not to put personal identifiers in their answers.
 %
 Refer to Appendix \ref{sec:appendix} for all presentation texts, the informed consent, and some scenario examples.
 
@@ -352,13 +353,13 @@ Refer to Appendix \ref{sec:appendix} for all presentation texts, the informed co
 
 \section{Analysis}
 \label{sec:survey-analysis}
-First, we calculate the value ratios of the TP, TN, FP, FN, and rejection scenarios in hate speech detection using the survey's results.
+First, we calculate the value ratios between the TP, TN, FP, FN, and rejection scenarios in hate speech detection using the survey's results.
 %
 Second, we analyze the quality of our survey method by looking at two aspects: reliability and validity.
 
 \subsection{Value ratios}
 \label{sec:analysis-values}
-The survey study aims to determine the value ratios of the TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection.
+The survey study aims to determine the value ratios between the TP, TN, FP, FN, and rejection scenarios in the context of hate speech detection.
 %
 The metric from section \ref{sec:value-metric} takes these numerical values as input to calculate the optimal rejection threshold.
 %
@@ -368,7 +369,7 @@ For example, if we set all values to 1, we retrieve the same optimal rejection t
 %
 We use a bipolar scale for question 3 in the survey since we ask the participants the degree to which they agree, disagree, or are neutral with the decision of SocialNet.
 %
-For both scales, we will convert disagreement values to negative values, neutral values to 0, and agreement values to positive values.
+For both scales, we convert disagreement values to negative values, neutral values to 0, and agreement values to positive values.
 %
 Since we found that the data of both scales is skewed after conducting the pilot survey, we first apply the median to the individual questions' results.
 %
@@ -376,8 +377,8 @@ Then we calculate the mean value over the resulting values to retrieve the final
 %
 For example, to calculate the aggregated $V_{tp}$ values for both scales, we use:
 \begin{align*}
-    V_{tp}^{ME} = \frac{1}{n} \sum_{i=1}^{n} r_{i, tp}^{ME}   & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of all participants for TP scenarios and $r_{i, tp}^{ME}$ is the  \\median response value of TP question number $i$ rated with the ME scale.}\\
-    V_{tp}^{100} = \frac{1}{n} \sum_{i=1}^{n} r_{i, tp}^{100} & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of all participants for TP scenarios and $r_{i, tp}^{100}$ is the \\median response value of TP question number $i$ rated with the 100-level scale.}
+     & V_{tp}^{ME} = \frac{1}{n} \sum_{i=1}^{n} \tilde{r}_{i, tp}^{ME}     & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of TP scenarios, and $\tilde{r}_{i, tp}^{ME}$ is the median   \\response value of TP question number $i$ rated by all participants with the \\ME scale.}         \\[10pt]
+     & V_{tp}^{100L} = \frac{1}{n} \sum_{i=1}^{n} \tilde{r}_{i, tp}^{100L} & \quad  \parbox{35em}{\footnotesize where $n$ is the total number of TP scenarios, and $\tilde{r}_{i, tp}^{100L}$ is the median \\response value of TP question number $i$ rated by all participants with the \\100-level scale.}
 \end{align*}
 %
 We apply the same calculations for the remaining scenario types.
@@ -386,7 +387,7 @@ The results should give us an understanding of how the participants feel towards
 %
 We define the value ratios we need for the metric using the aggregated values of the TP, TN, FP, FN, and rejection scenarios rated with the ME scale since the ME scale provides us with ratio data.
 %
-We will not use the aggregated values of the 100-level scale for our metric since the 100-level scale does not provide ratio data, but we will still present them.
+We do not use the aggregated values of the 100-level scale for our metric since the 100-level scale does not provide ratio data, but we still present them.
 
 \subsection{Reliability}
 \label{sec:reliability}
@@ -434,7 +435,7 @@ We can verify that they measure the same phenomenon if we find that both scales 
 %
 However, we can also expect a low correlation since the ME scale is a (normalized) unbounded scale, and the 100-level scale is bounded.
 %
-Nevertheless, we think both scales will give similar results, meaning that high ME responses should correspond to high 100-level scale responses and low ME responses to low 100-level scale responses.
+Nevertheless, we think both scales give similar results, meaning that high ME responses should correspond to high 100-level scale responses and low ME responses to low 100-level scale responses.
 %
 To guarantee content validity, we let experts (the supervisors of this thesis project) check the pre-registration report before conducting the experiments.
 %
@@ -450,7 +451,7 @@ We believe that if we conduct this experiment using different groups of particip
 %
 Therefore, we decided not to create too many participant inclusion criteria but take a random sample of global social media users.
 %
-We would have to experiment with multiple groups with different demographic characteristics to guarantee external validity.
+We would have to experiment with multiple groups with different demographic characteristics to analyze external validity.
 %
 We left this for future work to investigate in full detail.
 %
@@ -468,7 +469,7 @@ Therefore, we apply several statistics to the results of each scenario to analyz
 %
 
 %
-Prolific provides information about the demographic characteristics of the participants, out of which we analyze six features based on what Prolific provides us in the survey results: sex, student (whether they are still a student or not), continent, nationality, language, and ethnicity.
+Prolific provides information about the demographic characteristics of the participants, out of which we analyze six features: sex, student (whether they are still a student or not), continent, nationality, language, and ethnicity.
 %
 We manually add the continent feature based on the values of the nationality feature.
 %
@@ -490,11 +491,11 @@ First, we check if we can apply the parametric statistics by checking if their a
 %
 If not, then we use the non-parametric tests.
 %
-We apply ANOVA and the t-test when the data meets the following three conditions: homogeneity of variance (each population has the same variance), normality (normal distribution of the error), and independence (the observations are independent of each other) \citep{howell2012statistical}.
+We apply ANOVA and the t-test when the data meets the following three conditions: homogeneity of variance (each population has the same variance), normality (the data of each population is normally distributed), and independence (the observations are independent of each other) \citep{howell2012statistical}.
 %
 We use Bartlett's test of homogeneity of variances and the Shapiro-Wilk test of normality to check if we can apply ANOVA and the t-test.
 %
-We obey the independence condition since we collect the data of all survey study participants independently.
+We obey the independence condition since we collect the data of all participants independently.
 %
 
 %
@@ -514,4 +515,4 @@ However, we now may introduce Type I errors as we perform many pairwise statisti
 %
 As a result, we might incorrectly reject the null hypothesis for some pairwise tests, meaning that we find significant differences between some groups while there are none.
 %
-Therefore, we perform the post hoc Benjamini-Hochberg procedure to correct the p-values of the pairwise test results to control the Type I errors.
+Therefore, we perform the post hoc Benjamini-Hochberg procedure to correct the p values of the pairwise test results to control the Type I errors.
