@@ -4,9 +4,9 @@ As concluded in chapter \ref{ch:related-work}, there is a need for \textit{value
 %
 We also concluded that manual human moderation is the most effective and that most automatic hate speech detection methods do not perform well on unseen data.
 %
-Therefore, in this project, we focus on rejecting ML predictions in a value-sensitive manner.
+Therefore, in this project, we focus on creating a human-AI solution for detecting hate speech by rejecting ML predictions in a value-sensitive manner.
 %
-We do this by taking the values of TP, TN, FP, FN, and rejected predictions into account.
+We do this by taking the value ratios of TP, TN, FP, FN, and rejected predictions into account.
 %
 % Correct predictions (TP and TN) result in positive value (gains), while incorrect (FP and FN) and rejected predictions result in negative value (costs).
 %
@@ -24,7 +24,7 @@ In \ref{sec:overview-rejector}, we provide an overview of how we use the value-s
 
 \section{Value-sensitive metric}
 \label{sec:value-metric}
-The idea of rejecting ML predictions using a threshold is that for some threshold value $\tau$ in the range $[0, 1]$, we accept all predictions with confidence values greater than or equal to $\tau$ and reject all predictions with confidence values below $\tau$.
+The idea of rejecting ML predictions using a confidence threshold is that for some threshold value $\tau$ in the range $[0, 1]$, we accept all predictions with confidence values greater than or equal to $\tau$ and reject all predictions with confidence values below $\tau$.
 %
 We use a confidence metric to find the optimal rejection threshold that is based on the work of \citet{de2000reject}.
 %
@@ -36,7 +36,7 @@ The value of $V(\tau)$ depends on the values of TP, TN, FP, FN, and rejected pre
 %
 We denote the values of TP, TN, FP, FN, and rejected predictions as $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$, respectively.
 %
-We can derive the subsets of TP, TN, FP, and FN predictions from the complete set of predictions and their predicted and actual labels.
+We derive the subsets of TP, TN, FP, and FN predictions from a set of predictions based on the predicted and actual labels.
 %
 
 %
@@ -46,13 +46,7 @@ However, for constructing our metric, we can define several conditions if we ass
 %
 For each $\tau$ value in $[0, 1]$, we would like to know whether the model with the reject option is more effective (increased $V(\tau)$) or less effective (decreased $V(\tau)$ value).
 %
-
-\pagebreak
-
-%
-\begin{flushleft}
-    We define the following conditions:
-\end{flushleft}
+We define the following conditions:
 \begin{enumerate}
     \item The value of incorrect predictions should be lower than that of rejected predictions. Otherwise, adopting the reject option serves no purpose.
     \item Correct accepted predictions should increase the value of $V(\tau)$, while incorrect accepted predictions should decrease the value of $V(\tau)$.
@@ -93,9 +87,11 @@ where $p \in [tp, tn, fp, fn]$ and where $F_p(\tau)$ and $F_p^r(\tau)$ are the f
 %
 Conditions \ref{for:conditions-tp-tn} are satisfied by default since we assume that $V_{tp}$ and $V_{tn}$ are positive and $V_r$ is negative.
 %
-Conditions \ref{for:conditions-fp-fn} are satisfied since we assume that $V_{fp}$, $V_{fn}$, and $V_r$ are negative, and when condition \ref{for:value-condition} holds.
+Conditions \ref{for:conditions-fp-fn} are satisfied since we assume that $V_{fp}$, $V_{fn}$, and $V_r$ are negative and that condition \ref{for:value-condition} holds.
 % 
 We can retrieve the $F_p$ and the $F_p^r$ values by computing the integrals over the probability density functions (PDF) of the confidence values (denoted as $x$) of the predictions with type $p$.
+%
+We compute the PDFs so that the calculation of the optimal rejection threshold is less sensitive to confidence outliers in the set of predictions.
 %
 We denote $F_p$ by taking the integral over the interval $[\tau, 1]$, and $F_p^r$ by taking the integral over the interval $[0, \tau]$:
 %
