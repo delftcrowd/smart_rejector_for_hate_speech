@@ -26,7 +26,7 @@ You can now open a notebook, go to Kernel>change kernel and select `value-sensit
 
 ### License
 
-_We encourage you to use an open license and by default the repository contains an Apache License 2.0._
+Apache License 2.0.
 
 ## Student project report
 
