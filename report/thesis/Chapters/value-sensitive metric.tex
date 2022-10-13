@@ -1,12 +1,12 @@
 \chapter{Value-sensitive rejector}
 \label{ch:rejector}
-As concluded in chapter \ref{ch:related-work}, there is a need for \textit{value-sensitive} metrics for measuring the performance of ML models, especially for social-technical applications such as hate speech detection.
+As concluded in chapter \ref{ch:related-work}, there is a need for \textit{value-sensitive} metrics to measure ML models' performance, especially for social-technical applications such as hate speech detection.
 %
 We also concluded that manual human moderation is the most effective and that most automatic hate speech detection methods do not perform well on unseen data.
 %
-Therefore, in this project, we focus on rejecting ML predictions in a value-sensitive manner.
+Therefore, in this project, we focus on creating a human-AI solution for detecting hate speech by rejecting ML predictions in a value-sensitive manner.
 %
-We do this by taking the values of TP, TN, FP, FN, and rejected predictions into account.
+We do this by taking the value ratios of TP, TN, FP, FN, and rejected predictions into account.
 %
 % Correct predictions (TP and TN) result in positive value (gains), while incorrect (FP and FN) and rejected predictions result in negative value (costs).
 %
@@ -21,12 +21,14 @@ In this chapter, we explain how we create a value-sensitive dependent rejector b
 In \ref{sec:value-metric}, we explain how we construct the confidence metric.
 %
 In \ref{sec:overview-rejector}, we provide an overview of how we use the value-sensitive rejector, and in \ref{sec:state-of-the-art}, we discuss how we apply the rejector to some state-of-the-art hate speech classification models.
+%
+Refer to Appendix \ref{sec:appendix-C} for the source code of our value-sensitive rejector.
 
 \section{Value-sensitive metric}
 \label{sec:value-metric}
-The idea of rejecting ML predictions using a threshold is that for some threshold value $\tau$ in the range $[0, 1]$, we accept all predictions with confidence values greater than or equal to $\tau$ and reject all predictions with confidence values below $\tau$.
+The idea of rejecting ML predictions using a confidence threshold is that for some threshold value $\tau$ in the range $[0, 1]$, we accept all predictions with confidence values greater than or equal to $\tau$ and reject all predictions with confidence values below $\tau$.
 %
-We use a confidence metric to find the optimal rejection threshold.
+We use a confidence metric to find the optimal rejection threshold that is based on the work of \citet{de2000reject}.
 %
 Here, we introduce our confidence metric as the value function $V(\tau)$ that measures the total value of an ML model and rejection threshold $\tau$.
 %
@@ -36,23 +38,17 @@ The value of $V(\tau)$ depends on the values of TP, TN, FP, FN, and rejected pre
 %
 We denote the values of TP, TN, FP, FN, and rejected predictions as $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$, respectively.
 %
-We can derive the subsets of TP, TN, FP, and FN predictions from the complete set of predictions and their predicted and actual labels
+We derive the subsets of TP, TN, FP, and FN predictions from a set of predictions based on the predicted and actual labels.
 %
 
 %
 We should be free to use any value for $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_r$ since we do not know which values will come from the survey study in chapter \ref{ch:survey}.
 %
-However, for constructing our metric, we can define several conditions if we assume that $V_{tp}$ and $V_{tn}$ are gains and, therefore, positive values and $V_{fp}$, $V_{fn}$, and $V_{r}$ are costs and, therefore, negative values.
+However, for constructing our metric, we can define several conditions if we assume that $V_{tp}$ and $V_{tn}$ are positive values (gains) and $V_{fp}$, $V_{fn}$, and $V_{r}$ are negative values (costs).
 %
 For each $\tau$ value in $[0, 1]$, we would like to know whether the model with the reject option is more effective (increased $V(\tau)$) or less effective (decreased $V(\tau)$ value).
 %
-
-\pagebreak
-
-%
-\begin{flushleft}
-    We define the following conditions:
-\end{flushleft}
+We define the following conditions:
 \begin{enumerate}
     \item The value of incorrect predictions should be lower than that of rejected predictions. Otherwise, adopting the reject option serves no purpose.
     \item Correct accepted predictions should increase the value of $V(\tau)$, while incorrect accepted predictions should decrease the value of $V(\tau)$.
@@ -81,7 +77,7 @@ where $F_p$ and $F_p^r$ are the fractions of accepted and rejected predictions, 
 %
 % All conditions include greater/smaller than or equal to operators, since we want to allow the values of $V_{tp}$, $V_{tn}$, $V_{fp}$, $V_{fn}$, and $V_{r}$ to be equal to zero.
 %
-We create a linear $V(\tau)$ function and assume that the values $V_t$ are known constants.
+We create a linear $V(\tau)$ function and assume that the input values are known constants.
 %
 Subsequently, we can formulate $V(\tau)$ as:
 \begin{align}
@@ -93,9 +89,11 @@ where $p \in [tp, tn, fp, fn]$ and where $F_p(\tau)$ and $F_p^r(\tau)$ are the f
 %
 Conditions \ref{for:conditions-tp-tn} are satisfied by default since we assume that $V_{tp}$ and $V_{tn}$ are positive and $V_r$ is negative.
 %
-Conditions \ref{for:conditions-fp-fn} are satisfied since we assume that $V_{fp}$, $V_{fn}$, and $V_r$ are negative, and when condition \ref{for:value-condition} holds.
+Conditions \ref{for:conditions-fp-fn} are satisfied since we assume that $V_{fp}$, $V_{fn}$, and $V_r$ are negative and that condition \ref{for:value-condition} holds.
 % 
 We can retrieve the $F_p$ and the $F_p^r$ values by computing the integrals over the probability density functions (PDF) of the confidence values (denoted as $x$) of the predictions with type $p$.
+%
+We compute the PDFs so that the calculation of the optimal rejection threshold is less sensitive to confidence outliers in the set of predictions.
 %
 We denote $F_p$ by taking the integral over the interval $[\tau, 1]$, and $F_p^r$ by taking the integral over the interval $[0, \tau]$:
 %
@@ -142,7 +140,7 @@ In this phase, we use our value-sensitive metric from section \ref{sec:value-met
 %
 We use the following inputs in this calculation: the values from the crowdsourced survey and a set of predictions that consist of the confidence values and the predicted and actual labels.
 %
-Figure \ref{fig:deployment} shows how we can apply the trained rejector to unseen data in deployment
+Figure \ref{fig:deployment} shows how we can apply the trained rejector to unseen data in deployment.
 %
 We accept all predictions for which the confidence value $c$ is greater than or equal to the optimal rejection threshold $\tau_O$ and, otherwise, reject them so that a human moderator handles the prediction.
 %
@@ -178,15 +176,15 @@ We experiment with three different hate speech detection models based on the fin
 %
 The first model is a traditional ML model.
 %
-We implement the Logistich Regression (LR) model with Character N-gram from \citet{waseem2016hateful} since this model achieved the best performance compared to other traditional ML models \citep{davidson2017automated}.
+We implement the LR model with character N-gram from \citet{waseem2016hateful} since this model achieved the best performance compared to other traditional ML models \citep{davidson2017automated}.
 %
 We select the second model, a DL model, based on the findings from \citet{agrawal2018deep, badjatiya2017deep}.
 %
-We choose a Convolutional Neural Network (CNN) model initialized with random word embeddings since both studies found that this configuration provides state-of-the-art classification performance.
+We choose a CNN model initialized with random word embeddings since both studies found that this configuration provides state-of-the-art classification performance.
 %
 We implement the CNN model based on the work of \citep{agrawal2018deep}.
 %
-Finally, our third model is a transformer model, given its recent popularity in the NLP domain.
+Finally, our third model is a BERT-based model, given its recent popularity in the NLP domain.
 %
 We use the DistilBERT model since it is faster to train and smaller than BERT models while achieving similar performance \citep{sanh2019distilbert}.
 %g
@@ -202,7 +200,7 @@ We perform hyperparameter optimization on all three models.
 %
 For the CNN model, we apply random search to optimize the values of the learning rate, batch size, and the number of epochs.
 %
-For the DistilBERT model, we apply Population Based Training (PBT) \citep{jaderberg2017population} implemented in Tune \citep{liaw2018tune}, to optimize the values of the batch size, learning rate, and the number of epochs since Tune.
+For the DistilBERT model, we apply population based training (PBT) \citep{jaderberg2017population} implemented in Tune \citep{liaw2018tune}, to optimize the values of the batch size, learning rate, and the number of epochs since Tune.
 %
 PBT combines random search and hand tuning by discovering potentially optimal hyperparameter values along the way to reduce optimization time \citep{jaderberg2017population}.
 %
@@ -229,7 +227,7 @@ They found that the temperature scaling method is the most effective.
 %
 In temperature scaling, we divide the model's output logits with a temperature value of $T$ to soften the probabilities of the final softmax function in the model's architecture \citep{guo2017calibration}.
 %
-This $T$ value is initially set to $1$ and optimized by minimizing the negative log likelihood \citep{guo2017calibration}.
+This $T$ value is initially set to $1$ and optimized by minimizing the negative log-likelihood \citep{guo2017calibration}.
 %
 Please note that temperature scaling does not change the model's accuracy but only rescales the distribution of the confidence values \citep{guo2017calibration}.
 %
@@ -268,19 +266,19 @@ The remaining parts of the preprocessing, such as removing whitespaces and stop 
 %
 
 %
-We apply the value-sensitive rejector to two test datasets: the \emph{seen} dataset and the \textit{unseen} dataset.
+We apply the value-sensitive rejector to two test datasets: the \emph{seen} and \textit{unseen} dataset.
 %
 The seen dataset is the test set from the \citet{waseem2016hateful} dataset.
 %
 The unseen dataset is a test set from the \citet{basile2019semeval} dataset that consists of 10K English tweets labelled as either hateful (against immigrants or women) or not hateful.
 %
-We use the unseen dataset to simulate how the models would perform in a realistic use-case when a model is trained on one dataset and applied to a different dataset.
+We use the unseen dataset to simulate how the models would perform in a realistic use case when a model is trained on one dataset and applied to a different dataset.
 %
 
 %
 We want to study the effect of bias and how this affects the results when using our value-sensitive metric for evaluating the models with a reject option.
 %
-We expect that the accuracy of the predictions on the unseen dataset is significantly lower than on the seen dataset, similar to the findings of related studies: \citet{grondahl2018all, arango2019hate}.
+We expect that the accuracy of the predictions on the unseen dataset is significantly lower than the accuracy of the predictions on the seen dataset, in line with the findings of related studies by \citet{grondahl2018all, arango2019hate}.
 %
 Therefore, we also expect that the output value of our value-sensitive metric for the unseen dataset will be lower and that the optimal rejection threshold will be higher (meaning that we need to reject more predictions).
 %
@@ -290,7 +288,7 @@ Since our value-sensitive rejector depends on the PDFs of the confidence values 
 %
 We use the kernel density estimation (KDE) method provided by Statsmodels\footnote{\url{https://www.statsmodels.org/}} for estimating these PDFs.
 %
-With KDE, we estimate the PDF by weighing each measured confidence value from a set of predictions using a kernel function, a gaussian density function since it is the most commonly used, for each possible confidence value in the range $[0, 1]$.
+With KDE, we estimate the PDF by weighing the confidence values from a set of predictions using a kernel function, a gaussian density function since it is the most commonly used, for each possible confidence value in the range $[0, 1]$.
 %
 If there are many predictions with a confidence value around $0.8$, then the KDE estimate will be higher around that point.
 %

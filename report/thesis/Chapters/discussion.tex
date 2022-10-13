@@ -8,7 +8,7 @@ First, we wanted to determine how we could measure the total value of ML models 
 %
 We proposed a value-sensitive metric that measures the total value of an ML model for some rejection threshold, where we reject and accept all predictions with a confidence value below and above the threshold, respectively.
 %
-This calculation is based on a set of predictions for some datasets and the value ratios between TP, TN, FP, FN, and rejected predictions.
+This calculation is based on a set of predictions and the value ratios between TP, TN, FP, FN, and rejected predictions.
 %
 By maximizing the total value, we can find the optimal rejection threshold.
 %
@@ -18,9 +18,9 @@ We proposed to estimate the value ratios in a large survey study using the ME sc
 %
 The results from chapter \ref{ch:results} showed several key findings:
 \begin{itemize}
-    \item The survey's results indicated that the ME technique is suitable for retrieving the value ratios from human ratings to hate speech detection scenarios, since the results passed both the reliability and validity analyses.
-    \item Social media users appreciate correct predictions more than they detest incorrect predictions, especially content that is correctly identified as non-hateful and, therefore, not banned from the platform.
-    \item Social media users show higher agreement on rating the negative value of incorrect predictions as opposed to rating the positive value of correct predictions.
+    \item The survey's results indicated that the ME technique is suitable for retrieving the value ratios from human ratings to hate speech detection scenarios since the results passed both the reliability and validity analyses.
+    \item Social media users appreciate correct predictions more than they detest incorrect predictions, especially content correctly identified as non-hateful and, therefore, not banned from the platform.
+    \item Social media users agree more on rating the negative value of incorrect predictions than the positive value of correct predictions.
     \item We did not observe significant statistical differences for most scenarios between groups of participants with different demographical characteristics.
     \item The experiments with the \emph{seen} data showed that our value-sensitive rejector maximizes the utility of hate speech detection models in terms of the value of our value-sensitive metric when we consider not rewarding correct predictions.
     \item The experiments with the \emph{unseen} data demonstrated that hate speech detection models are susceptible to bias, affecting the results of our value-sensitive rejector since we had to reject more predictions when we considered not rewarding correct predictions. Also, the results showed that when using our value-sensitive metric, the best model selected can be different compared to using accuracy.
@@ -44,13 +44,13 @@ We found three scenarios for which more than 40\% disagreed with the ground trut
 %
 We also recognized this in the ME response values since participants generally were neutral about these scenarios.
 %
-Scenarios FN5 and REJ5 are annotated as non-aggressive hate speech targeted at a generic group and seem less hateful than the other posts, and the post in REJ7 contains an offensive slur.
+Scenarios FN5 and REJ5 are annotated as non-aggressive hate speech targeted at a generic group and seem less hateful than the other posts, and the neutral post in REJ7 contains an offensive slur.
 %
-Given the nature of these social media posts used in these scenarios, it might explain the larger disagreement about annotating it as hateful/non-hateful between participants for these scenarios.
+Given the nature of these social media posts used in these scenarios, it might explain the larger disagreement between participants in annotating it as hateful/non-hateful for these scenarios.
 %
 
 %
-We simulated the TP, TN, FP, FN, or rejection scenarios by asking the second and third questions where the participant had to provide a response value using either the ME or the 100-level scale to express their agreement or disagreement with SocialNet's decision.
+We simulated the TP, TN, FP, FN, and rejection scenarios by asking the second and third questions where the participant had to provide a response value using either the ME or the 100-level scale to express their agreement or disagreement with SocialNet's decision.
 %
 We analyze the resulting response values by looking at three aspects.
 %
@@ -64,7 +64,7 @@ Finally, we analyze the results of the demographic analysis in section \ref{sec:
 \subsection{Value ratios}
 \label{sec:discussion-value-ratios}
 %
-Regarding the value ratios, most results are in line with our hypotheses.
+Regarding the value ratios, most results align with our hypotheses.
 %
 The resulting values of both the ME and the 100-level scale follow the same order ($V_{fn} < V_{fp} < V_{r} < V_{tp} < V_{tn}$).
 %
@@ -72,7 +72,7 @@ We noticed that participants disagreed the most with scenarios FN3 and FN7.
 %
 According to the annotations given by \citet{basile2019semeval}, both scenarios are hate speech targeted at an individual and contain aggressive speech.
 %
-The results of FN3 and FN7 might suggest that participants disagree the most with FN predictions for aggressive hate speech target to individuals.
+The results of FN3 and FN7 might suggest that participants are more likely to disagree with FN predictions for aggressive hate speech targeted at individuals.
 %
 
 %
@@ -80,9 +80,9 @@ As expected, we found that participants disagree with the FP, FN, and rejected p
 %
 The results show that participants find a hateful post that is not detected worse than a non-hateful post detected as hate speech.
 %
-This finding is in line with our hypothesis that tolerating hate speech (FN predictions) negatively impacts social media users more than forbidding neutral speech (FP predictions).
+This finding is in line with our hypothesis that tolerating hate speech (FN predictions) harms social media users more than forbidding neutral speech (FP predictions).
 %
-The value of rejection is the closest to 0 (neutral) because rejected predictions do not cause any benefit or harm but only reduce the value by the human moderation effort.
+The value of rejection is the closest to 0 (neutral) because, according to our formulations in the survey, rejected predictions only reduce the value by the human moderation effort and do not cause much benefit or harm since the human moderator needs to handle the prediction within 24 hours.
 %
 
 %
@@ -114,13 +114,13 @@ We would expect many participants to give response values of -100, 100, or 0 as 
 %
 In general, the results also showed low alpha values when we computed it for each group of scenarios with the same type (TP, TN, FP, FN, and rejection).
 %
-Users tend to agree more on incorrect predictions than on the correct predictions, indicating that participants agree more on the harm caused by incorrect predictions.
+Users tend to agree more on incorrect predictions than on correct predictions, indicating that participants agree more on the harm caused by incorrect predictions.
 %
 We can explain the low reliability values by looking at the calculation of Krippendorff's alpha.
 %
 In this calculation, we measure the difference between the expected difference and the observed difference.
 %
-When we consider the response values to all scenarios, the values tend to follow the same trend; positive values to correct predictions and negative values for incorrect and rejected predictions.
+When we consider the response values to all scenarios, the values tend to follow the same trend; positive values for correct predictions and negative values for incorrect and rejected predictions.
 %
 When we consider the response values to the scenarios of the same type, e.g. all TP scenarios, the values seem more randomly distributed as each participant uses a different positive response value to the TP scenarios.
 %
@@ -165,9 +165,9 @@ Nevertheless, the results show that people with different nationalities, languag
 % %
 
 %
-We found the most group differences for scenarios FP7 and REJ4 among all features, which is surprising since both scenarios include a neutral social media post.
+We found the most group differences for scenarios FP7 and REJ4 (both containing non-hateful posts) among all features.
 %
-It is unclear why FP7 had so many significant differences as the post is neutral and not about any sensitive topic.
+It is unclear why FP7 had so many significant differences, as the post is neutral and not about any sensitive topic.
 %
 However, the social media post used in REJ4 is about refugees, which can be a politically sensitive topic.
 %
@@ -189,7 +189,7 @@ We observed the most pairwise significant differences for scenario FN5.
 %
 Scenario FN5 contains a hateful social media post about building the wall across the border between the United States and Mexico.
 %
-There are five posts about building the wall, including hateful and non-hateful posts.
+There are five posts about building the wall, both hateful and non-hateful.
 %
 For four out of the five posts, we found at least one feature with significant differences between the groups of participants, suggesting that group differences depend on the topic of the social media post.
 %
@@ -205,7 +205,7 @@ The \emph{seen} dataset is a test set sampled from the same dataset as the train
 %
 In contrast, the \emph{unseen} dataset is a test set sampled from a completely different dataset to simulate how the models perform on new and unfamiliar data.
 %
-Second, we study whether value-sensitive rejection of ML predictions is beneficial for hate speech detection.
+Second, we study whether value-sensitive rejection of ML predictions can be beneficial for hate speech detection.
 %
 Finally, we compare our value-sensitive metric to machine metrics such as accuracy.
 %
@@ -221,7 +221,7 @@ Nevertheless, we observed that the models are more confident in the correct pred
 %
 The results of our value-sensitive metric were very similar for all three models and both datasets.
 %
-When we consider all value ratios, then accepting all predictions seems the most valuable for both the \emph{seen} data and \emph{unseen} data.
+When we consider all value ratios, accepting all predictions seems the most valuable for both the \emph{seen} and \emph{unseen} data.
 %
 This result is not surprising as the absolute magnitudes of TP and TN are greater than the absolute magnitudes of FP and FN, and there are more TP and TN predictions than FP and FN predictions.
 %
@@ -233,13 +233,13 @@ We believe it is more critical to focus on punishing incorrect predictions, as w
 %
 Therefore, in the second part of the experiments with the value-sensitive rejector, we no longer focused on rewarding correct predictions, implying $V_{tp}=0$ and $V_{tn}=0$.
 %
-As a result and according to the formulation of the value-sensitive metric (formula \ref{for:final-V}), accepted predictions increase the total value by the value of rejection ($V_r$) and correct predictions that are rejected decrease the total value by the value of rejection.
+As a result and according to the formulation of the value-sensitive metric (formula \ref{for:final-V}), accepted correct predictions increase the total value by the value of rejection ($V_r$) and correct predictions that are rejected decrease the total value by the value of rejection.
 %
 For the \emph{seen} data, the results of the optimal rejection threshold show that by not rewarding correct predictions, a significant fraction of the predictions can be accepted from all three models and a smaller fraction rejected.
 %
-All three models are valuable for the \emph{unseen} data, but very few predictions can be accepted, and the majority are rejected.
+All three models with the optimal rejection threshold are valuable for the \emph{unseen} data, but very few predictions can be accepted, and the majority are rejected.
 %
-The results of the \emph{unseen} data also demonstrate that hate speech detection models are susceptible to bias, in line with the findings of related studies \citep{arango2019hate,grondahl2018all}.
+The high optimal rejection thresholds for the \emph{unseen} data also demonstrate that hate speech detection models are susceptible to bias, in line with the findings of related studies by \citet{arango2019hate,grondahl2018all}.
 %
 When we accept all predictions, all three models are valuable for the \emph{seen} data but invaluable for the \emph{unseen} data, putting the viability of all models into question.
 %
@@ -263,9 +263,9 @@ We see some interesting things when we compare the value-sensitive metric for th
 %
 For most configurations, both metrics return the same results, namely that the DistilBERT model is the best.
 %
-However, when considering not rewarding correct predictions for the unseen data, we see that the LR model performs the best and gets a slightly higher total value than the DistilBERT model for the optimal rejection threshold.
+However, when considering not rewarding correct predictions for the \emph{unseen} data, we see that the LR model performs the best and gets a slightly higher total value than the DistilBERT model for the optimal rejection threshold.
 %
-What makes this finding interesting is that while the accuracies of the original models are the same (64\%), we would expect that the DistilBERT has a higher total value because the DistilBERT model has a higher accuracy of the accepted predictions and a lower rejection rate.
+What makes this finding interesting is that while the accuracies of the original models are the same, we would expect that the DistilBERT has a higher total value because the DistilBERT model has a higher accuracy of the accepted predictions and a lower rejection rate.
 %
 One explanation might be that we found that the LR model achieves a higher total value since it rejects more FN predictions and accepts fewer FN predictions than the DistilBERT model for the optimal rejection threshold.
 %
@@ -285,11 +285,11 @@ Our work aligns with theirs as we presented a value-sensitive metric that consid
 %
 \citet{casati2021value} promoted the use of value-sensitive metrics.
 %
-They recognized the limits of machine metrics such as accuracy as two models could have the same accuracy, but one model could be more valuable than the other \citep{casati2021value}.
+They recognized the limits of machine metrics such as accuracy, as two models could have the same accuracy, but one model could be more valuable than the other \citep{casati2021value}.
 %
 Our experiments demonstrated this difference as we found that the best model according to our value-sensitive metric could be different from the best model according to the accuracy metric.
 %
-We believe these findings can benefit industry and research, as many domains exist where tasks cannot be fully automated and where value-sensitive rejection can increase the utility of human-AI collaboration.
+We believe these findings can benefit industry and research, as many domains exist where tasks cannot be fully automated and where human-AI solutions, such as our value-sensitive rejector, can increase the utility of ML models.
 %
 
 %
@@ -297,7 +297,7 @@ Regarding the survey study, we got several interesting findings.
 %
 Social media users appreciate correct hate speech predictions more than they detest incorrect predictions.
 %
-However, in terms of inter-rater reliability, they agree more on recognizing the harm caused by incorrect predictions than the gain of correct predictions.
+However, in terms of inter-rater reliability, they agree more on recognizing the harm caused by incorrect predictions than the gain from correct predictions.
 %
 Overall, the inter-rater reliability values of all scenarios of the same type were low.
 %
@@ -317,9 +317,9 @@ The results with all three hate speech detection models also demonstrated the im
 %
 The experiments with the \emph{unseen} data resulted in lower total values and accuracies compared to the \emph{seen} data, indicating that hate speech datasets are biased.
 %
-Once we train hate speech detection models on such biased datasets, the models become biased as well.
+Once we train hate speech detection models on such biased datasets, the models also become biased.
 %
-Our results fit the findings of previous studies where the authors found significant performance dropped when they trained models on one dataset and evaluated them on another \citep{grondahl2018all, arango2019hate}.
+Our results fit the findings of previous studies where the authors found a significant performance drop when they trained models on one dataset and evaluated them on another \citep{grondahl2018all, arango2019hate}.
 %
 
 %
@@ -327,9 +327,9 @@ Regarding the methodology, we believe the ME technique is interesting for social
 %
 We showed how we could use the value ratios in a value-sensitive metric that measures the total human-perceived value of ML models with a reject option.
 %
-We further demonstrated how we could create a human-machine co-creation solution for hate speech detection by using the value-sensitive metric to calculate the optimal rejection threshold for which the model achieves the highest total value.
+We further demonstrated how we could create a human-AI solution for hate speech detection by using the value-sensitive metric to calculate the optimal rejection threshold.
 %
-We used the optimal threshold to determine when we could trust machine predictions and when we needed to pass machine predictions to a human moderator.
+We used the optimal rejection threshold to determine when we could trust machine predictions and when we needed to pass machine predictions to a human moderator.
 
 \section{Limitations}
 \label{sec:discussion-limitations}
@@ -339,7 +339,7 @@ In this section, we list the limitations of the survey study and the value-sensi
 %
 Regarding the survey study, we had a limited sample size of 68 participants per scale due to a constrained budget.
 %
-We expect more reliable results when experimenting with larger sample size.
+We expect more reliable results when experimenting with larger sample sizes.
 %
 
 %
@@ -353,7 +353,7 @@ Nevertheless, we believe the results are still reliable since we performed a con
 %
 Third, dealing with hateful content on social media platforms remains controversial, even for governmental institutions and social media companies.
 %
-We believe the results will differ when we use different descriptions in the scenarios.
+We believed the results would differ when we used different descriptions in the scenarios.
 %
 Initially, we explained in the pilot survey that SocialNet removes hateful posts.
 %
@@ -361,8 +361,9 @@ After gathering the results, we noticed that participants assigned larger absolu
 %
 Therefore, we decided to update the descriptions to rank posts lower instead of removing posts and explained that it is expected from detection systems to produce correct predictions and that incorrect predictions might cause harm to social media users.
 %
-However, after updating the descriptions, we did not notice any difference as participants still assigned larger absolute values to TP and TN scenarios.
+After updating the descriptions, we did not notice any difference as participants still assigned larger absolute values to TP and TN scenarios.
 %
+Nevertheless, we still believe that using different descriptions would give different results as we think that people have different opinions about how we should deal with detected hate speech.
 
 %
 Finally, we should point out the limitations of the demographic analysis.
@@ -377,7 +378,7 @@ Although the sample sizes were large enough for the statistical tests, they were
 %
 We did not find enough evidence that people with different demographic characteristics have different opinions about hate speech detection scenarios.
 %
-However, if we repeated the experiment with larger sample sizes, we still expect to find group differences for some demographical features, such as nationality.
+However, if we repeated the experiment with larger sample sizes, we expect to find more group differences for some demographical features, such as nationality.
 %
 At the same time, we also believe that for the features where we did find significant differences between demographic groups, some of them might have happened by chance.
 %
@@ -437,10 +438,10 @@ By (un)known unknowns, we mean the low confident correct and high confident inco
 %
 If the underlying classification model of our value-sensitive rejector is not well-calibrated, then we end up with many (un)known unknowns.
 %
-We suggest that future work combine (un)known unknown detection techniques with our value-sensitive rejector so that less correct and more incorrect predictions are rejected and that more correct and less incorrect predictions are accepted.
+We suggest future work to combine (un)known unknown detection techniques with our value-sensitive rejector so that less correct and more incorrect predictions are rejected and that more correct and less incorrect predictions are accepted.
 %
 Finally, as the optimal rejection threshold is calculated empirically on a hate speech dataset, we should prevent ourselves from using biased datasets.
 %
-For example, the datasets we used for the experiments collected their data using specific keywords and annotated the data samples with only three annotators.
+We used datasets that were collected using specific keywords and annotated by only three annotators.
 %
-Therefore, we suggest preventing sample retrieval and sample annotation bias as much as possible by collecting data samples that are the most representative and annotating them using a large group of annotators with diverse demographic characteristics.
+Therefore, we suggest using datasets where sample retrieval and sample annotation bias are prevented as much as possible, for example, by collecting only the most representative data samples or by annotating the data by a large group of annotators with diverse demographic characteristics.

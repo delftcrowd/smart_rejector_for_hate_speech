@@ -12,6 +12,8 @@ We retrieved the value ratios using the ME scale.
 %
 We validated the ME scale by conducting a separate survey using a bounded scale of 100 levels, called the 100-level scale.
 %
+
+%
 We defined three goals of the experiments with the value-sensitive rejector.
 %
 First, we want to analyze how the rejector behaves on different models and datasets.
@@ -42,7 +44,7 @@ Most participants agreed with the ground truth label of the social media posts.
 %
 Please note that according to the ground truth label, REJ1, REJ2, REJ5, and REJ6 are hateful, and REJ3, REJ4, REJ7, and REJ8 are not hateful.
 %
-So most participants found the posts used in the TP and FN scenarios hateful and those used in TN and FP scenarios not hateful.
+So most participants found the posts used in the TP and FN scenarios hateful, and those used in TN and FP scenarios not hateful.
 %
 For the rejection scenarios, most found the posts of REJ1, REJ2, and REJ6 hateful and REJ3, REJ4, and REJ8 not hateful.
 %
@@ -57,8 +59,6 @@ Figure \ref{fig:boxplots} shows the response values to the second and third ques
 Participants generally agreed with the TP and TN scenarios and disagreed with the FP, FN, and rejection scenarios.
 %
 For both scales, participants disagreed the most with scenarios FN3 and FN7 and agreed the most with scenarios TN3 and TN6.
-%
-Scenario FN4 was an exception, as some participants agreed with the scenario for both scales.
 %
 
 %
@@ -106,7 +106,7 @@ For both scales, participants disagreed the most with the FN scenarios and agree
 %
 The final values of both scales follow the same order: $V_{fn} < V_{fp} < V_{r} < V_{tp} < V_{tn}$.
 %
-Participants give the highest absolute response values to the TN scenarios.
+Participants gave the highest absolute response values to the TN scenarios.
 %
 We also observed that participants provided greater absolute response values to the TP and TN scenarios than to the FP and FN scenarios.
 %
@@ -217,7 +217,7 @@ We found the most significant differences in the aggregated scores of the FP sce
 %
 
 %
-Finally, we conducted pairwise Mann-Whitney U tests to check if there are any significant differences between pairs of groups for the multi-group features: nationality, language, and ethnicity.
+Finally, we conducted pairwise Mann-Whitney U tests to check if there were any significant differences between pairs of groups for the multi-group features: nationality, language, and ethnicity.
 %
 Tables \ref{tab:results-pairwise-nationality}, \ref{tab:results-pairwise-language}, and \ref{tab:results-pairwise-ethnicity} present the resulting p values of the pairwise Mann-Whitney U tests for the features of nationality, language, and ethnicity, respectively.
 %
@@ -292,7 +292,7 @@ We used all three models (LR, DistilBERT, and CNN) to produce predictions for bo
 %
 Therefore, we ended up with six different sets of predictions.
 %
-Then, for each set of predictions, we created the PDFs for all predictions of the same type (TP, TN, FP, and FN).
+Then, for each set of predictions, we created the PDFs using KDE for all predictions of the same type (TP, TN, FP, and FN).
 %
 The PDFs were necessary for calculating the total value of the models with the reject option.
 %
@@ -319,7 +319,7 @@ Figure \ref{fig:metric-plots-all-values} presents the total value of all models 
 %
 The diamond-shaped markers indicate the optimal rejection threshold ($\tau_O$) for which the model achieves the highest total value ($V(\tau_O)$).
 %
-Positive $V(\tau)$ values indicate that the model for rejection threshold $\tau$ is valuable, and negative values indicate that the costs of incorrect accepted and rejected predictions exceed the gains of correct accepted and rejected predictions.
+Positive $V(\tau)$ values indicate that the model for rejection threshold $\tau$ is valuable, and negative values indicate that the costs of incorrect accepted/rejected predictions exceed the gains of correct accepted/rejected predictions.
 %
 For all models, we got $\tau_O \approx 0.5$, meaning that all models achieve the highest total value when all predictions are accepted.
 %
@@ -329,7 +329,7 @@ The total value of all models decreases for increasing values of the rejection t
 %
 
 %
-To further examine how $V(\tau)$ behaves when we only consider punishing incorrect predictions instead of rewarding correct predictions, we decided to apply the metric again, setting $V_{tp}$ and $V_{tn}$ equal to zero.
+To further examine how $V(\tau)$ behaves when we only consider punishing incorrect predictions instead of rewarding correct predictions, we applied the metric again, setting $V_{tp}$ and $V_{tn}$ equal to zero.
 %
 The metric's conditions \ref{for:conditions-fp-fn} and \ref{for:conditions-tp-tn} were still satisfied when we did this.
 %
@@ -337,7 +337,7 @@ Figure \ref{fig:metric-plots-tptn0} presents the total value ($V(\tau)$) again f
 %
 We found that $\tau_O$ of all models moved towards $1.0$, meaning that rejecting predictions is now more beneficial for the total value of the models.
 %
-All models achieve the highest $V(\tau)$ value when $\tau \in [0.7, 0.9]$ for \emph{seen} data and when $\tau \in [0.9, 1.0]$ for \emph{unseen data}.
+All models achieve the highest $V(\tau)$ value when $\tau \in [0.7, 0.9]$ for \emph{seen} data and when $\tau \in [0.9, 1.0]$ for \emph{unseen} data.
 %
 
 %
@@ -357,7 +357,7 @@ For the \emph{unseen} data, it rejected the least amount of predictions ($92.3\%
 %
 The CNN model performs the worst for all configurations regarding the accuracy of accepted predictions.
 %
-The model achieved the highest value for the \emph{unseen} data when all predictions were rejected, indicating that it is not valuable to use the model.
+The CNN model achieved the highest value for the \emph{unseen} data when all predictions were rejected, indicating that it is not valuable to use the CNN model.
 
 %
 Table \ref{tab:metric2} compares the results of our value-sensitive metric with machine metrics like accuracy.
@@ -370,7 +370,7 @@ In the first two rows, both the accuracy and $V(0)$ indicate that the DistilBERT
 %
 In the last two rows (where $V_{tp}=0$ and $V_{tn}=0$), both metrics indicate that the DistilBERT model performed the best for the \emph{seen} dataset but got different results for the \emph{unseen} dataset.
 %
-Then, according to the accuracy, the DistilBERT model performed the best, while the CNN model performed the best according to $V(0)$.
+For the \emph{unseen} dataset, according to the accuracy, the DistilBERT model performed the best, while the CNN model performed the best according to $V(0)$.
 %
 All $V(0)$ values in the last row show that none of the models is valuable for \emph{unseen} data when we accept all predictions.
 %
@@ -382,7 +382,7 @@ The DistilBERT model achieved the highest $V(\tau_O)$ values in all configuratio
 %
 This result is interesting as we can see from table \ref{tab:metric} that for the DistilBERT model, the accuracy of the accepted predictions is higher, and the rejection rate is lower than for the LR model.
 %
-Looking at the last row, we can see that all models become valuable when we adopt the optimal rejection threshold.
+By comparing $V(\tau_O)$ with $V(0)$ in the last row of the table, we can see that all models become valuable when we adopt the optimal rejection threshold.
 
 
 \begin{figure}

@@ -1,4 +1,4 @@
-name: smart-rejector
+name: value-sensitive-rejector
 channels:
   - conda-forge
   - anaconda
