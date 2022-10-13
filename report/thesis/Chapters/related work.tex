@@ -175,7 +175,7 @@ Classification models with a reject option are often evaluated by analyzing the 
 %
 \citet{nadeem2009reject} proposed using accuracy-rejection curves to plot the trade-off between accuracy and coverage so that different classification models with a reject option can be compared.
 %
-\citet{rottger2020hatecheck, casati2021value, olteanu2017limits} recognized the shortcomings of machine metrics, such as accuracy and found a gap in the evaluation of hate speech detection systems.
+\citet{rottger2020hatecheck, casati2021value, olteanu2017limits,sayin2021science} recognized the shortcomings of machine metrics, such as accuracy and found a gap in the evaluation of hate speech detection systems.
 %
 
 %
@@ -197,7 +197,13 @@ They found that for the same precision values, the perceived value changes depen
 %
 \citet{casati2021value} propose to develop new metrics for evaluating ML models with a reject option that considers domain-specific values.
 %
-Our work aligns with the latter two studies since we create a human-centred metric for evaluating hate speech classification models with a reject option that incorporates human value derived from a survey study.
+
+%
+\citet{sayin2021science} suggest that new metrics should be developed for measuring the value of human-AI systems that take the costs of incorrect predictions into account.
+%
+
+%
+Our work aligns with the latter three studies since we create a human-centred metric for evaluating hate speech classification models with a reject option that incorporates human value derived from a survey study.
 
 
 \section{Value assessment}
@@ -425,7 +431,7 @@ However, we need to have ratio data in this project since we want to know the va
         \caption{ME}
         \label{fig:scales-me}
     \end{subfigure}
-    \caption{Visualizations of all three rating scales: a five-point Likert item, the 100-level scale, and the ME scale.}
+    \caption{Visualizations of all three bipolar rating scales: a five-point Likert item, the 100-level scale, and the ME scale.}
     \label{fig:scales}
 \end{figure}
 
